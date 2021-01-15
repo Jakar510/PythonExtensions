@@ -1,7 +1,8 @@
 import logging
 
-from .switcher import SwitchCase
+from PythonExtensions.SwitchCase import *
 
+BREAK = ' ---> you should not see this'
 def example1(test=10):
     """
         Tests simple integers.
@@ -10,12 +11,12 @@ def example1(test=10):
     """
     print()
 
-    with SwitchCase(test) as sc:
-        sc(2, on_true=print, on_true_args=('test 1',))
+    with SwitchVariable(test) as sc:
+        sc(2)
         print('example1 sub 1')
-        sc(10, on_true=print, on_true_args=('test 2',))  # will break here due to match found.
-        print('example1 sub 2')
-        sc(12, on_true=print, on_true_args=('test 3',))
+        sc(10)  # will break here due to match found.
+        print('example1 sub 2' + BREAK) #
+        sc(12)
 
 
 def example2():
@@ -27,14 +28,14 @@ def example2():
     """
     print()
     test = '10'
-    with SwitchCase(test, catch_value_to_check=True) as sc:
+    with SwitchVariable(test) as sc:
         on_true = lambda x: print(f'testing... {x}')
 
-        sc(2, on_true=on_true)
+        sc(2)
         print('example2 sub 1')
-        sc('1', on_true=on_true)
+        sc('1')
         print('example2 sub 2')
-        sc('10', on_true=on_true)  # will break here due to match found.
+        sc('10')  # will break here due to match found.
 
 
 def example3(*args, **kwargs):
@@ -48,21 +49,19 @@ def example3(*args, **kwargs):
     """
     print()
     def run_test(*args, **kwargs):
-        return {
+        print({
                 'args':   args,
                 'kwargs': kwargs
-                }
-    test = '10'
-    switcher = SwitchCase(test, catch_value_to_check=True)
-    with switcher as sc:
-        on_true = lambda x: run_test(x, *args, **kwargs)
+                })
 
-        sc(2, on_true=on_true)
+    test = '10'
+    with SwitchCallback(test) as sc:
+
+        sc(2, run_test)
         print('example3 sub 1')
-        sc('1', on_true=on_true)  # will break here due to match found.
-        print('example3 sub 2')
-        sc('10', on_true=on_true)
-    print(switcher.result)
+        sc('1', run_test)  # will break here due to match found.
+        print('example3 sub 2' + BREAK)
+        sc('10', run_test)
 
 
 def example4():
@@ -76,19 +75,16 @@ def example4():
         # id = uuid.uuid4()
         def __init__(self, id):
             self.id = id
-
-    class Test(base):
         def __eq__(self, other):
-            if isinstance(other, Test):
+            if isinstance(other, base):
                 return other.id == self.id
-            elif isinstance(other, int):
-                return other == self.id
             return False
+
+    class Test(base): pass
 
 
     target1 = Test('Target')
-    instance_switcher = SwitchCase(target1, Check_Instance=True)
-    with instance_switcher as sc:
+    with SwitchVariable(target1) as sc:
         sc(1)
         print('example4.1 sub 1')
         sc('')
@@ -98,38 +94,39 @@ def example4():
         sc(TypeError)
         print('example4.1 sub 4')
         sc(Test('Test'))  # will break here due to match found.
-        print('example4.1 sub 5')
+        print('example4.1 sub 5' + BREAK)
         sc(int)
-        print('example4.1 sub 6')
+        print('example4.1 sub 6' + BREAK)
         sc({})
-        print('example4.1 sub 7')
-        sc(base('base'))
-        print('example4.1 sub 8')
+        print('example4.1 sub 7' + BREAK)
+        sc(Test('base'))
+        print('example4.1 sub 8' + BREAK)
 
     print()
-    target2 = Test('Target')
-    SubClass_switcher = SwitchCase(target2, Check_SubClass=True)
-    with SubClass_switcher as sc:
-        sc(1)
+    target2 = base
+    with SwitchSubClass(target2) as sc:
+        sc(int)
         print('example4.2 sub 1')
-        sc('')
+        sc(str)
         print('example4.2 sub 2')
-        sc(None)
+        sc(type(None))
         print('example4.2 sub 3')
         sc(TypeError)
         print('example4.2 sub 4')
-        sc(Test('Test'))  # will break here due to match found.
-        print('example4.2 sub 5')
+        sc(Test)  # will break here due to match found.
+        print('example4.2 sub 5' + BREAK)
         sc(int)
-        print('example4.2 sub 6')
-        sc({})
-        print('example4.2 sub 7')
-        sc(base('base'))
-        print('example4.2 sub 8')
+        print('example4.2 sub 6' + BREAK)
+        sc(dict)
+        print('example4.2 sub 7' + BREAK)
+        sc(base)
+        print('example4.2 sub 8' + BREAK)
+        sc(int)
+        print('example4.2 sub 8' + BREAK)
 
     print()
     target3 = Test('Target')
-    value_switcher = SwitchCase(target3)
+    value_switcher = SwitchInstance(target3)
 
     # sc.set_variable_to_check(1)
     with value_switcher as sc:

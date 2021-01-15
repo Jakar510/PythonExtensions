@@ -1,6 +1,5 @@
 import re
-from abc import ABC
-from typing import Callable, Dict, Tuple
+from typing import *
 
 from ..Exceptions import *
 
@@ -8,35 +7,36 @@ from ..Exceptions import *
 
 
 __all__ = [
-        'SwitchCase', 'CallbackSwitchCase', 'RegexSwitchCase', 'TypeSwitchCase', 'BaseSwitchCase',
-        'BreakCase', 'CallBackException', 'ActiveSessionError', 'InvalidRegexObject', 'InactiveSessionError'
-        ]
+    'BreakCase',
+    'CallBackException',
+    'ActiveSessionError',
+    'InvalidRegexObject',
+    'InactiveSessionError',
 
+    'BaseSwitchCase',
+    'SwitchRegex',
+    'SwitchVariable',
+    'SwitchCallback',
+    'SwitchInstance',
+    'SwitchSubClass',
+    ]
 
-def _to_type(obj: any): return type(obj) if obj.__class__ != type.__class__ else obj
-def _convert_to_types(value_to_check: any) -> tuple or type:
+def _to_type(obj: Type): return type(obj) if obj.__class__ != type.__class__ else obj
+def _convert_to_types(value_to_check: Union[Tuple[Type, ...], List[Type], Type]) -> Union[Tuple[Type, ...], Type]:
     if isinstance(value_to_check, (list, tuple)):
-        return tuple(map(BaseSwitchCase._to_type, value_to_check))
+        return tuple(map(_to_type, value_to_check))
 
     elif value_to_check.__class__ != type.__class__:
         return type(value_to_check)
 
 
 
-class CallbackhHandler(object):
-    def __init__(self, func: Callable[[Tuple, Dict], bool], *args, **kwargs):
-        self._func = func
-        self._args = args
-        self._kwargs = kwargs
+class Equalable(Protocol):
+    def __eq__(self, *args, **kwargs) -> bool: ...
 
-    def __call__(self, *args, **kwargs) -> bool:
-        args = self._args or args
-        kwargs = self._kwargs or kwargs
-        return self._func(*args, **kwargs)
+_TCase = TypeVar('_TCase')
 
-
-
-class BaseSwitchCase(object, ABC):
+class BaseSwitchCase(Generic[_TCase]):
     """
      variable: the instance to check against.
      regex: the instance to check against.
@@ -44,77 +44,92 @@ class BaseSwitchCase(object, ABC):
      Check_Address: Checks the addresses between variable and the value_to_check, using "is".
      catch_value_to_check: If match is True, added the value_to_check to on_true_args at the start.
      no_match_callback: Optional Method that is called if no match is found or Exception that is raised if no match is found.
-     no_match_handler_args (args): no_match_handler's args
-     no_match_handler_kwargs (kwargs): no_match_handler's kwargs
+     no_match_handler_args (args): _no_match_handler's args
+     no_match_handler_kwargs (kwargs): _no_match_handler's kwargs
     """
-    result = None
-    _variable: any
+    __slots__ = ['_variable', '_break', 'no_match_handler']
+    _variable: _TCase
     _active: bool = False
-    no_match_handler: CallbackhHandler or Exception = None
-    def __init__(self, variable: __eq__):
+    _break: Optional[BreakCase]
+    _no_match_handler: Optional[Union[Callable[[], None], Type[Exception]]]
+    def __init__(self, variable: _TCase, no_match_handler: Optional[Union[Callable[[], None], Type[Exception]]] = None):
         """
         :param variable: the instance to check against.
-        :param no_match_handler_args (args): no_match_handler's args
-        :param no_match_handler_kwargs (kwargs): no_match_handler's kwargs
+        :param no_match_handler_args (args): _no_match_handler's args
+        :param no_match_handler_kwargs (kwargs): _no_match_handler's kwargs
         """
         if not hasattr(variable, '__eq__'):
-            raise ValueError(f'variable is not a comparable type. {type(variable)}')
+            raise AttributeError(f'variable is not a comparable type. {type(variable)}')
 
         self._variable = variable
+        self._no_match_handler = no_match_handler
+        self._break = None
+        self._active = False
 
-    def _get_config(self) -> dict:
-        return {
-                'variable':          repr(self._variable),
-                'no_match_callback': repr(self.no_match_handler),
-                }
+
     def __enter__(self):
+        self._break = None
         self._active = True
         return self
     def __exit__(self, exc_type, exc_val, exc_tb):
         self._active = False
         if isinstance(exc_val, BreakCase): return True
-        if self.no_match_handler is None: return
-        if callable(self.no_match_handler): return self.no_match_handler()
-        if issubclass(self.no_match_handler, Exception): raise self.no_match_handler() from exc_val
-    def _exit(self): raise BreakCase()
+        if self._no_match_handler is None: return
+        if issubclass(self._no_match_handler, Exception): raise self._no_match_handler() from exc_val
+        if callable(self._no_match_handler): return self._no_match_handler()
+    def _exit(self) -> True:
+        print('__EXIT__', self._break)
+        if isinstance(self._break, BreakCase):
+            raise self._break
+        elif self._break is None:
+            self._break = BreakCase()
+        else:
+            raise RuntimeError(self._break)
+
+        return True
+
 
     def __setattr__(self, key, value):
-        if key not in ['result', '_active'] and self._active: self._raise_active(key, value)
+        if key not in ('_active', '_break') and self._active: self._raise_active(key, value)
         super().__setattr__(key, value)
+    def _raise_inactive(self): raise InactiveSessionError(""" Context Manager Must be Used!
 
-    def _raise_inactive(self):
-        raise InactiveSessionError(""" Context Manager Must be Used
+    For example:
 
-        For example:
-
-        # value_to_check = one of [ variable OR instance OR type OR tuple of types ]
-        with SwitchCase(value_to_check) as sc:
-            sc(value_to_search_for)
+    # value_to_check = one of [ variable OR instance OR type OR tuple of types ]
+    with SwitchVariable(value_to_check) as sc:
+        if sc(value_to_search_for):
             ...
-        """)
-    def _raise_active(self, key, value):
-        raise ActiveSessionError(f"""Attributes cannot be changed while context manager is active. 
+        if sc(value_to_search_for): 
+            ...
+        ...
+""")
+    def _raise_active(self, key, value): raise ActiveSessionError(f"""Attributes cannot be changed while the context manager is active. 
     key: {key} 
     value: {value} """)
 
-    def _check(self, value_to_check: any, *args, **kwargs) -> bool: raise NotImplementedError()
-    def __call__(self, value_to_check: any, *args, **kwargs) -> bool: raise NotImplementedError()
+    def _check(self, value_to_check: _TCase): return self._variable == value_to_check
+    def __call__(self, value_to_check: _TCase, *args, **kwargs) -> bool: raise NotImplementedError()
 
 
-
-class RegexSwitchCase(BaseSwitchCase):
-    _variable: callable
+class SwitchRegex(BaseSwitchCase[_TCase]):
+    _variable: Callable[[str], Any]
+    # noinspection PyMissingConstructor
     def __init__(self, regex: re.Pattern, method: str):
         """
         :param regex: the instance to check against.
         """
-        if not method in dir(regex): raise ValueError('method must be a callable function of the regex object.')
+        if not hasattr(regex, method): raise AttributeError('method must be a callable function of the regex object.')
         self._variable = getattr(regex, method)
-        if not callable(self._variable): raise TypeError('regex.method is not callble')
+        if not callable(self._variable): raise TypeError(f'regex.{method} is not callable')
 
-    def __call__(self, value_to_check: any) -> bool:
+    # noinspection PyMethodOverriding
+    def __call__(self, value_to_check: _TCase) -> bool:
         if not self._active: self._raise_inactive()
-        return self.__regex__(value_to_check)
+        if self.__regex__(value_to_check):
+            return self._exit()
+
+        return False
     def __regex__(self, value_to_check: str) -> bool:  # TODO: implement regex parsing for the value_to_check
         if not isinstance(value_to_check, str): return False
 
@@ -122,70 +137,52 @@ class RegexSwitchCase(BaseSwitchCase):
 
 
 
-class SwitchCase(BaseSwitchCase):
-    def __init__(self, variable: __eq__):
-        """
-        :param variable: the instance to check against.
-        """
-        if not hasattr(variable, '__eq__'):
-            raise ValueError(f'variable is not a comparable type. {type(variable)}')
-
-        self._variable = variable
-
-    def __call__(self, value_to_check: any) -> bool:
-        if not self._active: self._raise_inactive()
-        if self._check(value_to_check): self._exit()
-        return False
-
-    def _check(self, value_to_check): return self._variable == value_to_check
-
-
-
-class CallbackSwitchCase(BaseSwitchCase):
-    def __init__(self, variable: __eq__):
-        """
-        :param variable: the instance to check against.
-        """
-        if not hasattr(variable, '__eq__'): raise ValueError(f'variable is not a comparable type. {type(variable)}')
-
-        self._variable = variable
-
-    def __call__(self, value_to_check: any, callback: CallbackhHandler = None) -> bool:
+class SwitchVariable(BaseSwitchCase[_TCase]):
+    # noinspection PyMethodOverriding
+    def __call__(self, value_to_check: _TCase) -> bool:
         if not self._active: self._raise_inactive()
         if self._check(value_to_check):
-            callback()
-            self._exit()
+            return self._exit()
 
         return False
 
-    def _check(self, value_to_check): return self._variable == value_to_check
 
 
 
-class InstanceSwitchCase(BaseSwitchCase):
-    def __init__(self, variable: __eq__):
-        if not hasattr(variable, '__eq__'):
-            raise ValueError(f'variable is not comparable type. {type(variable)}')
+class SwitchCallback(BaseSwitchCase[_TCase]):
+    # noinspection PyMethodOverriding
+    def __call__(self, value_to_check: _TCase, callback: Callable[[_TCase], None]) -> bool:
+        if not self._active: self._raise_inactive()
+        if self._check(value_to_check):
+            callback(value_to_check)
+            return self._exit()
+
+        return False
+
+
+
+class SwitchInstance(BaseSwitchCase[_TCase]):
+    def __call__(self, *types: _TCase) -> bool:
+        if not self._active: self._raise_inactive()
+        if self._check(*types):
+            return self._exit()
+
+        return False
+
+    def _check(self, *types): return isinstance(self._variable, _convert_to_types(types))
+
+
+
+class SwitchSubClass(BaseSwitchCase):
+    def __init__(self, variable: Type):
+        super().__init__(variable)
 
         self._variable = variable
-    def __call__(self, *types: type) -> bool:
+    def __call__(self, *types: Type) -> bool:
         if not self._active: self._raise_inactive()
-        if self._check(*types): self._exit()
+        if self._check(*types):
+            return self._exit()
+
         return False
 
-    def _check(self, *types): return isinstance(self._variable, types)
-
-
-
-class TypeSwitchCase(BaseSwitchCase):
-    def __init__(self, variable: type):
-        if not hasattr(variable, '__eq__'):
-            raise ValueError(f'variable is not comparable type. {type(variable)}')
-
-        self._variable = variable
-    def __call__(self, *types: type) -> bool:
-        if not self._active: self._raise_inactive()
-        if self._check(*types): self._exit()
-        return False
-
-    def _check(self, *types): return issubclass(self._variable, types)
+    def _check(self, *types: Type): return issubclass(self._variable, _convert_to_types(types))

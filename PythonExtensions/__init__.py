@@ -17,7 +17,7 @@ __author__ = "Tyler Stegmaier"
 __email__ = "tyler.stegmaier.510@gmail.com"
 __copyright__ = "Copyright 2020"
 __credits__ = [
-    "Tkinter library authors"
+    "Tkinter library authors",
     "Copyright (c) 2020 Tyler Stegmaier",
     "Copyright (c) 2018 Pete Mojeiko for [Keyboard](src/Extensions/tk/Widgets/KeyBoard.py)",
     "Copyright (c) 2017 Ole Jakob Skjelten for [AnimatedGIF](src/Extensions/tk/Widgets/Custom.py)",
@@ -28,7 +28,7 @@ __version__ = version
 __maintainer__ = __author__
 __maintainer_email__ = __email__
 
-__status__ = Development_Status.Beta
+__status__ = Development_Status.Alpha
 
 __url__ = r'https://github.com/Jakar510/PythonExtensions'
 # download_url=f'https://github.com/Jakar510/PyDebug/TkinterExtensions/releases/tag/{version}'

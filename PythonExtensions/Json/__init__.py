@@ -2,7 +2,7 @@ import copy
 from enum import Enum, IntEnum
 from json import dumps, loads
 
-from PIL.Image import Image
+from PIL.Image import Image as _Image
 
 from .Keys import Keys
 from .MixIns import *
@@ -367,24 +367,24 @@ class CropBox(BaseDictModel[str, int]):
     @overload
     def EnforceBounds(self, image_size: Size) -> Tuple[int, int, int, int]: ...
     @overload
-    def EnforceBounds(self, image_size: Image) -> Tuple[int, int, int, int]: ...
+    def EnforceBounds(self, image_size: _Image) -> Tuple[int, int, int, int]: ...
     @overload
     def EnforceBounds(self, image_size: Tuple[int, int]) -> Tuple[int, int, int, int]: ...
 
-    def EnforceBounds(self, image_size: Union[Size, Image, Tuple[int, int]]) -> Tuple[int, int, int, int]:
+    def EnforceBounds(self, image_size: Union[Size, _Image, Tuple[int, int]]) -> Tuple[int, int, int, int]:
         def convert(o) -> Tuple[int, int]:
             if isinstance(o, Size): return o.ToTuple()
-            elif isinstance(o, Image): return o.size
+            elif isinstance(o, _Image): return o.size
             elif isinstance(o, tuple): return o
-            throw(o, Size, Image, tuple)
+            throw(o, Size, _Image, tuple)
 
         img_w, img_h = convert(image_size)
         return (
-                self.x if self.x >= 0 else 0,
-                self.y if self.y >= 0 else 0,
-                self.width if self.width <= img_w else img_w,
-                self.height if self.height <= img_h else img_h,
-                )
+            self.x if self.x >= 0 else 0,
+            self.y if self.y >= 0 else 0,
+            self.width if self.width <= img_w else img_w,
+            self.height if self.height <= img_h else img_h,
+            )
 
 
     def Right(self, amount: int):
@@ -411,11 +411,11 @@ class CropBox(BaseDictModel[str, int]):
     @classmethod
     def Create(cls, x: int, y: int, width: int, height: int):
         return cls({
-                Keys.x:      x,
-                Keys.y:      y,
-                Keys.width:  width,
-                Keys.height: height,
-                })
+            Keys.x:      x,
+            Keys.y:      y,
+            Keys.width:  width,
+            Keys.height: height,
+            })
 
     @classmethod
     def Crop(cls, x: int, y: int, width: int, height: int, *, pic: Point, img: Size, edit: Size):

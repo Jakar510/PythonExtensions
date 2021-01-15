@@ -6,12 +6,12 @@ import threading
 import time
 import tkinter as tk
 
-from PythonDebugTools import *
+from PythonExtensions.debug import *
 
 
 
 
-def Test():
+def Test_debug():
     _pp = Printer.Default()
     print('_pp is pp', _pp is pp)
     Printer.Set(_pp)
@@ -113,4 +113,4 @@ def Test():
     print('__fin__')
 
 if __name__ == '__main__':
-    Test()
+    Test_debug()

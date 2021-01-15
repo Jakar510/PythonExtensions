@@ -7,7 +7,7 @@ import tempfile
 from os.path import *
 from pathlib import Path as _Path
 from typing import *
-
+from typing import BinaryIO
 
 
 
@@ -15,9 +15,9 @@ __all__ = [
         'Path'
         ]
 
-class FileData(Protocol[bytes]):
+class FileData(Protocol[AnyStr]):
     def load(self, f: BinaryIO) -> Any: ...
-    def dump(self, data: bytes, f: BinaryIO) -> Any: ...
+    def dump(self, data: AnyStr, f: BinaryIO) -> Any: ...
 
 class Path(os.PathLike):
     def __init__(self, _path: str, temporary_file: bool = False):

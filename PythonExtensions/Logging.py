@@ -178,7 +178,7 @@ class LoggingManager(object):
                 return logger
 
         else:
-            raise ValueError('source is not identified')
+            raise ValueError(f'source is not identified: [ {source} ]')
 
     @classmethod
     def FromTypes(cls, *types: Type, app_name: str, root_path: str):
