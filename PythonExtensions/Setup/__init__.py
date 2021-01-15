@@ -9,14 +9,10 @@ import os
 from os.path import *
 from typing import *
 
+from .Classifiers import *
 
 
 
-__all__ = [
-    'ReadFromFile', 'ReadLinesFromFile', 'GetRequirements', 'GetVersion',
-    'Get_Packages_Data', 'pycache', 'GetPath',
-    'MatchExtension', 'MatchFileTypes',
-    ]
 
 def ReadLinesFromFile(path: str) -> List[str]:
     with open(path, "r") as f:
