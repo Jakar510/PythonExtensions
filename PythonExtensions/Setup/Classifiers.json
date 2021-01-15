@@ -1,0 +1,2128 @@
+{
+    "Development_Status": {
+        "Planning": {
+            "Planning": "Development Status :: 1 - Planning"
+        },
+        "PreAlpha": {
+            "PreAlpha": "Development Status :: 2 - Pre-Alpha"
+        },
+        "Alpha": {
+            "Alpha": "Development Status :: 3 - Alpha"
+        },
+        "Beta": {
+            "Beta": "Development Status :: 4 - Beta"
+        },
+        "Production_Stable": {
+            "Production_Stable": "Development Status :: 5 - Production/Stable"
+        },
+        "Mature": {
+            "Mature": "Development Status :: 6 - Mature"
+        },
+        "Inactive": {
+            "Inactive": "Development Status :: 7 - Inactive"
+        }
+    },
+    "Environment": {
+        "Console": {
+            "Console": "Environment :: Console",
+            "Curses": {
+                "Curses": "Environment :: Console :: Curses"
+            },
+            "Framebuffer": {
+                "Framebuffer": "Environment :: Console :: Framebuffer"
+            },
+            "Newt": {
+                "Newt": "Environment :: Console :: Newt"
+            },
+            "svgalib": {
+                "svgalib": "Environment :: Console :: svgalib"
+            }
+        },
+        "GPU": {
+            "GPU": "Environment :: GPU",
+            "NVIDIA_CUDA": {
+                "NVIDIA_CUDA": "Environment :: GPU :: NVIDIA CUDA",
+                "Zero": {
+                    "Zero": "Environment :: GPU :: NVIDIA CUDA :: 9.0"
+                },
+                "One": {
+                    "One": "Environment :: GPU :: NVIDIA CUDA :: 9.1"
+                },
+                "Two": {
+                    "Two": "Environment :: GPU :: NVIDIA CUDA :: 9.2"
+                },
+                "Three": {
+                    "Three": "Environment :: GPU :: NVIDIA CUDA :: 2.3"
+                },
+                "Five": {
+                    "Five": "Environment :: GPU :: NVIDIA CUDA :: 7.5"
+                }
+            }
+        },
+        "Handhelds_PDAs": {
+            "Handhelds_PDAs": "Environment :: Handhelds/PDA's"
+        },
+        "MacOS_X": {
+            "MacOS_X": "Environment :: MacOS X",
+            "Aqua": {
+                "Aqua": "Environment :: MacOS X :: Aqua"
+            },
+            "Carbon": {
+                "Carbon": "Environment :: MacOS X :: Carbon"
+            },
+            "Cocoa": {
+                "Cocoa": "Environment :: MacOS X :: Cocoa"
+            }
+        },
+        "No_Input_Output_Daemon": {
+            "No_Input_Output_Daemon": "Environment :: No Input/Output (Daemon)"
+        },
+        "OpenStack": {
+            "OpenStack": "Environment :: OpenStack"
+        },
+        "Other_Environment": {
+            "Other_Environment": "Environment :: Other Environment"
+        },
+        "Plugins": {
+            "Plugins": "Environment :: Plugins"
+        },
+        "Web_Environment": {
+            "Web_Environment": "Environment :: Web Environment",
+            "Buffet": {
+                "Buffet": "Environment :: Web Environment :: Buffet"
+            },
+            "Mozilla": {
+                "Mozilla": "Environment :: Web Environment :: Mozilla"
+            },
+            "ToscaWidgets": {
+                "ToscaWidgets": "Environment :: Web Environment :: ToscaWidgets"
+            }
+        },
+        "Win32_MS_Windows": {
+            "Win32_MS_Windows": "Environment :: Win32 (MS Windows)"
+        },
+        "X11_Applications": {
+            "X11_Applications": "Environment :: X11 Applications",
+            "GTK": {
+                "GTK": "Environment :: X11 Applications :: GTK"
+            },
+            "Gnome": {
+                "Gnome": "Environment :: X11 Applications :: Gnome"
+            },
+            "KDE": {
+                "KDE": "Environment :: X11 Applications :: KDE"
+            },
+            "Qt": {
+                "Qt": "Environment :: X11 Applications :: Qt"
+            }
+        }
+    },
+    "Framework": {
+        "AWS_CDK": {
+            "AWS_CDK": "Framework :: AWS CDK",
+            "One": {
+                "One": "Framework :: AWS CDK :: 1"
+            }
+        },
+        "AiiDA": {
+            "AiiDA": "Framework :: AiiDA"
+        },
+        "AsyncIO": {
+            "AsyncIO": "Framework :: AsyncIO"
+        },
+        "BEAT": {
+            "BEAT": "Framework :: BEAT"
+        },
+        "BFG": {
+            "BFG": "Framework :: BFG"
+        },
+        "Bob": {
+            "Bob": "Framework :: Bob"
+        },
+        "Bottle": {
+            "Bottle": "Framework :: Bottle"
+        },
+        "Buildout": {
+            "Buildout": "Framework :: Buildout",
+            "Extension": {
+                "Extension": "Framework :: Buildout :: Extension"
+            },
+            "Recipe": {
+                "Recipe": "Framework :: Buildout :: Recipe"
+            }
+        },
+        "CastleCMS": {
+            "CastleCMS": "Framework :: CastleCMS",
+            "Theme": {
+                "Theme": "Framework :: CastleCMS :: Theme"
+            }
+        },
+        "Chandler": {
+            "Chandler": "Framework :: Chandler"
+        },
+        "CherryPy": {
+            "CherryPy": "Framework :: CherryPy"
+        },
+        "CubicWeb": {
+            "CubicWeb": "Framework :: CubicWeb"
+        },
+        "Dash": {
+            "Dash": "Framework :: Dash"
+        },
+        "Django": {
+            "Django": "Framework :: Django",
+            "Ten": {
+                "Ten": "Framework :: Django :: 1.10"
+            },
+            "Eleven": {
+                "Eleven": "Framework :: Django :: 1.11"
+            },
+            "Four": {
+                "Four": "Framework :: Django :: 1.4"
+            },
+            "Five": {
+                "Five": "Framework :: Django :: 1.5"
+            },
+            "Six": {
+                "Six": "Framework :: Django :: 1.6"
+            },
+            "Seven": {
+                "Seven": "Framework :: Django :: 1.7"
+            },
+            "Eight": {
+                "Eight": "Framework :: Django :: 1.8"
+            },
+            "Nine": {
+                "Nine": "Framework :: Django :: 1.9"
+            },
+            "Zero": {
+                "Zero": "Framework :: Django :: 3.0"
+            },
+            "One": {
+                "One": "Framework :: Django :: 3.1"
+            },
+            "Two": {
+                "Two": "Framework :: Django :: 3.2"
+            }
+        },
+        "Django_CMS": {
+            "Django_CMS": "Framework :: Django CMS",
+            "Four": {
+                "Four": "Framework :: Django CMS :: 3.4"
+            },
+            "Five": {
+                "Five": "Framework :: Django CMS :: 3.5"
+            },
+            "Six": {
+                "Six": "Framework :: Django CMS :: 3.6"
+            },
+            "Seven": {
+                "Seven": "Framework :: Django CMS :: 3.7"
+            },
+            "Eight": {
+                "Eight": "Framework :: Django CMS :: 3.8"
+            }
+        },
+        "Flake8": {
+            "Flake8": "Framework :: Flake8"
+        },
+        "Flask": {
+            "Flask": "Framework :: Flask"
+        },
+        "Hypothesis": {
+            "Hypothesis": "Framework :: Hypothesis"
+        },
+        "IDLE": {
+            "IDLE": "Framework :: IDLE"
+        },
+        "IPython": {
+            "IPython": "Framework :: IPython"
+        },
+        "Jupyter": {
+            "Jupyter": "Framework :: Jupyter"
+        },
+        "Kedro": {
+            "Kedro": "Framework :: Kedro"
+        },
+        "Lektor": {
+            "Lektor": "Framework :: Lektor"
+        },
+        "Masonite": {
+            "Masonite": "Framework :: Masonite"
+        },
+        "Matplotlib": {
+            "Matplotlib": "Framework :: Matplotlib"
+        },
+        "Nengo": {
+            "Nengo": "Framework :: Nengo"
+        },
+        "Odoo": {
+            "Odoo": "Framework :: Odoo"
+        },
+        "Opps": {
+            "Opps": "Framework :: Opps"
+        },
+        "Paste": {
+            "Paste": "Framework :: Paste"
+        },
+        "Pelican": {
+            "Pelican": "Framework :: Pelican",
+            "Plugins": {
+                "Plugins": "Framework :: Pelican :: Plugins"
+            },
+            "Themes": {
+                "Themes": "Framework :: Pelican :: Themes"
+            }
+        },
+        "Plone": {
+            "Plone": "Framework :: Plone",
+            "Two": {
+                "Two": "Framework :: Plone :: 5.2"
+            },
+            "Three": {
+                "Three": "Framework :: Plone :: 5.3"
+            },
+            "Zero": {
+                "Zero": "Framework :: Plone :: 6.0"
+            },
+            "One": {
+                "One": "Framework :: Plone :: 5.1"
+            },
+            "Addon": {
+                "Addon": "Framework :: Plone :: Addon"
+            },
+            "Core": {
+                "Core": "Framework :: Plone :: Core"
+            },
+            "Theme": {
+                "Theme": "Framework :: Plone :: Theme"
+            }
+        },
+        "Pylons": {
+            "Pylons": "Framework :: Pylons"
+        },
+        "Pyramid": {
+            "Pyramid": "Framework :: Pyramid"
+        },
+        "Pytest": {
+            "Pytest": "Framework :: Pytest"
+        },
+        "Review_Board": {
+            "Review_Board": "Framework :: Review Board"
+        },
+        "Robot_Framework": {
+            "Robot_Framework": "Framework :: Robot Framework",
+            "Library": {
+                "Library": "Framework :: Robot Framework :: Library"
+            },
+            "Tool": {
+                "Tool": "Framework :: Robot Framework :: Tool"
+            }
+        },
+        "Scrapy": {
+            "Scrapy": "Framework :: Scrapy"
+        },
+        "Setuptools_Plugin": {
+            "Setuptools_Plugin": "Framework :: Setuptools Plugin"
+        },
+        "Sphinx": {
+            "Sphinx": "Framework :: Sphinx",
+            "Extension": {
+                "Extension": "Framework :: Sphinx :: Extension"
+            },
+            "Theme": {
+                "Theme": "Framework :: Sphinx :: Theme"
+            }
+        },
+        "Trac": {
+            "Trac": "Framework :: Trac"
+        },
+        "Trio": {
+            "Trio": "Framework :: Trio"
+        },
+        "Tryton": {
+            "Tryton": "Framework :: Tryton"
+        },
+        "TurboGears": {
+            "TurboGears": "Framework :: TurboGears",
+            "Applications": {
+                "Applications": "Framework :: TurboGears :: Applications"
+            },
+            "Widgets": {
+                "Widgets": "Framework :: TurboGears :: Widgets"
+            }
+        },
+        "Twisted": {
+            "Twisted": "Framework :: Twisted"
+        },
+        "Wagtail": {
+            "Wagtail": "Framework :: Wagtail",
+            "One": {
+                "One": "Framework :: Wagtail :: 1"
+            },
+            "Two": {
+                "Two": "Framework :: Wagtail :: 2"
+            }
+        },
+        "ZODB": {
+            "ZODB": "Framework :: ZODB"
+        },
+        "Zope": {
+            "Zope": "Framework :: Zope",
+            "Two": {
+                "Two": "Framework :: Zope :: 2"
+            },
+            "Three": {
+                "Three": "Framework :: Zope :: 3"
+            },
+            "Four": {
+                "Four": "Framework :: Zope :: 4"
+            },
+            "Five": {
+                "Five": "Framework :: Zope :: 5"
+            }
+        },
+        "Zope2": {
+            "Zope2": "Framework :: Zope2"
+        },
+        "Zope3": {
+            "Zope3": "Framework :: Zope3"
+        },
+        "napari": {
+            "napari": "Framework :: napari"
+        },
+        "tox": {
+            "tox": "Framework :: tox"
+        }
+    },
+    "Intended_Audience": {
+        "Customer_Service": {
+            "Customer_Service": "Intended Audience :: Customer Service"
+        },
+        "Developers": {
+            "Developers": "Intended Audience :: Developers"
+        },
+        "Education": {
+            "Education": "Intended Audience :: Education"
+        },
+        "End_Users_Desktop": {
+            "End_Users_Desktop": "Intended Audience :: End Users/Desktop"
+        },
+        "Financial_and_Insurance_Industry": {
+            "Financial_and_Insurance_Industry": "Intended Audience :: Financial and Insurance Industry"
+        },
+        "Healthcare_Industry": {
+            "Healthcare_Industry": "Intended Audience :: Healthcare Industry"
+        },
+        "Information_Technology": {
+            "Information_Technology": "Intended Audience :: Information Technology"
+        },
+        "Legal_Industry": {
+            "Legal_Industry": "Intended Audience :: Legal Industry"
+        },
+        "Manufacturing": {
+            "Manufacturing": "Intended Audience :: Manufacturing"
+        },
+        "Other_Audience": {
+            "Other_Audience": "Intended Audience :: Other Audience"
+        },
+        "Religion": {
+            "Religion": "Intended Audience :: Religion"
+        },
+        "Science_Research": {
+            "Science_Research": "Intended Audience :: Science/Research"
+        },
+        "System_Administrators": {
+            "System_Administrators": "Intended Audience :: System Administrators"
+        },
+        "Telecommunications_Industry": {
+            "Telecommunications_Industry": "Intended Audience :: Telecommunications Industry"
+        }
+    },
+    "License": {
+        "Aladdin_Free_Public_License_AFPL": {
+            "Aladdin_Free_Public_License_AFPL": "License :: Aladdin Free Public License (AFPL)"
+        },
+        "CC0_1_0_Universal_CC0_1_0_Public_Domain_Dedication": {
+            "CC0_1_0_Universal_CC0_1_0_Public_Domain_Dedication": "License :: CC0 1.0 Universal (CC0 1.0) Public Domain Dedication"
+        },
+        "CeCILLB_Free_Software_License_Agreement_CECILLB": {
+            "CeCILLB_Free_Software_License_Agreement_CECILLB": "License :: CeCILL-B Free Software License Agreement (CECILL-B)"
+        },
+        "CeCILLC_Free_Software_License_Agreement_CECILLC": {
+            "CeCILLC_Free_Software_License_Agreement_CECILLC": "License :: CeCILL-C Free Software License Agreement (CECILL-C)"
+        },
+        "DFSG_approved": {
+            "DFSG_approved": "License :: DFSG approved"
+        },
+        "Eiffel_Forum_License_EFL": {
+            "Eiffel_Forum_License_EFL": "License :: Eiffel Forum License (EFL)"
+        },
+        "Free_For_Educational_Use": {
+            "Free_For_Educational_Use": "License :: Free For Educational Use"
+        },
+        "Free_For_Home_Use": {
+            "Free_For_Home_Use": "License :: Free For Home Use"
+        },
+        "Free_To_Use_But_Restricted": {
+            "Free_To_Use_But_Restricted": "License :: Free To Use But Restricted"
+        },
+        "Free_for_noncommercial_use": {
+            "Free_for_noncommercial_use": "License :: Free for non-commercial use"
+        },
+        "Freely_Distributable": {
+            "Freely_Distributable": "License :: Freely Distributable"
+        },
+        "Freeware": {
+            "Freeware": "License :: Freeware"
+        },
+        "GUST_Font_License_1_0": {
+            "GUST_Font_License_1_0": "License :: GUST Font License 1.0"
+        },
+        "GUST_Font_License_20060930": {
+            "GUST_Font_License_20060930": "License :: GUST Font License 2006-09-30"
+        },
+        "Netscape_Public_License_NPL": {
+            "Netscape_Public_License_NPL": "License :: Netscape Public License (NPL)"
+        },
+        "Nokia_Open_Source_License_NOKOS": {
+            "Nokia_Open_Source_License_NOKOS": "License :: Nokia Open Source License (NOKOS)"
+        },
+        "OSI_Approved": {
+            "OSI_Approved": "License :: OSI Approved",
+            "Academic_Free_License_AFL": {
+                "Academic_Free_License_AFL": "License :: OSI Approved :: Academic Free License (AFL)"
+            },
+            "Apache_Software_License": {
+                "Apache_Software_License": "License :: OSI Approved :: Apache Software License"
+            },
+            "Apple_Public_Source_License": {
+                "Apple_Public_Source_License": "License :: OSI Approved :: Apple Public Source License"
+            },
+            "Artistic_License": {
+                "Artistic_License": "License :: OSI Approved :: Artistic License"
+            },
+            "Attribution_Assurance_License": {
+                "Attribution_Assurance_License": "License :: OSI Approved :: Attribution Assurance License"
+            },
+            "BSD_License": {
+                "BSD_License": "License :: OSI Approved :: BSD License"
+            },
+            "Boost_Software_License_1_0_BSL1_0": {
+                "Boost_Software_License_1_0_BSL1_0": "License :: OSI Approved :: Boost Software License 1.0 (BSL-1.0)"
+            },
+            "CEA_CNRS_Inria_Logiciel_Libre_License_version_2_1_CeCILL2_1": {
+                "CEA_CNRS_Inria_Logiciel_Libre_License_version_2_1_CeCILL2_1": "License :: OSI Approved :: CEA CNRS Inria Logiciel Libre License, version 2.1 (CeCILL-2.1)"
+            },
+            "Common_Development_and_Distribution_License_1_0_CDDL1_0": {
+                "Common_Development_and_Distribution_License_1_0_CDDL1_0": "License :: OSI Approved :: Common Development and Distribution License 1.0 (CDDL-1.0)"
+            },
+            "Common_Public_License": {
+                "Common_Public_License": "License :: OSI Approved :: Common Public License"
+            },
+            "Eclipse_Public_License_1_0_EPL1_0": {
+                "Eclipse_Public_License_1_0_EPL1_0": "License :: OSI Approved :: Eclipse Public License 1.0 (EPL-1.0)"
+            },
+            "Eclipse_Public_License_2_0_EPL2_0": {
+                "Eclipse_Public_License_2_0_EPL2_0": "License :: OSI Approved :: Eclipse Public License 2.0 (EPL-2.0)"
+            },
+            "Eiffel_Forum_License": {
+                "Eiffel_Forum_License": "License :: OSI Approved :: Eiffel Forum License"
+            },
+            "European_Union_Public_Licence_1_0_EUPL_1_0": {
+                "European_Union_Public_Licence_1_0_EUPL_1_0": "License :: OSI Approved :: European Union Public Licence 1.0 (EUPL 1.0)"
+            },
+            "European_Union_Public_Licence_1_1_EUPL_1_1": {
+                "European_Union_Public_Licence_1_1_EUPL_1_1": "License :: OSI Approved :: European Union Public Licence 1.1 (EUPL 1.1)"
+            },
+            "European_Union_Public_Licence_1_2_EUPL_1_2": {
+                "European_Union_Public_Licence_1_2_EUPL_1_2": "License :: OSI Approved :: European Union Public Licence 1.2 (EUPL 1.2)"
+            },
+            "GNU_Affero_General_Public_License_v3": {
+                "GNU_Affero_General_Public_License_v3": "License :: OSI Approved :: GNU Affero General Public License v3"
+            },
+            "GNU_Affero_General_Public_License_v3_or_later_AGPLv3_plus": {
+                "GNU_Affero_General_Public_License_v3_or_later_AGPLv3_plus": "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)"
+            },
+            "GNU_Free_Documentation_License_FDL": {
+                "GNU_Free_Documentation_License_FDL": "License :: OSI Approved :: GNU Free Documentation License (FDL)"
+            },
+            "GNU_General_Public_License_GPL": {
+                "GNU_General_Public_License_GPL": "License :: OSI Approved :: GNU General Public License (GPL)"
+            },
+            "GNU_General_Public_License_v2_GPLv2": {
+                "GNU_General_Public_License_v2_GPLv2": "License :: OSI Approved :: GNU General Public License v2 (GPLv2)"
+            },
+            "GNU_General_Public_License_v2_or_later_GPLv2_plus": {
+                "GNU_General_Public_License_v2_or_later_GPLv2_plus": "License :: OSI Approved :: GNU General Public License v2 or later (GPLv2+)"
+            },
+            "GNU_General_Public_License_v3_GPLv3": {
+                "GNU_General_Public_License_v3_GPLv3": "License :: OSI Approved :: GNU General Public License v3 (GPLv3)"
+            },
+            "GNU_General_Public_License_v3_or_later_GPLv3_plus": {
+                "GNU_General_Public_License_v3_or_later_GPLv3_plus": "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)"
+            },
+            "GNU_Lesser_General_Public_License_v2_LGPLv2": {
+                "GNU_Lesser_General_Public_License_v2_LGPLv2": "License :: OSI Approved :: GNU Lesser General Public License v2 (LGPLv2)"
+            },
+            "GNU_Lesser_General_Public_License_v2_or_later_LGPLv2_plus": {
+                "GNU_Lesser_General_Public_License_v2_or_later_LGPLv2_plus": "License :: OSI Approved :: GNU Lesser General Public License v2 or later (LGPLv2+)"
+            },
+            "GNU_Lesser_General_Public_License_v3_LGPLv3": {
+                "GNU_Lesser_General_Public_License_v3_LGPLv3": "License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)"
+            },
+            "GNU_Lesser_General_Public_License_v3_or_later_LGPLv3_plus": {
+                "GNU_Lesser_General_Public_License_v3_or_later_LGPLv3_plus": "License :: OSI Approved :: GNU Lesser General Public License v3 or later (LGPLv3+)"
+            },
+            "GNU_Library_or_Lesser_General_Public_License_LGPL": {
+                "GNU_Library_or_Lesser_General_Public_License_LGPL": "License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)"
+            },
+            "Historical_Permission_Notice_and_Disclaimer_HPND": {
+                "Historical_Permission_Notice_and_Disclaimer_HPND": "License :: OSI Approved :: Historical Permission Notice and Disclaimer (HPND)"
+            },
+            "IBM_Public_License": {
+                "IBM_Public_License": "License :: OSI Approved :: IBM Public License"
+            },
+            "ISC_License_ISCL": {
+                "ISC_License_ISCL": "License :: OSI Approved :: ISC License (ISCL)"
+            },
+            "Intel_Open_Source_License": {
+                "Intel_Open_Source_License": "License :: OSI Approved :: Intel Open Source License"
+            },
+            "Jabber_Open_Source_License": {
+                "Jabber_Open_Source_License": "License :: OSI Approved :: Jabber Open Source License"
+            },
+            "MIT_License": {
+                "MIT_License": "License :: OSI Approved :: MIT License"
+            },
+            "MITRE_Collaborative_Virtual_Workspace_License_CVW": {
+                "MITRE_Collaborative_Virtual_Workspace_License_CVW": "License :: OSI Approved :: MITRE Collaborative Virtual Workspace License (CVW)"
+            },
+            "MirOS_License_MirOS": {
+                "MirOS_License_MirOS": "License :: OSI Approved :: MirOS License (MirOS)"
+            },
+            "Motosoto_License": {
+                "Motosoto_License": "License :: OSI Approved :: Motosoto License"
+            },
+            "Mozilla_Public_License_1_0_MPL": {
+                "Mozilla_Public_License_1_0_MPL": "License :: OSI Approved :: Mozilla Public License 1.0 (MPL)"
+            },
+            "Mozilla_Public_License_1_1_MPL_1_1": {
+                "Mozilla_Public_License_1_1_MPL_1_1": "License :: OSI Approved :: Mozilla Public License 1.1 (MPL 1.1)"
+            },
+            "Mozilla_Public_License_2_0_MPL_2_0": {
+                "Mozilla_Public_License_2_0_MPL_2_0": "License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)"
+            },
+            "Nethack_General_Public_License": {
+                "Nethack_General_Public_License": "License :: OSI Approved :: Nethack General Public License"
+            },
+            "Nokia_Open_Source_License": {
+                "Nokia_Open_Source_License": "License :: OSI Approved :: Nokia Open Source License"
+            },
+            "Open_Group_Test_Suite_License": {
+                "Open_Group_Test_Suite_License": "License :: OSI Approved :: Open Group Test Suite License"
+            },
+            "Open_Software_License_3_0_OSL3_0": {
+                "Open_Software_License_3_0_OSL3_0": "License :: OSI Approved :: Open Software License 3.0 (OSL-3.0)"
+            },
+            "PostgreSQL_License": {
+                "PostgreSQL_License": "License :: OSI Approved :: PostgreSQL License"
+            },
+            "Python_License_CNRI_Python_License": {
+                "Python_License_CNRI_Python_License": "License :: OSI Approved :: Python License (CNRI Python License)"
+            },
+            "Python_Software_Foundation_License": {
+                "Python_Software_Foundation_License": "License :: OSI Approved :: Python Software Foundation License"
+            },
+            "Qt_Public_License_QPL": {
+                "Qt_Public_License_QPL": "License :: OSI Approved :: Qt Public License (QPL)"
+            },
+            "Ricoh_Source_Code_Public_License": {
+                "Ricoh_Source_Code_Public_License": "License :: OSI Approved :: Ricoh Source Code Public License"
+            },
+            "SIL_Open_Font_License_1_1_OFL1_1": {
+                "SIL_Open_Font_License_1_1_OFL1_1": "License :: OSI Approved :: SIL Open Font License 1.1 (OFL-1.1)"
+            },
+            "Sleepycat_License": {
+                "Sleepycat_License": "License :: OSI Approved :: Sleepycat License"
+            },
+            "Sun_Industry_Standards_Source_License_SISSL": {
+                "Sun_Industry_Standards_Source_License_SISSL": "License :: OSI Approved :: Sun Industry Standards Source License (SISSL)"
+            },
+            "Sun_Public_License": {
+                "Sun_Public_License": "License :: OSI Approved :: Sun Public License"
+            },
+            "The_Unlicense_Unlicense": {
+                "The_Unlicense_Unlicense": "License :: OSI Approved :: The Unlicense (Unlicense)"
+            },
+            "Universal_Permissive_License_UPL": {
+                "Universal_Permissive_License_UPL": "License :: OSI Approved :: Universal Permissive License (UPL)"
+            },
+            "University_of_Illinois_NCSA_Open_Source_License": {
+                "University_of_Illinois_NCSA_Open_Source_License": "License :: OSI Approved :: University of Illinois/NCSA Open Source License"
+            },
+            "Vovida_Software_License_1_0": {
+                "Vovida_Software_License_1_0": "License :: OSI Approved :: Vovida Software License 1.0"
+            },
+            "W3C_License": {
+                "W3C_License": "License :: OSI Approved :: W3C License"
+            },
+            "X_Net_License": {
+                "X_Net_License": "License :: OSI Approved :: X.Net License"
+            },
+            "Zope_Public_License": {
+                "Zope_Public_License": "License :: OSI Approved :: Zope Public License"
+            },
+            "zlib_libpng_License": {
+                "zlib_libpng_License": "License :: OSI Approved :: zlib/libpng License"
+            }
+        },
+        "Other_Proprietary_License": {
+            "Other_Proprietary_License": "License :: Other/Proprietary License"
+        },
+        "Public_Domain": {
+            "Public_Domain": "License :: Public Domain"
+        },
+        "Repoze_Public_License": {
+            "Repoze_Public_License": "License :: Repoze Public License"
+        }
+    },
+    "Natural_Language": {
+        "Afrikaans": {
+            "Afrikaans": "Natural Language :: Afrikaans"
+        },
+        "Arabic": {
+            "Arabic": "Natural Language :: Arabic"
+        },
+        "Basque": {
+            "Basque": "Natural Language :: Basque"
+        },
+        "Bengali": {
+            "Bengali": "Natural Language :: Bengali"
+        },
+        "Bosnian": {
+            "Bosnian": "Natural Language :: Bosnian"
+        },
+        "Bulgarian": {
+            "Bulgarian": "Natural Language :: Bulgarian"
+        },
+        "Cantonese": {
+            "Cantonese": "Natural Language :: Cantonese"
+        },
+        "Catalan": {
+            "Catalan": "Natural Language :: Catalan"
+        },
+        "Chinese_Simplified": {
+            "Chinese_Simplified": "Natural Language :: Chinese (Simplified)"
+        },
+        "Chinese_Traditional": {
+            "Chinese_Traditional": "Natural Language :: Chinese (Traditional)"
+        },
+        "Croatian": {
+            "Croatian": "Natural Language :: Croatian"
+        },
+        "Czech": {
+            "Czech": "Natural Language :: Czech"
+        },
+        "Danish": {
+            "Danish": "Natural Language :: Danish"
+        },
+        "Dutch": {
+            "Dutch": "Natural Language :: Dutch"
+        },
+        "English": {
+            "English": "Natural Language :: English"
+        },
+        "Esperanto": {
+            "Esperanto": "Natural Language :: Esperanto"
+        },
+        "Finnish": {
+            "Finnish": "Natural Language :: Finnish"
+        },
+        "French": {
+            "French": "Natural Language :: French"
+        },
+        "Galician": {
+            "Galician": "Natural Language :: Galician"
+        },
+        "German": {
+            "German": "Natural Language :: German"
+        },
+        "Greek": {
+            "Greek": "Natural Language :: Greek"
+        },
+        "Hebrew": {
+            "Hebrew": "Natural Language :: Hebrew"
+        },
+        "Hindi": {
+            "Hindi": "Natural Language :: Hindi"
+        },
+        "Hungarian": {
+            "Hungarian": "Natural Language :: Hungarian"
+        },
+        "Icelandic": {
+            "Icelandic": "Natural Language :: Icelandic"
+        },
+        "Indonesian": {
+            "Indonesian": "Natural Language :: Indonesian"
+        },
+        "Irish": {
+            "Irish": "Natural Language :: Irish"
+        },
+        "Italian": {
+            "Italian": "Natural Language :: Italian"
+        },
+        "Japanese": {
+            "Japanese": "Natural Language :: Japanese"
+        },
+        "Javanese": {
+            "Javanese": "Natural Language :: Javanese"
+        },
+        "Korean": {
+            "Korean": "Natural Language :: Korean"
+        },
+        "Latin": {
+            "Latin": "Natural Language :: Latin"
+        },
+        "Latvian": {
+            "Latvian": "Natural Language :: Latvian"
+        },
+        "Lithuanian": {
+            "Lithuanian": "Natural Language :: Lithuanian"
+        },
+        "Macedonian": {
+            "Macedonian": "Natural Language :: Macedonian"
+        },
+        "Malay": {
+            "Malay": "Natural Language :: Malay"
+        },
+        "Marathi": {
+            "Marathi": "Natural Language :: Marathi"
+        },
+        "Nepali": {
+            "Nepali": "Natural Language :: Nepali"
+        },
+        "Norwegian": {
+            "Norwegian": "Natural Language :: Norwegian"
+        },
+        "Panjabi": {
+            "Panjabi": "Natural Language :: Panjabi"
+        },
+        "Persian": {
+            "Persian": "Natural Language :: Persian"
+        },
+        "Polish": {
+            "Polish": "Natural Language :: Polish"
+        },
+        "Portuguese": {
+            "Portuguese": "Natural Language :: Portuguese"
+        },
+        "Portuguese_Brazilian": {
+            "Portuguese_Brazilian": "Natural Language :: Portuguese (Brazilian)"
+        },
+        "Romanian": {
+            "Romanian": "Natural Language :: Romanian"
+        },
+        "Russian": {
+            "Russian": "Natural Language :: Russian"
+        },
+        "Serbian": {
+            "Serbian": "Natural Language :: Serbian"
+        },
+        "Slovak": {
+            "Slovak": "Natural Language :: Slovak"
+        },
+        "Slovenian": {
+            "Slovenian": "Natural Language :: Slovenian"
+        },
+        "Spanish": {
+            "Spanish": "Natural Language :: Spanish"
+        },
+        "Swedish": {
+            "Swedish": "Natural Language :: Swedish"
+        },
+        "Tamil": {
+            "Tamil": "Natural Language :: Tamil"
+        },
+        "Telugu": {
+            "Telugu": "Natural Language :: Telugu"
+        },
+        "Thai": {
+            "Thai": "Natural Language :: Thai"
+        },
+        "Tibetan": {
+            "Tibetan": "Natural Language :: Tibetan"
+        },
+        "Turkish": {
+            "Turkish": "Natural Language :: Turkish"
+        },
+        "Ukrainian": {
+            "Ukrainian": "Natural Language :: Ukrainian"
+        },
+        "Urdu": {
+            "Urdu": "Natural Language :: Urdu"
+        },
+        "Vietnamese": {
+            "Vietnamese": "Natural Language :: Vietnamese"
+        }
+    },
+    "Operating_System": {
+        "Android": {
+            "Android": "Operating System :: Android"
+        },
+        "BeOS": {
+            "BeOS": "Operating System :: BeOS"
+        },
+        "MacOS": {
+            "MacOS": "Operating System :: MacOS",
+            "MacOS_9": {
+                "MacOS_9": "Operating System :: MacOS :: MacOS 9"
+            },
+            "MacOS_X": {
+                "MacOS_X": "Operating System :: MacOS :: MacOS X"
+            }
+        },
+        "Microsoft": {
+            "Microsoft": "Operating System :: Microsoft",
+            "MSDOS": {
+                "MSDOS": "Operating System :: Microsoft :: MS-DOS"
+            },
+            "Windows": {
+                "Windows": "Operating System :: Microsoft :: Windows",
+                "Windows_10": {
+                    "Windows_10": "Operating System :: Microsoft :: Windows :: Windows 10"
+                },
+                "Windows_3_1_or_Earlier": {
+                    "Windows_3_1_or_Earlier": "Operating System :: Microsoft :: Windows :: Windows 3.1 or Earlier"
+                },
+                "Windows_7": {
+                    "Windows_7": "Operating System :: Microsoft :: Windows :: Windows 7"
+                },
+                "Windows_8": {
+                    "Windows_8": "Operating System :: Microsoft :: Windows :: Windows 8"
+                },
+                "Windows_8_1": {
+                    "Windows_8_1": "Operating System :: Microsoft :: Windows :: Windows 8.1"
+                },
+                "Windows_95_98_2000": {
+                    "Windows_95_98_2000": "Operating System :: Microsoft :: Windows :: Windows 95/98/2000"
+                },
+                "Windows_CE": {
+                    "Windows_CE": "Operating System :: Microsoft :: Windows :: Windows CE"
+                },
+                "Windows_NT_2000": {
+                    "Windows_NT_2000": "Operating System :: Microsoft :: Windows :: Windows NT/2000"
+                },
+                "Windows_Server_2003": {
+                    "Windows_Server_2003": "Operating System :: Microsoft :: Windows :: Windows Server 2003"
+                },
+                "Windows_Server_2008": {
+                    "Windows_Server_2008": "Operating System :: Microsoft :: Windows :: Windows Server 2008"
+                },
+                "Windows_Vista": {
+                    "Windows_Vista": "Operating System :: Microsoft :: Windows :: Windows Vista"
+                },
+                "Windows_XP": {
+                    "Windows_XP": "Operating System :: Microsoft :: Windows :: Windows XP"
+                }
+            }
+        },
+        "OS_Independent": {
+            "OS_Independent": "Operating System :: OS Independent"
+        },
+        "OS_2": {
+            "OS_2": "Operating System :: OS/2"
+        },
+        "Other_OS": {
+            "Other_OS": "Operating System :: Other OS"
+        },
+        "PDA_Systems": {
+            "PDA_Systems": "Operating System :: PDA Systems"
+        },
+        "POSIX": {
+            "POSIX": "Operating System :: POSIX",
+            "AIX": {
+                "AIX": "Operating System :: POSIX :: AIX"
+            },
+            "BSD": {
+                "BSD": "Operating System :: POSIX :: BSD",
+                "BSD_OS": {
+                    "BSD_OS": "Operating System :: POSIX :: BSD :: BSD/OS"
+                },
+                "FreeBSD": {
+                    "FreeBSD": "Operating System :: POSIX :: BSD :: FreeBSD"
+                },
+                "NetBSD": {
+                    "NetBSD": "Operating System :: POSIX :: BSD :: NetBSD"
+                },
+                "OpenBSD": {
+                    "OpenBSD": "Operating System :: POSIX :: BSD :: OpenBSD"
+                }
+            },
+            "GNU_Hurd": {
+                "GNU_Hurd": "Operating System :: POSIX :: GNU Hurd"
+            },
+            "HPUX": {
+                "HPUX": "Operating System :: POSIX :: HP-UX"
+            },
+            "IRIX": {
+                "IRIX": "Operating System :: POSIX :: IRIX"
+            },
+            "Linux": {
+                "Linux": "Operating System :: POSIX :: Linux"
+            },
+            "Other": {
+                "Other": "Operating System :: POSIX :: Other"
+            },
+            "SCO": {
+                "SCO": "Operating System :: POSIX :: SCO"
+            },
+            "SunOS_Solaris": {
+                "SunOS_Solaris": "Operating System :: POSIX :: SunOS/Solaris"
+            }
+        },
+        "PalmOS": {
+            "PalmOS": "Operating System :: PalmOS"
+        },
+        "RISC_OS": {
+            "RISC_OS": "Operating System :: RISC OS"
+        },
+        "Unix": {
+            "Unix": "Operating System :: Unix"
+        },
+        "iOS": {
+            "iOS": "Operating System :: iOS"
+        }
+    },
+    "Programming_Language": {
+        "APL": {
+            "APL": "Programming Language :: APL"
+        },
+        "ASP": {
+            "ASP": "Programming Language :: ASP"
+        },
+        "Ada": {
+            "Ada": "Programming Language :: Ada"
+        },
+        "Assembly": {
+            "Assembly": "Programming Language :: Assembly"
+        },
+        "Awk": {
+            "Awk": "Programming Language :: Awk"
+        },
+        "Basic": {
+            "Basic": "Programming Language :: Basic"
+        },
+        "C": {
+            "C": "Programming Language :: C"
+        },
+        "C_sharp": {
+            "C_sharp": "Programming Language :: C#"
+        },
+        "C_plus_plus": {
+            "C_plus_plus": "Programming Language :: C++"
+        },
+        "Cold_Fusion": {
+            "Cold_Fusion": "Programming Language :: Cold Fusion"
+        },
+        "Cython": {
+            "Cython": "Programming Language :: Cython"
+        },
+        "Delphi_Kylix": {
+            "Delphi_Kylix": "Programming Language :: Delphi/Kylix"
+        },
+        "Dylan": {
+            "Dylan": "Programming Language :: Dylan"
+        },
+        "Eiffel": {
+            "Eiffel": "Programming Language :: Eiffel"
+        },
+        "EmacsLisp": {
+            "EmacsLisp": "Programming Language :: Emacs-Lisp"
+        },
+        "Erlang": {
+            "Erlang": "Programming Language :: Erlang"
+        },
+        "Euler": {
+            "Euler": "Programming Language :: Euler"
+        },
+        "Euphoria": {
+            "Euphoria": "Programming Language :: Euphoria"
+        },
+        "F_sharp": {
+            "F_sharp": "Programming Language :: F#"
+        },
+        "Forth": {
+            "Forth": "Programming Language :: Forth"
+        },
+        "Fortran": {
+            "Fortran": "Programming Language :: Fortran"
+        },
+        "Haskell": {
+            "Haskell": "Programming Language :: Haskell"
+        },
+        "Java": {
+            "Java": "Programming Language :: Java"
+        },
+        "JavaScript": {
+            "JavaScript": "Programming Language :: JavaScript"
+        },
+        "Kotlin": {
+            "Kotlin": "Programming Language :: Kotlin"
+        },
+        "Lisp": {
+            "Lisp": "Programming Language :: Lisp"
+        },
+        "Logo": {
+            "Logo": "Programming Language :: Logo"
+        },
+        "ML": {
+            "ML": "Programming Language :: ML"
+        },
+        "Modula": {
+            "Modula": "Programming Language :: Modula"
+        },
+        "OCaml": {
+            "OCaml": "Programming Language :: OCaml"
+        },
+        "Object_Pascal": {
+            "Object_Pascal": "Programming Language :: Object Pascal"
+        },
+        "Objective_C": {
+            "Objective_C": "Programming Language :: Objective C"
+        },
+        "Other": {
+            "Other": "Programming Language :: Other"
+        },
+        "Other_Scripting_Engines": {
+            "Other_Scripting_Engines": "Programming Language :: Other Scripting Engines"
+        },
+        "PHP": {
+            "PHP": "Programming Language :: PHP"
+        },
+        "PL_SQL": {
+            "PL_SQL": "Programming Language :: PL/SQL"
+        },
+        "PROGRESS": {
+            "PROGRESS": "Programming Language :: PROGRESS"
+        },
+        "Pascal": {
+            "Pascal": "Programming Language :: Pascal"
+        },
+        "Perl": {
+            "Perl": "Programming Language :: Perl"
+        },
+        "Pike": {
+            "Pike": "Programming Language :: Pike"
+        },
+        "Pliant": {
+            "Pliant": "Programming Language :: Pliant"
+        },
+        "Prolog": {
+            "Prolog": "Programming Language :: Prolog"
+        },
+        "Python": {
+            "Python": "Programming Language :: Python",
+            "Two": {
+                "Two": "Programming Language :: Python :: 3.2",
+                "Only": {
+                    "Only": "Programming Language :: Python :: 2 :: Only"
+                }
+            },
+            "Three": {
+                "Three": "Programming Language :: Python :: 3.3",
+                "Only": {
+                    "Only": "Programming Language :: Python :: 3 :: Only"
+                }
+            },
+            "Four": {
+                "Four": "Programming Language :: Python :: 3.4"
+            },
+            "Five": {
+                "Five": "Programming Language :: Python :: 3.5"
+            },
+            "Six": {
+                "Six": "Programming Language :: Python :: 3.6"
+            },
+            "Seven": {
+                "Seven": "Programming Language :: Python :: 3.7"
+            },
+            "Zero": {
+                "Zero": "Programming Language :: Python :: 3.0"
+            },
+            "One": {
+                "One": "Programming Language :: Python :: 3.1"
+            },
+            "Ten": {
+                "Ten": "Programming Language :: Python :: 3.10"
+            },
+            "Eight": {
+                "Eight": "Programming Language :: Python :: 3.8"
+            },
+            "Nine": {
+                "Nine": "Programming Language :: Python :: 3.9"
+            },
+            "Implementation": {
+                "Implementation": "Programming Language :: Python :: Implementation",
+                "CPython": {
+                    "CPython": "Programming Language :: Python :: Implementation :: CPython"
+                },
+                "IronPython": {
+                    "IronPython": "Programming Language :: Python :: Implementation :: IronPython"
+                },
+                "Jython": {
+                    "Jython": "Programming Language :: Python :: Implementation :: Jython"
+                },
+                "MicroPython": {
+                    "MicroPython": "Programming Language :: Python :: Implementation :: MicroPython"
+                },
+                "PyPy": {
+                    "PyPy": "Programming Language :: Python :: Implementation :: PyPy"
+                },
+                "Stackless": {
+                    "Stackless": "Programming Language :: Python :: Implementation :: Stackless"
+                }
+            }
+        },
+        "R": {
+            "R": "Programming Language :: R"
+        },
+        "REBOL": {
+            "REBOL": "Programming Language :: REBOL"
+        },
+        "Rexx": {
+            "Rexx": "Programming Language :: Rexx"
+        },
+        "Ruby": {
+            "Ruby": "Programming Language :: Ruby"
+        },
+        "Rust": {
+            "Rust": "Programming Language :: Rust"
+        },
+        "SQL": {
+            "SQL": "Programming Language :: SQL"
+        },
+        "Scheme": {
+            "Scheme": "Programming Language :: Scheme"
+        },
+        "Simula": {
+            "Simula": "Programming Language :: Simula"
+        },
+        "Smalltalk": {
+            "Smalltalk": "Programming Language :: Smalltalk"
+        },
+        "Tcl": {
+            "Tcl": "Programming Language :: Tcl"
+        },
+        "Unix_Shell": {
+            "Unix_Shell": "Programming Language :: Unix Shell"
+        },
+        "Visual_Basic": {
+            "Visual_Basic": "Programming Language :: Visual Basic"
+        },
+        "XBasic": {
+            "XBasic": "Programming Language :: XBasic"
+        },
+        "YACC": {
+            "YACC": "Programming Language :: YACC"
+        },
+        "Zope": {
+            "Zope": "Programming Language :: Zope"
+        }
+    },
+    "Topic": {
+        "Adaptive_Technologies": {
+            "Adaptive_Technologies": "Topic :: Adaptive Technologies"
+        },
+        "Artistic_Software": {
+            "Artistic_Software": "Topic :: Artistic Software"
+        },
+        "Communications": {
+            "Communications": "Topic :: Communications",
+            "BBS": {
+                "BBS": "Topic :: Communications :: BBS"
+            },
+            "Chat": {
+                "Chat": "Topic :: Communications :: Chat",
+                "ICQ": {
+                    "ICQ": "Topic :: Communications :: Chat :: ICQ"
+                },
+                "Internet_Relay_Chat": {
+                    "Internet_Relay_Chat": "Topic :: Communications :: Chat :: Internet Relay Chat"
+                },
+                "Unix_Talk": {
+                    "Unix_Talk": "Topic :: Communications :: Chat :: Unix Talk"
+                }
+            },
+            "Conferencing": {
+                "Conferencing": "Topic :: Communications :: Conferencing"
+            },
+            "Email": {
+                "Email": "Topic :: Communications :: Email",
+                "Address_Book": {
+                    "Address_Book": "Topic :: Communications :: Email :: Address Book"
+                },
+                "Email_Clients_MUA": {
+                    "Email_Clients_MUA": "Topic :: Communications :: Email :: Email Clients (MUA)"
+                },
+                "Filters": {
+                    "Filters": "Topic :: Communications :: Email :: Filters"
+                },
+                "Mail_Transport_Agents": {
+                    "Mail_Transport_Agents": "Topic :: Communications :: Email :: Mail Transport Agents"
+                },
+                "Mailing_List_Servers": {
+                    "Mailing_List_Servers": "Topic :: Communications :: Email :: Mailing List Servers"
+                },
+                "PostOffice": {
+                    "PostOffice": "Topic :: Communications :: Email :: Post-Office",
+                    "IMAP": {
+                        "IMAP": "Topic :: Communications :: Email :: Post-Office :: IMAP"
+                    },
+                    "POP3": {
+                        "POP3": "Topic :: Communications :: Email :: Post-Office :: POP3"
+                    }
+                }
+            },
+            "FIDO": {
+                "FIDO": "Topic :: Communications :: FIDO"
+            },
+            "Fax": {
+                "Fax": "Topic :: Communications :: Fax"
+            },
+            "File_Sharing": {
+                "File_Sharing": "Topic :: Communications :: File Sharing",
+                "Gnutella": {
+                    "Gnutella": "Topic :: Communications :: File Sharing :: Gnutella"
+                },
+                "Napster": {
+                    "Napster": "Topic :: Communications :: File Sharing :: Napster"
+                }
+            },
+            "Ham_Radio": {
+                "Ham_Radio": "Topic :: Communications :: Ham Radio"
+            },
+            "Internet_Phone": {
+                "Internet_Phone": "Topic :: Communications :: Internet Phone"
+            },
+            "Telephony": {
+                "Telephony": "Topic :: Communications :: Telephony"
+            },
+            "Usenet_News": {
+                "Usenet_News": "Topic :: Communications :: Usenet News"
+            }
+        },
+        "Database": {
+            "Database": "Topic :: Database",
+            "Database_Engines_Servers": {
+                "Database_Engines_Servers": "Topic :: Database :: Database Engines/Servers"
+            },
+            "FrontEnds": {
+                "FrontEnds": "Topic :: Database :: Front-Ends"
+            }
+        },
+        "Desktop_Environment": {
+            "Desktop_Environment": "Topic :: Desktop Environment",
+            "File_Managers": {
+                "File_Managers": "Topic :: Desktop Environment :: File Managers"
+            },
+            "GNUstep": {
+                "GNUstep": "Topic :: Desktop Environment :: GNUstep"
+            },
+            "Gnome": {
+                "Gnome": "Topic :: Desktop Environment :: Gnome"
+            },
+            "K_Desktop_Environment_KDE": {
+                "K_Desktop_Environment_KDE": "Topic :: Desktop Environment :: K Desktop Environment (KDE)",
+                "Themes": {
+                    "Themes": "Topic :: Desktop Environment :: K Desktop Environment (KDE) :: Themes"
+                }
+            },
+            "PicoGUI": {
+                "PicoGUI": "Topic :: Desktop Environment :: PicoGUI",
+                "Applications": {
+                    "Applications": "Topic :: Desktop Environment :: PicoGUI :: Applications"
+                },
+                "Themes": {
+                    "Themes": "Topic :: Desktop Environment :: PicoGUI :: Themes"
+                }
+            },
+            "Screen_Savers": {
+                "Screen_Savers": "Topic :: Desktop Environment :: Screen Savers"
+            },
+            "Window_Managers": {
+                "Window_Managers": "Topic :: Desktop Environment :: Window Managers",
+                "Afterstep": {
+                    "Afterstep": "Topic :: Desktop Environment :: Window Managers :: Afterstep",
+                    "Themes": {
+                        "Themes": "Topic :: Desktop Environment :: Window Managers :: Afterstep :: Themes"
+                    }
+                },
+                "Applets": {
+                    "Applets": "Topic :: Desktop Environment :: Window Managers :: Applets"
+                },
+                "Blackbox": {
+                    "Blackbox": "Topic :: Desktop Environment :: Window Managers :: Blackbox",
+                    "Themes": {
+                        "Themes": "Topic :: Desktop Environment :: Window Managers :: Blackbox :: Themes"
+                    }
+                },
+                "CTWM": {
+                    "CTWM": "Topic :: Desktop Environment :: Window Managers :: CTWM",
+                    "Themes": {
+                        "Themes": "Topic :: Desktop Environment :: Window Managers :: CTWM :: Themes"
+                    }
+                },
+                "Enlightenment": {
+                    "Enlightenment": "Topic :: Desktop Environment :: Window Managers :: Enlightenment",
+                    "Epplets": {
+                        "Epplets": "Topic :: Desktop Environment :: Window Managers :: Enlightenment :: Epplets"
+                    },
+                    "Themes_DR15": {
+                        "Themes_DR15": "Topic :: Desktop Environment :: Window Managers :: Enlightenment :: Themes DR15"
+                    },
+                    "Themes_DR16": {
+                        "Themes_DR16": "Topic :: Desktop Environment :: Window Managers :: Enlightenment :: Themes DR16"
+                    },
+                    "Themes_DR17": {
+                        "Themes_DR17": "Topic :: Desktop Environment :: Window Managers :: Enlightenment :: Themes DR17"
+                    }
+                },
+                "FVWM": {
+                    "FVWM": "Topic :: Desktop Environment :: Window Managers :: FVWM",
+                    "Themes": {
+                        "Themes": "Topic :: Desktop Environment :: Window Managers :: FVWM :: Themes"
+                    }
+                },
+                "Fluxbox": {
+                    "Fluxbox": "Topic :: Desktop Environment :: Window Managers :: Fluxbox",
+                    "Themes": {
+                        "Themes": "Topic :: Desktop Environment :: Window Managers :: Fluxbox :: Themes"
+                    }
+                },
+                "IceWM": {
+                    "IceWM": "Topic :: Desktop Environment :: Window Managers :: IceWM",
+                    "Themes": {
+                        "Themes": "Topic :: Desktop Environment :: Window Managers :: IceWM :: Themes"
+                    }
+                },
+                "MetaCity": {
+                    "MetaCity": "Topic :: Desktop Environment :: Window Managers :: MetaCity",
+                    "Themes": {
+                        "Themes": "Topic :: Desktop Environment :: Window Managers :: MetaCity :: Themes"
+                    }
+                },
+                "Oroborus": {
+                    "Oroborus": "Topic :: Desktop Environment :: Window Managers :: Oroborus",
+                    "Themes": {
+                        "Themes": "Topic :: Desktop Environment :: Window Managers :: Oroborus :: Themes"
+                    }
+                },
+                "Sawfish": {
+                    "Sawfish": "Topic :: Desktop Environment :: Window Managers :: Sawfish",
+                    "Themes_0_30": {
+                        "Themes_0_30": "Topic :: Desktop Environment :: Window Managers :: Sawfish :: Themes 0.30"
+                    },
+                    "Themes_pre0_30": {
+                        "Themes_pre0_30": "Topic :: Desktop Environment :: Window Managers :: Sawfish :: Themes pre-0.30"
+                    }
+                },
+                "Waimea": {
+                    "Waimea": "Topic :: Desktop Environment :: Window Managers :: Waimea",
+                    "Themes": {
+                        "Themes": "Topic :: Desktop Environment :: Window Managers :: Waimea :: Themes"
+                    }
+                },
+                "Window_Maker": {
+                    "Window_Maker": "Topic :: Desktop Environment :: Window Managers :: Window Maker",
+                    "Applets": {
+                        "Applets": "Topic :: Desktop Environment :: Window Managers :: Window Maker :: Applets"
+                    },
+                    "Themes": {
+                        "Themes": "Topic :: Desktop Environment :: Window Managers :: Window Maker :: Themes"
+                    }
+                },
+                "XFCE": {
+                    "XFCE": "Topic :: Desktop Environment :: Window Managers :: XFCE",
+                    "Themes": {
+                        "Themes": "Topic :: Desktop Environment :: Window Managers :: XFCE :: Themes"
+                    }
+                }
+            }
+        },
+        "Documentation": {
+            "Documentation": "Topic :: Documentation",
+            "Sphinx": {
+                "Sphinx": "Topic :: Documentation :: Sphinx"
+            }
+        },
+        "Education": {
+            "Education": "Topic :: Education",
+            "Computer_Aided_Instruction_CAI": {
+                "Computer_Aided_Instruction_CAI": "Topic :: Education :: Computer Aided Instruction (CAI)"
+            },
+            "Testing": {
+                "Testing": "Topic :: Education :: Testing"
+            }
+        },
+        "Games_Entertainment": {
+            "Games_Entertainment": "Topic :: Games/Entertainment",
+            "Arcade": {
+                "Arcade": "Topic :: Games/Entertainment :: Arcade"
+            },
+            "Board_Games": {
+                "Board_Games": "Topic :: Games/Entertainment :: Board Games"
+            },
+            "First_Person_Shooters": {
+                "First_Person_Shooters": "Topic :: Games/Entertainment :: First Person Shooters"
+            },
+            "Fortune_Cookies": {
+                "Fortune_Cookies": "Topic :: Games/Entertainment :: Fortune Cookies"
+            },
+            "MultiUser_Dungeons_MUD": {
+                "MultiUser_Dungeons_MUD": "Topic :: Games/Entertainment :: Multi-User Dungeons (MUD)"
+            },
+            "Puzzle_Games": {
+                "Puzzle_Games": "Topic :: Games/Entertainment :: Puzzle Games"
+            },
+            "Real_Time_Strategy": {
+                "Real_Time_Strategy": "Topic :: Games/Entertainment :: Real Time Strategy"
+            },
+            "RolePlaying": {
+                "RolePlaying": "Topic :: Games/Entertainment :: Role-Playing"
+            },
+            "SideScrolling_Arcade_Games": {
+                "SideScrolling_Arcade_Games": "Topic :: Games/Entertainment :: Side-Scrolling/Arcade Games"
+            },
+            "Simulation": {
+                "Simulation": "Topic :: Games/Entertainment :: Simulation"
+            },
+            "Turn_Based_Strategy": {
+                "Turn_Based_Strategy": "Topic :: Games/Entertainment :: Turn Based Strategy"
+            }
+        },
+        "Home_Automation": {
+            "Home_Automation": "Topic :: Home Automation"
+        },
+        "Internet": {
+            "Internet": "Topic :: Internet",
+            "File_Transfer_Protocol_FTP": {
+                "File_Transfer_Protocol_FTP": "Topic :: Internet :: File Transfer Protocol (FTP)"
+            },
+            "Finger": {
+                "Finger": "Topic :: Internet :: Finger"
+            },
+            "Log_Analysis": {
+                "Log_Analysis": "Topic :: Internet :: Log Analysis"
+            },
+            "Name_Service_DNS": {
+                "Name_Service_DNS": "Topic :: Internet :: Name Service (DNS)"
+            },
+            "Proxy_Servers": {
+                "Proxy_Servers": "Topic :: Internet :: Proxy Servers"
+            },
+            "WAP": {
+                "WAP": "Topic :: Internet :: WAP"
+            },
+            "WWW_HTTP": {
+                "WWW_HTTP": "Topic :: Internet :: WWW/HTTP",
+                "Browsers": {
+                    "Browsers": "Topic :: Internet :: WWW/HTTP :: Browsers"
+                },
+                "Dynamic_Content": {
+                    "Dynamic_Content": "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
+                    "CGI_Tools_Libraries": {
+                        "CGI_Tools_Libraries": "Topic :: Internet :: WWW/HTTP :: Dynamic Content :: CGI Tools/Libraries"
+                    },
+                    "Content_Management_System": {
+                        "Content_Management_System": "Topic :: Internet :: WWW/HTTP :: Dynamic Content :: Content Management System"
+                    },
+                    "Message_Boards": {
+                        "Message_Boards": "Topic :: Internet :: WWW/HTTP :: Dynamic Content :: Message Boards"
+                    },
+                    "News_Diary": {
+                        "News_Diary": "Topic :: Internet :: WWW/HTTP :: Dynamic Content :: News/Diary"
+                    },
+                    "Page_Counters": {
+                        "Page_Counters": "Topic :: Internet :: WWW/HTTP :: Dynamic Content :: Page Counters"
+                    },
+                    "Wiki": {
+                        "Wiki": "Topic :: Internet :: WWW/HTTP :: Dynamic Content :: Wiki"
+                    }
+                },
+                "HTTP_Servers": {
+                    "HTTP_Servers": "Topic :: Internet :: WWW/HTTP :: HTTP Servers"
+                },
+                "Indexing_Search": {
+                    "Indexing_Search": "Topic :: Internet :: WWW/HTTP :: Indexing/Search"
+                },
+                "Session": {
+                    "Session": "Topic :: Internet :: WWW/HTTP :: Session"
+                },
+                "Site_Management": {
+                    "Site_Management": "Topic :: Internet :: WWW/HTTP :: Site Management",
+                    "Link_Checking": {
+                        "Link_Checking": "Topic :: Internet :: WWW/HTTP :: Site Management :: Link Checking"
+                    }
+                },
+                "WSGI": {
+                    "WSGI": "Topic :: Internet :: WWW/HTTP :: WSGI",
+                    "Application": {
+                        "Application": "Topic :: Internet :: WWW/HTTP :: WSGI :: Application"
+                    },
+                    "Middleware": {
+                        "Middleware": "Topic :: Internet :: WWW/HTTP :: WSGI :: Middleware"
+                    },
+                    "Server": {
+                        "Server": "Topic :: Internet :: WWW/HTTP :: WSGI :: Server"
+                    }
+                }
+            },
+            "XMPP": {
+                "XMPP": "Topic :: Internet :: XMPP"
+            },
+            "Z39_50": {
+                "Z39_50": "Topic :: Internet :: Z39.50"
+            }
+        },
+        "Multimedia": {
+            "Multimedia": "Topic :: Multimedia",
+            "Graphics": {
+                "Graphics": "Topic :: Multimedia :: Graphics",
+                "ThreeDimension_Modeling": {
+                    "ThreeDimension_Modeling": "Topic :: Multimedia :: Graphics :: 3D Modeling"
+                },
+                "ThreeDimension_Rendering": {
+                    "ThreeDimension_Rendering": "Topic :: Multimedia :: Graphics :: 3D Rendering"
+                },
+                "Capture": {
+                    "Capture": "Topic :: Multimedia :: Graphics :: Capture",
+                    "Digital_Camera": {
+                        "Digital_Camera": "Topic :: Multimedia :: Graphics :: Capture :: Digital Camera"
+                    },
+                    "Scanners": {
+                        "Scanners": "Topic :: Multimedia :: Graphics :: Capture :: Scanners"
+                    },
+                    "Screen_Capture": {
+                        "Screen_Capture": "Topic :: Multimedia :: Graphics :: Capture :: Screen Capture"
+                    }
+                },
+                "Editors": {
+                    "Editors": "Topic :: Multimedia :: Graphics :: Editors",
+                    "RasterBased": {
+                        "RasterBased": "Topic :: Multimedia :: Graphics :: Editors :: Raster-Based"
+                    },
+                    "VectorBased": {
+                        "VectorBased": "Topic :: Multimedia :: Graphics :: Editors :: Vector-Based"
+                    }
+                },
+                "Graphics_Conversion": {
+                    "Graphics_Conversion": "Topic :: Multimedia :: Graphics :: Graphics Conversion"
+                },
+                "Presentation": {
+                    "Presentation": "Topic :: Multimedia :: Graphics :: Presentation"
+                },
+                "Viewers": {
+                    "Viewers": "Topic :: Multimedia :: Graphics :: Viewers"
+                }
+            },
+            "Sound_Audio": {
+                "Sound_Audio": "Topic :: Multimedia :: Sound/Audio",
+                "Analysis": {
+                    "Analysis": "Topic :: Multimedia :: Sound/Audio :: Analysis"
+                },
+                "CD_Audio": {
+                    "CD_Audio": "Topic :: Multimedia :: Sound/Audio :: CD Audio",
+                    "CD_Playing": {
+                        "CD_Playing": "Topic :: Multimedia :: Sound/Audio :: CD Audio :: CD Playing"
+                    },
+                    "CD_Ripping": {
+                        "CD_Ripping": "Topic :: Multimedia :: Sound/Audio :: CD Audio :: CD Ripping"
+                    },
+                    "CD_Writing": {
+                        "CD_Writing": "Topic :: Multimedia :: Sound/Audio :: CD Audio :: CD Writing"
+                    }
+                },
+                "Capture_Recording": {
+                    "Capture_Recording": "Topic :: Multimedia :: Sound/Audio :: Capture/Recording"
+                },
+                "Conversion": {
+                    "Conversion": "Topic :: Multimedia :: Sound/Audio :: Conversion"
+                },
+                "Editors": {
+                    "Editors": "Topic :: Multimedia :: Sound/Audio :: Editors"
+                },
+                "MIDI": {
+                    "MIDI": "Topic :: Multimedia :: Sound/Audio :: MIDI"
+                },
+                "Mixers": {
+                    "Mixers": "Topic :: Multimedia :: Sound/Audio :: Mixers"
+                },
+                "Players": {
+                    "Players": "Topic :: Multimedia :: Sound/Audio :: Players",
+                    "MP3": {
+                        "MP3": "Topic :: Multimedia :: Sound/Audio :: Players :: MP3"
+                    }
+                },
+                "Sound_Synthesis": {
+                    "Sound_Synthesis": "Topic :: Multimedia :: Sound/Audio :: Sound Synthesis"
+                },
+                "Speech": {
+                    "Speech": "Topic :: Multimedia :: Sound/Audio :: Speech"
+                }
+            },
+            "Video": {
+                "Video": "Topic :: Multimedia :: Video",
+                "Capture": {
+                    "Capture": "Topic :: Multimedia :: Video :: Capture"
+                },
+                "Conversion": {
+                    "Conversion": "Topic :: Multimedia :: Video :: Conversion"
+                },
+                "Display": {
+                    "Display": "Topic :: Multimedia :: Video :: Display"
+                },
+                "NonLinear_Editor": {
+                    "NonLinear_Editor": "Topic :: Multimedia :: Video :: Non-Linear Editor"
+                }
+            }
+        },
+        "Office_Business": {
+            "Office_Business": "Topic :: Office/Business",
+            "Financial": {
+                "Financial": "Topic :: Office/Business :: Financial",
+                "Accounting": {
+                    "Accounting": "Topic :: Office/Business :: Financial :: Accounting"
+                },
+                "Investment": {
+                    "Investment": "Topic :: Office/Business :: Financial :: Investment"
+                },
+                "PointOfSale": {
+                    "PointOfSale": "Topic :: Office/Business :: Financial :: Point-Of-Sale"
+                },
+                "Spreadsheet": {
+                    "Spreadsheet": "Topic :: Office/Business :: Financial :: Spreadsheet"
+                }
+            },
+            "Groupware": {
+                "Groupware": "Topic :: Office/Business :: Groupware"
+            },
+            "News_Diary": {
+                "News_Diary": "Topic :: Office/Business :: News/Diary"
+            },
+            "Office_Suites": {
+                "Office_Suites": "Topic :: Office/Business :: Office Suites"
+            },
+            "Scheduling": {
+                "Scheduling": "Topic :: Office/Business :: Scheduling"
+            }
+        },
+        "Other_Nonlisted_Topic": {
+            "Other_Nonlisted_Topic": "Topic :: Other/Nonlisted Topic"
+        },
+        "Printing": {
+            "Printing": "Topic :: Printing"
+        },
+        "Religion": {
+            "Religion": "Topic :: Religion"
+        },
+        "Scientific_Engineering": {
+            "Scientific_Engineering": "Topic :: Scientific/Engineering",
+            "Artificial_Intelligence": {
+                "Artificial_Intelligence": "Topic :: Scientific/Engineering :: Artificial Intelligence"
+            },
+            "Artificial_Life": {
+                "Artificial_Life": "Topic :: Scientific/Engineering :: Artificial Life"
+            },
+            "Astronomy": {
+                "Astronomy": "Topic :: Scientific/Engineering :: Astronomy"
+            },
+            "Atmospheric_Science": {
+                "Atmospheric_Science": "Topic :: Scientific/Engineering :: Atmospheric Science"
+            },
+            "BioInformatics": {
+                "BioInformatics": "Topic :: Scientific/Engineering :: Bio-Informatics"
+            },
+            "Chemistry": {
+                "Chemistry": "Topic :: Scientific/Engineering :: Chemistry"
+            },
+            "Electronic_Design_Automation_EDA": {
+                "Electronic_Design_Automation_EDA": "Topic :: Scientific/Engineering :: Electronic Design Automation (EDA)"
+            },
+            "GIS": {
+                "GIS": "Topic :: Scientific/Engineering :: GIS"
+            },
+            "Human_Machine_Interfaces": {
+                "Human_Machine_Interfaces": "Topic :: Scientific/Engineering :: Human Machine Interfaces"
+            },
+            "Hydrology": {
+                "Hydrology": "Topic :: Scientific/Engineering :: Hydrology"
+            },
+            "Image_Processing": {
+                "Image_Processing": "Topic :: Scientific/Engineering :: Image Processing"
+            },
+            "Image_Recognition": {
+                "Image_Recognition": "Topic :: Scientific/Engineering :: Image Recognition"
+            },
+            "Information_Analysis": {
+                "Information_Analysis": "Topic :: Scientific/Engineering :: Information Analysis"
+            },
+            "Interface_Engine_Protocol_Translator": {
+                "Interface_Engine_Protocol_Translator": "Topic :: Scientific/Engineering :: Interface Engine/Protocol Translator"
+            },
+            "Mathematics": {
+                "Mathematics": "Topic :: Scientific/Engineering :: Mathematics"
+            },
+            "Medical_Science_Apps_": {
+                "Medical_Science_Apps_": "Topic :: Scientific/Engineering :: Medical Science Apps."
+            },
+            "Physics": {
+                "Physics": "Topic :: Scientific/Engineering :: Physics"
+            },
+            "Visualization": {
+                "Visualization": "Topic :: Scientific/Engineering :: Visualization"
+            }
+        },
+        "Security": {
+            "Security": "Topic :: Security",
+            "Cryptography": {
+                "Cryptography": "Topic :: Security :: Cryptography"
+            }
+        },
+        "Sociology": {
+            "Sociology": "Topic :: Sociology",
+            "Genealogy": {
+                "Genealogy": "Topic :: Sociology :: Genealogy"
+            },
+            "History": {
+                "History": "Topic :: Sociology :: History"
+            }
+        },
+        "Software_Development": {
+            "Software_Development": "Topic :: Software Development",
+            "Assemblers": {
+                "Assemblers": "Topic :: Software Development :: Assemblers"
+            },
+            "Bug_Tracking": {
+                "Bug_Tracking": "Topic :: Software Development :: Bug Tracking"
+            },
+            "Build_Tools": {
+                "Build_Tools": "Topic :: Software Development :: Build Tools"
+            },
+            "Code_Generators": {
+                "Code_Generators": "Topic :: Software Development :: Code Generators"
+            },
+            "Compilers": {
+                "Compilers": "Topic :: Software Development :: Compilers"
+            },
+            "Debuggers": {
+                "Debuggers": "Topic :: Software Development :: Debuggers"
+            },
+            "Disassemblers": {
+                "Disassemblers": "Topic :: Software Development :: Disassemblers"
+            },
+            "Documentation": {
+                "Documentation": "Topic :: Software Development :: Documentation"
+            },
+            "Embedded_Systems": {
+                "Embedded_Systems": "Topic :: Software Development :: Embedded Systems"
+            },
+            "Internationalization": {
+                "Internationalization": "Topic :: Software Development :: Internationalization"
+            },
+            "Interpreters": {
+                "Interpreters": "Topic :: Software Development :: Interpreters"
+            },
+            "Libraries": {
+                "Libraries": "Topic :: Software Development :: Libraries",
+                "Application_Frameworks": {
+                    "Application_Frameworks": "Topic :: Software Development :: Libraries :: Application Frameworks"
+                },
+                "Java_Libraries": {
+                    "Java_Libraries": "Topic :: Software Development :: Libraries :: Java Libraries"
+                },
+                "PHP_Classes": {
+                    "PHP_Classes": "Topic :: Software Development :: Libraries :: PHP Classes"
+                },
+                "Perl_Modules": {
+                    "Perl_Modules": "Topic :: Software Development :: Libraries :: Perl Modules"
+                },
+                "Pike_Modules": {
+                    "Pike_Modules": "Topic :: Software Development :: Libraries :: Pike Modules"
+                },
+                "Python_Modules": {
+                    "Python_Modules": "Topic :: Software Development :: Libraries :: Python Modules"
+                },
+                "Ruby_Modules": {
+                    "Ruby_Modules": "Topic :: Software Development :: Libraries :: Ruby Modules"
+                },
+                "Tcl_Extensions": {
+                    "Tcl_Extensions": "Topic :: Software Development :: Libraries :: Tcl Extensions"
+                },
+                "pygame": {
+                    "pygame": "Topic :: Software Development :: Libraries :: pygame"
+                }
+            },
+            "Localization": {
+                "Localization": "Topic :: Software Development :: Localization"
+            },
+            "Object_Brokering": {
+                "Object_Brokering": "Topic :: Software Development :: Object Brokering",
+                "CORBA": {
+                    "CORBA": "Topic :: Software Development :: Object Brokering :: CORBA"
+                }
+            },
+            "Preprocessors": {
+                "Preprocessors": "Topic :: Software Development :: Pre-processors"
+            },
+            "Quality_Assurance": {
+                "Quality_Assurance": "Topic :: Software Development :: Quality Assurance"
+            },
+            "Testing": {
+                "Testing": "Topic :: Software Development :: Testing",
+                "Acceptance": {
+                    "Acceptance": "Topic :: Software Development :: Testing :: Acceptance"
+                },
+                "BDD": {
+                    "BDD": "Topic :: Software Development :: Testing :: BDD"
+                },
+                "Mocking": {
+                    "Mocking": "Topic :: Software Development :: Testing :: Mocking"
+                },
+                "Traffic_Generation": {
+                    "Traffic_Generation": "Topic :: Software Development :: Testing :: Traffic Generation"
+                },
+                "Unit": {
+                    "Unit": "Topic :: Software Development :: Testing :: Unit"
+                }
+            },
+            "User_Interfaces": {
+                "User_Interfaces": "Topic :: Software Development :: User Interfaces"
+            },
+            "Version_Control": {
+                "Version_Control": "Topic :: Software Development :: Version Control",
+                "Bazaar": {
+                    "Bazaar": "Topic :: Software Development :: Version Control :: Bazaar"
+                },
+                "CVS": {
+                    "CVS": "Topic :: Software Development :: Version Control :: CVS"
+                },
+                "Git": {
+                    "Git": "Topic :: Software Development :: Version Control :: Git"
+                },
+                "Mercurial": {
+                    "Mercurial": "Topic :: Software Development :: Version Control :: Mercurial"
+                },
+                "RCS": {
+                    "RCS": "Topic :: Software Development :: Version Control :: RCS"
+                },
+                "SCCS": {
+                    "SCCS": "Topic :: Software Development :: Version Control :: SCCS"
+                }
+            },
+            "Widget_Sets": {
+                "Widget_Sets": "Topic :: Software Development :: Widget Sets"
+            }
+        },
+        "System": {
+            "System": "Topic :: System",
+            "Archiving": {
+                "Archiving": "Topic :: System :: Archiving",
+                "Backup": {
+                    "Backup": "Topic :: System :: Archiving :: Backup"
+                },
+                "Compression": {
+                    "Compression": "Topic :: System :: Archiving :: Compression"
+                },
+                "Mirroring": {
+                    "Mirroring": "Topic :: System :: Archiving :: Mirroring"
+                },
+                "Packaging": {
+                    "Packaging": "Topic :: System :: Archiving :: Packaging"
+                }
+            },
+            "Benchmark": {
+                "Benchmark": "Topic :: System :: Benchmark"
+            },
+            "Boot": {
+                "Boot": "Topic :: System :: Boot",
+                "Init": {
+                    "Init": "Topic :: System :: Boot :: Init"
+                }
+            },
+            "Clustering": {
+                "Clustering": "Topic :: System :: Clustering"
+            },
+            "Console_Fonts": {
+                "Console_Fonts": "Topic :: System :: Console Fonts"
+            },
+            "Distributed_Computing": {
+                "Distributed_Computing": "Topic :: System :: Distributed Computing"
+            },
+            "Emulators": {
+                "Emulators": "Topic :: System :: Emulators"
+            },
+            "Filesystems": {
+                "Filesystems": "Topic :: System :: Filesystems"
+            },
+            "Hardware": {
+                "Hardware": "Topic :: System :: Hardware",
+                "Hardware_Drivers": {
+                    "Hardware_Drivers": "Topic :: System :: Hardware :: Hardware Drivers"
+                },
+                "Mainframes": {
+                    "Mainframes": "Topic :: System :: Hardware :: Mainframes"
+                },
+                "Symmetric_Multiprocessing": {
+                    "Symmetric_Multiprocessing": "Topic :: System :: Hardware :: Symmetric Multi-processing"
+                }
+            },
+            "Installation_Setup": {
+                "Installation_Setup": "Topic :: System :: Installation/Setup"
+            },
+            "Logging": {
+                "Logging": "Topic :: System :: Logging"
+            },
+            "Monitoring": {
+                "Monitoring": "Topic :: System :: Monitoring"
+            },
+            "Networking": {
+                "Networking": "Topic :: System :: Networking",
+                "Firewalls": {
+                    "Firewalls": "Topic :: System :: Networking :: Firewalls"
+                },
+                "Monitoring": {
+                    "Monitoring": "Topic :: System :: Networking :: Monitoring",
+                    "Hardware_Watchdog": {
+                        "Hardware_Watchdog": "Topic :: System :: Networking :: Monitoring :: Hardware Watchdog"
+                    }
+                },
+                "Time_Synchronization": {
+                    "Time_Synchronization": "Topic :: System :: Networking :: Time Synchronization"
+                }
+            },
+            "Operating_System": {
+                "Operating_System": "Topic :: System :: Operating System"
+            },
+            "Operating_System_Kernels": {
+                "Operating_System_Kernels": "Topic :: System :: Operating System Kernels",
+                "BSD": {
+                    "BSD": "Topic :: System :: Operating System Kernels :: BSD"
+                },
+                "GNU_Hurd": {
+                    "GNU_Hurd": "Topic :: System :: Operating System Kernels :: GNU Hurd"
+                },
+                "Linux": {
+                    "Linux": "Topic :: System :: Operating System Kernels :: Linux"
+                }
+            },
+            "Power_UPS": {
+                "Power_UPS": "Topic :: System :: Power (UPS)"
+            },
+            "Recovery_Tools": {
+                "Recovery_Tools": "Topic :: System :: Recovery Tools"
+            },
+            "Shells": {
+                "Shells": "Topic :: System :: Shells"
+            },
+            "Software_Distribution": {
+                "Software_Distribution": "Topic :: System :: Software Distribution"
+            },
+            "System_Shells": {
+                "System_Shells": "Topic :: System :: System Shells"
+            },
+            "Systems_Administration": {
+                "Systems_Administration": "Topic :: System :: Systems Administration",
+                "Authentication_Directory": {
+                    "Authentication_Directory": "Topic :: System :: Systems Administration :: Authentication/Directory",
+                    "LDAP": {
+                        "LDAP": "Topic :: System :: Systems Administration :: Authentication/Directory :: LDAP"
+                    },
+                    "NIS": {
+                        "NIS": "Topic :: System :: Systems Administration :: Authentication/Directory :: NIS"
+                    }
+                }
+            }
+        },
+        "Terminals": {
+            "Terminals": "Topic :: Terminals",
+            "Serial": {
+                "Serial": "Topic :: Terminals :: Serial"
+            },
+            "Telnet": {
+                "Telnet": "Topic :: Terminals :: Telnet"
+            },
+            "Terminal_Emulators_X_Terminals": {
+                "Terminal_Emulators_X_Terminals": "Topic :: Terminals :: Terminal Emulators/X Terminals"
+            }
+        },
+        "Text_Editors": {
+            "Text_Editors": "Topic :: Text Editors",
+            "Documentation": {
+                "Documentation": "Topic :: Text Editors :: Documentation"
+            },
+            "Emacs": {
+                "Emacs": "Topic :: Text Editors :: Emacs"
+            },
+            "Integrated_Development_Environments_IDE": {
+                "Integrated_Development_Environments_IDE": "Topic :: Text Editors :: Integrated Development Environments (IDE)"
+            },
+            "Text_Processing": {
+                "Text_Processing": "Topic :: Text Editors :: Text Processing"
+            },
+            "Word_Processors": {
+                "Word_Processors": "Topic :: Text Editors :: Word Processors"
+            }
+        },
+        "Text_Processing": {
+            "Text_Processing": "Topic :: Text Processing",
+            "Filters": {
+                "Filters": "Topic :: Text Processing :: Filters"
+            },
+            "Fonts": {
+                "Fonts": "Topic :: Text Processing :: Fonts"
+            },
+            "General": {
+                "General": "Topic :: Text Processing :: General"
+            },
+            "Indexing": {
+                "Indexing": "Topic :: Text Processing :: Indexing"
+            },
+            "Linguistic": {
+                "Linguistic": "Topic :: Text Processing :: Linguistic"
+            },
+            "Markup": {
+                "Markup": "Topic :: Text Processing :: Markup",
+                "HTML": {
+                    "HTML": "Topic :: Text Processing :: Markup :: HTML"
+                },
+                "LaTeX": {
+                    "LaTeX": "Topic :: Text Processing :: Markup :: LaTeX"
+                },
+                "Markdown": {
+                    "Markdown": "Topic :: Text Processing :: Markup :: Markdown"
+                },
+                "SGML": {
+                    "SGML": "Topic :: Text Processing :: Markup :: SGML"
+                },
+                "VRML": {
+                    "VRML": "Topic :: Text Processing :: Markup :: VRML"
+                },
+                "XML": {
+                    "XML": "Topic :: Text Processing :: Markup :: XML"
+                },
+                "reStructuredText": {
+                    "reStructuredText": "Topic :: Text Processing :: Markup :: reStructuredText"
+                }
+            }
+        },
+        "Utilities": {
+            "Utilities": "Topic :: Utilities"
+        }
+    },
+    "Typing": {
+        "Typed": {
+            "Typed": "Typing :: Typed"
+        }
+    }
+}

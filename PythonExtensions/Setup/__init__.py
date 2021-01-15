@@ -6,7 +6,6 @@
 
 import importlib
 import os
-from enum import Enum
 from os.path import *
 from typing import *
 
@@ -14,7 +13,6 @@ from typing import *
 
 
 __all__ = [
-    'DevelopmentStatus',
     'ReadFromFile', 'ReadLinesFromFile', 'GetRequirements', 'GetVersion',
     'Get_Packages_Data', 'pycache', 'GetPath',
     'MatchExtension', 'MatchFileTypes',
@@ -48,25 +46,6 @@ def GetRequirements(path: str) -> List[str]:
 
         install_requires.append(f'{line}>={VERSION}')
     return install_requires
-
-class DevelopmentStatus(str, Enum):
-    """
-    How mature is this project? Common values are
-        Development Status :: 1 - Planning
-        Development Status :: 2 - Pre-Alpha
-        Development Status :: 3 - Alpha
-        Development Status :: 4 - Beta
-        Development Status :: 5 - Production/Stable
-        Development Status :: 6 - Mature
-        Development Status :: 7 - Inactive
-    """
-    Planning = 'Development Status :: 1 - Planning'
-    PreAlpha = 'Development Status :: 2 - Pre-Alpha'
-    Alpha = 'Development Status :: 3 - Alpha'
-    Beta = 'Development Status :: 4 - Beta'
-    Stable = 'Development Status :: 5 - Production/Stable'
-    Mature = 'Development Status :: 6 - Mature'
-    Inactive = 'Development Status :: 7 - Inactive'
 
 pycache = '__pycache__'
 
