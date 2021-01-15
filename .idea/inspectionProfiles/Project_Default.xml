@@ -2,6 +2,14 @@
   <profile version="1.0">
     <option name="myName" value="Project Default" />
     <inspection_tool class="CythonUsageBeforeDeclarationInspection" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="DuplicatedCode" enabled="true" level="WEAK WARNING" enabled_by_default="true">
+      <Languages>
+        <language minSize="55" name="Python" />
+      </Languages>
+    </inspection_tool>
+    <inspection_tool class="PyArgumentEqualDefaultInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+    <inspection_tool class="PyArgumentListInspection" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="PyCallByClassInspection" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="PyComparisonWithNoneInspection" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="PyDefaultArgumentInspection" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
     <inspection_tool class="PyPep8Inspection" enabled="false" level="WEAK WARNING" enabled_by_default="false">
@@ -18,6 +26,13 @@
       <option name="ignoredIdentifiers">
         <list>
           <option value="tkinter.Listbox.tag_configure" />
+          <option value="property.setter" />
+          <option value="TruePad.Misc.Fonts.AllFonts.*" />
+          <option value="TruePad.Constants.Fonts.AllFonts.*" />
+          <option value="pprint.PrettyPrinter._format" />
+          <option value="object._options" />
+          <option value="test.test.LogPaths.network" />
+          <option value="src.BaseExtensions.Logging.LogPaths.*" />
         </list>
       </option>
     </inspection_tool>
