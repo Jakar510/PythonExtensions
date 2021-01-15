@@ -1,0 +1,98 @@
+
+from types import FunctionType, MethodType
+from typing import Union
+import re
+import sys
+
+
+
+
+
+__all__ = [
+        'CalculateOffset', 'RoundFloat',
+        'IsMethod', 'IsFunction',
+        'IsAttributePrivate',
+        'get_size', 'sizeof',
+
+        ]
+
+
+def RoundFloat(Float: float, Precision: int) -> str:
+    """ Rounds the Float to the given Precision and returns It as string. """
+    return f"{Float:.{Precision}f}"
+
+def CalculateOffset(starting: Union[int, float], *args: Union[int, float]) -> int:
+    """
+        Example: WrapLength = ScreenWidth * Widget.Parent.relwidth * Widget.relwidth * offset
+
+    :param starting: starting value (such as width or height)
+    :param args: a list of float or integers to be cumulatively multiplied together.
+    :return:
+    """
+    for arg in args:
+        if not isinstance(arg, (int, float)): arg = float(arg)
+        starting *= arg
+    return int(starting)
+
+
+
+def IsMethod(o) -> bool:
+    """
+        Checks if passed object is a method
+
+        https://stackoverflow.com/questions/37455426/advantages-of-using-methodtype-in-python
+    :param o: object being checked
+    :type o: any
+    :return: weather it is a method
+    :rtype: bool
+    """
+    return isinstance(o, MethodType)
+def IsFunction(o) -> bool:
+    """
+        Checks if passed object is a function
+
+        https://stackoverflow.com/questions/37455426/advantages-of-using-methodtype-in-python
+    :param o: object being checked
+    :type o: any
+    :return: weather it is a method
+    :rtype: bool
+    """
+    return isinstance(o, FunctionType)
+
+
+
+
+private_or_special_function_searcher = re.compile(r"(^__\w+$)|(^_\w+$)|(^__\w+__$)")
+
+def IsAttributePrivate(attr_name: str) -> bool: return private_or_special_function_searcher.search(attr_name) is not None
+
+
+
+def get_size(obj, seen: set = set()):
+    """ Recursively finds size of objects """
+    size = sys.getsizeof(obj)
+    if seen is None: seen = set()
+
+    obj_id = id(obj)
+    if obj_id in seen: return 0
+
+    # Important mark as seen *before* entering recursion to gracefully handle self-referential objects
+    seen.add(obj_id)
+    if isinstance(obj, dict):
+        size += sum([get_size(v, seen) for v in obj.values()])
+        size += sum([get_size(k, seen) for k in obj.keys()])
+
+    elif hasattr(obj, '__dict__'):
+        size += get_size(obj.__dict__, seen)
+
+    elif hasattr(obj, '__iter__') and not isinstance(obj, (str, bytes, bytearray)):
+        size += sum([get_size(i, seen) for i in obj])
+
+    return size
+
+
+def sizeof(obj):
+    size = sys.getsizeof(obj)
+    if isinstance(obj, dict): return size + sum(map(sizeof, obj.keys())) + sum(map(sizeof, obj.values()))
+    if isinstance(obj, (list, tuple, set, frozenset)): return size + sum(map(sizeof, obj))
+    return size

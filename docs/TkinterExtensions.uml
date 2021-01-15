@@ -1,0 +1,1261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>Python</ID>
+  <OriginalElement>#D:/WorkSpace/TkinterExtensions/src/TkinterExtensions</OriginalElement>
+  <nodes>
+    <node x="13777.576176142698" y="14347.0">TkinterExtensions.Widgets.HTML.HTMLLabel</node>
+    <node x="3587.333333333332" y="7894.5">TkinterExtensions.Misc.Enumerations.SelectionMode</node>
+    <node x="14373.629394819149" y="12026.0">TkinterExtensions.Widgets.Widgets.ScrolledText</node>
+    <node x="18389.224100938314" y="13323.0">TkinterExtensions.Widgets.Themed.LabelThemed</node>
+    <node x="8341.458333333332" y="10779.0">TkinterExtensions.Widgets.KeyBoard._PopupKeyboard</node>
+    <node x="4431.951176142698" y="10823.0">TkinterExtensions.examples.Root</node>
+    <node x="16515.333333333332" y="2538.0">TkinterExtensions.Widgets.BaseWidgets.CallWrapper</node>
+    <node x="20621.46761465688" y="10173.5">tkinter.Button</node>
+    <node x="19064.2636761427" y="10195.5">tkinter.Frame</node>
+    <node x="14253.125" y="2538.0">tkinter.Place</node>
+    <node x="13460.504394819149" y="10834.5">tkinter.Scrollbar</node>
+    <node x="14502.875" y="7939.5">tkinter.Widget</node>
+    <node x="1923.3333333333321" y="7894.5">TkinterExtensions.Misc.Enumerations.ViewArguments</node>
+    <node x="13435.576176142698" y="13323.5">tkinter.ttk.Combobox</node>
+    <node x="20872.104166666668" y="12037.0">TkinterExtensions.Widgets.BaseWidgets.ImageMixin</node>
+    <node x="22700.83772815248" y="12070.0">TkinterExtensions.examples.BaseWindow</node>
+    <node x="13023.08772815248" y="10691.0">tkinter.Entry</node>
+    <node x="18689.104166666668" y="12015.0">TkinterExtensions.Widgets.KeyBoard.KeyboardEntry</node>
+    <node x="13781.576176142698" y="13967.0">TkinterExtensions.Widgets.HTML.HTMLText</node>
+    <node x="8735.388676142698" y="2637.5">TkinterExtensions.Mixins.AutoNameMixin</node>
+    <node x="1688.754394819147" y="811.0">tkinter.Misc</node>
+    <node x="19677.557434271646" y="13290.0">TkinterExtensions.examples.LabelWindow</node>
+    <node x="11927.729166666666" y="104.0">object</node>
+    <node x="19332.2636761427" y="10195.5">abc.ABCMeta</node>
+    <node x="14489.125" y="2395.0">tkinter.Grid</node>
+    <node x="554.5043948191469" y="335.5">typing.Sized</node>
+    <node x="21433.104166666668" y="12103.5">TkinterExtensions.Misc.Helpers.AutoStartThread</node>
+    <node x="10032.145833333332" y="5106.0">TkinterExtensions.Events.TkinterEvent</node>
+    <node x="13789.576176142698" y="14496.0">TkinterExtensions.examples.HTMLViewer</node>
+    <node x="6099.333333333333" y="7806.5">TkinterExtensions.Misc.Enumerations.AnchorAndSticky</node>
+    <node x="7303.333333333333" y="7916.5">TkinterExtensions.Misc.Enumerations.Wrap</node>
+    <node x="12754.458333333332" y="12037.0">TkinterExtensions.Widgets.Widgets.Entry</node>
+    <node x="3427.8803509383106" y="5128.0">enum.Enum</node>
+    <node x="3143.333333333332" y="7883.5">TkinterExtensions.Misc.Enumerations.MenuItemTypes</node>
+    <node x="15792.333333333332" y="10823.0">TkinterExtensions.Widgets.BaseWidgets.BaseTextTkinterWidget</node>
+    <node x="23029.057434271646" y="2549.0">TkinterExtensions.Misc.Helpers.AutoCounter</node>
+    <node x="18936.2636761427" y="10878.5">TkinterExtensions.Widgets.Frames.Frame</node>
+    <node x="14177.576176142698" y="13345.5">TkinterExtensions.Widgets.Themed.ScrollbarThemed</node>
+    <node x="11891.229166666666" y="2637.5">TkinterExtensions.Mixins.NameMixin</node>
+    <node x="18107.104166666668" y="11993.0">TkinterExtensions.Widgets.Custom.ButtonGrid</node>
+    <node x="22924.21761465688" y="10746.0">threading.Thread</node>
+    <node x="14836.125" y="10867.5">tkinter.ttk.Widget</node>
+    <node x="3480.567708333332" y="0.0">typing.Hashable</node>
+    <node x="21729.46761465688" y="10195.5">tkinter.Label</node>
+    <node x="13321.458333333332" y="12114.5">TkinterExtensions.Widgets.Widgets.Scrollbar</node>
+    <node x="7518.69678132355" y="4578.0">tkinter.Wm</node>
+    <node x="14613.576176142698" y="13345.5">TkinterExtensions.Widgets.Widgets.CheckButton</node>
+    <node x="4879.333333333332" y="7894.5">TkinterExtensions.Misc.Enumerations.ViewState</node>
+    <node x="9303.791666666666" y="11531.0">tkinter.Text</node>
+    <node x="12065.229166666666" y="5205.5">TkinterExtensions.Widgets.Style.Style</node>
+    <node x="9881.421061485813" y="10173.5">tkinter.XView</node>
+    <node x="15921.22410093831" y="13290.0">TkinterExtensions.Widgets.Widgets.CheckBox</node>
+    <node x="10213.791666666666" y="11751.0">tkinter.ttk.Treeview</node>
+    <node x="14718.125" y="2516.0">tkinter.Pack</node>
+    <node x="17103.224100938314" y="13334.5">TkinterExtensions.Widgets.Widgets.Button</node>
+    <node x="13749.576176142698" y="13202.0">TkinterExtensions.Widgets.HTML.HTMLScrolledText</node>
+    <node x="16127.333333333332" y="2637.5">TkinterExtensions.examples.MainMenu_Colors</node>
+    <node x="4031.333333333332" y="7905.5">TkinterExtensions.Misc.Enumerations.ActiveStyle</node>
+    <node x="16384.22410093831" y="13334.5">TkinterExtensions.Widgets.Themed.ButtonThemed</node>
+    <node x="22496.171061485817" y="13312.0">TkinterExtensions.examples.Window3</node>
+    <node x="23225.2636761427" y="13334.0">TkinterExtensions.examples.Window2</node>
+    <node x="6931.333333333333" y="7839.5">TkinterExtensions.Misc.Enumerations.Tags</node>
+    <node x="22820.171061485817" y="13334.0">TkinterExtensions.examples.Window1</node>
+    <node x="19824.5136761427" y="10195.5">tkinter.LabelFrame</node>
+    <node x="13318.576176142698" y="13934.5">TkinterExtensions.Widgets.Themed.ComboBoxThemed</node>
+    <node x="1304.3333333333321" y="7795.0">tkinter.Tk</node>
+    <node x="10086.145833333332" y="2649.5">tkEvent</node>
+    <node x="17822.224100938314" y="13312.0">TkinterExtensions.Widgets.Widgets.Label</node>
+    <node x="2367.333333333332" y="7916.5">TkinterExtensions.Misc.Enumerations.Orient</node>
+    <node x="2755.333333333332" y="7872.5">TkinterExtensions.Misc.Enumerations.Relief</node>
+    <node x="388.0" y="10162.5">TkinterExtensions.Widgets.KeyBoard.KeyBoardState</node>
+    <node x="812.7543948191469" y="2307.0">enum.EnumMeta</node>
+    <node x="1340.754394819147" y="2362.0">TkinterExtensions.Misc.HID.HID_BUFFER</node>
+    <node x="5727.333333333333" y="7894.5">TkinterExtensions.Misc.Enumerations.Fill</node>
+    <node x="23590.21761465688" y="12114.5">TkinterExtensions.Misc.Helpers.AutoStartTargetedThread</node>
+    <node x="12215.229166666666" y="2483.0">tkinter.ttk.Style</node>
+    <node x="19521.104166666668" y="12059.0">TkinterExtensions.Widgets.Themed.TreeViewHolderThemed</node>
+    <node x="8964.041666666666" y="13224.5">TkinterExtensions.Widgets.Widgets.Canvas</node>
+    <node x="20582.33772815248" y="13736.0">TkinterExtensions.Widgets.AnimatedGIF.AnimatedGIF</node>
+    <node x="11122.791666666666" y="13059.0">TkinterExtensions.Widgets.Widgets.Listbox</node>
+    <node x="22542.21761465688" y="2582.0">TkinterExtensions.Events.lazy_property</node>
+    <node x="19436.7636761427" y="10912.5">abc.ABC</node>
+    <node x="920.2543948191469" y="335.5">typing.Container</node>
+    <node x="0.0" y="10173.5">TkinterExtensions.Misc.Enumerations.Layout</node>
+    <node x="8712.708333333332" y="7927.5">tkinter.Toplevel</node>
+    <node x="8880.708333333332" y="5139.0">tkinter.BaseWidget</node>
+    <node x="6559.333333333333" y="7894.5">TkinterExtensions.Misc.Enumerations.Side</node>
+    <node x="4235.951176142698" y="10173.0">TkinterExtensions.Widgets.Root.tkRoot</node>
+    <node x="14830.375" y="12114.5">tkinter.ttk.Scrollbar</node>
+    <node x="10673.791666666666" y="13235.0">TkinterExtensions.Widgets.Themed.TreeViewThemed</node>
+    <node x="1775.754394819147" y="324.5">typing.Iterator</node>
+    <node x="19125.104166666668" y="12081.5">TkinterExtensions.Widgets.Frames.LabelFrame</node>
+    <node x="5291.333333333333" y="7828.5">TkinterExtensions.Misc.Enumerations.CanvasStyles</node>
+    <node x="1128.254394819147" y="335.5">typing.Iterable</node>
+    <node x="10194.145833333332" y="2637.5">tkinter.Event</node>
+    <node x="10284.18540853772" y="13290.5">TkinterExtensions.Widgets.Widgets.Text</node>
+    <node x="7675.333333333333" y="6145.0">TkinterExtensions.Events.Bindings</node>
+    <node x="13877.379394819149" y="12081.5">tkinter.ttk.Entry</node>
+    <node x="16541.84910093831" y="12103.5">tkinter.ttk.Button</node>
+    <node x="9806.145833333332" y="10878.5">tkinter.YView</node>
+    <node x="11914.203112767866" y="10845.0">TkinterExtensions.Widgets.BaseWidgets.CommandMixin</node>
+    <node x="19997.104166666668" y="12070.0">TkinterExtensions.examples.HomeWindow</node>
+    <node x="326.0" y="7939.5">enum.IntEnum</node>
+    <node x="4459.333333333332" y="7916.5">TkinterExtensions.Misc.Enumerations.BorderMode</node>
+    <node x="13814.875" y="9854.0">TkinterExtensions.Widgets.BaseWidgets.BaseTkinterWidget</node>
+    <node x="10656.791666666666" y="11861.0">tkinter.Listbox</node>
+    <node x="15901.34910093831" y="12059.5">tkinter.Checkbutton</node>
+    <node x="71.0" y="2010.5">int</node>
+    <node x="8906.791666666666" y="11454.0">tkinter.Canvas</node>
+    <node x="16556.333333333332" y="5227.0">TkinterExtensions.Widgets.BaseWidgets.CurrentValue</node>
+    <node x="12868.576176142698" y="13268.0">TkinterExtensions.Widgets.Themed.EntryThemed</node>
+    <node x="17738.71272815248" y="12114.5">tkinter.ttk.Label</node>
+    <node x="8261.458333333332" y="10173.0">TkinterExtensions.Widgets.Root.tkTopLevel</node>
+    <node x="20345.104166666668" y="12092.0">TkinterExtensions.Widgets.Custom.TitledEntry</node>
+    <node x="7991.333333333333" y="7751.0">TkinterExtensions.Widgets.Root._rootMixin</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="TkinterExtensions.Misc.Enumerations.Fill" target="enum.Enum">
+      <point x="0.0" y="-60.0" />
+      <point x="5903.333333333333" y="6065.0" />
+      <point x="3637.2241009383106" y="6065.0" />
+      <point x="49.84375" y="148.5" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.Widgets.Entry" target="tkinter.Entry">
+      <point x="0.0" y="-104.5" />
+      <point x="13027.958333333332" y="11284.0" />
+      <point x="13085.08772815248" y="11284.0" />
+      <point x="-62.0" y="236.5" />
+    </edge>
+    <edge source="tkinter.Misc" target="object">
+      <point x="134.0" y="-1853.5" />
+      <point x="2023.754394819147" y="701.0" />
+      <point x="11950.829166666666" y="701.0" />
+      <point x="-92.39999999999964" y="258.5" />
+    </edge>
+    <edge source="int" target="object">
+      <point x="143.5" y="-654.0" />
+      <point x="501.5" y="681.0" />
+      <point x="11932.349166666667" y="681.0" />
+      <point x="-110.8799999999992" y="258.5" />
+    </edge>
+    <edge source="TkinterExtensions.Events.TkinterEvent" target="tkinter.Event">
+      <point x="82.0" y="-170.5" />
+      <point x="10278.145833333332" y="4558.0" />
+      <point x="10262.145833333332" y="4558.0" />
+      <point x="0.0" y="27.0" />
+    </edge>
+    <edge source="tkinter.ttk.Label" target="tkinter.ttk.Widget">
+      <point x="0.0" y="-27.0" />
+      <point x="17843.21272815248" y="11264.0" />
+      <point x="15107.925" y="11264.0" />
+      <point x="120.79999999999927" y="60.0" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.Themed.ButtonThemed" target="TkinterExtensions.Widgets.BaseWidgets.ImageMixin">
+      <point x="262.125" y="-38.0" />
+      <point x="16995.84910093831" y="12999.0" />
+      <point x="21034.404166666667" y="12999.0" />
+      <point x="-108.20000000000073" y="104.5" />
+    </edge>
+    <edge source="TkinterExtensions.Misc.Enumerations.Side" target="enum.Enum">
+      <point x="0.0" y="-60.0" />
+      <point x="6735.333333333333" y="6045.0" />
+      <point x="3677.0991009383106" y="6045.0" />
+      <point x="89.71875" y="148.5" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.KeyBoard.KeyboardEntry" target="TkinterExtensions.Widgets.Frames.Frame">
+      <point x="0.0" y="-126.5" />
+      <point x="18897.104166666668" y="11414.0" />
+      <point x="19056.2636761427" y="11414.0" />
+      <point x="-48.0" y="49.0" />
+    </edge>
+    <edge source="tkinter.Scrollbar" target="tkinter.Widget">
+      <point x="0.0" y="-93.0" />
+      <point x="13584.504394819149" y="10611.0" />
+      <point x="12913.852075204386" y="10611.0" />
+      <point x="12913.852075204386" y="9824.0" />
+      <point x="14556.875" y="9824.0" />
+      <point x="-18.0" y="15.0" />
+    </edge>
+    <edge source="TkinterExtensions.Misc.Helpers.AutoCounter" target="object">
+      <point x="0.0" y="-115.5" />
+      <point x="23213.057434271646" y="701.0" />
+      <point x="12135.629166666666" y="701.0" />
+      <point x="92.39999999999964" y="258.5" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.AnimatedGIF.AnimatedGIF" target="TkinterExtensions.Widgets.Widgets.Label">
+      <point x="-193.25" y="-280.5" />
+      <point x="20775.58772815248" y="13711.0" />
+      <point x="18095.724100938314" y="13711.0" />
+      <point x="0.0" y="60.5" />
+    </edge>
+    <edge source="tkinter.BaseWidget" target="tkinter.Misc">
+      <point x="0.0" y="-137.5" />
+      <point x="9050.208333333332" y="4538.0" />
+      <point x="1990.254394819147" y="4538.0" />
+      <point x="100.5" y="1853.5" />
+    </edge>
+    <edge source="tkinter.LabelFrame" target="tkinter.Widget">
+      <point x="0.0" y="-27.0" />
+      <point x="19948.5136761427" y="9804.0" />
+      <point x="14616.875" y="9804.0" />
+      <point x="42.0" y="15.0" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.Widgets.Button" target="TkinterExtensions.Widgets.BaseWidgets.CommandMixin">
+      <point x="-262.125" y="-38.0" />
+      <point x="17190.599100938314" y="12889.0" />
+      <point x="12732.958333333332" y="12889.0" />
+      <point x="12732.958333333332" y="11254.0" />
+      <point x="12292.78003584479" y="11254.0" />
+      <point x="89.07692307692378" y="82.5" />
+    </edge>
+    <edge source="tkinter.ttk.Scrollbar" target="tkinter.ttk.Widget">
+      <point x="52.25" y="-27.0" />
+      <point x="0.0" y="60.0" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.Frames.Frame" target="TkinterExtensions.Widgets.BaseWidgets.BaseTkinterWidget">
+      <point x="-84.0" y="-49.0" />
+      <point x="19020.2636761427" y="10661.0" />
+      <point x="14604.125" y="10661.0" />
+      <point x="358.75" y="368.5" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.Themed.ScrollbarThemed" target="tkinter.ttk.Scrollbar">
+      <point x="104.0" y="-27.0" />
+      <point x="14489.576176142698" y="12989.0" />
+      <point x="14934.875" y="12989.0" />
+      <point x="0.0" y="27.0" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.Themed.ComboBoxThemed" target="TkinterExtensions.Widgets.BaseWidgets.BaseTextTkinterWidget">
+      <point x="147.66666666666606" y="-82.0" />
+      <point x="13687.742842809363" y="13711.0" />
+      <point x="15826.84910093831" y="13711.0" />
+      <point x="15826.84910093831" y="11374.0" />
+      <point x="16044.333333333332" y="11374.0" />
+      <point x="0.0" y="104.5" />
+    </edge>
+    <edge source="TkinterExtensions.Events.lazy_property" target="object">
+      <point x="0.0" y="-82.5" />
+      <point x="22722.71761465688" y="721.0" />
+      <point x="12117.149166666666" y="721.0" />
+      <point x="73.92000000000007" y="258.5" />
+    </edge>
+    <edge source="tkinter.Misc" target="typing.Iterator">
+      <point x="0.0" y="-1853.5" />
+      <point x="38.0" y="38.0" />
+    </edge>
+    <edge source="TkinterExtensions.Misc.Helpers.AutoStartTargetedThread" target="threading.Thread">
+      <point x="0.0" y="-27.0" />
+      <point x="323.5" y="181.5" />
+    </edge>
+    <edge source="tkinter.Text" target="tkinter.XView">
+      <point x="-296.66666666666606" y="-610.5" />
+      <point x="9452.125" y="11414.0" />
+      <point x="9455.791666666666" y="11414.0" />
+      <point x="9455.791666666666" y="10671.0" />
+      <point x="9942.921061485813" y="10671.0" />
+      <point x="-41.0" y="49.0" />
+    </edge>
+    <edge source="enum.IntEnum" target="enum.Enum">
+      <point x="32.0" y="-15.0" />
+      <point x="422.0" y="6075.0" />
+      <point x="3437.8491009383106" y="6075.0" />
+      <point x="-149.53125" y="148.5" />
+    </edge>
+    <edge source="TkinterExtensions.Misc.Enumerations.Layout" target="enum.IntEnum">
+      <point x="0.0" y="-49.0" />
+      <point x="184.0" y="9834.0" />
+      <point x="358.0" y="9834.0" />
+      <point x="-32.0" y="15.0" />
+    </edge>
+    <edge source="tkinter.Misc" target="typing.Iterable">
+      <point x="-134.0" y="-1853.5" />
+      <point x="1755.754394819147" y="641.0" />
+      <point x="1242.254394819147" y="641.0" />
+      <point x="38.0" y="27.0" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.Widgets.CheckBox" target="TkinterExtensions.Widgets.BaseWidgets.CommandMixin">
+      <point x="-166.125" y="-82.5" />
+      <point x="15976.59910093831" y="12909.0" />
+      <point x="12683.208333333332" y="12909.0" />
+      <point x="12683.208333333332" y="11274.0" />
+      <point x="12203.703112767866" y="11274.0" />
+      <point x="0.0" y="82.5" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.Widgets.Listbox" target="TkinterExtensions.Widgets.BaseWidgets.BaseTextTkinterWidget">
+      <point x="220.0" y="-313.5" />
+      <point x="11672.791666666666" y="13009.0" />
+      <point x="15060.875" y="13009.0" />
+      <point x="15060.875" y="11344.0" />
+      <point x="15928.02564102564" y="11344.0" />
+      <point x="-116.30769230769147" y="104.5" />
+    </edge>
+    <edge source="tkinter.Canvas" target="tkinter.YView">
+      <point x="125.66666666666606" y="-687.5" />
+      <point x="9220.958333333332" y="11424.0" />
+      <point x="9831.770833333332" y="11424.0" />
+      <point x="-76.875" y="49.0" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.Widgets.Scrollbar" target="tkinter.Scrollbar">
+      <point x="125.33333333333394" y="-27.0" />
+      <point x="13634.791666666668" y="11284.0" />
+      <point x="13522.504394819149" y="11284.0" />
+      <point x="-62.0" y="93.0" />
+    </edge>
+    <edge source="tkinter.ttk.Combobox" target="tkinter.ttk.Entry">
+      <point x="0.0" y="-49.0" />
+      <point x="13540.076176142698" y="12969.0" />
+      <point x="14093.379394819149" y="12969.0" />
+      <point x="72.0" y="60.0" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.Frames.LabelFrame" target="TkinterExtensions.Widgets.BaseWidgets.BaseTextTkinterWidget">
+      <point x="-94.0" y="-60.0" />
+      <point x="19219.104166666668" y="11244.0" />
+      <point x="16276.948717948719" y="11244.0" />
+      <point x="232.61538461538476" y="104.5" />
+    </edge>
+    <edge source="TkinterExtensions.Misc.Enumerations.CanvasStyles" target="enum.Enum">
+      <point x="0.0" y="-126.0" />
+      <point x="5499.333333333333" y="6075.0" />
+      <point x="3617.2866009383106" y="6075.0" />
+      <point x="29.90625" y="148.5" />
+    </edge>
+    <edge source="tkinter.Checkbutton" target="tkinter.Widget">
+      <point x="0.0" y="-82.0" />
+      <point x="16025.34910093831" y="11384.0" />
+      <point x="16337.46272815248" y="11384.0" />
+      <point x="16337.46272815248" y="9824.0" />
+      <point x="14592.875" y="9824.0" />
+      <point x="18.0" y="15.0" />
+    </edge>
+    <edge source="TkinterExtensions.Misc.Enumerations.Relief" target="enum.Enum">
+      <point x="0.0" y="-82.0" />
+      <point x="2939.333333333332" y="6105.0" />
+      <point x="3497.6616009383106" y="6105.0" />
+      <point x="-89.71875" y="148.5" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.KeyBoard._PopupKeyboard" target="TkinterExtensions.Widgets.Root.tkTopLevel">
+      <point x="0.0" y="-148.5" />
+      <point x="0.0" y="49.5" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.Frames.LabelFrame" target="tkinter.LabelFrame">
+      <point x="94.0" y="-60.0" />
+      <point x="19407.104166666668" y="11434.0" />
+      <point x="19948.5136761427" y="11434.0" />
+      <point x="0.0" y="27.0" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.Themed.ScrollbarThemed" target="TkinterExtensions.Widgets.BaseWidgets.BaseTkinterWidget">
+      <point x="-104.0" y="-27.0" />
+      <point x="14281.576176142698" y="12969.0" />
+      <point x="14175.879394819149" y="12969.0" />
+      <point x="14175.879394819149" y="10671.0" />
+      <point x="14317.125" y="10671.0" />
+      <point x="71.75" y="368.5" />
+    </edge>
+    <edge source="TkinterExtensions.examples.HomeWindow" target="TkinterExtensions.Widgets.Frames.Frame">
+      <point x="0.0" y="-71.5" />
+      <point x="20161.104166666668" y="11224.0" />
+      <point x="19152.2636761427" y="11224.0" />
+      <point x="48.0" y="49.0" />
+    </edge>
+    <edge source="TkinterExtensions.examples.Root" target="TkinterExtensions.Widgets.Root.tkRoot">
+      <point x="0.0" y="-104.5" />
+      <point x="0.0" y="49.5" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.Themed.ButtonThemed" target="tkinter.ttk.Button">
+      <point x="-87.375" y="-38.0" />
+      <point x="0.0" y="38.0" />
+    </edge>
+    <edge source="tkinter.Toplevel" target="tkinter.Wm">
+      <point x="-62.0" y="-27.0" />
+      <point x="8774.708333333332" y="5995.0" />
+      <point x="7976.94678132355" y="5995.0" />
+      <point x="152.75" y="698.5" />
+    </edge>
+    <edge source="enum.EnumMeta" target="typing.Iterable">
+      <point x="63.5" y="-357.5" />
+      <point x="1130.254394819147" y="671.0" />
+      <point x="1166.254394819147" y="671.0" />
+      <point x="-38.0" y="27.0" />
+    </edge>
+    <edge source="tkinter.Widget" target="tkinter.Pack">
+      <point x="54.0" y="-15.0" />
+      <point x="14628.875" y="6125.0" />
+      <point x="14824.625" y="6125.0" />
+      <point x="0.0" y="148.5" />
+    </edge>
+    <edge source="TkinterExtensions.Mixins.AutoNameMixin" target="object">
+      <point x="0.0" y="-27.0" />
+      <point x="8903.388676142698" y="741.0" />
+      <point x="11987.789166666666" y="741.0" />
+      <point x="-55.44000000000051" y="258.5" />
+    </edge>
+    <edge source="tkinter.Widget" target="tkinter.Place">
+      <point x="-18.0" y="-15.0" />
+      <point x="14556.875" y="6115.0" />
+      <point x="14361.125" y="6115.0" />
+      <point x="0.0" y="126.5" />
+    </edge>
+    <edge source="TkinterExtensions.examples.Window3" target="TkinterExtensions.examples.BaseWindow">
+      <point x="0.0" y="-60.5" />
+      <point x="22648.171061485817" y="13039.0" />
+      <point x="22755.50439481915" y="13039.0" />
+      <point x="-109.33333333333212" y="71.5" />
+    </edge>
+    <edge source="tkinter.ttk.Entry" target="tkinter.Entry">
+      <point x="-72.0" y="-60.0" />
+      <point x="13949.379394819149" y="11204.0" />
+      <point x="13209.08772815248" y="11204.0" />
+      <point x="62.0" y="236.5" />
+    </edge>
+    <edge source="enum.EnumMeta" target="typing.Iterator">
+      <point x="190.5" y="-357.5" />
+      <point x="1257.254394819147" y="671.0" />
+      <point x="1813.754394819147" y="671.0" />
+      <point x="-38.0" y="38.0" />
+    </edge>
+    <edge source="TkinterExtensions.examples.Window1" target="TkinterExtensions.examples.BaseWindow">
+      <point x="0.0" y="-38.5" />
+      <point x="22972.171061485817" y="13039.0" />
+      <point x="22864.83772815248" y="13039.0" />
+      <point x="0.0" y="71.5" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.Themed.ComboBoxThemed" target="tkinter.ttk.Combobox">
+      <point x="0.0" y="-82.0" />
+      <point x="0.0" y="49.0" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.Themed.LabelThemed" target="TkinterExtensions.Widgets.BaseWidgets.BaseTextTkinterWidget">
+      <point x="0.0" y="-49.5" />
+      <point x="18662.724100938314" y="12849.0" />
+      <point x="18096.604166666668" y="12849.0" />
+      <point x="18096.604166666668" y="11254.0" />
+      <point x="16238.179487179488" y="11254.0" />
+      <point x="193.84615384615427" y="104.5" />
+    </edge>
+    <edge source="abc.ABC" target="object">
+      <point x="22.0" y="-15.0" />
+      <point x="19502.7636761427" y="10671.0" />
+      <point x="22531.71761465688" y="10671.0" />
+      <point x="22531.71761465688" y="731.0" />
+      <point x="12107.909166666666" y="731.0" />
+      <point x="64.68000000000029" y="258.5" />
+    </edge>
+    <edge source="abc.ABC" target="abc.ABCMeta">
+      <point x="-22.0" y="-15.0" />
+      <point x="0.0" y="27.0" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.Themed.EntryThemed" target="TkinterExtensions.Widgets.BaseWidgets.CommandMixin">
+      <point x="-182.33333333333394" y="-104.5" />
+      <point x="12959.742842809363" y="12929.0" />
+      <point x="11849.625" y="12929.0" />
+      <point x="11849.625" y="11284.0" />
+      <point x="12114.626189690942" y="11284.0" />
+      <point x="-89.07692307692378" y="82.5" />
+    </edge>
+    <edge source="TkinterExtensions.Misc.Helpers.AutoStartThread" target="threading.Thread">
+      <point x="131.5" y="-38.0" />
+      <point x="21827.604166666668" y="11434.0" />
+      <point x="23247.71761465688" y="11434.0" />
+      <point x="-323.5" y="181.5" />
+    </edge>
+    <edge source="tkinter.ttk.Treeview" target="tkinter.YView">
+      <point x="-113.33333333333394" y="-390.5" />
+      <point x="10270.458333333332" y="11274.0" />
+      <point x="9934.270833333332" y="11274.0" />
+      <point x="25.625" y="49.0" />
+    </edge>
+    <edge source="tkinter.ttk.Treeview" target="tkinter.ttk.Widget">
+      <point x="113.33333333333394" y="-390.5" />
+      <point x="10497.125" y="11294.0" />
+      <point x="14866.325" y="11294.0" />
+      <point x="-120.79999999999927" y="60.0" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.KeyBoard.KeyBoardState" target="enum.IntEnum">
+      <point x="0.0" y="-60.0" />
+      <point x="596.0" y="9834.0" />
+      <point x="422.0" y="9834.0" />
+      <point x="32.0" y="15.0" />
+    </edge>
+    <edge source="TkinterExtensions.examples.MainMenu_Colors" target="object">
+      <point x="0.0" y="-27.0" />
+      <point x="16311.333333333332" y="751.0" />
+      <point x="12089.429166666667" y="751.0" />
+      <point x="46.20000000000073" y="258.5" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.Widgets.Button" target="TkinterExtensions.Widgets.BaseWidgets.ImageMixin">
+      <point x="262.125" y="-38.0" />
+      <point x="17714.849100938314" y="13009.0" />
+      <point x="21142.604166666668" y="13009.0" />
+      <point x="0.0" y="104.5" />
+    </edge>
+    <edge source="TkinterExtensions.Misc.HID.HID_BUFFER" target="typing.Container">
+      <point x="0.0" y="-302.5" />
+      <point x="1504.754394819147" y="651.0" />
+      <point x="1061.254394819147" y="651.0" />
+      <point x="47.0" y="27.0" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.Widgets.Label" target="TkinterExtensions.Widgets.BaseWidgets.BaseTextTkinterWidget">
+      <point x="-68.375" y="-60.5" />
+      <point x="18027.349100938314" y="12869.0" />
+      <point x="17697.583333333332" y="12869.0" />
+      <point x="17697.583333333332" y="11274.0" />
+      <point x="16199.410256410258" y="11274.0" />
+      <point x="155.07692307692378" y="104.5" />
+    </edge>
+    <edge source="TkinterExtensions.Events.TkinterEvent" target="tkEvent">
+      <point x="-82.0" y="-170.5" />
+      <point x="10114.145833333332" y="4558.0" />
+      <point x="10130.145833333332" y="4558.0" />
+      <point x="0.0" y="15.0" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.Custom.TitledEntry" target="TkinterExtensions.Widgets.Frames.Frame">
+      <point x="0.0" y="-49.5" />
+      <point x="20598.104166666668" y="11214.0" />
+      <point x="19200.2636761427" y="11214.0" />
+      <point x="96.0" y="49.0" />
+    </edge>
+    <edge source="TkinterExtensions.Misc.Enumerations.MenuItemTypes" target="enum.Enum">
+      <point x="0.0" y="-71.0" />
+      <point x="3355.333333333332" y="6115.0" />
+      <point x="3517.5991009383106" y="6115.0" />
+      <point x="-69.78125" y="148.5" />
+    </edge>
+    <edge source="tkinter.Wm" target="object">
+      <point x="0.0" y="-698.5" />
+      <point x="7824.19678132355" y="731.0" />
+      <point x="11978.549166666666" y="731.0" />
+      <point x="-64.68000000000029" y="258.5" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.Widgets.Label" target="tkinter.Label">
+      <point x="205.125" y="-60.5" />
+      <point x="18300.849100938314" y="13039.0" />
+      <point x="21969.604166666668" y="13039.0" />
+      <point x="21969.604166666668" y="10661.0" />
+      <point x="21853.46761465688" y="10661.0" />
+      <point x="0.0" y="27.0" />
+    </edge>
+    <edge source="tkinter.Tk" target="tkinter.Wm">
+      <point x="149.75" y="-159.5" />
+      <point x="1753.5833333333321" y="6125.0" />
+      <point x="7671.44678132355" y="6125.0" />
+      <point x="-152.75" y="698.5" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.Widgets.Entry" target="TkinterExtensions.Widgets.BaseWidgets.BaseTextTkinterWidget">
+      <point x="182.33333333333394" y="-104.5" />
+      <point x="13210.291666666668" y="11314.0" />
+      <point x="15811.71794871795" y="11314.0" />
+      <point x="-232.61538461538476" y="104.5" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.Widgets.Scrollbar" target="TkinterExtensions.Widgets.BaseWidgets.CommandMixin">
+      <point x="-125.33333333333394" y="-27.0" />
+      <point x="13384.125" y="11224.0" />
+      <point x="12426.395420460174" y="11224.0" />
+      <point x="222.69230769230853" y="82.5" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.Widgets.Text" target="TkinterExtensions.Widgets.BaseWidgets.CommandMixin">
+      <point x="0.0" y="-82.0" />
+      <point x="10452.18540853772" y="12919.0" />
+      <point x="10930.291666666666" y="12919.0" />
+      <point x="10930.291666666666" y="11244.0" />
+      <point x="11936.472343537096" y="11244.0" />
+      <point x="-267.2307692307695" y="82.5" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.Widgets.CheckButton" target="TkinterExtensions.Widgets.BaseWidgets.BaseTextTkinterWidget">
+      <point x="0.0" y="-27.0" />
+      <point x="14809.576176142698" y="13029.0" />
+      <point x="15559.97410093831" y="13029.0" />
+      <point x="15559.97410093831" y="11364.0" />
+      <point x="16005.564102564102" y="11364.0" />
+      <point x="-38.76923076923049" y="104.5" />
+    </edge>
+    <edge source="TkinterExtensions.Misc.Enumerations.ViewArguments" target="enum.Enum">
+      <point x="0.0" y="-60.0" />
+      <point x="2135.333333333332" y="6085.0" />
+      <point x="3457.7866009383106" y="6085.0" />
+      <point x="-129.59375" y="148.5" />
+    </edge>
+    <edge source="TkinterExtensions.Misc.Enumerations.ActiveStyle" target="enum.Enum">
+      <point x="0.0" y="-49.0" />
+      <point x="4235.333333333332" y="6105.0" />
+      <point x="3557.4741009383106" y="6105.0" />
+      <point x="-29.90625" y="148.5" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.Widgets.CheckBox" target="TkinterExtensions.Widgets.BaseWidgets.BaseTextTkinterWidget">
+      <point x="55.375" y="-82.5" />
+      <point x="16198.09910093831" y="13039.0" />
+      <point x="16159.84910093831" y="13039.0" />
+      <point x="16159.84910093831" y="11374.0" />
+      <point x="16083.102564102563" y="11374.0" />
+      <point x="38.76923076923049" y="104.5" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.Custom.ButtonGrid" target="TkinterExtensions.Widgets.Frames.Frame">
+      <point x="-140.5" y="-148.5" />
+      <point x="18247.604166666668" y="11404.0" />
+      <point x="19008.2636761427" y="11404.0" />
+      <point x="-96.0" y="49.0" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.Widgets.ScrolledText" target="TkinterExtensions.Widgets.Frames.Frame">
+      <point x="133.33333333333394" y="-115.5" />
+      <point x="14706.96272815248" y="11394.0" />
+      <point x="18960.2636761427" y="11394.0" />
+      <point x="-144.0" y="49.0" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.BaseWidgets.BaseTextTkinterWidget" target="TkinterExtensions.Widgets.BaseWidgets.BaseTkinterWidget">
+      <point x="1.8189894035458565E-12" y="-104.5" />
+      <point x="16044.333333333336" y="10671.0" />
+      <point x="14460.625" y="10671.0" />
+      <point x="215.25" y="368.5" />
+    </edge>
+    <edge source="tkinter.Listbox" target="tkinter.YView">
+      <point x="-87.66666666666606" y="-280.5" />
+      <point x="10700.625" y="11254.0" />
+      <point x="9985.520833333332" y="11254.0" />
+      <point x="76.875" y="49.0" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.Widgets.Listbox" target="tkinter.Listbox">
+      <point x="-220.0" y="-313.5" />
+      <point x="11232.791666666666" y="12909.0" />
+      <point x="10788.291666666666" y="12909.0" />
+      <point x="0.0" y="280.5" />
+    </edge>
+    <edge source="TkinterExtensions.examples.Window2" target="TkinterExtensions.examples.BaseWindow">
+      <point x="0.0" y="-38.5" />
+      <point x="23377.2636761427" y="13029.0" />
+      <point x="22974.171061485813" y="13029.0" />
+      <point x="109.33333333333212" y="71.5" />
+    </edge>
+    <edge source="tkinter.XView" target="object">
+      <point x="0.0" y="-49.0" />
+      <point x="9983.921061485813" y="761.0" />
+      <point x="12006.269166666667" y="761.0" />
+      <point x="-36.95999999999913" y="258.5" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.Themed.TreeViewThemed" target="TkinterExtensions.Widgets.BaseWidgets.BaseTkinterWidget">
+      <point x="143.0" y="-137.5" />
+      <point x="11031.291666666666" y="12949.0" />
+      <point x="13866.879394819149" y="12949.0" />
+      <point x="13866.879394819149" y="10661.0" />
+      <point x="14173.625" y="10661.0" />
+      <point x="-71.75" y="368.5" />
+    </edge>
+    <edge source="tkinter.ttk.Style" target="object">
+      <point x="0.0" y="-181.5" />
+      <point x="12397.229166666666" y="791.0" />
+      <point x="12052.469166666666" y="791.0" />
+      <point x="9.239999999999782" y="258.5" />
+    </edge>
+    <edge source="int" target="typing.Hashable">
+      <point x="-143.5" y="-654.0" />
+      <point x="214.5" y="84.0" />
+      <point x="3505.901041666666" y="84.0" />
+      <point x="-50.66666666666606" y="27.0" />
+    </edge>
+    <edge source="TkinterExtensions.Misc.Enumerations.Wrap" target="enum.Enum">
+      <point x="0.0" y="-38.0" />
+      <point x="7479.333333333333" y="6025.0" />
+      <point x="3716.9741009383106" y="6025.0" />
+      <point x="129.59375" y="148.5" />
+    </edge>
+    <edge source="tkinter.Button" target="tkinter.Widget">
+      <point x="0.0" y="-49.0" />
+      <point x="20745.46761465688" y="9794.0" />
+      <point x="14628.875" y="9794.0" />
+      <point x="54.0" y="15.0" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.Themed.TreeViewThemed" target="TkinterExtensions.Widgets.BaseWidgets.CommandMixin">
+      <point x="0.0" y="-137.5" />
+      <point x="10888.291666666666" y="12929.0" />
+      <point x="11137.041666666666" y="12929.0" />
+      <point x="11137.041666666666" y="11254.0" />
+      <point x="11981.010805075557" y="11254.0" />
+      <point x="-222.69230769230853" y="82.5" />
+    </edge>
+    <edge source="tkinter.Widget" target="tkinter.Grid">
+      <point x="18.0" y="-15.0" />
+      <point x="0.0" y="269.5" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.BaseWidgets.BaseTkinterWidget" target="tkinter.Widget">
+      <point x="0.0" y="-368.5" />
+      <point x="14245.375" y="9834.0" />
+      <point x="14568.875" y="9834.0" />
+      <point x="-6.0" y="15.0" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.Widgets.ScrolledText" target="TkinterExtensions.Widgets.BaseWidgets.BaseTextTkinterWidget">
+      <point x="0.0" y="-115.5" />
+      <point x="14573.629394819149" y="11324.0" />
+      <point x="15850.48717948718" y="11324.0" />
+      <point x="-193.84615384615427" y="104.5" />
+    </edge>
+    <edge source="tkinter.Place" target="object">
+      <point x="0.0" y="-126.5" />
+      <point x="14361.125" y="781.0" />
+      <point x="12061.709166666666" y="781.0" />
+      <point x="18.479999999999563" y="258.5" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.HTML.HTMLLabel" target="TkinterExtensions.Widgets.HTML.HTMLText">
+      <point x="0.0" y="-49.5" />
+      <point x="0.0" y="49.5" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.Root.tkRoot" target="tkinter.Tk">
+      <point x="-168.0" y="-49.5" />
+      <point x="4403.951176142698" y="9834.0" />
+      <point x="1603.8333333333321" y="9834.0" />
+      <point x="0.0" y="159.5" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.Themed.TreeViewHolderThemed" target="TkinterExtensions.Widgets.Frames.Frame">
+      <point x="0.0" y="-82.5" />
+      <point x="19749.104166666668" y="11234.0" />
+      <point x="19104.2636761427" y="11234.0" />
+      <point x="0.0" y="49.0" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.Widgets.Button" target="TkinterExtensions.Widgets.BaseWidgets.BaseTextTkinterWidget">
+      <point x="-87.375" y="-38.0" />
+      <point x="17365.349100938314" y="12979.0" />
+      <point x="17361.083333333332" y="12979.0" />
+      <point x="17361.083333333332" y="11284.0" />
+      <point x="16160.641025641024" y="11284.0" />
+      <point x="116.30769230769147" y="104.5" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.Widgets.Canvas" target="TkinterExtensions.Widgets.BaseWidgets.BaseTkinterWidget">
+      <point x="131.25" y="-148.0" />
+      <point x="9357.791666666666" y="12939.0" />
+      <point x="13855.879394819149" y="12939.0" />
+      <point x="13855.879394819149" y="10651.0" />
+      <point x="14030.125" y="10651.0" />
+      <point x="-215.25" y="368.5" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.Widgets.CheckBox" target="TkinterExtensions.Widgets.BaseWidgets.ImageMixin">
+      <point x="166.125" y="-82.5" />
+      <point x="16308.84910093831" y="12989.0" />
+      <point x="20926.204166666666" y="12989.0" />
+      <point x="-216.40000000000146" y="104.5" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.Frames.Frame" target="tkinter.Frame">
+      <point x="84.0" y="-49.0" />
+      <point x="0.0" y="27.0" />
+    </edge>
+    <edge source="tkinter.Canvas" target="tkinter.Widget">
+      <point x="-125.66666666666606" y="-687.5" />
+      <point x="8969.625" y="11434.0" />
+      <point x="9026.958333333332" y="11434.0" />
+      <point x="9026.958333333332" y="9784.0" />
+      <point x="14508.875" y="9784.0" />
+      <point x="-66.0" y="15.0" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.Widgets.Canvas" target="tkinter.Canvas">
+      <point x="-131.25" y="-148.0" />
+      <point x="0.0" y="687.5" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.Widgets.Scrollbar" target="TkinterExtensions.Widgets.BaseWidgets.BaseTkinterWidget">
+      <point x="0.0" y="-27.0" />
+      <point x="13509.458333333332" y="11214.0" />
+      <point x="12503.703112767866" y="11214.0" />
+      <point x="12503.703112767866" y="10641.0" />
+      <point x="13886.625" y="10641.0" />
+      <point x="-358.75" y="368.5" />
+    </edge>
+    <edge source="tkEvent" target="object">
+      <point x="0.0" y="-15.0" />
+      <point x="10130.145833333332" y="771.0" />
+      <point x="12015.509166666667" y="771.0" />
+      <point x="-27.719999999999345" y="258.5" />
+    </edge>
+    <edge source="enum.EnumMeta" target="typing.Container">
+      <point x="-63.5" y="-357.5" />
+      <point x="1003.2543948191469" y="671.0" />
+      <point x="967.2543948191469" y="671.0" />
+      <point x="-47.0" y="27.0" />
+    </edge>
+    <edge source="tkinter.Text" target="tkinter.YView">
+      <point x="0.0" y="-610.5" />
+      <point x="9748.791666666666" y="11434.0" />
+      <point x="9883.020833333332" y="11434.0" />
+      <point x="-25.625" y="49.0" />
+    </edge>
+    <edge source="TkinterExtensions.Misc.Enumerations.ViewState" target="enum.Enum">
+      <point x="0.0" y="-60.0" />
+      <point x="5075.333333333332" y="6085.0" />
+      <point x="3597.3491009383106" y="6085.0" />
+      <point x="9.96875" y="148.5" />
+    </edge>
+    <edge source="object" target="typing.Hashable">
+      <point x="0.0" y="-258.5" />
+      <point x="12043.229166666666" y="74.0" />
+      <point x="3607.234374999998" y="74.0" />
+      <point x="50.666666666666515" y="27.0" />
+    </edge>
+    <edge source="tkinter.Listbox" target="tkinter.Widget">
+      <point x="87.66666666666606" y="-280.5" />
+      <point x="10875.958333333332" y="11284.0" />
+      <point x="10894.96104956336" y="11284.0" />
+      <point x="10894.96104956336" y="9804.0" />
+      <point x="14532.875" y="9804.0" />
+      <point x="-42.0" y="15.0" />
+    </edge>
+    <edge source="tkinter.ttk.Widget" target="tkinter.Widget">
+      <point x="0.0" y="-60.0" />
+      <point x="14987.125" y="9834.0" />
+      <point x="14580.875" y="9834.0" />
+      <point x="6.0" y="15.0" />
+    </edge>
+    <edge source="TkinterExtensions.Misc.Enumerations.Tags" target="enum.Enum">
+      <point x="0.0" y="-115.0" />
+      <point x="7107.333333333333" y="6035.0" />
+      <point x="3697.0366009383106" y="6035.0" />
+      <point x="109.65625" y="148.5" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.Themed.EntryThemed" target="tkinter.ttk.Entry">
+      <point x="0.0" y="-104.5" />
+      <point x="13142.076176142698" y="12959.0" />
+      <point x="13949.379394819149" y="12959.0" />
+      <point x="-72.0" y="60.0" />
+    </edge>
+    <edge source="TkinterExtensions.examples.HTMLViewer" target="TkinterExtensions.Widgets.HTML.HTMLLabel">
+      <point x="0.0" y="-38.5" />
+      <point x="0.0" y="49.5" />
+    </edge>
+    <edge source="tkinter.ttk.Entry" target="tkinter.ttk.Widget">
+      <point x="72.0" y="-60.0" />
+      <point x="14093.379394819149" y="11304.0" />
+      <point x="14926.725" y="11304.0" />
+      <point x="-60.399999999999636" y="60.0" />
+    </edge>
+    <edge source="tkinter.Toplevel" target="tkinter.BaseWidget">
+      <point x="62.0" y="-27.0" />
+      <point x="8898.708333333332" y="6125.0" />
+      <point x="8965.458333333332" y="6125.0" />
+      <point x="-84.75" y="137.5" />
+    </edge>
+    <edge source="TkinterExtensions.Misc.Enumerations.Orient" target="enum.Enum">
+      <point x="0.0" y="-38.0" />
+      <point x="2551.333333333332" y="6095.0" />
+      <point x="3477.7241009383106" y="6095.0" />
+      <point x="-109.65625" y="148.5" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.HTML.HTMLText" target="TkinterExtensions.Widgets.HTML.HTMLScrolledText">
+      <point x="0.0" y="-49.5" />
+      <point x="0.0" y="170.5" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.Widgets.Label" target="TkinterExtensions.Widgets.BaseWidgets.ImageMixin">
+      <point x="68.375" y="-60.5" />
+      <point x="18164.099100938314" y="13019.0" />
+      <point x="21250.80416666667" y="13019.0" />
+      <point x="108.20000000000073" y="104.5" />
+    </edge>
+    <edge source="enum.EnumMeta" target="typing.Sized">
+      <point x="-190.5" y="-357.5" />
+      <point x="876.2543948191469" y="671.0" />
+      <point x="586.5043948191469" y="671.0" />
+      <point x="-32.0" y="27.0" />
+    </edge>
+    <edge source="TkinterExtensions.Misc.HID.HID_BUFFER" target="typing.Sized">
+      <point x="-109.33333333333326" y="-302.5" />
+      <point x="1395.421061485813" y="661.0" />
+      <point x="650.5043948191469" y="661.0" />
+      <point x="32.0" y="27.0" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.Themed.ButtonThemed" target="TkinterExtensions.Widgets.BaseWidgets.CommandMixin">
+      <point x="-262.125" y="-38.0" />
+      <point x="16471.59910093831" y="12899.0" />
+      <point x="12721.958333333332" y="12899.0" />
+      <point x="12721.958333333332" y="11264.0" />
+      <point x="12248.241574306327" y="11264.0" />
+      <point x="44.53846153846098" y="82.5" />
+    </edge>
+    <edge source="TkinterExtensions.Misc.Enumerations.AnchorAndSticky" target="enum.Enum">
+      <point x="0.0" y="-148.0" />
+      <point x="6319.333333333333" y="6055.0" />
+      <point x="3657.1616009383106" y="6055.0" />
+      <point x="69.78125" y="148.5" />
+    </edge>
+    <edge source="TkinterExtensions.Events.Bindings" target="enum.Enum">
+      <point x="0.0" y="-1809.5" />
+      <point x="7823.333333333333" y="6015.0" />
+      <point x="3736.9116009383106" y="6015.0" />
+      <point x="149.53125" y="148.5" />
+    </edge>
+    <edge source="tkinter.Listbox" target="tkinter.XView">
+      <point x="0.0" y="-280.5" />
+      <point x="10788.291666666666" y="11244.0" />
+      <point x="10452.875" y="11244.0" />
+      <point x="10452.875" y="10661.0" />
+      <point x="10024.921061485813" y="10661.0" />
+      <point x="41.0" y="49.0" />
+    </edge>
+    <edge source="TkinterExtensions.Misc.Enumerations.BorderMode" target="enum.Enum">
+      <point x="0.0" y="-38.0" />
+      <point x="4659.333333333332" y="6095.0" />
+      <point x="3577.4116009383106" y="6095.0" />
+      <point x="-9.96875" y="148.5" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.BaseWidgets.ImageMixin" target="object">
+      <point x="0.0" y="-104.5" />
+      <point x="21142.604166666668" y="11424.0" />
+      <point x="22913.71761465688" y="11424.0" />
+      <point x="22913.71761465688" y="711.0" />
+      <point x="12126.389166666666" y="711.0" />
+      <point x="83.15999999999985" y="258.5" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.Root.tkTopLevel" target="TkinterExtensions.Widgets.Root._rootMixin">
+      <point x="-188.75" y="-49.5" />
+      <point x="8450.208333333332" y="9834.0" />
+      <point x="8397.083333333332" y="9834.0" />
+      <point x="135.25" y="203.5" />
+    </edge>
+    <edge source="threading.Thread" target="object">
+      <point x="0.0" y="-181.5" />
+      <point x="23571.21761465688" y="691.0" />
+      <point x="12144.869166666665" y="691.0" />
+      <point x="101.63999999999942" y="258.5" />
+    </edge>
+    <edge source="tkinter.Canvas" target="tkinter.XView">
+      <point x="0.0" y="-687.5" />
+      <point x="9095.291666666666" y="11434.0" />
+      <point x="9037.958333333332" y="11434.0" />
+      <point x="9037.958333333332" y="10661.0" />
+      <point x="9901.921061485813" y="10661.0" />
+      <point x="-82.0" y="49.0" />
+    </edge>
+    <edge source="tkinter.ttk.Treeview" target="tkinter.XView">
+      <point x="0.0" y="-390.5" />
+      <point x="10383.791666666666" y="11264.0" />
+      <point x="10021.645833333332" y="11264.0" />
+      <point x="10021.645833333332" y="10671.0" />
+      <point x="9983.921061485813" y="10671.0" />
+      <point x="0.0" y="49.0" />
+    </edge>
+    <edge source="tkinter.ttk.Scrollbar" target="tkinter.Scrollbar">
+      <point x="-52.25" y="-27.0" />
+      <point x="14882.625" y="11184.0" />
+      <point x="13646.504394819149" y="11184.0" />
+      <point x="62.0" y="93.0" />
+    </edge>
+    <edge source="tkinter.YView" target="object">
+      <point x="0.0" y="-49.0" />
+      <point x="9908.645833333332" y="10651.0" />
+      <point x="9870.921061485813" y="10651.0" />
+      <point x="9870.921061485813" y="751.0" />
+      <point x="11997.029166666665" y="751.0" />
+      <point x="-46.20000000000073" y="258.5" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.Themed.LabelThemed" target="TkinterExtensions.Widgets.BaseWidgets.ImageMixin">
+      <point x="182.33333333333212" y="-49.5" />
+      <point x="18845.057434271643" y="13029.0" />
+      <point x="21359.00416666667" y="13029.0" />
+      <point x="216.40000000000146" y="104.5" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.Root.tkRoot" target="TkinterExtensions.Widgets.Root._rootMixin">
+      <point x="168.0" y="-49.5" />
+      <point x="4739.951176142698" y="9834.0" />
+      <point x="8126.583333333333" y="9834.0" />
+      <point x="-135.25" y="203.5" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.BaseWidgets.CallWrapper" target="object">
+      <point x="0.0" y="-126.5" />
+      <point x="16772.333333333332" y="741.0" />
+      <point x="12098.669166666667" y="741.0" />
+      <point x="55.44000000000051" y="258.5" />
+    </edge>
+    <edge source="tkinter.Frame" target="tkinter.Widget">
+      <point x="0.0" y="-27.0" />
+      <point x="19188.2636761427" y="9814.0" />
+      <point x="14604.875" y="9814.0" />
+      <point x="30.0" y="15.0" />
+    </edge>
+    <edge source="enum.Enum" target="enum.EnumMeta">
+      <point x="-106.33333333333348" y="-148.5" />
+      <point x="3481.0470176049766" y="4548.0" />
+      <point x="1066.754394819147" y="4548.0" />
+      <point x="0.0" y="357.5" />
+    </edge>
+    <edge source="enum.Enum" target="object">
+      <point x="106.33333333333394" y="-148.5" />
+      <point x="3693.7136842716445" y="4558.0" />
+      <point x="4078.3836842716446" y="4558.0" />
+      <point x="4078.3836842716446" y="711.0" />
+      <point x="11960.069166666666" y="711.0" />
+      <point x="-83.15999999999985" y="258.5" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.Widgets.CheckButton" target="TkinterExtensions.Widgets.BaseWidgets.CommandMixin">
+      <point x="-130.66666666666606" y="-27.0" />
+      <point x="14678.90950947603" y="12919.0" />
+      <point x="12672.208333333332" y="12919.0" />
+      <point x="12672.208333333332" y="11284.0" />
+      <point x="12159.164651229405" y="11284.0" />
+      <point x="-44.53846153846098" y="82.5" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.Widgets.Button" target="tkinter.Button">
+      <point x="87.375" y="-38.0" />
+      <point x="17540.099100938314" y="12979.0" />
+      <point x="20861.604166666668" y="12979.0" />
+      <point x="20861.604166666668" y="10661.0" />
+      <point x="20745.46761465688" y="10661.0" />
+      <point x="0.0" y="49.0" />
+    </edge>
+    <edge source="tkinter.Entry" target="tkinter.XView">
+      <point x="-62.0" y="-236.5" />
+      <point x="13085.08772815248" y="10631.0" />
+      <point x="10065.921061485813" y="10631.0" />
+      <point x="82.0" y="49.0" />
+    </edge>
+    <edge source="tkinter.Grid" target="object">
+      <point x="0.0" y="-269.5" />
+      <point x="14593.625" y="771.0" />
+      <point x="12070.949166666665" y="771.0" />
+      <point x="27.719999999999345" y="258.5" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.Root._rootMixin" target="object">
+      <point x="0.0" y="-203.5" />
+      <point x="8261.833333333332" y="6005.0" />
+      <point x="7508.19678132355" y="6005.0" />
+      <point x="7508.19678132355" y="721.0" />
+      <point x="11969.309166666666" y="721.0" />
+      <point x="-73.92000000000007" y="258.5" />
+    </edge>
+    <edge source="tkinter.ttk.Button" target="tkinter.ttk.Widget">
+      <point x="0.0" y="-38.0" />
+      <point x="16646.34910093831" y="11304.0" />
+      <point x="15047.525" y="11304.0" />
+      <point x="60.399999999999636" y="60.0" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.Widgets.Text" target="TkinterExtensions.Widgets.BaseWidgets.BaseTextTkinterWidget">
+      <point x="112.0" y="-82.0" />
+      <point x="10564.18540853772" y="12999.0" />
+      <point x="15049.875" y="12999.0" />
+      <point x="15049.875" y="11334.0" />
+      <point x="15889.25641025641" y="11334.0" />
+      <point x="-155.07692307692378" y="104.5" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.Widgets.Listbox" target="TkinterExtensions.Widgets.BaseWidgets.CommandMixin">
+      <point x="0.0" y="-313.5" />
+      <point x="11452.791666666666" y="12929.0" />
+      <point x="11424.791666666666" y="12929.0" />
+      <point x="11424.791666666666" y="11264.0" />
+      <point x="12025.54926661402" y="11264.0" />
+      <point x="-178.15384615384573" y="82.5" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.Widgets.Entry" target="TkinterExtensions.Widgets.BaseWidgets.CommandMixin">
+      <point x="-182.33333333333394" y="-104.5" />
+      <point x="12845.625" y="11234.0" />
+      <point x="12381.856958921711" y="11234.0" />
+      <point x="178.15384615384573" y="82.5" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.Widgets.CheckButton" target="tkinter.Checkbutton">
+      <point x="130.66666666666606" y="-27.0" />
+      <point x="14940.242842809363" y="13039.0" />
+      <point x="15963.34910093831" y="13039.0" />
+      <point x="-62.0" y="82.0" />
+    </edge>
+    <edge source="TkinterExtensions.Misc.Helpers.AutoStartThread" target="abc.ABC">
+      <point x="-131.5" y="-38.0" />
+      <point x="21564.604166666668" y="11204.0" />
+      <point x="19502.7636761427" y="11204.0" />
+      <point x="22.0" y="15.0" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.Custom.ButtonGrid" target="abc.ABC">
+      <point x="140.5" y="-148.5" />
+      <point x="18528.604166666668" y="11424.0" />
+      <point x="19458.7636761427" y="11424.0" />
+      <point x="-22.0" y="15.0" />
+    </edge>
+    <edge source="TkinterExtensions.examples.BaseWindow" target="TkinterExtensions.Widgets.Frames.Frame">
+      <point x="0.0" y="-71.5" />
+      <point x="22864.83772815248" y="11194.0" />
+      <point x="19248.2636761427" y="11194.0" />
+      <point x="144.0" y="49.0" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.Themed.ButtonThemed" target="TkinterExtensions.Widgets.BaseWidgets.BaseTextTkinterWidget">
+      <point x="87.375" y="-38.0" />
+      <point x="16821.09910093831" y="12979.0" />
+      <point x="16761.34910093831" y="12979.0" />
+      <point x="16761.34910093831" y="11294.0" />
+      <point x="16121.871794871793" y="11294.0" />
+      <point x="77.53846153846098" y="104.5" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.Widgets.Label" target="TkinterExtensions.Widgets.BaseWidgets.CommandMixin">
+      <point x="-205.125" y="-60.5" />
+      <point x="17890.599100938314" y="12879.0" />
+      <point x="12743.958333333332" y="12879.0" />
+      <point x="12743.958333333332" y="11244.0" />
+      <point x="12337.31849738325" y="11244.0" />
+      <point x="133.61538461538476" y="82.5" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.Themed.LabelThemed" target="tkinter.ttk.Label">
+      <point x="-182.33333333333212" y="-49.5" />
+      <point x="18480.39076760498" y="12859.0" />
+      <point x="17843.21272815248" y="12859.0" />
+      <point x="0.0" y="27.0" />
+    </edge>
+    <edge source="tkinter.Pack" target="object">
+      <point x="0.0" y="-148.5" />
+      <point x="14824.625" y="761.0" />
+      <point x="12080.189166666665" y="761.0" />
+      <point x="36.95999999999913" y="258.5" />
+    </edge>
+    <edge source="TkinterExtensions.Misc.Enumerations.SelectionMode" target="enum.Enum">
+      <point x="0.0" y="-60.0" />
+      <point x="3799.333333333332" y="6115.0" />
+      <point x="3537.5366009383106" y="6115.0" />
+      <point x="-49.84375" y="148.5" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.Widgets.ScrolledText" target="TkinterExtensions.Widgets.BaseWidgets.CommandMixin">
+      <point x="-133.33333333333394" y="-115.5" />
+      <point x="14440.296061485813" y="11194.0" />
+      <point x="12470.933881998635" y="11194.0" />
+      <point x="267.2307692307695" y="82.5" />
+    </edge>
+    <edge source="TkinterExtensions.Misc.HID.HID_BUFFER" target="object">
+      <point x="109.33333333333326" y="-302.5" />
+      <point x="1614.0877281524808" y="691.0" />
+      <point x="11941.589166666667" y="691.0" />
+      <point x="-101.63999999999942" y="258.5" />
+    </edge>
+    <edge source="tkinter.Label" target="tkinter.Widget">
+      <point x="0.0" y="-27.0" />
+      <point x="21853.46761465688" y="9784.0" />
+      <point x="14640.875" y="9784.0" />
+      <point x="66.0" y="15.0" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.Widgets.CheckBox" target="tkinter.Checkbutton">
+      <point x="-55.375" y="-82.5" />
+      <point x="62.0" y="82.0" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.Widgets.Text" target="tkinter.Text">
+      <point x="-112.0" y="-82.0" />
+      <point x="10340.18540853772" y="12929.0" />
+      <point x="9748.791666666666" y="12929.0" />
+      <point x="0.0" y="610.5" />
+    </edge>
+    <edge source="enum.Enum" target="typing.Hashable">
+      <point x="0.0" y="-148.5" />
+      <point x="3587.3803509383106" y="4548.0" />
+      <point x="4051.4636842716445" y="4548.0" />
+      <point x="4051.4636842716445" y="84.0" />
+      <point x="3556.567708333332" y="84.0" />
+      <point x="0.0" y="27.0" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.Themed.ComboBoxThemed" target="TkinterExtensions.Widgets.BaseWidgets.CommandMixin">
+      <point x="-147.66666666666606" y="-82.0" />
+      <point x="13392.40950947603" y="13711.0" />
+      <point x="11793.291666666666" y="13711.0" />
+      <point x="11793.291666666666" y="11274.0" />
+      <point x="12070.08772815248" y="11274.0" />
+      <point x="-133.61538461538476" y="82.5" />
+    </edge>
+    <edge source="TkinterExtensions.examples.LabelWindow" target="TkinterExtensions.Widgets.Frames.LabelFrame">
+      <point x="0.0" y="-82.5" />
+      <point x="19845.557434271646" y="12969.0" />
+      <point x="19313.104166666668" y="12969.0" />
+      <point x="0.0" y="60.0" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.Themed.TreeViewThemed" target="tkinter.ttk.Treeview">
+      <point x="-143.0" y="-137.5" />
+      <point x="10745.291666666666" y="12909.0" />
+      <point x="10383.791666666666" y="12909.0" />
+      <point x="0.0" y="390.5" />
+    </edge>
+    <edge source="tkinter.Widget" target="tkinter.BaseWidget">
+      <point x="-54.0" y="-15.0" />
+      <point x="14520.875" y="6125.0" />
+      <point x="9134.958333333332" y="6125.0" />
+      <point x="84.75" y="137.5" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.Root.tkTopLevel" target="tkinter.Toplevel">
+      <point x="188.75" y="-49.5" />
+      <point x="8827.708333333332" y="9834.0" />
+      <point x="8836.708333333332" y="9834.0" />
+      <point x="0.0" y="27.0" />
+    </edge>
+    <edge source="tkinter.Tk" target="tkinter.Misc">
+      <point x="-149.75" y="-159.5" />
+      <point x="1454.0833333333321" y="6065.0" />
+      <point x="1328.875" y="6065.0" />
+      <point x="1328.875" y="4558.0" />
+      <point x="1789.254394819147" y="4558.0" />
+      <point x="-100.5" y="1853.5" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.BaseWidgets.CurrentValue" target="TkinterExtensions.Widgets.BaseWidgets.CallWrapper">
+      <point x="0.0" y="-49.5" />
+      <point x="0.0" y="126.5" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.Themed.EntryThemed" target="TkinterExtensions.Widgets.BaseWidgets.BaseTextTkinterWidget">
+      <point x="182.33333333333394" y="-104.5" />
+      <point x="13324.40950947603" y="13019.0" />
+      <point x="15071.875" y="13019.0" />
+      <point x="15071.875" y="11354.0" />
+      <point x="15966.794871794871" y="11354.0" />
+      <point x="-77.53846153846098" y="104.5" />
+    </edge>
+    <edge source="tkinter.Text" target="tkinter.Widget">
+      <point x="296.66666666666606" y="-610.5" />
+      <point x="10045.458333333332" y="11284.0" />
+      <point x="10598.22242234919" y="11284.0" />
+      <point x="10598.22242234919" y="9794.0" />
+      <point x="14520.875" y="9794.0" />
+      <point x="-54.0" y="15.0" />
+    </edge>
+    <edge source="tkinter.Event" target="object">
+      <point x="0.0" y="-27.0" />
+      <point x="10262.145833333332" y="781.0" />
+      <point x="12024.749166666666" y="781.0" />
+      <point x="-18.479999999999563" y="258.5" />
+    </edge>
+    <edge source="tkinter.Entry" target="tkinter.Widget">
+      <point x="62.0" y="-236.5" />
+      <point x="13209.08772815248" y="10621.0" />
+      <point x="12538.43540853772" y="10621.0" />
+      <point x="12538.43540853772" y="9814.0" />
+      <point x="14544.875" y="9814.0" />
+      <point x="-30.0" y="15.0" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.HTML.HTMLScrolledText" target="TkinterExtensions.Widgets.Widgets.ScrolledText">
+      <point x="0.0" y="-170.5" />
+      <point x="13953.576176142698" y="12979.0" />
+      <point x="14573.629394819149" y="12979.0" />
+      <point x="0.0" y="115.5" />
+    </edge>
+    <edge source="enum.IntEnum" target="int">
+      <point x="-32.0" y="-15.0" />
+      <point x="0.0" y="654.0" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.Style.Style" target="tkinter.ttk.Style">
+      <point x="0.0" y="-71.0" />
+      <point x="0.0" y="181.5" />
+    </edge>
+    <edge source="TkinterExtensions.Mixins.NameMixin" target="object">
+      <point x="0.0" y="-27.0" />
+      <point x="0.0" y="258.5" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.BaseWidgets.CommandMixin" target="object">
+      <point x="0.0" y="-82.5" />
+      <point x="12203.703112767866" y="10651.0" />
+      <point x="10370.645833333332" y="10651.0" />
+      <point x="10370.645833333332" y="791.0" />
+      <point x="12033.989166666666" y="791.0" />
+      <point x="-9.239999999999782" y="258.5" />
+    </edge>
+    <edge source="TkinterExtensions.Widgets.AnimatedGIF.AnimatedGIF" target="object">
+      <point x="193.25" y="-280.5" />
+      <point x="21162.08772815248" y="13711.0" />
+      <point x="24228.71761465688" y="13711.0" />
+      <point x="24228.71761465688" y="681.0" />
+      <point x="12154.109166666665" y="681.0" />
+      <point x="110.8799999999992" y="258.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="0.30000000000000016" x="13688.999999999996" y="11890.537434463477" />
+  <SelectedNodes>
+    <node>TkinterExtensions.Widgets.Root._rootMixin</node>
+  </SelectedNodes>
+  <Categories>
+    <Category>Inner Classes</Category>
+    <Category>Fields</Category>
+    <Category>Methods</Category>
+  </Categories>
+</Diagram>
+

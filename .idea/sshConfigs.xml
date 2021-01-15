@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SshConfigs">
+    <configs>
+      <sshConfig authType="PASSWORD" host="192.168.1.217" id="7a27ac04-c050-4631-859b-e2dc51c9110e" port="22" customName="Rasbian VM" nameFormat="CUSTOM" username="pi">
+        <option name="customName" value="Rasbian VM" />
+      </sshConfig>
+    </configs>
+  </component>
+</project>

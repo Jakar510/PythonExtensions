@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="5a7111ec-9f42-4c41-bf15-5a88b464a2eb" name="Rasbian VM">
+        <fileTransfer rootFolder="/home/pi/TkinterExtensions" accessType="SFTP" host="192.168.1.217" port="22" sshConfigId="7a27ac04-c050-4631-859b-e2dc51c9110e" sshConfig="Rasbian VM">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
