@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="7a6e45bf-6aac-404f-8876-27fa1a8fc2c2" name="Default Changelist" comment="pycharm fixes">
+      <change afterPath="$PROJECT_DIR$/.idea/PythonExtensions.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/webResources.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/Extensions.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Extensions/AutoCounter.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/AutoCounter.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Extensions/Constants.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/Constants.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Extensions/Dates.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/Dates.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Extensions/Exceptions.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/Exceptions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Extensions/Files/FileLock.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/Files/FileLock.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Extensions/Files/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/Files/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Extensions/Images.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/Images.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Extensions/Json/Keys.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/Json/Keys.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Extensions/Json/MixIns.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/Json/MixIns.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Extensions/Json/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/Json/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Extensions/Logging.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/Logging.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Extensions/Setup/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/Setup/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Extensions/SwitchCase/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/SwitchCase/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Extensions/Threads.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/Threads.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Extensions/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Extensions/__version__.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/__version__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Extensions/debug/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/debug/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Extensions/debug/__version__.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/debug/__version__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Extensions/debug/chains.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/debug/chains.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Extensions/debug/console.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/debug/console.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Extensions/debug/converters.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/debug/converters.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Extensions/debug/decorators.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/debug/decorators.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Extensions/misc.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/misc.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Extensions/tk/Enumerations.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/tk/Enumerations.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Extensions/tk/Events.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/tk/Events.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Extensions/tk/HID_BUFFER.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/tk/HID_BUFFER.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Extensions/tk/Mixins.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/tk/Mixins.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Extensions/tk/Widgets/AnimatedGIF.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/tk/Widgets/AnimatedGIF.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Extensions/tk/Widgets/AutoScroll.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/tk/Widgets/AutoScroll.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Extensions/tk/Widgets/BaseApp.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/tk/Widgets/BaseApp.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Extensions/tk/Widgets/BaseWidgets.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/tk/Widgets/BaseWidgets.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Extensions/tk/Widgets/Custom.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/tk/Widgets/Custom.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Extensions/tk/Widgets/Frames.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/tk/Widgets/Frames.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Extensions/tk/Widgets/HTML.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/tk/Widgets/HTML.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Extensions/tk/Widgets/KeyBoard.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/tk/Widgets/KeyBoard.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Extensions/tk/Widgets/KeyboardComboBoxThemed.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/tk/Widgets/KeyboardComboBoxThemed.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Extensions/tk/Widgets/KeyboardEntry.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/tk/Widgets/KeyboardEntry.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Extensions/tk/Widgets/Root.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/tk/Widgets/Root.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Extensions/tk/Widgets/Style.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/tk/Widgets/Style.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Extensions/tk/Widgets/Themed.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/tk/Widgets/Themed.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Extensions/tk/Widgets/Widgets.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/tk/Widgets/Widgets.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Extensions/tk/Widgets/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/tk/Widgets/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Extensions/tk/Widgets/base.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/tk/Widgets/base.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Extensions/tk/Widgets/tkMessageBox.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/tk/Widgets/tkMessageBox.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Extensions/tk/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/tk/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Extensions/tk/debug.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/tk/debug.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Extensions/tk/tkNamedColor/TkinterThemes.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/tk/tkNamedColor/TkinterThemes.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Extensions/tk/tkNamedColor/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/tk/tkNamedColor/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Extensions/tk/tkNamedColor/colors.png" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/tk/tkNamedColor/colors.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Tests/base.py" beforeDir="false" afterPath="$PROJECT_DIR$/Tests/base.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/setup.py" beforeDir="false" afterPath="$PROJECT_DIR$/setup.py" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1n7OOn1TEqy2mU9vMthZg035YlD" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+    <option name="showMembers" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="DjangoTestsConfigurationType">
+      <module name="PythonExtensions" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="TARGET" value="" />
+      <option name="SETTINGS_FILE" value="" />
+      <option name="CUSTOM_SETTINGS" value="false" />
+      <option name="USE_OPTIONS" value="false" />
+      <option name="OPTIONS" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="PyBehaveRunConfigurationType" factoryName="Behave">
+      <module name="PythonExtensions" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="ADDITIONAL_ARGS" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
+      <module name="PythonExtensions" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="Python.FlaskServer">
+      <module name="PythonExtensions" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="launchJavascriptDebuger" value="false" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="Tox" factoryName="Tox">
+      <module name="PythonExtensions" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="docs" factoryName="Docutils task">
+      <module name="PythonExtensions" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="docutils_input_file" value="" />
+      <option name="docutils_output_file" value="" />
+      <option name="docutils_params" value="" />
+      <option name="docutils_task" value="" />
+      <option name="docutils_open_in_browser" value="false" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="docs" factoryName="Sphinx task">
+      <module name="PythonExtensions" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="docutils_input_file" value="" />
+      <option name="docutils_output_file" value="" />
+      <option name="docutils_params" value="" />
+      <option name="docutils_task" value="" />
+      <option name="docutils_open_in_browser" value="false" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Doctests">
+      <module name="PythonExtensions" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Unittests">
+      <module name="PythonExtensions" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="7a6e45bf-6aac-404f-8876-27fa1a8fc2c2" name="Default Changelist" comment="" />
+      <created>1610737633268</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1610737633268</updated>
+      <workItem from="1610737634516" duration="1029000" />
+    </task>
+    <task id="LOCAL-00001" summary="pycharm fixes">
+      <created>1610737677124</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1610737677124</updated>
+    </task>
+    <task id="LOCAL-00002" summary="pycharm fixes">
+      <created>1610737803619</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1610737803619</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="pycharm fixes" />
+    <option name="LAST_COMMIT_MESSAGE" value="pycharm fixes" />
+  </component>
+</project>

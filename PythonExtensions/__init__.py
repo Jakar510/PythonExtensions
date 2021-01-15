@@ -12,7 +12,7 @@ from .__version__ import *
 
 
 
-__name__ = 'Extensions'
+__name__ = 'PythonExtensions'
 __author__ = "Tyler Stegmaier"
 __email__ = "tyler.stegmaier.510@gmail.com"
 __copyright__ = "Copyright 2020"
@@ -30,7 +30,7 @@ __maintainer_email__ = __email__
 
 __status__ = DevelopmentStatus.Beta.value
 
-__url__ = r'https://github.com/Jakar510/Extensions'
+__url__ = r'https://github.com/Jakar510/PythonExtensions'
 # download_url=f'https://github.com/Jakar510/PyDebug/TkinterExtensions/releases/tag/{version}'
 __classifiers__ = [
         __status__,

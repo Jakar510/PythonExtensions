@@ -1,10 +1,10 @@
 import json
 
-from Extensions.Images import ImageObject
-from Extensions.Json import *
-from Extensions.Logging import *
+from PythonExtensions.Images import ImageObject
+from PythonExtensions.Json import *
+from PythonExtensions.Logging import *
 
-from Extensions.debug import *
+from PythonExtensions.debug import *
 
 
 

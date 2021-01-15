@@ -52,13 +52,21 @@ def GetRequirements(path: str) -> List[str]:
 class DevelopmentStatus(str, Enum):
     """
     How mature is this project? Common values are
-      3 - Alpha
-      4 - Beta
-      5 - Production/Stable
+        Development Status :: 1 - Planning
+        Development Status :: 2 - Pre-Alpha
+        Development Status :: 3 - Alpha
+        Development Status :: 4 - Beta
+        Development Status :: 5 - Production/Stable
+        Development Status :: 6 - Mature
+        Development Status :: 7 - Inactive
     """
-    Alpha = '3 - Alpha'
-    Beta = '4 - Beta'
-    Stable = '5 - Production/Stable'
+    Planning = 'Development Status :: 1 - Planning'
+    PreAlpha = 'Development Status :: 2 - Pre-Alpha'
+    Alpha = 'Development Status :: 3 - Alpha'
+    Beta = 'Development Status :: 4 - Beta'
+    Stable = 'Development Status :: 5 - Production/Stable'
+    Mature = 'Development Status :: 6 - Mature'
+    Inactive = 'Development Status :: 7 - Inactive'
 
 pycache = '__pycache__'
 
