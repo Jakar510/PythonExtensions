@@ -9,8 +9,8 @@ import os
 import tempfile
 from io import BytesIO
 
-from PIL.Image import Image, open, BICUBIC
-from PIL import ImageTk, ImageFile
+from PIL import ImageFile, ImageTk
+from PIL.Image import BICUBIC, EXTENSION, Exif, Image, init, open
 
 from .Exceptions import ArgumentError
 from .Files import *
@@ -20,10 +20,10 @@ from .Json import *
 
 
 __all__ = [
-        'ImageObject',
-        'ImageTk',
-        'ImageExtensions',
-        ]
+    'ImageObject',
+    'ImageTk',
+    'ImageExtensions',
+    ]
 
 
 
@@ -236,7 +236,7 @@ class ImageObject(object):
     def FromBase64(cls, data: str, *, width: int = None, height: int = None) -> 'ImageObject':
         Assert(data, str)
 
-        return FromBytes(base64.b64decode(data), width=width, height=height)
+        return cls.FromBytes(base64.b64decode(data), width=width, height=height)
 
     @classmethod
     def FromBytes(cls, data: bytes, *, width: int = None, height: int = None) -> 'ImageObject':
@@ -272,7 +272,9 @@ class ImageObject(object):
 
         if isinstance(path, str):
             if not file_types:
-                if not ID: ImageObject.Extensions()
+                if not EXTENSION: ImageObject.Extensions()
+                file_types = tuple(EXTENSION.keys())
+
             if path.lower().endswith(file_types):
                 try:
                     with open(path, 'rb') as f:

@@ -1,6 +1,3 @@
-import json
-
-from PythonExtensions.Images import ImageObject
 from PythonExtensions.Json import *
 from PythonExtensions.Logging import *
 

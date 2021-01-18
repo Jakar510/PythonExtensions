@@ -1,6 +1,6 @@
-import copy
+import copy as _copy
 from enum import Enum, IntEnum
-from json import dumps, loads
+from json import dumps as _dumps, loads as _loads
 
 from PIL.Image import Image as _Image
 
@@ -89,7 +89,7 @@ def _ToDict(o: Dict) -> Dict[_KT, Union[_VT, Dict, str]]:
 
 
 class BaseModel(object):
-    def Clone(self): return copy.deepcopy(self)
+    def Clone(self): return _copy.deepcopy(self)
     def ToString(self) -> str:
         try:
             return f'<{self.__class__.__qualname__} Object() [ {self.ToJsonString()} ]'
@@ -106,8 +106,8 @@ class BaseModel(object):
     @classmethod
     def Parse(cls, d): return cls()
     @classmethod
-    def FromJson(cls, string: Union[str, bytes, bytearray], **kwargs): return cls.Parse(loads(string, **kwargs))
-    def ToJsonString(self) -> str: return dumps(self, indent=4, default=_serialize)  # , cls=JsonEncoder)
+    def FromJson(cls, string: Union[str, bytes, bytearray], **kwargs): return cls.Parse(_loads(string, **kwargs))
+    def ToJsonString(self) -> str: return _dumps(self, indent=4, default=_serialize)  # , cls=JsonEncoder)
 
 
 

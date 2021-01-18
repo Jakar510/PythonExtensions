@@ -4,12 +4,17 @@
 #
 # ------------------------------------------------------------------------------
 
-from .base import Test_base, TestLogging
-from .debug import Test_debug
 from .SwitchCase import run_tests
+from .base import TestLogging, Test_base
+from .debug import Test_debug
 from .test_tk import run_all
 
-def run_all():
+
+
+
+__all__ = ['RUN_TESTS']
+
+def RUN_TESTS():
     Test_base()
     TestLogging()
     # run_tests()
