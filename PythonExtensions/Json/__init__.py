@@ -1,6 +1,7 @@
 import copy as _copy
 from enum import Enum, IntEnum
 from json import dumps as _dumps, loads as _loads
+from typing import *
 
 from PIL.Image import Image as _Image
 

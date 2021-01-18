@@ -1,9 +1,9 @@
-from typing import *
+from typing import TypeVar, Generic
 
 
 
 
-_AnyID = TypeVar("AnyID", str, int)
+_AnyID = TypeVar("_AnyID", str, int)
 
 class _MixinBase:
     get: callable

@@ -3,8 +3,11 @@ import hashlib
 import os
 from os.path import *
 from pathlib import Path as _Path
+from typing import *
+from typing import BinaryIO
 
-from ..Json import *
+from ..Json import AssertKeys, BaseDictModel, Keys, throw
+
 
 
 
@@ -137,7 +140,10 @@ class Path(BaseDictModel[str, Union[str, bool]], os.PathLike):
         if hasattr(self, '_hash'): del self._hash
         super(Path, self).__setitem__(key, value)
 
-
+    def __eq__(self, other): return isinstance(other, Path) and self._path == other._path
+    def __ne__(self, other): return isinstance(other, Path) and self._path != other._path
+    def __gt__(self, other): return isinstance(other, Path) and self._path > other._path
+    def __lt__(self, other): return isinstance(other, Path) and self._path < other._path
 
     @classmethod
     def FromString(cls, _path: Union[str, 'Path']) -> 'Path': return cls.Init(_path)
@@ -162,7 +168,7 @@ class Path(BaseDictModel[str, Union[str, bool]], os.PathLike):
 
         d = path.DirectoryName
         def _join(file): return cls.Join(d, file)
-        return list(map(_join, os.listdir(path)))
+        return sorted(map(_join, os.listdir(path)))
 
     @classmethod
     def Init(cls, path: str, *, temporary_file: bool = False) -> 'Path':
