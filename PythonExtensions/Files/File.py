@@ -6,6 +6,7 @@ from os.path import *
 from typing import *
 
 from .Path import *
+from ..Json import *
 
 
 
@@ -14,11 +15,11 @@ __all__ = [
     'File'
     ]
 
-
-class File(object):
-    def __init__(self, path: Path, *, temporary: bool = False):
-        self._path = path
-        self._temporary = temporary
+class File(BaseDictModel):
+    @property
+    def _path(self) -> Path: return self[Keys.Path]
+    @property
+    def _temporary(self) -> bool: return self[Keys.Temporary]
 
     def Remove(self): return self._path.Remove()
     def __del__(self):
@@ -77,16 +78,29 @@ class File(object):
 
 
     @classmethod
-    def TemporaryFile(cls, fileName: str, *sub_folders: str, root_dir: str = None):
-        if not root_dir: root_dir = tempfile.gettempdir()
-        path = Path.Join(root_dir, *sub_folders, fileName)
-        os.makedirs(basename(path), exist_ok=True)
-        return cls(path, temporary=True)
+    def Init(cls, path: Path, *, temporary: bool):
+        return cls({ Keys.Path: path, Keys.Temporary: temporary })
+
+    @classmethod
+    def Parse(cls, d):
+        if isinstance(d, dict):
+            AssertKeys(d, Keys.Path, Keys.Temporary)
+            d[Keys.Path] = Path.Parse(d[Keys.Path])
+
+            return cls(d)
+
+        throw(d, dict)
+
+    @classmethod
+    def TemporaryFile(cls, *sub_folders: str, name: str, root_dir: str = None):
+        path = Path.Join(root_dir or tempfile.gettempdir(), *sub_folders, name, temporary_file=True)
+        os.makedirs(path.DirectoryName, exist_ok=True)
+        return cls.Init(path, temporary=True)
 
     @classmethod
     def Create(cls, _path: Union[str, 'Path'], content: Union[str, bytes] = None, *, buffering=None, encoding: str = None, errors=None, newline: str = '\n', closefd=True):
         os.makedirs(basename(_path), exist_ok=True)
-        path = cls(os.path.abspath(_path))
+        path = cls.Init(os.path.abspath(_path), temporary=False)
         path.Write(content, buffering=buffering, encoding=encoding, errors=errors, newline=newline, closefd=closefd)
 
         return path
@@ -96,10 +110,3 @@ class File(object):
         with open(_outPath, 'wb' if open_as_binary else 'w') as out:
             with open(_inPath, 'rb' if open_as_binary else 'r') as _in:
                 out.write(_in.read())
-
-
-
-if __name__ == '__main__':
-    _file = File.TemporaryFile('test.txt', 'BaseExtensions')
-    print(_file)
-    _file.Write('test data')

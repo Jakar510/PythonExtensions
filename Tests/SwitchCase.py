@@ -157,7 +157,7 @@ def example5():
 
 
 
-def run_tests():
+def test_switch_case():
     example1()
     example2()
     example3()
@@ -166,5 +166,5 @@ def run_tests():
 
 
 if __name__ == '__main__':
-    run_tests()
+    test_switch_case()
 

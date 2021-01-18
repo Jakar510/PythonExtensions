@@ -1,13 +1,10 @@
 import base64
 import hashlib
-import json
 import os
-import pickle
-import tempfile
 from os.path import *
 from pathlib import Path as _Path
-from typing import *
-from typing import BinaryIO
+
+from ..Json import *
 
 
 
@@ -23,10 +20,14 @@ class FileData(Protocol[AnyStr]):
 
 
 
-class Path(os.PathLike):
-    def __init__(self, _path: str, temporary_file: bool = False):
-        self._temporary_file = temporary_file
-        self._path = _path
+class Path(BaseDictModel[str, Union[str, bool]], os.PathLike):
+    _hash: str
+    @property
+    def Value(self) -> str: return self._path
+    @property
+    def _path(self) -> str: return self[Keys.Path]
+    @property
+    def _temporary_file(self) -> bool: return Keys.Temporary in self
 
     @property
     def Exists(self) -> bool: return exists(self._path)
@@ -106,7 +107,6 @@ class Path(os.PathLike):
     def Size(self) -> int: return getsize(self._path)
     def ToUri(self): return _Path(self._path).as_uri()
 
-
     def GetHashID(self, BlockSize: int = 65536) -> str:
         """
         :param BlockSize: defaults to 64KB
@@ -114,63 +114,65 @@ class Path(os.PathLike):
         """
         if self.IsDirectory: raise IsADirectoryError('Argument cannot be a directory.')
 
-        _hasher = hashlib.sha1()
-        with open(self, 'rb') as f:
-            buf = f.read(BlockSize)
-            while len(buf) > 0:
-                _hasher.update(buf)
+        try:
+            return self._hash
+        except AttributeError:
+            _hasher = hashlib.sha1()
+            with open(self, 'rb') as f:
                 buf = f.read(BlockSize)
-        return base64.urlsafe_b64encode(_hasher.digest()).decode()
-
-
+                while len(buf) > 0:
+                    _hasher.update(buf)
+                    buf = f.read(BlockSize)
+            self._hash = base64.urlsafe_b64encode(_hasher.digest()).decode()
+            return self._hash
 
     def __del__(self):
         if self._temporary_file and self.Exists: return self.Remove()
     def __str__(self): return self._path
-    def __repr__(self):
-        try: return f'<{self.__class__.__qualname__} Object. Location: "{self._path}">'
-        except AttributeError: return f'<{self.__class__.__name__} Object. Location: "{self._path}">'
     def __bytes__(self):
         """ Return the bytes representation of the path. This is only recommended to use under Unix. """
         return os.fsencode(self._path)
     def __fspath__(self): return self._path
+    def __setitem__(self, key, value):
+        if hasattr(self, '_hash'): del self._hash
+        super(Path, self).__setitem__(key, value)
 
-    def __eq__(self, other):
-        if not isinstance(other, Path): return NotImplementedError()
-        return self._path == other._path
-    def __ne__(self, other):
-        if not isinstance(other, Path): return NotImplementedError()
-        return self._path != other._path
 
-    def __hash__(self):
-        try:
-            return self._hash
-        except AttributeError:
-            self._hash = hash(self._path)
-            return self._hash
-
-    @property
-    def Value(self): return self._path
 
     @classmethod
-    def FromString(cls, _path: Union[str, 'Path']): return cls(abspath(_path))
+    def FromString(cls, _path: Union[str, 'Path']) -> 'Path': return cls.Init(_path)
 
     @classmethod
-    def FromPathLibPath(cls, _path: _Path): return cls(abspath(_path.resolve()))
+    def FromPathLibPath(cls, _path: _Path) -> 'Path': return cls.Init(str(_path.resolve()))
 
     @classmethod
-    def Join(cls, *args: str): return cls(join(*args))
+    def Join(cls, *args: str, temporary_file: bool = False) -> 'Path': return cls.Init(join(*args), temporary_file=temporary_file)
 
     @classmethod
-    def MakeDirectories(cls, path: Union[str, 'Path'], mode: int = 0o777, exist_ok: bool = True):
+    def MakeDirectories(cls, path: Union[str, 'Path'], mode: int = 0o777, exist_ok: bool = True) -> 'Path':
         os.makedirs(path, mode, exist_ok)
-        return cls(path)
+        return cls.Init(path)
 
     @classmethod
     def ListDir(cls, path: Union[str, 'Path']) -> List['Path']:
-        if isfile(path): return [cls.FromString(path)]
+        if not isinstance(path, Path):
+            path = Path.Init(path)
 
-        d = basename(path)
-        def _join(file): return cls.FromString(join(d, file))
+        if path.IsFile: return [cls.FromString(path)]
+
+        d = path.DirectoryName
+        def _join(file): return cls.Join(d, file)
         return list(map(_join, os.listdir(path)))
 
+    @classmethod
+    def Init(cls, path: str, *, temporary_file: bool = False) -> 'Path':
+        if temporary_file: return cls({ Keys.Path: abspath(path), Keys.Temporary: temporary_file })
+        return cls({ Keys.Path: abspath(path) })
+
+    @classmethod
+    def Parse(cls, d) -> 'Path':
+        if isinstance(d, dict):
+            AssertKeys(d, Keys.Path)
+            return cls(d)
+
+        throw(d, dict)

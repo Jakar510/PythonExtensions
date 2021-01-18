@@ -6,6 +6,9 @@ class Keys(object):
     # Aspect = 'Aspect'
     # ImagePos = 'ImagePos'
 
+    Temporary = 'Temporary'
+    Path = 'Path'
+
     width = 'Width'
     height = 'Height'
 

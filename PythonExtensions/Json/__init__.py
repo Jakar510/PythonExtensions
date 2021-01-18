@@ -91,6 +91,8 @@ def _ToDict(o: Dict) -> Dict[_KT, Union[_VT, Dict, str]]:
 class BaseModel(object):
     def Clone(self): return _copy.deepcopy(self)
     def ToString(self) -> str:
+        # try: return f'<{self.__class__.__qualname__} Object. State: {self.__dict__}>'
+        # except AttributeError: return f'<{self.__class__.__name__} Object. State: {self.__dict__}>'
         try:
             return f'<{self.__class__.__qualname__} Object() [ {self.ToJsonString()} ]'
         except AttributeError:
