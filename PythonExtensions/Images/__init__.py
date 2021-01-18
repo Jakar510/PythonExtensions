@@ -101,9 +101,8 @@ class ImageExtensions(str, Enum):
 
 
 class ImageObject(object):
-    __slots__ = ['_img', '_path', '_temp', '_fp', '_MaxWidth', '_MaxHeight', '_name_']
-    _path: Union[str, Path]
-    _temp: Path
+    __slots__ = ['_img', '_path', '_fp', '_MaxWidth', '_MaxHeight', '_name_']
+    _path: Path
     _fp: Optional[BytesIO]
     _img: Image
     _MaxWidth: Optional[int]
@@ -127,7 +126,7 @@ class ImageObject(object):
         except AttributeError:
             self._name_ = f'{hash(self)}.{extension.value}'
             return self._name_
-    def _TempFilePath(self, extension: ImageExtensions) -> Path: return File.TemporaryFile(self.__name__(extension), self.__module__, root_dir=tempfile.gettempdir())
+    def _TempFilePath(self, extension: ImageExtensions) -> Path: return File.TemporaryFile(self.__module__, name=self.__name__(extension), root_dir=tempfile.gettempdir())
     def __enter__(self):
         # noinspection PyTypeChecker
         self._fp = open(self._path, 'wb')
@@ -135,23 +134,18 @@ class ImageObject(object):
         return self
     def __exit__(self, *args):
         # exc_type, exc_val, exc_tb = args
-        if self._fp and all(arg is None for arg in args): self.save()
+        if not self._path.IsTemporary and self._fp and all(arg is None for arg in args): self.save()
 
         if self._fp:
             if hasattr(self, '_temp'): os.remove(self._temp)
             self._img.close()
             self._fp.close()
             self._fp = None
-    def __call__(self, path: Union[str, Path] = None, *, extension: ImageExtensions = None):
+    def __call__(self, path: Path = None, *, extension: ImageExtensions = None):
         if not path and not extension:
             raise ArgumentError('Must Provide either the file path or the image type extension')
 
-        self._path = path
-        if path:
-            if hasattr(self, '_temp'): del self._temp
-            return self
-
-        self._temp = self._TempFilePath(extension)
+        self._path = path or self._TempFilePath(extension)
         return self
     def save(self): self._img.save(self._fp)
 
@@ -159,7 +153,7 @@ class ImageObject(object):
         self._MaxWidth = height
         self._MaxHeight = width
 
-
+    def Size(self) -> Size: return Size.Create(self._img.width, self._img.height)
 
     @property
     def _factors(self) -> Tuple[float, float]:
@@ -167,10 +161,10 @@ class ImageObject(object):
             return self._MaxWidth / self._img.width, self._MaxHeight / self._img.height
 
         return 1, 1
-    def _Maximum_ScalingFactor(self) -> float: return max(self._factors)
-    def _Minimum_ScalingFactor(self) -> float: return min(self._factors)
+    def Maximum_ScalingFactor(self) -> float: return max(self._factors)
+    def Minimum_ScalingFactor(self) -> float: return min(self._factors)
     def _CalculateNewSize(self) -> Tuple[int, int]:
-        scalingFactor = self._Minimum_ScalingFactor()
+        scalingFactor = self.Minimum_ScalingFactor()
         return int(scalingFactor * self._img.width), int(scalingFactor * self._img.height)
     def _Scale(self, factor: float) -> Tuple[int, int]: return int(self._img.width * (factor or 1)), int(self._img.height * (factor or 1))
 
@@ -253,7 +247,10 @@ class ImageObject(object):
             with img_open(buf) as img:
                 return cls(img, width, height)
 
-
+    @classmethod
+    def Open(cls, path: Union[str, Path]):
+        o = cls.FromFile(path)
+        return o.__call__(path).__enter__()
 
 
 

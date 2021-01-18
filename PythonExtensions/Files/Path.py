@@ -30,7 +30,7 @@ class Path(BaseDictModel[str, Union[str, bool]], os.PathLike):
     @property
     def _path(self) -> str: return self[Keys.Path]
     @property
-    def _temporary_file(self) -> bool: return Keys.Temporary in self
+    def IsTemporary(self) -> bool: return Keys.Temporary in self
 
     @property
     def Exists(self) -> bool: return exists(self._path)
@@ -130,7 +130,7 @@ class Path(BaseDictModel[str, Union[str, bool]], os.PathLike):
             return self._hash
 
     def __del__(self):
-        if self._temporary_file and self.Exists: return self.Remove()
+        if self.IsTemporary and self.Exists: return self.Remove()
     def __str__(self): return self._path
     def __bytes__(self):
         """ Return the bytes representation of the path. This is only recommended to use under Unix. """
