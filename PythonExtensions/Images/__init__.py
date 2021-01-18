@@ -12,9 +12,9 @@ from io import BytesIO
 from PIL import ImageFile, ImageTk
 from PIL.Image import BICUBIC, EXTENSION, Exif, Image, init, open
 
-from .Exceptions import ArgumentError
-from .Files import *
-from .Json import *
+from ..Exceptions import ArgumentError
+from ..Files import *
+from ..Json import *
 
 
 
@@ -126,7 +126,7 @@ class ImageObject(object):
         except AttributeError:
             self._name_ = f'{hash(self)}.{extension.value}'
             return self._name_
-    def _TempFilePath(self, extension: ImageExtensions) -> Path: return Path.CreateTemporaryFile(self.__name__(extension), self.__module__, root_dir=tempfile.gettempdir())
+    def _TempFilePath(self, extension: ImageExtensions) -> Path: return File.TemporaryFile(self.__name__(extension), self.__module__, root_dir=tempfile.gettempdir())
     def __enter__(self):
         # noinspection PyTypeChecker
         self._fp = open(self._path, 'wb')
@@ -141,7 +141,7 @@ class ImageObject(object):
             self._img.close()
             self._fp.close()
             self._fp = None
-    def __call__(self, *, path: Union[str, Path] = None, extension: ImageExtensions = None):
+    def __call__(self, path: Union[str, Path] = None, *, extension: ImageExtensions = None):
         if not path and not extension:
             raise ArgumentError('Must Provide either the file path or the image type extension')
 

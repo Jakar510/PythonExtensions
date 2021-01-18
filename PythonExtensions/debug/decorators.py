@@ -3,7 +3,7 @@ import time
 from tkinter import Event
 
 from .console import *
-from BaseExtensions.Helpers import RoundFloat
+from ..misc import RoundFloat
 
 
 
@@ -112,7 +112,7 @@ def CheckTime(*, Precision: int = 5, tag: str = pp.TITLE_TAG):
             start_time = time.time()
             result = func(*args, **kwargs)
             _time = RoundFloat(time.time() - start_time, Precision=Precision)
-            result, _tag, name, signature, pp_result =pp. get_func_details(func, tag, result, args, kwargs)
+            result, _tag, name, signature, pp_result = pp.get_func_details(func, tag, result, args, kwargs)
             Print(_tag, f'{name}  took:  {_time}')
             return result
 

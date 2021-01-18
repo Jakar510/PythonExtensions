@@ -48,5 +48,3 @@ class IsoFormat(object):
     def FromDate(cls, obj: Date, _format: Optional[str], tz: tzinfo = None): return cls(obj, _format, tz)
     @classmethod
     def FromTime(cls, obj: Time, _format: Optional[str], tz: tzinfo = None): return cls(obj, _format, tz)
-
-

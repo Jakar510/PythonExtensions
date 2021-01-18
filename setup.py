@@ -3,15 +3,13 @@
 #  Property of TrueLogic Company.
 #  Copyright (c) 2020.
 # ------------------------------------------------------------------------------
-#
-# ------------------------------------------------------------------------------
-import os
 
 from setuptools import setup
 
 from PythonExtensions import __author__, __classifiers__, __email__, __license__, __maintainer__, __maintainer_email__, __name__, __short_description__, __url__, __version__
 from PythonExtensions.Setup import *
 from PythonExtensions.debug import *
+
 
 
 
@@ -23,7 +21,6 @@ _packages, _package_data = Get_Packages_Data(os.path.abspath('PythonExtensions')
 
 PrettyPrint('_packages', _packages)
 PrettyPrint('_package_data', _package_data)
-
 
 setup(name=__name__,
       version=__version__,

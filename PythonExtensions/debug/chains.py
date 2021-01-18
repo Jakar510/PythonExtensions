@@ -1,9 +1,8 @@
 import functools
 from typing import *
 
-from BaseExtensions.AutoCounter import AutoCounter
-
 from .console import *
+from ..misc import AutoCounter
 
 
 
