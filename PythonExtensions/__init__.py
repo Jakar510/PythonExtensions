@@ -46,8 +46,9 @@ __classifiers__ = [
     License.OSI_Approved.MIT_License,
 
     # Support platforms
-    Operating_System.MacOS,
-    Operating_System.Microsoft.Windows,
+    Operating_System.MacOS.MacOS,
+    Operating_System.Microsoft.Windows.Windows,
+    Operating_System.Microsoft.Windows.Windows_10,
     Operating_System.POSIX.Linux,
     Programming_Language.Python.Python,
     Programming_Language.Python.Three.Only,
