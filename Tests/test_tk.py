@@ -11,12 +11,10 @@ import random
 from time import sleep
 from typing import List, Union
 
-from TkinterExtensions import *
+from PythonExtensions.tk import *
 
 
 
-
-print('TkinterExtensions.version', version)
 
 class MainMenu_Colors: NumPadEntry = None
 

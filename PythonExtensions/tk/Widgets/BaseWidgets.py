@@ -5,23 +5,19 @@
 # ------------------------------------------------------------------------------
 #
 # ------------------------------------------------------------------------------
-
-
-import base64
-import io
 import os
 from abc import ABC
 from enum import Enum
 from pprint import PrettyPrinter
 from types import FunctionType, MethodType
 from typing import Union
-from urllib.request import urlopen
 
 from PIL import Image, ImageTk
 
 from ..Enumerations import *
-from BaseExtensions.Images import *
 from ..Widgets.base import *
+from ...Files import Path
+from ...Images import *
 
 
 
@@ -29,11 +25,11 @@ from ..Widgets.base import *
 pp = PrettyPrinter(indent=4)
 
 __all__ = [
-        'BaseTkinterWidget', 'BaseTextTkinterWidget',
-        'Image', 'ImageTk',
-        'CurrentValue', 'CallWrapper', 'CurrentValue',
-        'CommandMixin', 'ImageMixin',
-        ]
+    'BaseTkinterWidget', 'BaseTextTkinterWidget',
+    'Image', 'ImageTk',
+    'CurrentValue', 'CallWrapper', 'CurrentValue',
+    'CommandMixin', 'ImageMixin',
+    ]
 
 class BaseTkinterWidget(tk.Widget, ABC):
     # noinspection PyMissingConstructor
@@ -66,25 +62,25 @@ class BaseTkinterWidget(tk.Widget, ABC):
     def FullDetails(self) -> dict:
         d = self.Details
         d.update({
-                'Type':               type(self),
-                'repr':               repr(self),
-                'str':                str(self),
-                'ViewState':          self.CurrentViewState,
-                'LayoutManger':       self._manager_,
-                'children':           self.children.copy(),
-                'PI (position info)': self.pi,
-                'dir':                dir(self),
-                '__dict__':           self.__dict__.copy(),
-                'winfo':              {
-                        'name':               self.winfo_name(),
-                        'manager':            self.winfo_manager(),
-                        'id':                 self.winfo_id(),
-                        'parent':             self.winfo_parent(),
-                        'ismapped':           self.winfo_ismapped(),
-                        'pathname(winfo_id)': self.winfo_pathname(self.winfo_id()),
-                        'children':           self.winfo_children(),
-                        },
-                })
+            'Type':               type(self),
+            'repr':               repr(self),
+            'str':                str(self),
+            'ViewState':          self.CurrentViewState,
+            'LayoutManger':       self._manager_,
+            'children':           self.children.copy(),
+            'PI (position info)': self.pi,
+            'dir':                dir(self),
+            '__dict__':           self.__dict__.copy(),
+            'winfo':              {
+                'name':               self.winfo_name(),
+                'manager':            self.winfo_manager(),
+                'id':                 self.winfo_id(),
+                'parent':             self.winfo_parent(),
+                'ismapped':           self.winfo_ismapped(),
+                'pathname(winfo_id)': self.winfo_pathname(self.winfo_id()),
+                'children':           self.winfo_children(),
+                },
+            })
         return d
 
 
@@ -390,8 +386,9 @@ class CallWrapper(tk.CallWrapper):
         except Exception:
             if hasattr(self._widget, '_report_exception'):
                 # noinspection PyProtectedMember
-                self._widget._report_exception()
-            else: raise
+                return self._widget._report_exception()
+
+            raise
 
     def __repr__(self) -> str: return f'{super().__repr__().replace(">", "")} [ {dict(func=self._func, widget=self._widget)} ]>'
     def __str__(self) -> str: return repr(self)
@@ -480,26 +477,35 @@ class ImageMixin:
     update_idletasks: callable
     update: callable
     _IMG: Union[ImageTk.PhotoImage, tk.PhotoImage] = None
-    def SetImage(self, path: str = None, *, WidthMax: int = None, HeightMax: int = None):
+    def SetImage(self, path: Union[str, Path] = None, *, WidthMax: int = None, HeightMax: int = None):
         if not os.path.isfile(path): raise FileNotFoundError(path)
-        with open(path, 'rb') as f:
-            return self._open(f, WidthMax, HeightMax)
+        return self._open(ImageObject.FromFile(path, width=WidthMax, height=HeightMax))
+        # with open(path, 'rb') as f:
+        #     return self._open(f, WidthMax, HeightMax)
     def SetPhoto(self, base64Data: bytes or str = None, *, WidthMax: int = None, HeightMax: int = None):
-        with io.BytesIO(base64.b64decode(base64Data)) as buf:
-            return self._open(buf, WidthMax, HeightMax)
+        return self._open(ImageObject.FromBase64(base64Data, width=WidthMax, height=HeightMax))
+        # with io.BytesIO(base64.b64decode(base64Data)) as buf:
+        #     return self._open(buf)
     def DownloadImage(self, url: str, *, WidthMax: int = None, HeightMax: int = None):
-        with io.BytesIO(urlopen(url).read()) as buf:
-            return self._open(buf, WidthMax, HeightMax)
+        return self._open(ImageObject.FromURL(url, width=WidthMax, height=HeightMax))
+        # with io.BytesIO(urlopen(url).read()) as buf:
+        #     return self._open(buf)
 
-    def _open(self, f, WidthMax: int, HeightMax: int):
+    # def _open(self, f, WidthMax: int, HeightMax: int):
+    #     self.update_idletasks()
+    #     if WidthMax is None: WidthMax = self.width
+    #     if HeightMax is None: HeightMax = self.height
+    #
+    #     if WidthMax <= 0: raise ValueError(f'WidthMax must be positive. Value: {WidthMax}')
+    #     if HeightMax <= 0: raise ValueError(f'HeightMax must be positive. Value: {HeightMax}')
+    #     with Image.open(f) as img:
+    #         self._IMG = ImageTk.PhotoImage(master=self, image=ResizePhoto(img, WidthMax=WidthMax, HeightMax=HeightMax))
+    #         self.configure(image=self._IMG)
+    #
+    #     return self
+    def _open(self, img: ImageObject):
         self.update_idletasks()
-        if WidthMax is None: WidthMax = self.width
-        if HeightMax is None: HeightMax = self.height
-
-        if WidthMax <= 0: raise ValueError(f'WidthMax must be positive. Value: {WidthMax}')
-        if HeightMax <= 0: raise ValueError(f'HeightMax must be positive. Value: {HeightMax}')
-        with Image.open(f) as img:
-            self._IMG = ImageTk.PhotoImage(master=self, image=ResizePhoto(img, WidthMax=WidthMax, HeightMax=HeightMax))
-            self.configure(image=self._IMG)
+        self._IMG = img.ToPhotoImage()
+        self.configure(image=self._IMG)
 
         return self

@@ -1,7 +1,7 @@
-from Tests import run_all
+from Tests import RUN_TESTS
 
 
 
 
 if __name__ == '__main__':
-    run_all()
+    RUN_TESTS()

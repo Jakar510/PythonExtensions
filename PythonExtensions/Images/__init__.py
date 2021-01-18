@@ -8,9 +8,10 @@ import base64
 import os
 import tempfile
 from io import BytesIO
+from urllib.request import urlopen
 
 from PIL import ImageFile, ImageTk
-from PIL.Image import BICUBIC, EXTENSION, Exif, Image, init, open
+from PIL.Image import BICUBIC, EXTENSION, Exif, Image, init, open as img_open
 
 from ..Exceptions import ArgumentError
 from ..Files import *
@@ -130,7 +131,7 @@ class ImageObject(object):
     def __enter__(self):
         # noinspection PyTypeChecker
         self._fp = open(self._path, 'wb')
-        self._img = open(self._fp)
+        self._img = img_open(self._fp)
         return self
     def __exit__(self, *args):
         # exc_type, exc_val, exc_tb = args
@@ -229,7 +230,7 @@ class ImageObject(object):
         Assert(path, str, Path)
 
         with open(path, 'rb') as f:
-            with open(f) as img:
+            with img_open(f) as img:
                 return cls(img, width, height)
 
     @classmethod
@@ -239,11 +240,17 @@ class ImageObject(object):
         return cls.FromBytes(base64.b64decode(data), width=width, height=height)
 
     @classmethod
+    def FromURL(cls, url: str, *, width: int = None, height: int = None) -> 'ImageObject':
+        Assert(url, str)
+
+        return cls.FromBytes(urlopen(url).read(), width=width, height=height)
+
+    @classmethod
     def FromBytes(cls, data: bytes, *, width: int = None, height: int = None) -> 'ImageObject':
         Assert(data, bytes)
 
         with BytesIO(data) as buf:
-            with open(buf) as img:
+            with img_open(buf) as img:
                 return cls(img, width, height)
 
 
@@ -278,7 +285,7 @@ class ImageObject(object):
             if path.lower().endswith(file_types):
                 try:
                     with open(path, 'rb') as f:
-                        with open(f) as img:
+                        with img_open(f) as img:
                             img.verify()
                             return True
                 except (IOError, SyntaxError): return False
@@ -286,7 +293,7 @@ class ImageObject(object):
         elif isinstance(path, bytes):
             try:
                 with BytesIO(path) as buf:
-                    with open(buf) as img:
+                    with img_open(buf) as img:
                         img.verify()
                         return True
             except (IOError, SyntaxError): return False
