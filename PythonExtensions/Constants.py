@@ -8,24 +8,27 @@ import psutil
 
 
 
-__all__ = ['DEVICE']
+__all__ = [
+    'ARCHITECTURE', 'PROCESSOR',
+    'PLATFORM', 'PLATFORM_RELEASE', 'PLATFORM_VERSION',
+    'PLATFORM_IS_LINUX', 'PLATFORM_IS_WINDOWS',
+    'CPU_COUNT', 'RAM',
+    'HOSTNAME', 'IP_ADDRESS', 'MAC_ADDRESS'
+    ]
 
-class Device(object):
-    ARCHITECTURE = platform.machine()
-    PROCESSOR = platform.processor()
+ARCHITECTURE = platform.machine()
+PROCESSOR = platform.processor()
 
-    PLATFORM = platform.system()
-    PLATFORM_RELEASE = platform.release()
-    PLATFORM_VERSION = platform.version()
+PLATFORM = platform.system()
+PLATFORM_RELEASE = platform.release()
+PLATFORM_VERSION = platform.version()
 
-    IS_LINUX = PLATFORM == 'Linux'
-    IS_WINDOWS = PLATFORM == 'Window'
+PLATFORM_IS_LINUX = PLATFORM == 'Linux'
+PLATFORM_IS_WINDOWS = PLATFORM == 'Window'
 
-    CPU_COUNT = psutil.cpu_count()
-    RAM = str(round(psutil.virtual_memory().total / (1024.0 ** 3), 2)) + " GB"
+CPU_COUNT = psutil.cpu_count()
+RAM = str(round(psutil.virtual_memory().total / (1024.0 ** 3), 2)) + " GB"
 
-    HOSTNAME = socket.gethostname()
-    IP_ADDRESS = socket.gethostbyname(socket.gethostname())
-    MAC_ADDRESS = ':'.join(re.findall('..', '%012x' % uuid.getnode()))
-
-DEVICE = Device()
+HOSTNAME = socket.gethostname()
+IP_ADDRESS = socket.gethostbyname(socket.gethostname())
+MAC_ADDRESS = ':'.join(re.findall('..', '%012x' % uuid.getnode()))
