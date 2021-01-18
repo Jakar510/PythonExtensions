@@ -53,7 +53,7 @@ class PlacementSet(object):
 
     def __repr__(self): return repr(self._state)
 
-
+# ------------------------------------------------------------------------------------------
 
 class PopupKeyboard(tkTopLevel):
     """
@@ -462,54 +462,7 @@ class KeyboardMixin:
     @property
     def popup_relheight(self) -> Optional[int]: return int(self.__root.height * self._popup_relheight) if self._popup_relheight is not None else None
 
-
-
-
-# _T = TypeVar('_T')
-# class KeyBaordTestFrame(Frame, Generic[_T]):
-#     @staticmethod
-#     def test():
-#         from .Themed import NotebookThemed
-#         from .KeyboardEntry import TitledKeyboardEntry, FramedKeyboardEntry  # circular import
-#         from .KeyboardComboBoxThemed import TitledKeyboardComboBoxThemed, FramedKeyboardComboBoxThemed  # circular import
-#         root = tkRoot(Screen_Width=800, Screen_Height=480, x=200, y=200)
-#         nb = NotebookThemed(root).PlaceFull()
-#         d = KeyBaordTestFrame.FrameConfig()
-#
-#         w = FramedKeyboardEntry.TEST(nb, root, d)
-#         nb.Add(w, title='Frame_Entry')
-#         w = TitledKeyboardEntry.TEST(nb, root, d)
-#         nb.Add(w, title='Titled_Entry')
-#
-#         w = FramedKeyboardComboBoxThemed.TEST(nb, root, d)
-#         nb.Add(w, title='Framed_COMBO_BOX')
-#         w = TitledKeyboardComboBoxThemed.TEST(nb, root, d)
-#         nb.Add(w, title='Titled_COMBO_BOX')
-#
-#         root.mainloop()
-#     @staticmethod
-#     def FrameConfig(): return {
-#             'Center_Below': dict(placement=PlacementSet(Placement.Center, Placement.Bottom)),
-#             'Left_Below':   dict(placement=PlacementSet(Placement.Left, Placement.Bottom)),
-#             'Right_Below':  dict(placement=PlacementSet(Placement.Right, Placement.Bottom)),
-#             'Auto_Below':   dict(placement=PlacementSet(Placement.Auto, Placement.Bottom)),
-#             'FULL_Auto':    { },
-#             'Center_Above': dict(placement=PlacementSet(Placement.Center, Placement.Top)),
-#             'Left_Above':   dict(placement=PlacementSet(Placement.Left, Placement.Top)),
-#             'Right_Above':  dict(placement=PlacementSet(Placement.Right, Placement.Top)),
-#             'Auto_Above':   dict(placement=PlacementSet(Placement.Auto, Placement.Top)),
-#             }
-#     Center_Below: _T
-#     Left_Below: _T
-#     Right_Below: _T
-#     Auto_Below: _T
-#     FULL_Auto: _T
-#     Center_Above: _T
-#     Left_Above: _T
-#     Right_Above: _T
-#     Auto_Above: _T
-#
-#     def iter(self) -> List[_T]: return [getattr(self, key) for key in self.FrameConfig().keys()]
+# ------------------------------------------------------------------------------------------
 
 class value_title_mixin:
     Title: Label
@@ -542,6 +495,7 @@ class value_title_mixin:
         if isinstance(value, str): return dict(text=value)
         return value
 
+# ------------------------------------------------------------------------------------------
 
 class BaseTitled(Frame, value_title_mixin):
     """
@@ -615,7 +569,7 @@ class BaseTitledKeyboard(Frame, value_title_mixin):
     #
     #     return frame
 
-
+# ------------------------------------------------------------------------------------------
 
 class BaseFramed(LabelFrame, value_title_mixin):
     """

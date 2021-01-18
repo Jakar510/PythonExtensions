@@ -6,7 +6,7 @@
 #
 # ------------------------------------------------------------------------------
 import random
-from typing import Any, Dict, Iterable, List, Tuple, Union
+from typing import *
 
 from .BaseWidgets import *
 from .Frames import *
@@ -80,8 +80,7 @@ class ComboBoxThemed(ttk.Combobox, BaseTextTkinterWidget, CommandMixin):
 
     def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
 
-
-
+# ------------------------------------------------------------------------------------------
 
 class ScrollbarThemed(ttk.Scrollbar, BaseTkinterWidget):
     def __init__(self, master, orientation: Orient, **kwargs):
@@ -89,8 +88,7 @@ class ScrollbarThemed(ttk.Scrollbar, BaseTkinterWidget):
 
     def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
 
-
-
+# ------------------------------------------------------------------------------------------
 
 class DelimiterError(Exception): pass
 class ListItem(dict):
@@ -211,9 +209,9 @@ class TreeViewThemed(ttk.Treeview, BaseTkinterWidget, CommandMixin):
         self.command_cb = self.Bind(Bindings.TreeViewSelect, self._cmd, add=add)
         return self
 
-    def SetTags(self, **tags: Dict[str, Dict[str, Any]]):
-        for _ in self.SetTagsIter(**tags): pass
-    def SetTagsIter(self, **tags: Dict[str, Dict[str, Any]]) -> Iterable[Tuple[str, Union[Dict[str, Any], str]]]:
+    def SetTags(self, **tags: Dict[str, Any]):
+        for _ in self.SetTagsIter(tags): pass
+    def SetTagsIter(self, tags: Dict[str, Dict[str, Any]]) -> Generator[Tuple[str, Union[Dict[str, Any], str]], Dict[str, Dict[str, Any]], None]:
         if tags:
             for tag, kwargs in tags.items():
                 yield tag, self.tag_configure(tag, **kwargs)
@@ -316,10 +314,8 @@ class TreeViewHolderThemed(Frame):
 
     def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
 
+# ------------------------------------------------------------------------------------------
 
-
-
-# noinspection DuplicatedCode
 class ButtonThemed(ttk.Button, BaseTextTkinterWidget, ImageMixin, CommandMixin):
     """Construct a button _widget with the master MASTER.
 
@@ -350,9 +346,8 @@ class ButtonThemed(ttk.Button, BaseTextTkinterWidget, ImageMixin, CommandMixin):
 
     def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
 
+# ------------------------------------------------------------------------------------------
 
-
-# noinspection DuplicatedCode
 class LabelThemed(ttk.Label, BaseTextTkinterWidget, ImageMixin):
     __doc__ = """Construct a label _widget with the master MASTER.
 
@@ -377,10 +372,8 @@ class LabelThemed(ttk.Label, BaseTextTkinterWidget, ImageMixin):
 
     def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
 
+# ------------------------------------------------------------------------------------------
 
-
-
-# noinspection DuplicatedCode
 class EntryThemed(ttk.Entry, BaseTextTkinterWidget, CommandMixin):
     __doc__ = """Construct an entry _widget with the master MASTER.
 
@@ -415,8 +408,7 @@ class EntryThemed(ttk.Entry, BaseTextTkinterWidget, CommandMixin):
 
     def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
 
-
-
+# ------------------------------------------------------------------------------------------
 
 class NotebookThemed(BaseTextTkinterWidget, ttk.Notebook):
     def __init__(self, master, Color: dict = None, **kwargs):
@@ -534,6 +526,7 @@ class NotebookThemed(BaseTextTkinterWidget, ttk.Notebook):
 
     def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
 
+# ------------------------------------------------------------------------------------------
 
 class SeparatorThemed(ttk.Separator, BaseTkinterWidget):
     def __init__(self, master, orientation: Orient = Orient.Horizonal):
@@ -541,6 +534,7 @@ class SeparatorThemed(ttk.Separator, BaseTkinterWidget):
 
     def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
 
+# ------------------------------------------------------------------------------------------
 
 class CheckButtonThemed(ttk.Checkbutton, BaseTextTkinterWidget, ImageMixin, CommandMixin):
     """Ttk Checkbutton widget which is either in on- or off-state.

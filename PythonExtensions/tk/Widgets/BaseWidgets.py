@@ -10,10 +10,11 @@ from abc import ABC
 from enum import Enum
 from pprint import PrettyPrinter
 from types import FunctionType, MethodType
-from typing import Union
+from typing import *
 
 from PIL import Image, ImageTk
 
+from .. import Bindings
 from ..Enumerations import *
 from ..Widgets.base import *
 from ...Files import Path
@@ -31,13 +32,26 @@ __all__ = [
     'CommandMixin', 'ImageMixin',
     ]
 
+class BindingCollection(dict, Dict[Bindings, Set[str]]):
+    def __getitem__(self, item: Bindings):
+        try:
+            return super(BindingCollection, self).__getitem__(item)
+        except KeyError:
+            self[item] = set()
+            return super(BindingCollection, self).__getitem__(item)
+    def Clear(self):
+        for _set in self.values(): _set.clear()
+        self.clear()
+    __del__ = Clear
+
 class BaseTkinterWidget(tk.Widget, ABC):
     # noinspection PyMissingConstructor
     def __init__(self, Color: dict = None, ):
         if Color: self.configure(**Color)
 
+    __bindings__: BindingCollection = BindingCollection()
     _state_: ViewState = ViewState.Hidden
-    _pi: dict = { }
+    _pi: Dict = { }
     _manager_: Layout = None
     _wrap: int = None
     _cb: str or None = None
@@ -177,24 +191,44 @@ class BaseTkinterWidget(tk.Widget, ABC):
         if color: self.configure(disabledforeground=color)
         return self
 
+    def UndindIDs(self, ids: Iterable[str] = None):
+        for item in ids: self.unbind(item or self.__bindings__)
 
+    def Bind(self, sequence: Bindings = None, func: callable = None, add: bool = None) -> str:
+        if isinstance(sequence, Enum): sequence = sequence.value
+        _id = self.bind(sequence, func, add)
+        self.__bindings__[sequence].add(_id)
+        return _id
+    def BindAll(self, sequence: Bindings = None, func: callable = None, add: bool = None) -> str:
+        if isinstance(sequence, Enum): sequence = sequence.value
+        _id = self.bind_all(sequence, func, add)
+        self.__bindings__[sequence].add(_id)
+        return _id
 
-    def Bind(self, sequence: str or Enum = None, func: callable = None, add: bool = None) -> str:
+    def ResetBindings(self):
+        for seq, _set in self.__bindings__.items():
+            for item in _set:
+                self.unbind(seq, item)
+    def ClearBindings(self, sequence: Bindings):
+        for item in self.__bindings__[sequence]:
+            self.unbind(sequence, item)
+    def UnBind(self, sequence: Bindings, funcid: str):
+        self.__bindings__[sequence].discard(funcid)
+        return self.unbind(sequence, funcid)
+    def UnBindAll(self, sequence: Bindings = None) -> str:
         if isinstance(sequence, Enum): sequence = sequence.value
-        return self.bind(sequence, func, add)
-
-    def BindAll(self, sequence: str or Enum = None, func: callable = None, add: bool = None) -> str:
-        if isinstance(sequence, Enum): sequence = sequence.value
-        return self.bind_all(sequence, func, add)
-    def UnBindAll(self, sequence: str or Enum = None) -> str:
-        if isinstance(sequence, Enum): sequence = sequence.value
+        self.__bindings__[sequence].clear()
         return self.unbind_all(sequence)
 
-    def BindClass(self, className, sequence: str or Enum = None, func: callable = None, add: bool = None) -> str:
+
+    def BindClass(self, className, sequence: Bindings = None, func: callable = None, add: bool = None) -> str:
         if isinstance(sequence, Enum): sequence = sequence.value
-        return self.bind_class(className, sequence, func, add)
-    def UnBindClass(self, className, sequence: str or Enum = None) -> str:
+        _id = self.bind_class(className, sequence, func, add)
+        self.__bindings__[sequence].add(_id)
+        return _id
+    def UnBindClass(self, className, sequence: Bindings = None) -> str:
         if isinstance(sequence, Enum): sequence = sequence.value
+        self.__bindings__[sequence].clear()
         return self.unbind_class(className, sequence)
 
 
@@ -367,6 +401,7 @@ class BaseTextTkinterWidget(BaseTkinterWidget):
         t += v
         self.txt = t
 
+# ------------------------------------------------------------------------------------------
 
 class CallWrapper(tk.CallWrapper):
     """ Internal class. Stores function to call when some user defined Tcl function is called e.g. after an event occurred. """
@@ -439,7 +474,7 @@ class CurrentValue(CallWrapper):
         self._widget = w
         return self
 
-
+# ------------------------------------------------------------------------------------------
 
 class CommandMixin:
     _cmd: CallWrapper

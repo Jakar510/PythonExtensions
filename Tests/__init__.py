@@ -15,8 +15,8 @@ from .test_tk import run_all
 __all__ = ['RUN_TESTS']
 
 def RUN_TESTS():
-    Test_base()
-    TestLogging()
+    # Test_base()
+    # TestLogging()
     # run_tests()
-    Test_debug()
+    # Test_debug()
     run_all()

@@ -7,7 +7,7 @@
 # ------------------------------------------------------------------------------
 
 from enum import Enum
-from typing import Union
+from typing import *
 
 from ..Widgets.BaseWidgets import *
 from ..Widgets.base import *
@@ -16,10 +16,10 @@ from ..Widgets.base import *
 
 
 __all__ = [
-        'Frame', 'LabelFrame',
-        'FrameThemed', 'LabelFrameThemed',
-        'FrameTypes',
-        ]
+    'Frame', 'LabelFrame',
+    'FrameThemed', 'LabelFrameThemed',
+    'FrameTypes',
+    ]
 
 class BaseFrameMixin:
     InstanceID: Union[str, int, Enum] = None
@@ -48,8 +48,6 @@ class Frame(tk.Frame, BaseTkinterWidget, BaseFrameMixin):
         tk.Frame.__init__(self, master, **kwargs)
 
     def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
-
-
 
 
 class LabelFrame(tk.LabelFrame, BaseTextTkinterWidget, BaseFrameMixin):
@@ -81,18 +79,12 @@ class LabelFrame(tk.LabelFrame, BaseTextTkinterWidget, BaseFrameMixin):
 
     def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
 
-
-
-
-
 # noinspection DuplicatedCode
 class FrameThemed(ttk.Frame, BaseTkinterWidget, BaseFrameMixin):
     def __init__(self, master, **kwargs):
         ttk.Frame.__init__(self, master=master, **kwargs)
 
     def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
-
-
 
 
 class LabelFrameThemed(ttk.LabelFrame, BaseTextTkinterWidget, BaseFrameMixin):
@@ -124,7 +116,6 @@ class LabelFrameThemed(ttk.LabelFrame, BaseTextTkinterWidget, BaseFrameMixin):
 
     def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
 
+# ------------------------------------------------------------------------------------------
 
-
-
-FrameTypes = Union[Frame, LabelFrame, FrameThemed, LabelFrameThemed]
+FrameTypes = TypeVar('FrameTypes', Frame, LabelFrame, FrameThemed, LabelFrameThemed)

@@ -9,21 +9,21 @@
 import base64
 import io
 import os
-from typing import Tuple, Union
+from typing import *
 from urllib.request import urlopen
 
 from .BaseWidgets import *
 from .Frames import Frame
-from ..Events import *
 from ..Enumerations import *
+from ..Events import *
 from ..Widgets.base import *
 
 
 
 
 __all__ = [
-        'Entry', 'Label', 'Button', 'Listbox', 'CheckButton', 'Canvas', 'Text', 'CheckButton', 'ScrolledText', 'Scrollbar', 'Scale',
-        ]
+    'Entry', 'Label', 'Button', 'Listbox', 'CheckButton', 'Canvas', 'Text', 'CheckButton', 'ScrolledText', 'Scrollbar', 'Scale',
+    ]
 
 TODO = """
 --Button
@@ -73,10 +73,8 @@ class Button(tk.Button, BaseTextTkinterWidget, ImageMixin, CommandMixin):
 
     def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
 
+# ------------------------------------------------------------------------------------------
 
-
-
-# noinspection DuplicatedCode
 class Label(tk.Label, BaseTextTkinterWidget, ImageMixin, CommandMixin):
     __doc__ = """Construct a label _widget with the master MASTER.
 
@@ -107,6 +105,7 @@ class Label(tk.Label, BaseTextTkinterWidget, ImageMixin, CommandMixin):
 
     def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
 
+# ------------------------------------------------------------------------------------------
 
 class Message(tk.Message, BaseTextTkinterWidget, CommandMixin):
     def __init__(self, master, **kwargs):
@@ -118,8 +117,8 @@ class Message(tk.Message, BaseTextTkinterWidget, CommandMixin):
 
     def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
 
+# ------------------------------------------------------------------------------------------
 
-# noinspection DuplicatedCode
 class Entry(tk.Entry, BaseTextTkinterWidget, CommandMixin):
     __doc__ = """Construct an entry _widget with the master MASTER.
 
@@ -157,8 +156,7 @@ class Entry(tk.Entry, BaseTextTkinterWidget, CommandMixin):
 
     def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
 
-
-
+# ------------------------------------------------------------------------------------------
 
 class CheckButton(tk.Checkbutton, BaseTextTkinterWidget, ImageMixin, CommandMixin):
     """Construct a checkbutton _widget with the master MASTER.
@@ -230,7 +228,7 @@ class CheckButton(tk.Checkbutton, BaseTextTkinterWidget, ImageMixin, CommandMixi
 
     def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
 
-
+# ------------------------------------------------------------------------------------------
 
 class Listbox(tk.Listbox, BaseTextTkinterWidget, CommandMixin):
     """Construct a listbox _widget with the master MASTER.
@@ -377,8 +375,7 @@ class Listbox(tk.Listbox, BaseTextTkinterWidget, CommandMixin):
 
     def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
 
-
-
+# ------------------------------------------------------------------------------------------
 
 class Canvas(tk.Canvas, BaseTkinterWidget):
     def __init__(self, master, *args, Color: dict = None, **kwargs):
@@ -478,29 +475,73 @@ class Canvas(tk.Canvas, BaseTkinterWidget):
 
     def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
 
+# ------------------------------------------------------------------------------------------
 
 class Scrollbar(tk.Scrollbar, BaseTkinterWidget, CommandMixin):
-    def __init__(self, master, **kwargs):
-        tk.Scrollbar.__init__(self, master, **kwargs)
+    """Construct a scrollbar widget with the parent MASTER.
+
+    Valid resource names: activebackground, activerelief,
+    background, bd, bg, borderwidth, command, cursor,
+    elementborderwidth, highlightbackground,
+    highlightcolor, highlightthickness, jump, orient,
+    relief, repeatdelay, repeatinterval, takefocus,
+    troughcolor, width."""
+    def __init__(self, master, orientation: Orient, **kwargs):
+        tk.Scrollbar.__init__(self, master, orient=orientation.value, **kwargs)
 
     def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
 
-
+# ------------------------------------------------------------------------------------------
 
 class Text(tk.Text, BaseTextTkinterWidget, CommandMixin):
+    """Construct a text widget with the parent MASTER.
+
+    STANDARD OPTIONS
+
+        background, borderwidth, cursor,
+        exportselection, font, foreground,
+        highlightbackground, highlightcolor,
+        highlightthickness, insertbackground,
+        insertborderwidth, insertofftime,
+        insertontime, insertwidth, padx, pady,
+        relief, selectbackground,
+        selectborderwidth, selectforeground,
+        setgrid, takefocus,
+        xscrollcommand, yscrollcommand,
+
+    WIDGET-SPECIFIC OPTIONS
+
+        autoseparators, height, maxundo,
+        spacing1, spacing2, spacing3,
+        state, tabs, undo, width, wrap,
+
+    """
+
+
+
+    class Index(str):
+        @classmethod
+        def Create(cls, line: int, char: int): return cls(f'{line}.{char}')
+        @classmethod
+        def End(cls): return cls(tk.END)
+
+
+
     def __init__(self, master, **kwargs):
         tk.Text.__init__(self, master, **kwargs)
 
-    def Clear(self): self.delete(self.GetIndex(1, 0), tk.END)
+    def Clear(self): self.delete(self.Index.Create(1, 0), self.Index.End())
+    def ClearTags(self): return self.tag_delete(*self.Tags())
+    def Tags(self, index: int = None) -> List[str]: return self.tag_names(index)
 
-    @staticmethod
-    def GetIndex(line: int, char: int): return f'{line}.{char}'
+    def Replace(self, new_text: str, start: Index, end: Index):
+        self.delete(start, end)
+        return self.insert(start, new_text)
 
     @property
-    def txt(self) -> str: return self.get(self.GetIndex(1, 0), tk.END)
+    def txt(self) -> str: return self.get(self.Index.Create(1, 0), self.Index.End())
     @txt.setter
-    def txt(self, value: str): self.insert(self.GetIndex(1, 0), value)
-
+    def txt(self, value: str): self.insert(self.Index.Create(1, 0), value)
 
     def _setCommand(self, add: bool):
         self.command_cb = self.Bind(Bindings.ButtonPress, func=self._cmd, add=add)
@@ -508,21 +549,30 @@ class Text(tk.Text, BaseTextTkinterWidget, CommandMixin):
 
     def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
 
+# ------------------------------------------------------------------------------------------
 
-
-class ScrolledText(BaseTextTkinterWidget, CommandMixin):
+class ScrolledText(Frame, BaseTextTkinterWidget, CommandMixin):
     tb: Text
     vbar: Scrollbar
-    # noinspection PyMissingConstructor
-    def __init__(self, master, *, text: str, **kw):
-        # super().__init__(text=text)
-        self.frame = Frame(master, text=text, **kw)
-        self.tb = Text(master=self.frame).Pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+    hbar: Scrollbar
+    def __init__(self, master, *, text: str = '', **frame_kwargs):
+        super().__init__(master, **frame_kwargs)
+        self.Grid_RowConfigure(0, weight=10)
+        self.Grid_RowConfigure(1, weight=1)
+        self.Grid_ColumnConfigure(0, weight=10)
+        self.Grid_ColumnConfigure(1, weight=1)
+        self.tb = Text(master=self).Grid(0, 0)
+        self.tb.txt = text
 
-        self.vbar = Scrollbar(self.frame)
-        self.vbar.Pack(side=tk.RIGHT, fill=Fill.y)
+        self.vbar = Scrollbar(self, orientation=Orient.Vertical)
+        self.vbar.Grid(0, 1)
         self.vbar.SetCommand(self.tb.yview)
         self.tb.configure(yscrollcommand=self.vbar.set)
+
+        self.hbar = Scrollbar(self, orientation=Orient.Horizonal)
+        self.hbar.Grid(1, 0, columnspan=2)
+        self.hbar.SetCommand(self.tb.xview)
+        self.tb.configure(xscrollcommand=self.hbar.set)
 
 
     @property
@@ -538,11 +588,10 @@ class ScrolledText(BaseTextTkinterWidget, CommandMixin):
 
     def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
 
-
+# ------------------------------------------------------------------------------------------
 
 class Scale(tk.Scale, BaseTkinterWidget):
     def __init__(self, master, **kwargs):
         tk.Scale.__init__(self, master, **kwargs)
 
     def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
-

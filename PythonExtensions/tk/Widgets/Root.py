@@ -102,7 +102,6 @@ class _rootMixin:
         return self.attributes('-alpha', v)
 
 
-# noinspection DuplicatedCode
 class tkRoot(tk.Tk, _rootMixin):
     def __init__(self, Screen_Width: int = None, Screen_Height: int = None, x: int = 0, y: int = 0, fullscreen: bool = None, **kwargs):
         super().__init__(**kwargs)
@@ -113,7 +112,6 @@ class tkRoot(tk.Tk, _rootMixin):
     def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
 
 
-# noinspection DuplicatedCode
 class tkTopLevel(tk.Toplevel, _rootMixin):
     def __init__(self, master, *, Screen_Width: int = None, Screen_Height: int = None, x: int = 0, y: int = 0, fullscreen: bool = None, **kwargs):
         super().__init__(master=master, **kwargs)

@@ -4,7 +4,7 @@
 #
 # ------------------------------------------------------------------------------
 
-from typing import List, Tuple
+from typing import *
 
 from ..Widgets.base import *
 
@@ -23,6 +23,10 @@ class Style(ttk.Style):
         self.map('TNotebook.Tab', background=[('selected', selected), ('active', active)])
         self.theme_settings(self.CurrentTheme, { "TNotebook.Tab": { "configure": { "padding": padding, 'font': font } } })
 
+    def SetConfig(self, cfg: Dict[Type, Dict[str, Any]]):
+        assert (isinstance(cfg, dict))
+        for obj, kw in cfg.items(): self.Configure(obj, **kw)
+    def Configure(self, obj: Type, **kwargs): return self.configure(obj.__name__, **kwargs)
 
     @property
     def Themes(self) -> List[str]: return self.theme_names()
