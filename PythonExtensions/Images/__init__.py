@@ -5,7 +5,6 @@
 # ------------------------------------------------------------------------------
 
 import base64
-import binascii
 import os
 import tempfile
 from io import BytesIO
@@ -35,6 +34,7 @@ class ImageObject(object):
     _img: Image
     _widthMax: Optional[int]
     _heightMax: Optional[int]
+    open = staticmethod(img_open)
     def __init__(self, img: Optional[Image], widthMax: Optional[int] = None, heightMax: Optional[int] = None, *, LOAD_TRUNCATEDImageS: bool = True):
         self._img = img
         self.SetMaxSize(widthMax, heightMax)
@@ -163,7 +163,7 @@ class ImageObject(object):
         Assert(path, str, Path)
 
         with open(path, 'rb') as f:
-            with img_open(f) as img:
+            with cls.open(f) as img:
                 o = cls(img, width, height)
                 if AsPhotoImage is not None: return o.ToPhotoImage(master=AsPhotoImage, width=width, height=height)
                 return o.Raw
@@ -210,14 +210,14 @@ class ImageObject(object):
         Assert(data, bytes)
         if formats:
             with BytesIO(data) as buf:
-                with img_open(buf, formats=formats) as img:
+                with cls.open(buf, formats=formats) as img:
                     o = cls(img, width, height)
                     if AsPhotoImage is not None: return o.ToPhotoImage(master=AsPhotoImage, width=width, height=height)
                     return o.Raw
 
         else:
             with BytesIO(data) as buf:
-                with img_open(buf) as img:
+                with cls.open(buf) as img:
                     o = cls(img, width, height)
                     if AsPhotoImage is not None: return o.ToPhotoImage(master=AsPhotoImage, width=width, height=height)
                     return o.Raw
@@ -251,7 +251,7 @@ class ImageObject(object):
             if path.lower().endswith(file_types):
                 try:
                     with open(path, 'rb') as f:
-                        with img_open(f) as img:
+                        with ImageObject.open(f) as img:
                             img.verify()
                             return True
                 except (IOError, SyntaxError): return False
@@ -259,7 +259,7 @@ class ImageObject(object):
         elif isinstance(path, bytes):
             try:
                 with BytesIO(path) as buf:
-                    with img_open(buf) as img:
+                    with ImageObject.open(buf) as img:
                         img.verify()
                         return True
             except (IOError, SyntaxError): return False
