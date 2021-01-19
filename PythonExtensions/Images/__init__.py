@@ -29,16 +29,16 @@ __all__ = [
     ]
 
 class ImageObject(object):
-    __slots__ = ['_img', '_path', '_fp', '_MaxWidth', '_MaxHeight', '_name_']
+    __slots__ = ['_img', '_path', '_fp', '_widthMax', '_heightMax', '_name_']
     _path: Path
     _fp: Optional[BytesIO]
     _img: Image
-    _MaxWidth: Optional[int]
-    _MaxHeight: Optional[int]
-    def __init__(self, img: Optional[Image], MaxWidth: Optional[int] = None, MaxHeight: Optional[int] = None, *, LOAD_TRUNCATEDImageS: bool = True):
+    _widthMax: Optional[int]
+    _heightMax: Optional[int]
+    def __init__(self, img: Optional[Image], widthMax: Optional[int] = None, heightMax: Optional[int] = None, *, LOAD_TRUNCATEDImageS: bool = True):
         self._img = img
-        self.SetMaxSize(MaxWidth, MaxHeight)
-        if MaxHeight and MaxWidth:
+        self.SetMaxSize(widthMax, heightMax)
+        if widthMax and heightMax:
             self.Resize(check_metadata=True)
         ImageFile.LOAD_TRUNCATEDImageS = LOAD_TRUNCATEDImageS
     def __hash__(self): return hash(self._img)
@@ -77,17 +77,17 @@ class ImageObject(object):
         return self
     def save(self): self._img.save(self._fp)
 
-    def SetMaxSize(self, width: Optional[int], height: Optional[int]):
-        self._MaxWidth = height
-        self._MaxHeight = width
+    def SetMaxSize(self, widthMax: Optional[int], heightMax: Optional[int]):
+        self._widthMax = widthMax
+        self._heightMax = heightMax
 
     @property
     def size(self) -> Size: return Size.Create(self._img.width, self._img.height)
 
     @property
     def _factors(self) -> Tuple[float, float]:
-        if isinstance(self._MaxWidth, int) and isinstance(self._MaxHeight, int):
-            return self._MaxWidth / self._img.width, self._MaxHeight / self._img.height
+        if isinstance(self._widthMax, int) and isinstance(self._heightMax, int):
+            return self._widthMax / self._img.width, self._heightMax / self._img.height
 
         return 1, 1
     def Maximum_ScalingFactor(self) -> float: return max(self._factors)
@@ -100,7 +100,7 @@ class ImageObject(object):
 
     def Rotate(self, angle: int = None, *, expand: bool = True, Offset: Tuple[int, int] = None, fill_color=None, center=None, resample=BICUBIC) -> 'ImageObject':
         """
-            CAUTION: Offset will TRIM the image if moved out of bounds of the 
+            CAUTION: Offset will TRIM the image if moved out of bounds of the
 
         :param fill_color:
         :param center:
@@ -147,70 +147,80 @@ class ImageObject(object):
         self._img = self._img.resize(**kwargs)
         return self
 
-    def ToPhotoImage(self) -> ImageTk.PhotoImage:
-        try:
-            return ImageTk.PhotoImage(self._img)
-        except AttributeError:
-            with self(extension=ImageExtensions.png) as img:
-                return ImageTk.PhotoImage(img._img)
+    def ToPhotoImage(self, master=None, **kwargs) -> ImageTk.PhotoImage: return ImageTk.PhotoImage(master=master, image=self._img, **kwargs)
+
 
 
     @classmethod
-    def PhotoImage(cls, data: Union[Path, str, bytes], width: int = None, height: int = None) -> ImageTk.PhotoImage:
-        if isinstance(data, Path):
-            cls.FromFile(data, width=width, height=height, AsPhotoImage=True)
-
-        else:
-            try:
-                return cls.FromBase64(data, width=width, height=height, AsPhotoImage=True)
-
-            except (binascii.Error, ValueError, TypeError):
-                return cls.FromBytes(data, width=width, height=height, AsPhotoImage=True)
+    @overload
+    def FromFile(cls, path: Union[str, Path], *, width: int = None, height: int = None, AsPhotoImage) -> ImageTk.PhotoImage: ...
+    @classmethod
+    @overload
+    def FromFile(cls, path: Union[str, Path], *, width: int = None, height: int = None) -> Image: ...
 
     @classmethod
-    def FromFile(cls, path: Union[str, Path], *, width: int = None, height: int = None, AsPhotoImage: bool = False):
+    def FromFile(cls, path: Union[str, Path], *, width: int = None, height: int = None, AsPhotoImage=None):
         Assert(path, str, Path)
 
         with open(path, 'rb') as f:
             with img_open(f) as img:
                 o = cls(img, width, height)
-                if AsPhotoImage: return o.ToPhotoImage()
-                return o
+                if AsPhotoImage is not None: return o.ToPhotoImage(master=AsPhotoImage, width=width, height=height)
+                return o.Raw
+
+
 
     @classmethod
-    def FromBase64(cls, data: Union[str, bytes], width: int = None, height: int = None, AsPhotoImage: bool = False):
-        Assert(data, str, bytes)
+    @overload
+    def FromBase64(cls, path: Union[str, bytes], *, width: int = None, height: int = None, AsPhotoImage) -> ImageTk.PhotoImage: ...
+    @classmethod
+    @overload
+    def FromBase64(cls, path: Union[str, bytes], *, width: int = None, height: int = None) -> Image: ...
 
+    @classmethod
+    def FromBase64(cls, data: Union[str, bytes], width: int = None, height: int = None, AsPhotoImage=None):
+        Assert(data, str, bytes)
         return cls.FromBytes(base64.b64decode(data), width=width, height=height, AsPhotoImage=AsPhotoImage)
 
-    @classmethod
-    def FromURL(cls, url: str, width: int = None, height: int = None, AsPhotoImage: bool = False):
-        Assert(url, str)
 
+
+    @classmethod
+    @overload
+    def FromURL(cls, path: Union[str, bytes], *, width: int = None, height: int = None, AsPhotoImage) -> ImageTk.PhotoImage: ...
+    @classmethod
+    @overload
+    def FromURL(cls, path: Union[str, bytes], *, width: int = None, height: int = None) -> Image: ...
+
+    @classmethod
+    def FromURL(cls, url: str, width: int = None, height: int = None, AsPhotoImage=None):
+        Assert(url, str)
         return cls.FromBytes(urlopen(url).read(), width=width, height=height, AsPhotoImage=AsPhotoImage)
 
-    @classmethod
-    def FromBytes(cls, data: bytes, *ext: ImageExtensions, width: int = None, height: int = None, AsPhotoImage: bool = False):
-        Assert(data, bytes)
 
-        if ext:
+
+    @classmethod
+    @overload
+    def FromBytes(cls, path: Union[str, bytes], *formats: str, width: int = None, height: int = None, AsPhotoImage) -> ImageTk.PhotoImage: ...
+    @classmethod
+    @overload
+    def FromBytes(cls, path: Union[str, bytes], *formats: str, width: int = None, height: int = None) -> Image: ...
+
+    @classmethod
+    def FromBytes(cls, data: bytes, *formats: str, width: int = None, height: int = None, AsPhotoImage=None):
+        Assert(data, bytes)
+        if formats:
             with BytesIO(data) as buf:
-                with img_open(buf, formats=[e.value for e in ext]) as img:
+                with img_open(buf, formats=formats) as img:
                     o = cls(img, width, height)
-                    if AsPhotoImage: return o.ToPhotoImage()
-                    return o
+                    if AsPhotoImage is not None: return o.ToPhotoImage(master=AsPhotoImage, width=width, height=height)
+                    return o.Raw
 
         else:
             with BytesIO(data) as buf:
                 with img_open(buf) as img:
                     o = cls(img, width, height)
-                    if AsPhotoImage: return o.ToPhotoImage()
-                    return o
-
-    @classmethod
-    def Open(cls, path: Union[str, Path]):
-        o = cls.FromFile(path)
-        return o.__call__(path).__enter__()
+                    if AsPhotoImage is not None: return o.ToPhotoImage(master=AsPhotoImage, width=width, height=height)
+                    return o.Raw
 
 
 
@@ -218,7 +228,6 @@ class ImageObject(object):
     def Extensions() -> Tuple[str, ...]:
         init()
         return tuple(EXTENSION.keys())
-
 
     @staticmethod
     @overload

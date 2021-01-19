@@ -5,12 +5,15 @@
 # ------------------------------------------------------------------------------
 #
 # ------------------------------------------------------------------------------
+import base64
 import os
 from abc import ABC
 from enum import Enum
+from io import BytesIO
 from pprint import PrettyPrinter
 from types import FunctionType, MethodType
 from typing import *
+from urllib.request import urlopen
 
 from PIL import Image, ImageTk
 
@@ -515,33 +518,26 @@ class ImageMixin:
     _IMG: Union[ImageTk.PhotoImage, tk.PhotoImage] = None
     def SetImage(self, path: Union[str, Path] = None, *, WidthMax: int = None, HeightMax: int = None):
         if not os.path.isfile(path): raise FileNotFoundError(path)
-        return self._open(ImageObject.FromFile(path, width=WidthMax, height=HeightMax))
-        # with open(path, 'rb') as f:
-        #     return self._open(f, WidthMax, HeightMax)
+        with open(path, 'rb') as f:
+            return self._open(f, WidthMax, HeightMax)
     def SetPhoto(self, data: Union[str, bytes], *, WidthMax: int = None, HeightMax: int = None):
-        return self._open(ImageObject.FromBase64(data,  width=WidthMax, height=HeightMax))
-        # with io.BytesIO(base64.b64decode(base64Data)) as buf:
-        #     return self._open(buf)
+        with BytesIO(base64.b64decode(data)) as buf:
+            return self._open(buf, WidthMax, HeightMax)
     def DownloadImage(self, url: str, *, WidthMax: int = None, HeightMax: int = None):
-        return self._open(ImageObject.FromURL(url, width=WidthMax, height=HeightMax))
-        # with io.BytesIO(urlopen(url).read()) as buf:
-        #     return self._open(buf)
+        with BytesIO(urlopen(url).read()) as buf:
+            return self._open(buf, WidthMax, HeightMax)
 
-    # def _open(self, f, WidthMax: int, HeightMax: int):
-    #     self.update_idletasks()
-    #     if WidthMax is None: WidthMax = self.width
-    #     if HeightMax is None: HeightMax = self.height
-    #
-    #     if WidthMax <= 0: raise ValueError(f'WidthMax must be positive. Value: {WidthMax}')
-    #     if HeightMax <= 0: raise ValueError(f'HeightMax must be positive. Value: {HeightMax}')
-    #     with Image.open(f) as img:
-    #         self._IMG = ImageTk.PhotoImage(master=self, image=ResizePhoto(img, WidthMax=WidthMax, HeightMax=HeightMax))
-    #         self.configure(image=self._IMG)
-    #
-    #     return self
-    def _open(self, img: ImageObject):
+    def _open(self, f, WidthMax: int, HeightMax: int):
         self.update_idletasks()
-        self._IMG = img.ToPhotoImage()
-        self.configure(image=self._IMG)
+        if WidthMax is None: WidthMax = self.width
+        if HeightMax is None: HeightMax = self.height
+
+        if WidthMax <= 0: raise ValueError(f'WidthMax must be positive. Value: {WidthMax}')
+        if HeightMax <= 0: raise ValueError(f'HeightMax must be positive. Value: {HeightMax}')
+        with Image.open(f) as img:
+            img = ImageObject(img, WidthMax, HeightMax)
+            img.Resize(check_metadata=False)
+            self._IMG = img.ToPhotoImage(master=self, size=img.Raw.size)
+            self.configure(image=self._IMG)
 
         return self
