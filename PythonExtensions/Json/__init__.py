@@ -2,6 +2,7 @@ import copy as _copy
 from enum import Enum, IntEnum
 from json import dumps as _dumps, loads as _loads
 from typing import *
+from typing import BinaryIO
 
 from PIL.Image import Image as _Image
 
@@ -11,6 +12,7 @@ from .MixIns import *
 
 
 
+BinaryIO = BinaryIO
 
 _T = TypeVar("_T")
 _KT = TypeVar("_KT")

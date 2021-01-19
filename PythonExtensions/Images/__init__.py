@@ -76,7 +76,7 @@ class ImageObject(object):
 
         self._path = path or self._TempFilePath(extension)  # ImageExtensions(path.extension({ '.': '' })
         return self
-    def save(self): self._img.save(self._fp)
+    def save(self, fp: BinaryIO = None): self._img.save(fp or self._fp)
 
     def SetMaxSize(self, widthMax: Optional[int], heightMax: Optional[int]):
         self._widthMax = widthMax
