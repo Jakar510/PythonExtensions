@@ -229,24 +229,29 @@ class ImageObject(object):
                 return cls(img, width, height)
 
     @classmethod
-    def FromBase64(cls, data: str, *, width: int = None, height: int = None) -> 'ImageObject':
+    def FromBase64(cls, data: str, *ext: ImageExtensions, width: int = None, height: int = None) -> 'ImageObject':
         Assert(data, str)
 
-        return cls.FromBytes(base64.b64decode(data), width=width, height=height)
+        return cls.FromBytes(base64.b64decode(data), *ext, width=width, height=height)
 
     @classmethod
-    def FromURL(cls, url: str, *, width: int = None, height: int = None) -> 'ImageObject':
+    def FromURL(cls, url: str, *ext: ImageExtensions, width: int = None, height: int = None) -> 'ImageObject':
         Assert(url, str)
 
-        return cls.FromBytes(urlopen(url).read(), width=width, height=height)
+        return cls.FromBytes(urlopen(url).read(), *ext, width=width, height=height)
 
     @classmethod
-    def FromBytes(cls, data: bytes, *, width: int = None, height: int = None) -> 'ImageObject':
+    def FromBytes(cls, data: bytes, *ext: ImageExtensions, width: int = None, height: int = None) -> 'ImageObject':
         Assert(data, bytes)
 
-        with BytesIO(data) as buf:
-            with img_open(buf) as img:
-                return cls(img, width, height)
+        if ext:
+            with BytesIO(data) as buf:
+                with img_open(buf, formats=[e.value for e in ext]) as img:
+                    return cls(img, width, height)
+        else:
+            with BytesIO(data) as buf:
+                with img_open(buf) as img:
+                    return cls(img, width, height)
 
     @classmethod
     def Open(cls, path: Union[str, Path]):
