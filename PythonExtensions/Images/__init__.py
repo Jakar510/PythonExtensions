@@ -5,6 +5,7 @@
 # ------------------------------------------------------------------------------
 
 import base64
+import binascii
 import os
 import tempfile
 from io import BytesIO
@@ -13,6 +14,7 @@ from urllib.request import urlopen
 from PIL import ImageFile, ImageTk
 from PIL.Image import BICUBIC, EXTENSION, Exif, Image, init, open as img_open
 
+from .ImageExtensions import *
 from ..Exceptions import ArgumentError
 from ..Files import *
 from ..Json import *
@@ -25,79 +27,6 @@ __all__ = [
     'ImageTk',
     'ImageExtensions',
     ]
-
-# t = ['BLP', 'BMP', 'BUFR', 'CUR', 'DCX', 'DDS', 'DIB', 'EPS', 'FITS', 'FLI', 'FTEX', 'GBR', 'GIF', 'GRIB', 'HDF5', 'ICNS', 'ICO', 'IM', 'IMT', 'IPTC', 'JPEG', 'JPEG2000', 'MCIDAS', 'MPEG',
-#      'MSP', 'PCD', 'PCX', 'PIXAR', 'PNG', 'PPM', 'PSD', 'SGI', 'SPIDER', 'SUN', 'TGA', 'TIFF', 'WEBP', 'WMF', 'XBM', 'XPM', 'XVTHUMB']
-
-class ImageExtensions(str, Enum):
-    blp = '.blp'
-    bmp = '.bmp'
-    dib = '.dib'
-    bufr = '.bufr'
-    cur = '.cur'
-    pcx = '.pcx'
-    dcx = '.dcx'
-    dds = '.dds'
-    ps = '.ps'
-    eps = '.eps'
-    fit = '.fit'
-    fits = '.fits'
-    fli = '.fli'
-    flc = '.flc'
-    ftc = '.ftc'
-    ftu = '.ftu'
-    gbr = '.gbr'
-    gif = '.gif'
-    grib = '.grib'
-    h5 = '.h5'
-    hdf = '.hdf'
-    png = '.png'
-    apng = '.apng'
-    jp2 = '.jp2'
-    j2k = '.j2k'
-    jpc = '.jpc'
-    jpf = '.jpf'
-    jpx = '.jpx'
-    j2c = '.j2c'
-    icns = '.icns'
-    ico = '.ico'
-    im = '.im'
-    iim = '.iim'
-    tif = '.tif'
-    tiff = '.tiff'
-    jfif = '.jfif'
-    jpe = '.jpe'
-    jpg = '.jpg'
-    jpeg = '.jpeg'
-    mpg = '.mpg'
-    mpeg = '.mpeg'
-    mpo = '.mpo'
-    msp = '.msp'
-    palm = '.palm'
-    pcd = '.pcd'
-    pdf = '.pdf'
-    pxr = '.pxr'
-    pbm = '.pbm'
-    pgm = '.pgm'
-    ppm = '.ppm'
-    pnm = '.pnm'
-    psd = '.psd'
-    bw = '.bw'
-    rgb = '.rgb'
-    rgba = '.rgba'
-    sgi = '.sgi'
-    ras = '.ras'
-    tga = '.tga'
-    icb = '.icb'
-    vda = '.vda'
-    vst = '.vst'
-    webp = '.webp'
-    wmf = '.wmf'
-    emf = '.emf'
-    xbm = '.xbm'
-    xpm = '.xpm'
-
-
 
 class ImageObject(object):
     __slots__ = ['_img', '_path', '_fp', '_MaxWidth', '_MaxHeight', '_name_']
@@ -144,7 +73,7 @@ class ImageObject(object):
         if not path and not extension:
             raise ArgumentError('Must Provide either the file path or the image type extension')
 
-        self._path = path or self._TempFilePath(extension)
+        self._path = path or self._TempFilePath(extension)  # ImageExtensions(path.extension({ '.': '' })
         return self
     def save(self): self._img.save(self._fp)
 
@@ -217,41 +146,66 @@ class ImageObject(object):
 
         self._img = self._img.resize(**kwargs)
         return self
-    def ToPhotoImage(self) -> ImageTk.PhotoImage: return ImageTk.PhotoImage(self._img)
+
+    def ToPhotoImage(self) -> ImageTk.PhotoImage:
+        try:
+            return ImageTk.PhotoImage(self._img)
+        except AttributeError:
+            with self(extension=ImageExtensions.png) as img:
+                return ImageTk.PhotoImage(img._img)
+
 
     @classmethod
-    def FromFile(cls, path: Union[str, Path], *, width: int = None, height: int = None) -> 'ImageObject':
+    def PhotoImage(cls, data: Union[Path, str, bytes], width: int = None, height: int = None) -> ImageTk.PhotoImage:
+        if isinstance(data, Path):
+            cls.FromFile(data, width=width, height=height, AsPhotoImage=True)
+
+        else:
+            try:
+                return cls.FromBase64(data, width=width, height=height, AsPhotoImage=True)
+
+            except (binascii.Error, ValueError, TypeError):
+                return cls.FromBytes(data, width=width, height=height, AsPhotoImage=True)
+
+    @classmethod
+    def FromFile(cls, path: Union[str, Path], *, width: int = None, height: int = None, AsPhotoImage: bool = False):
         Assert(path, str, Path)
 
         with open(path, 'rb') as f:
             with img_open(f) as img:
-                return cls(img, width, height)
+                o = cls(img, width, height)
+                if AsPhotoImage: return o.ToPhotoImage()
+                return o
 
     @classmethod
-    def FromBase64(cls, data: Union[str, bytes], width: int = None, height: int = None) -> 'ImageObject':
+    def FromBase64(cls, data: Union[str, bytes], width: int = None, height: int = None, AsPhotoImage: bool = False):
         Assert(data, str, bytes)
 
-        return cls.FromBytes(base64.b64decode(data), width=width, height=height)
+        return cls.FromBytes(base64.b64decode(data), width=width, height=height, AsPhotoImage=AsPhotoImage)
 
     @classmethod
-    def FromURL(cls, url: str, width: int = None, height: int = None) -> 'ImageObject':
+    def FromURL(cls, url: str, width: int = None, height: int = None, AsPhotoImage: bool = False):
         Assert(url, str)
 
-        return cls.FromBytes(urlopen(url).read(), width=width, height=height)
+        return cls.FromBytes(urlopen(url).read(), width=width, height=height, AsPhotoImage=AsPhotoImage)
 
     @classmethod
-    def FromBytes(cls, data: bytes, *ext: ImageExtensions, width: int = None, height: int = None) -> 'ImageObject':
+    def FromBytes(cls, data: bytes, *ext: ImageExtensions, width: int = None, height: int = None, AsPhotoImage: bool = False):
         Assert(data, bytes)
 
         if ext:
             with BytesIO(data) as buf:
                 with img_open(buf, formats=[e.value for e in ext]) as img:
-                    return cls(img, width, height)
+                    o = cls(img, width, height)
+                    if AsPhotoImage: return o.ToPhotoImage()
+                    return o
 
         else:
             with BytesIO(data) as buf:
                 with img_open(buf) as img:
-                    return cls(img, width, height)
+                    o = cls(img, width, height)
+                    if AsPhotoImage: return o.ToPhotoImage()
+                    return o
 
     @classmethod
     def Open(cls, path: Union[str, Path]):

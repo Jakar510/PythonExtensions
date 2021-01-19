@@ -80,13 +80,13 @@ class Path(BaseDictModel[str, Union[str, bool]], os.PathLike):
     @overload
     def extension(self, raw: Any) -> str: ...
     @overload
-    def extension(self, **kwargs: str) -> str: ...
+    def extension(self, replacements: Dict[str, str]) -> str: ...
     @overload
-    def extension(self, lower: Any, **kwargs: str) -> str: ...
+    def extension(self, replacements: Dict[str, str], lower: Any) -> str: ...
     @overload
-    def extension(self, upper: Any, **kwargs: str) -> str: ...
+    def extension(self, replacements: Dict[str, str], upper: Any) -> str: ...
 
-    def extension(self, **kwargs) -> str:
+    def extension(self, replacements: Dict[str, str] = { }, **kwargs) -> str:
         ext = splitext(self._path)[1]
         if not kwargs or 'raw' in kwargs: return ext
 
@@ -96,7 +96,7 @@ class Path(BaseDictModel[str, Union[str, bool]], os.PathLike):
         if kwargs.pop('upper', None):
             ext = ext.upper()
 
-        for key, value in kwargs.items():
+        for key, value in replacements.items():
             ext = ext.replace(key, value)
 
         return ext
