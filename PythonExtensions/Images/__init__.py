@@ -119,15 +119,16 @@ class ImageObject(object):
         self._img = self._img.crop(box.ToTuple())
         return self
 
-    def CropZoom(self, box: Optional[CropBox], Scaled_Size: (int, int), *, reducing_gap=3.0) -> 'ImageObject':
-        self._img = self._img.resize(size=Scaled_Size, reducing_gap=reducing_gap)
+    def CropZoom(self, box: Optional[CropBox], size: Union[Size, Tuple[int, int]], *, reducing_gap: float = 3.0) -> 'ImageObject':
+        if isinstance(size, Size): size = size.ToTuple()
+        self._img = self._img.resize(size=size, reducing_gap=reducing_gap)
         return self.Resize(box=box, reducing_gap=reducing_gap, check_metadata=False)
 
-    def Zoom(self, factor: float, *, reducing_gap=3.0) -> 'ImageObject':
+    def Zoom(self, factor: float, *, reducing_gap: float = 3.0) -> 'ImageObject':
         self._img = self._img.resize(size=self._Scale(factor), reducing_gap=reducing_gap)
         return self
 
-    def Resize(self, size: Union[Size, Tuple[int, int]] = None, box: CropBox = None, *, check_metadata: bool, reducing_gap=3.0, resample=BICUBIC) -> 'ImageObject':
+    def Resize(self, size: Union[Size, Tuple[int, int]] = None, box: CropBox = None, *, check_metadata: bool, reducing_gap: float = 3.0, resample=BICUBIC) -> 'ImageObject':
         if check_metadata:
             exif: Exif = self._img.getexif()
             if 'Orientation' in exif:  # check if image has exif metadata.
