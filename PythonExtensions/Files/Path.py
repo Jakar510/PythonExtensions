@@ -76,7 +76,7 @@ class Path(BaseDictModel[str, Union[str, bool]], os.PathLike):
 
     @property
     def FileName(self) -> Optional[str]:
-        if not self.Exists: return None
+        if not self.IsFile: return None
         return FilePath(self._path).name
 
     @overload

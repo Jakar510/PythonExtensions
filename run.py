@@ -5,11 +5,19 @@ from PythonExtensions.Files import *
 
 
 if __name__ == '__main__':
-    # RUN_TESTS()
-
-    d = Path.MakeDirectories(Path.Join('.', 'temp', 'py'))
-    d = Path.Join(d, 't.txt')
+    d = Path.MakeDirectories(Path.Join('.', 'temp'))
     print(d)
     print(d.FileName)
     print(d.extension())
+    file = Path.Join(d, 't.txt')
+    with open(file, 'w') as f: f.write(str(d))
+    print(file)
+    print(file.FileName)
+    print(file.extension())
+
+    file.Remove()
+    d.Remove()
+
+    RUN_TESTS()
+
 
