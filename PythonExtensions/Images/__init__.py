@@ -34,7 +34,6 @@ class ImageObject(object):
     _img: Image
     _widthMax: Optional[int]
     _heightMax: Optional[int]
-    open = staticmethod(img_open)
     def __init__(self, img: Optional[Image], widthMax: Optional[int] = None, heightMax: Optional[int] = None, *, LOAD_TRUNCATEDImageS: bool = True):
         self._img = img
         self.SetMaxSize(widthMax, heightMax)
@@ -46,6 +45,8 @@ class ImageObject(object):
     @property
     def Raw(self) -> Image: return self._img
 
+    @staticmethod
+    def open(fp, **kwargs) -> Image: return img_open(fp, **kwargs)
 
 
     def __name__(self, extension: ImageExtensions) -> str:

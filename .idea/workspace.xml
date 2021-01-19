@@ -182,7 +182,7 @@
       <workItem from="1610932552563" duration="8312000" />
       <workItem from="1610982813820" duration="12916000" />
       <workItem from="1611005656372" duration="7221000" />
-      <workItem from="1611067605658" duration="11821000" />
+      <workItem from="1611067605658" duration="11944000" />
     </task>
     <task id="LOCAL-00001" summary="pycharm fixes">
       <created>1610737677124</created>
@@ -359,7 +359,14 @@
       <option name="project" value="LOCAL" />
       <updated>1611083088139</updated>
     </task>
-    <option name="localTasksCounter" value="26" />
+    <task id="LOCAL-00026" summary="bug fixes / updates">
+      <created>1611083492082</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1611083492082</updated>
+    </task>
+    <option name="localTasksCounter" value="27" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
