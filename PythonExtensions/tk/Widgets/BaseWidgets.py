@@ -490,10 +490,10 @@ class CommandMixin:
         :type func: Union[callable, FunctionType, MethodType, CurrentValue]
         :param z: arg passed to the fucntion.
         :type z: Union[int, float, str, Enum]
-        :param add: if False, replaces the current function.
+        :param add: if True, replaces the current function.
         :type add: bool
         :param kwargs: keyword args passed to the function.
-        :type kwargs: Dict[str, Any]
+        :type kwargs: Any
         :return: returns self to enable chaining.
         """
         if not callable(func):
@@ -518,8 +518,11 @@ class ImageMixin:
         return self._open(ImageObject.FromFile(path, width=WidthMax, height=HeightMax))
         # with open(path, 'rb') as f:
         #     return self._open(f, WidthMax, HeightMax)
-    def SetPhoto(self, base64Data: bytes or str = None, *, WidthMax: int = None, HeightMax: int = None):
-        return self._open(ImageObject.FromBase64(base64Data, width=WidthMax, height=HeightMax))
+    def SetPhoto(self, data: Union[str, bytes], *, WidthMax: int = None, HeightMax: int = None):
+        if isinstance(data, bytes):
+            return self._open(ImageObject.FromBytes(data, width=WidthMax, height=HeightMax))
+
+        return self._open(ImageObject.FromBase64(data, width=WidthMax, height=HeightMax))
         # with io.BytesIO(base64.b64decode(base64Data)) as buf:
         #     return self._open(buf)
     def DownloadImage(self, url: str, *, WidthMax: int = None, HeightMax: int = None):
