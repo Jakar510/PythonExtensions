@@ -34,12 +34,12 @@ class ImageObject(object):
     _img: Image
     _widthMax: Optional[int]
     _heightMax: Optional[int]
-    def __init__(self, img: Optional[Image], widthMax: Optional[int] = None, heightMax: Optional[int] = None, *, LOAD_TRUNCATEDImageS: bool = True):
+    def __init__(self, img: Optional[Image], widthMax: Optional[int] = None, heightMax: Optional[int] = None, *, AutoResize: bool = True, LOAD_TRUNCATED_IMAGES: bool = True):
         self._img = img
         self.SetMaxSize(widthMax, heightMax)
-        if widthMax and heightMax:
+        if AutoResize and widthMax and heightMax:
             self.Resize(check_metadata=True)
-        ImageFile.LOAD_TRUNCATEDImageS = LOAD_TRUNCATEDImageS
+        ImageFile.LOAD_TRUNCATEDImageS = LOAD_TRUNCATED_IMAGES
     def __hash__(self): return hash(self._img)
 
     @property
