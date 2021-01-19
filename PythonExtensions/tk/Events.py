@@ -9,6 +9,9 @@
 import pprint
 from enum import Enum
 from tkinter import Event as tkEvent, EventType as tkEventType
+from typing import *
+
+from ..Json import Point
 
 
 
@@ -32,7 +35,6 @@ class Bindings(Enum):
     Unmap = '<Unmap>'
     Visibility = '<Visibility>'
     WM_DELETE_WINDOW = 'WM_DELETE_WINDOW'
-
 
     # class Mouse(Enum):
     B1_Motion = '<B1-Motion>'
@@ -493,3 +495,7 @@ State: {pprint.pformat(self.ToDict(), indent=4)} >"""
         event = TkinterEvent(event)
         print('Debug.TkinterEvent', event)
         print(event.KeySynonym)
+
+    def Point(self) -> Optional[Point]:
+        if isinstance(self.x, (float, int)) and isinstance(self.y, (float, int)): return Point.Create(self.x, self.y)
+        return None

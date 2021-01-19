@@ -19,6 +19,7 @@ from ..Enumerations import *
 from ..Widgets.base import *
 from ...Files import Path
 from ...Images import *
+from ...Json import Size
 
 
 
@@ -46,7 +47,7 @@ class BindingCollection(dict, Dict[Bindings, Set[str]]):
 
 class BaseTkinterWidget(tk.Widget, ABC):
     # noinspection PyMissingConstructor
-    def __init__(self, Color: dict = None, ):
+    def __init__(self, Color: dict = None):
         if Color: self.configure(**Color)
 
     __bindings__: BindingCollection = BindingCollection()
@@ -109,7 +110,7 @@ class BaseTkinterWidget(tk.Widget, ABC):
     @property
     def y(self) -> int: return self.winfo_rooty()
 
-
+    def size(self) -> Size: return Size.Create(self.width, self.height)
     def show(self, **kwargs) -> bool:
         """
         Shows the current widget or _root_frame, based on the current geometry manager.

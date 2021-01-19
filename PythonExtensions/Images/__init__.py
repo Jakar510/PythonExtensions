@@ -153,7 +153,8 @@ class ImageObject(object):
         self._MaxWidth = height
         self._MaxHeight = width
 
-    def Size(self) -> Size: return Size.Create(self._img.width, self._img.height)
+    @property
+    def size(self) -> Size: return Size.Create(self._img.width, self._img.height)
 
     @property
     def _factors(self) -> Tuple[float, float]:
