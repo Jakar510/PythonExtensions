@@ -518,11 +518,8 @@ class ImageMixin:
         return self._open(ImageObject.FromFile(path, width=WidthMax, height=HeightMax))
         # with open(path, 'rb') as f:
         #     return self._open(f, WidthMax, HeightMax)
-    def SetPhoto(self, data: Union[str, bytes], *ext: ImageExtensions, WidthMax: int = None, HeightMax: int = None):
-        if isinstance(data, bytes):
-            return self._open(ImageObject.FromBytes(data, *ext, width=WidthMax, height=HeightMax))
-
-        return self._open(ImageObject.FromBase64(data, *ext, width=WidthMax, height=HeightMax))
+    def SetPhoto(self, data: Union[str, bytes], *, WidthMax: int = None, HeightMax: int = None):
+        return self._open(ImageObject.FromBase64(data,  width=WidthMax, height=HeightMax))
         # with io.BytesIO(base64.b64decode(base64Data)) as buf:
         #     return self._open(buf)
     def DownloadImage(self, url: str, *, WidthMax: int = None, HeightMax: int = None):

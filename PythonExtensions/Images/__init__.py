@@ -26,77 +26,76 @@ __all__ = [
     'ImageExtensions',
     ]
 
-
-
-
+# t = ['BLP', 'BMP', 'BUFR', 'CUR', 'DCX', 'DDS', 'DIB', 'EPS', 'FITS', 'FLI', 'FTEX', 'GBR', 'GIF', 'GRIB', 'HDF5', 'ICNS', 'ICO', 'IM', 'IMT', 'IPTC', 'JPEG', 'JPEG2000', 'MCIDAS', 'MPEG',
+#      'MSP', 'PCD', 'PCX', 'PIXAR', 'PNG', 'PPM', 'PSD', 'SGI', 'SPIDER', 'SUN', 'TGA', 'TIFF', 'WEBP', 'WMF', 'XBM', 'XPM', 'XVTHUMB']
 
 class ImageExtensions(str, Enum):
-    blp = 'blp'
-    bmp = 'bmp'
-    dib = 'dib'
-    bufr = 'bufr'
-    cur = 'cur'
-    pcx = 'pcx'
-    dcx = 'dcx'
-    dds = 'dds'
-    ps = 'ps'
-    eps = 'eps'
-    fit = 'fit'
-    fits = 'fits'
-    fli = 'fli'
-    flc = 'flc'
-    ftc = 'ftc'
-    ftu = 'ftu'
-    gbr = 'gbr'
-    gif = 'gif'
-    grib = 'grib'
-    h5 = 'h5'
-    hdf = 'hdf'
-    png = 'png'
-    apng = 'apng'
-    jp2 = 'jp2'
-    j2k = 'j2k'
-    jpc = 'jpc'
-    jpf = 'jpf'
-    jpx = 'jpx'
-    j2c = 'j2c'
-    icns = 'icns'
-    ico = 'ico'
-    im = 'im'
-    iim = 'iim'
-    tif = 'tif'
-    tiff = 'tiff'
-    jfif = 'jfif'
-    jpe = 'jpe'
-    jpg = 'jpg'
-    jpeg = 'jpeg'
-    mpg = 'mpg'
-    mpeg = 'mpeg'
-    mpo = 'mpo'
-    msp = 'msp'
-    palm = 'palm'
-    pcd = 'pcd'
-    pdf = 'pdf'
-    pxr = 'pxr'
-    pbm = 'pbm'
-    pgm = 'pgm'
-    ppm = 'ppm'
-    pnm = 'pnm'
-    psd = 'psd'
-    bw = 'bw'
-    rgb = 'rgb'
-    rgba = 'rgba'
-    sgi = 'sgi'
-    ras = 'ras'
-    tga = 'tga'
-    icb = 'icb'
-    vda = 'vda'
-    vst = 'vst'
-    webp = 'webp'
-    wmf = 'wmf'
-    emf = 'emf'
-    xbm = 'xbm'
-    xpm = 'xpm'
+    blp = '.blp'
+    bmp = '.bmp'
+    dib = '.dib'
+    bufr = '.bufr'
+    cur = '.cur'
+    pcx = '.pcx'
+    dcx = '.dcx'
+    dds = '.dds'
+    ps = '.ps'
+    eps = '.eps'
+    fit = '.fit'
+    fits = '.fits'
+    fli = '.fli'
+    flc = '.flc'
+    ftc = '.ftc'
+    ftu = '.ftu'
+    gbr = '.gbr'
+    gif = '.gif'
+    grib = '.grib'
+    h5 = '.h5'
+    hdf = '.hdf'
+    png = '.png'
+    apng = '.apng'
+    jp2 = '.jp2'
+    j2k = '.j2k'
+    jpc = '.jpc'
+    jpf = '.jpf'
+    jpx = '.jpx'
+    j2c = '.j2c'
+    icns = '.icns'
+    ico = '.ico'
+    im = '.im'
+    iim = '.iim'
+    tif = '.tif'
+    tiff = '.tiff'
+    jfif = '.jfif'
+    jpe = '.jpe'
+    jpg = '.jpg'
+    jpeg = '.jpeg'
+    mpg = '.mpg'
+    mpeg = '.mpeg'
+    mpo = '.mpo'
+    msp = '.msp'
+    palm = '.palm'
+    pcd = '.pcd'
+    pdf = '.pdf'
+    pxr = '.pxr'
+    pbm = '.pbm'
+    pgm = '.pgm'
+    ppm = '.ppm'
+    pnm = '.pnm'
+    psd = '.psd'
+    bw = '.bw'
+    rgb = '.rgb'
+    rgba = '.rgba'
+    sgi = '.sgi'
+    ras = '.ras'
+    tga = '.tga'
+    icb = '.icb'
+    vda = '.vda'
+    vst = '.vst'
+    webp = '.webp'
+    wmf = '.wmf'
+    emf = '.emf'
+    xbm = '.xbm'
+    xpm = '.xpm'
 
 
 
@@ -229,16 +228,16 @@ class ImageObject(object):
                 return cls(img, width, height)
 
     @classmethod
-    def FromBase64(cls, data: str, *ext: ImageExtensions, width: int = None, height: int = None) -> 'ImageObject':
-        Assert(data, str)
+    def FromBase64(cls, data: Union[str, bytes], width: int = None, height: int = None) -> 'ImageObject':
+        Assert(data, str, bytes)
 
-        return cls.FromBytes(base64.b64decode(data), *ext, width=width, height=height)
+        return cls.FromBytes(base64.b64decode(data), width=width, height=height)
 
     @classmethod
-    def FromURL(cls, url: str, *ext: ImageExtensions, width: int = None, height: int = None) -> 'ImageObject':
+    def FromURL(cls, url: str, width: int = None, height: int = None) -> 'ImageObject':
         Assert(url, str)
 
-        return cls.FromBytes(urlopen(url).read(), *ext, width=width, height=height)
+        return cls.FromBytes(urlopen(url).read(), width=width, height=height)
 
     @classmethod
     def FromBytes(cls, data: bytes, *ext: ImageExtensions, width: int = None, height: int = None) -> 'ImageObject':
@@ -248,6 +247,7 @@ class ImageObject(object):
             with BytesIO(data) as buf:
                 with img_open(buf, formats=[e.value for e in ext]) as img:
                     return cls(img, width, height)
+
         else:
             with BytesIO(data) as buf:
                 with img_open(buf) as img:
