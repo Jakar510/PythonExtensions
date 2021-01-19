@@ -104,7 +104,7 @@ class Path(BaseDictModel[str, Union[str, bool]], os.PathLike):
     @property
     def BaseName(self) -> 'Path': return Path.FromString(basename(self._path))
     @property
-    def DirectoryName(self) -> str: return dirname(self._path)
+    def DirectoryName(self) -> 'Path': return Path.FromString(dirname(self._path))
 
     @property
     def Size(self) -> int: return getsize(self._path)
@@ -132,18 +132,26 @@ class Path(BaseDictModel[str, Union[str, bool]], os.PathLike):
     def __del__(self):
         if self.IsTemporary and self.Exists: return self.Remove()
     def __str__(self): return self._path
+    def __fspath__(self): return self._path
     def __bytes__(self):
         """ Return the bytes representation of the path. This is only recommended to use under Unix. """
         return os.fsencode(self._path)
-    def __fspath__(self): return self._path
     def __setitem__(self, key, value):
         if hasattr(self, '_hash'): del self._hash
         super(Path, self).__setitem__(key, value)
 
-    def __eq__(self, other): return isinstance(other, Path) and self._path == other._path
-    def __ne__(self, other): return isinstance(other, Path) and self._path != other._path
-    def __gt__(self, other): return isinstance(other, Path) and self._path > other._path
-    def __lt__(self, other): return isinstance(other, Path) and self._path < other._path
+    def __eq__(self, other):
+        if not isinstance(other, Path): raise TypeError(type(other), Path)
+        return self._path == other._path
+    def __ne__(self, other):
+        if not isinstance(other, Path): raise TypeError(type(other), Path)
+        return self._path != other._path
+    def __gt__(self, other):
+        if not isinstance(other, Path): raise TypeError(type(other), Path)
+        return self._path > other._path
+    def __lt__(self, other):
+        if not isinstance(other, Path): raise TypeError(type(other), Path)
+        return self._path < other._path
 
     @classmethod
     def FromString(cls, _path: Union[str, 'Path']) -> 'Path': return cls.Init(_path)
@@ -152,7 +160,7 @@ class Path(BaseDictModel[str, Union[str, bool]], os.PathLike):
     def FromPathLibPath(cls, _path: _Path) -> 'Path': return cls.Init(str(_path.resolve()))
 
     @classmethod
-    def Join(cls, *args: str, temporary_file: bool = False) -> 'Path': return cls.Init(join(*args), temporary_file=temporary_file)
+    def Join(cls, *args: Union[str, 'Path'], temporary_file: bool = False) -> 'Path': return cls.Init(join(*args), temporary_file=temporary_file)
 
     @classmethod
     def MakeDirectories(cls, path: Union[str, 'Path'], mode: int = 0o777, exist_ok: bool = True) -> 'Path':
@@ -166,8 +174,8 @@ class Path(BaseDictModel[str, Union[str, bool]], os.PathLike):
 
         if path.IsFile: return [cls.FromString(path)]
 
-        d = path.DirectoryName
-        def _join(file): return cls.Join(d, file)
+        if not path.IsDirectory: raise FileNotFoundError(f'path "{path}" is not a valid directory.')
+        def _join(file): return cls.Join(path, file)
         return sorted(map(_join, os.listdir(path)))
 
     @classmethod
