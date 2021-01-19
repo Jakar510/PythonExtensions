@@ -2,7 +2,7 @@ import base64
 import hashlib
 import os
 from os.path import *
-from pathlib import Path as _Path
+from pathlib import Path as FilePath
 from shutil import rmtree
 from typing import *
 from typing import BinaryIO
@@ -75,21 +75,25 @@ class Path(BaseDictModel[str, Union[str, bool]], os.PathLike):
         return os.chmod(self._path, mode, dir_fd=dir_fd, follow_symlinks=follow_symlinks)
 
     @property
-    def FileName(self) -> str: return splitext(self._path)[0]
+    def FileName(self) -> Optional[str]:
+        if not self.Exists: return None
+        return FilePath(self._path).name
 
     @overload
-    def extension(self) -> str: ...
+    def extension(self) -> Optional[str]: ...
     @overload
-    def extension(self, raw: Any) -> str: ...
+    def extension(self, raw: Any) -> Optional[str]: ...
     @overload
-    def extension(self, replacements: Dict[str, str]) -> str: ...
+    def extension(self, replacements: Dict[str, str]) -> Optional[str]: ...
     @overload
-    def extension(self, replacements: Dict[str, str], lower: Any) -> str: ...
+    def extension(self, replacements: Dict[str, str], lower: Any) -> Optional[str]: ...
     @overload
-    def extension(self, replacements: Dict[str, str], upper: Any) -> str: ...
+    def extension(self, replacements: Dict[str, str], upper: Any) -> Optional[str]: ...
 
-    def extension(self, replacements: Dict[str, str] = { }, **kwargs) -> str:
-        ext = splitext(self._path)[1]
+    def extension(self, replacements: Dict[str, str] = { }, **kwargs) -> Optional[str]:
+        name = self.FileName
+        if not name: return None
+        ext = name.split('.')[-1]
         if not kwargs or 'raw' in kwargs: return ext
 
         if kwargs.pop('lower', None):
@@ -110,7 +114,7 @@ class Path(BaseDictModel[str, Union[str, bool]], os.PathLike):
 
     @property
     def Size(self) -> int: return getsize(self._path)
-    def ToUri(self): return _Path(self._path).as_uri()
+    def ToUri(self): return FilePath(self._path).as_uri()
 
     def GetHashID(self, BlockSize: int = 65536) -> str:
         """
@@ -159,7 +163,7 @@ class Path(BaseDictModel[str, Union[str, bool]], os.PathLike):
     def FromString(cls, _path: Union[str, 'Path']) -> 'Path': return cls.Init(_path)
 
     @classmethod
-    def FromPathLibPath(cls, _path: _Path) -> 'Path': return cls.Init(str(_path.resolve()))
+    def FromPathLibPath(cls, _path: FilePath) -> 'Path': return cls.Init(str(_path.resolve()))
 
     @classmethod
     def Join(cls, *args: Union[str, 'Path'], temporary_file: bool = False) -> 'Path': return cls.Init(join(*args), temporary_file=temporary_file)
