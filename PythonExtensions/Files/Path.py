@@ -3,11 +3,11 @@ import hashlib
 import os
 from os.path import *
 from pathlib import Path as _Path
+from shutil import rmtree
 from typing import *
 from typing import BinaryIO
 
 from ..Json import AssertKeys, BaseDictModel, Keys, throw
-
 
 
 
@@ -44,7 +44,9 @@ class Path(BaseDictModel[str, Union[str, bool]], os.PathLike):
 
     def rename(self, new: str): return os.rename(self._path, join(self.BaseName, new))
     def Remove(self):
-        if self.Exists: return os.remove(self._path)
+        if self.Exists:
+            if self.IsFile: return os.remove(self._path)
+            elif self.IsDirectory: return rmtree(self)
 
     def chmod(self, mode: int, dir_fd=None, follow_symlinks: bool = False) -> None:
         """
