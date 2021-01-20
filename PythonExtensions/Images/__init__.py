@@ -90,7 +90,7 @@ class ImageObject(object):
 
     @property
     def _factors(self) -> Tuple[float, float]:
-        if isinstance(self._widthMax, int) and isinstance(self._heightMax, int):
+        if isinstance(self._widthMax, (int, float)) and isinstance(self._heightMax, (int, float)):
             return self._widthMax / self._img.width, self._heightMax / self._img.height
 
         return 1, 1
@@ -123,7 +123,7 @@ class ImageObject(object):
         self._img = self._img.crop(box.EnforceBounds(self._img.size))
         return self
 
-    def CropZoom(self, box: CropBox, size: Union[Size, Tuple[int, int]], *, reducing_gap: float = None) -> 'ImageObject':
+    def CropZoom(self, box: CropBox, size: Union[Size, Tuple[int, int]], *, reducing_gap: float = 3.0) -> 'ImageObject':
         try:
             if isinstance(size, Size): size = size.ToTuple()
             elif isinstance(size, tuple): size = tuple(map(int, size))
@@ -131,10 +131,11 @@ class ImageObject(object):
 
             self._img = self._img.resize(size=size, reducing_gap=reducing_gap)
             self.Crop(box)
-            return self.Resize(reducing_gap=reducing_gap, check_metadata=False)
-        except:
-            PrettyPrint('__CropZoom__kwargs__', box=box, size=size, reducing_gap=reducing_gap)
-            raise
+            self._img = self._img.resize(size=self._CalculateNewSize(), reducing_gap=reducing_gap)
+            # self.Resize(reducing_gap=reducing_gap, check_metadata=False)
+            return self
+        finally:
+            PrettyPrint('__CropZoom__kwargs__', box=box, size=size, reducing_gap=reducing_gap, _widthMax=self._widthMax, _heightMax=self._heightMax, result=self.size)
 
 
     def Zoom(self, factor: float, *, reducing_gap: float = None) -> 'ImageObject':
@@ -162,7 +163,7 @@ class ImageObject(object):
         try:
             self._img = self._img.resize(**kwargs)
         except:
-            PrettyPrint('__Resize__kwargs__', kwargs)
+            PrettyPrint('__Resize__kwargs__', kwargs=kwargs, _widthMax=self._widthMax, _heightMax=self._heightMax, result=self.size)
             raise
 
         return self

@@ -4,7 +4,6 @@
     <list default="true" id="7a6e45bf-6aac-404f-8876-27fa1a8fc2c2" name="Default Changelist" comment="bug fixes / updates">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PythonExtensions/Images/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/Images/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/__version__.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/__version__.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -182,7 +181,7 @@
       <workItem from="1610932552563" duration="8312000" />
       <workItem from="1610982813820" duration="12916000" />
       <workItem from="1611005656372" duration="7221000" />
-      <workItem from="1611067605658" duration="26823000" />
+      <workItem from="1611067605658" duration="27936000" />
     </task>
     <task id="LOCAL-00001" summary="pycharm fixes">
       <created>1610737677124</created>
@@ -478,7 +477,14 @@
       <option name="project" value="LOCAL" />
       <updated>1611115299426</updated>
     </task>
-    <option name="localTasksCounter" value="43" />
+    <task id="LOCAL-00043" summary="bug fixes / updates">
+      <created>1611115556162</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1611115556162</updated>
+    </task>
+    <option name="localTasksCounter" value="44" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
