@@ -17,7 +17,7 @@ from .ImageExtensions import *
 from ..Exceptions import ArgumentError
 from ..Files import *
 from ..Json import *
-from ..debug import PrettyPrint
+from ..debug import PrettyPrint, print_stack_trace
 
 
 
@@ -189,6 +189,7 @@ class ImageObject(object):
     def FromFile(cls, path: Union[str, Path], *, width: int = None, height: int = None, AsPhotoImage=None):
         Assert(path, str, Path)
 
+        print_stack_trace()
         with open(path, 'rb') as f:
             with cls.open(f) as img:
                 o = cls(img, width, height)
@@ -235,6 +236,8 @@ class ImageObject(object):
     @classmethod
     def FromBytes(cls, data: bytes, *formats: str, width: int = None, height: int = None, AsPhotoImage=None):
         Assert(data, bytes)
+
+        print_stack_trace()
         if formats:
             with BytesIO(data) as buf:
                 with cls.open(buf, formats=formats) as img:

@@ -9,12 +9,12 @@ from typing import *
 
 
 __all__ = [
-        # 'getPPrintStr',  'check', 'get_func_details', 'print_signature'
-        'PRINT', 'Print', 'print_exception', 'PrettyPrint',
-        # 'TITLE_TAG', 'DEFAULT_TAG', 'END_TAG',
-        'Printer', 'pp', 'CallStack',
-        'GetFunctionName', 'GetFuncModule',
-        ]
+    # 'getPPrintStr',  'check', 'get_func_details', 'print_signature'
+    'PRINT', 'Print', 'print_exception', 'print_stack_trace', 'PrettyPrint',
+    # 'TITLE_TAG', 'DEFAULT_TAG', 'END_TAG',
+    'Printer', 'pp', 'CallStack',
+    'GetFunctionName', 'GetFuncModule',
+    ]
 
 class NoStringWrappingPrettyPrinter(PrettyPrinter):
     """
@@ -159,14 +159,39 @@ class Printer(object):
         return s
 
 
-    def print_exception(self, e: Exception):
+    def print_exception(self, e: Exception, limit=None, file=None, chain=True):
+        """Print exception up to 'limit' stack trace entries from 'tb' to 'file'.
+
+        This differs from print_tb() in the following ways: (1) if
+        traceback is not None, it prints a header "Traceback (most recent
+        call last):"; (2) it prints the exception type and value after the
+        stack trace; (3) if type is SyntaxError and value has the
+        appropriate format, it prints the line where the syntax error
+        occurred with a caret on the next line indicating the approximate
+        position of the error.
+        """
         if self.can_print: return
 
         if self._active:
-            return traceback.print_exception(type(e), e, e.__traceback__)
+            return traceback.print_exception(type(e), e, e.__traceback__, limit, file, chain)
 
         with self._lock:
-            return traceback.print_exception(type(e), e, e.__traceback__)
+            return traceback.print_exception(type(e), e, e.__traceback__, limit, file, chain)
+
+    def print_stack_trace(self, f=None, limit=None, file=None):
+        """Print a stack trace from its invocation point.
+
+        The optional 'f' argument can be used to specify an alternate
+        stack frame at which to start. The optional 'limit' and 'file'
+        arguments have the same meaning as for print_exception().
+        """
+        if self.can_print: return
+
+        if self._active:
+            return traceback.print_stack(f, limit, file)
+
+        with self._lock:
+            return traceback.print_stack(f, limit, file)
 
 
     def get_func_details(self, func: callable, tag: str, result: Any, args, kwargs) -> Tuple[Any, str, str, str, str]:
@@ -245,9 +270,14 @@ def Print(*args):
         return p.Print(*args)
 
 
-def print_exception(e: Exception):
+def print_exception(e: Exception, limit=None, file=None, chain=True):
     with pp as p:
-        return p.print_exception(e)
+        return p.print_exception(e, limit, file, chain)
+
+
+def print_stack_trace(f=None, limit=None, file=None):
+    with pp as p:
+        return p.print_stack_trace(f, limit, file)
 
 
 
