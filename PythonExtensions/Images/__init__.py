@@ -120,21 +120,22 @@ class ImageObject(object):
         return self
 
     def Crop(self, box: CropBox) -> 'ImageObject':
-        self._img = self._img.crop(box.ToTuple())
+        self._img = self._img.crop(box.EnforceBounds(self._img.size))
         return self
 
-    def CropZoom(self, box: Optional[CropBox], size: Union[Size, Tuple[int, int]], *, reducing_gap: float = None) -> 'ImageObject':
+    def CropZoom(self, box: CropBox, size: Union[Size, Tuple[int, int]], *, reducing_gap: float = None) -> 'ImageObject':
         try:
             if isinstance(size, Size): size = size.ToTuple()
             elif isinstance(size, tuple): size = tuple(map(int, size))
-            else: raise TypeError(type(size), Size, tuple)
+            else: raise TypeError(type(size), (Size, tuple))
 
             self._img = self._img.resize(size=size, reducing_gap=reducing_gap)
+            self.Crop(box)
+            return self.Resize(size, reducing_gap=reducing_gap, check_metadata=False)
         except:
-            PrettyPrint('__CropZoom__kwargs__', size=size, reducing_gap=reducing_gap)
+            PrettyPrint('__CropZoom__kwargs__', box=box, size=size, reducing_gap=reducing_gap)
             raise
 
-        return self.Resize(box, reducing_gap=reducing_gap, check_metadata=False)
 
     def Zoom(self, factor: float, *, reducing_gap: float = None) -> 'ImageObject':
         self._img = self._img.resize(size=self._Scale(factor), reducing_gap=reducing_gap)
@@ -152,7 +153,7 @@ class ImageObject(object):
                     self.Rotate(RotationAngle.right)
 
         kwargs = dict(resample=resample, reducing_gap=reducing_gap)
-        if box: kwargs['box'] =  box.EnforceBounds(image_size=self._img.size)
+        if box: kwargs['box'] = box.EnforceBounds(image_size=self._img.size)
 
         if isinstance(size, Size): kwargs['size'] = size.ToTuple()
         elif isinstance(size, tuple): kwargs['size'] = tuple(map(int, size))
