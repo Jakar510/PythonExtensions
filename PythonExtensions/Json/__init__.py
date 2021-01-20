@@ -258,12 +258,12 @@ class Size(BaseDictModel):
     def height(self) -> int: return self[Keys.height]
 
     def ToTuple(self) -> Tuple[int, int]: return int(self.width), int(self.height)
+    def __iter__(self) -> Iterable[int]: return iter(self.ToTuple())
 
     @staticmethod
     def FromTuple(v: Tuple[int, int]): return Size.Create(*v)
     @classmethod
     def Create(cls, width: int, height: int): return cls({ Keys.width: width, Keys.height: height })
-
     @classmethod
     def Parse(cls, d):
         if d is None: return None
@@ -289,12 +289,12 @@ class Point(BaseDictModel[str, int]):
     def x(self) -> int: return self[Keys.x]
 
     def ToTuple(self) -> Tuple[int, int]: return int(self.x), int(self.y)
+    def __iter__(self) -> Iterable[int]: return iter(self.ToTuple())
 
     @staticmethod
     def FromTuple(v: Tuple[int, int]): return Point.Create(*v)
     @classmethod
     def Create(cls, x: int, y: int): return cls({ Keys.x: x, Keys.y: y })
-
     @classmethod
     def Parse(cls, d):
         if d is None: return None
@@ -328,19 +328,20 @@ class CropBox(BaseDictModel[str, int]):
         self[Keys.height] = height
         return self
 
-    def Update(self, pic: Point, img: Size, edit: Size) -> bool:
+    def __iter__(self) -> Iterable[int]: return iter(self.ToTuple())
+    def Update(self, pic: Point, img: Size, view: Size) -> bool:
         """
             The goal is to find the area of the object that is visible, and return it's coordinates.
 
             x, y: root left point of the box, in (x, y) format.
             : bottom right point of the box, in (x, y) format.
 
-        :param edit:
-        :param pic:  root left point of the photo, in (x, y) format.
+        :param view: size of the view where the photo/object is displayed
+        :param pic:  where the photo is placed, in (x, y) format. For Example: Canvas placements
         :param img:  size of the photo, in (Width, Height) format.
         :return: True if all of the object will be visible, otherwise false.
         """
-        if pic.x >= 0 and pic.y >= 0 and pic.y + img.height <= edit.height and pic.x + img.width <= edit.height: return True
+        if pic.x >= 0 and pic.y >= 0 and (pic.y + img.height) <= view.height and (pic.x + img.width) <= view.height: return True
 
         self[Keys.x] = 0 if pic.x > 0 else abs(self.x)
 
@@ -348,7 +349,9 @@ class CropBox(BaseDictModel[str, int]):
         def y(pic_y: int) -> int:
             if pic_y > 0:  return 0
             return abs(pic_y)
-        self[Keys.y] = y(pic.y)
+        # self[Keys.y] = y(pic.y)
+        self[Keys.y] = y(pic_y=pic.y)
+
 
 
         def height(_y: int, _height: int, pic_y: int, img_h: int, edit_h: int) -> int:
@@ -356,124 +359,149 @@ class CropBox(BaseDictModel[str, int]):
             elif pic_y < 0 and _y + _height < edit_h: return img_h + pic_y
 
             return pic_y + img_h
-        self[Keys.height] = height(self.y, self.height, pic.y, img.height, edit.height)
+        # self[Keys.height] = height(self.y, self.height, pic.y, img.height, edit.height)
+        self[Keys.height] = height(_y=self.y, _height=self.height, pic_y=pic.y, img_h=img.height, edit_h=view.height)
 
 
-        def width(x: int, img_w: int, edit_w: int) -> int:
-            if img_w + x > edit_w: return edit_w - x
+
+        def width(_x: int, img_w: int, edit_w: int) -> int:
+            if img_w + _x > edit_w: return edit_w - _x
 
             return img_w
-        self[Keys.width] = width(self.x, img.width, edit.width)
+        # self[Keys.width] = width(self.x, img.width, edit.width)
+        self[Keys.width] = width(_x=self.x, img_w=img.width, edit_w=view.width)
 
         return False
 
+    @staticmethod
+    def convert(o: Union[Size, _Image, Tuple[int, int]]) -> Tuple[int, int]:
+        if isinstance(o, Size): return o.ToTuple()
+        elif isinstance(o, _Image): return o.size
+        elif isinstance(o, tuple): return o
+        throw(o, Size, _Image, tuple)
     def MinScalingFactor(self, MaxWidth: int, MaxHeight: int) -> float: return min(MaxWidth / self.width, MaxHeight / self.height)
     def MaxScalingFactor(self, MaxWidth: int, MaxHeight: int) -> float: return max(MaxWidth / self.width, MaxHeight / self.height)
-
-    @overload
-    def EnforceBounds(self, image_size: Size) -> Tuple[int, int, int, int]: ...
-    @overload
-    def EnforceBounds(self, image_size: _Image) -> Tuple[int, int, int, int]: ...
-    @overload
-    def EnforceBounds(self, image_size: Tuple[int, int]) -> Tuple[int, int, int, int]: ...
+    def Scale(self, size: Union[Size, _Image, Tuple[int, int]]) -> Tuple[int, int]:
+        w, h = self.convert(size)
+        factor = self.MinScalingFactor(w, h)
+        return int(w * factor), int(h * factor)
 
     def EnforceBounds(self, image_size: Union[Size, _Image, Tuple[int, int]]) -> Tuple[int, int, int, int]:
-        def convert(o) -> Tuple[int, int]:
-            if isinstance(o, Size): return o.ToTuple()
-            elif isinstance(o, _Image): return o.size
-            elif isinstance(o, tuple): return o
-            throw(o, Size, _Image, tuple)
+        img_w, img_h = self.convert(image_size)
+        self.Set(int(self.x if self.x >= 0 else 0),
+                 int(self.y if self.y >= 0 else 0))
+        self.Resize(int(self.width if self.width <= img_w else img_w),
+                    int(self.height if self.height <= img_h else img_h))
 
-        img_w, img_h = convert(image_size)
-        return (
-            int(self.x if self.x >= 0 else 0),
-            int(self.y if self.y >= 0 else 0),
-            int(self.width if self.width <= img_w else img_w),
-            int(self.height if self.height <= img_h else img_h),
-            )
-
+        return self.ToTuple()
 
     def Right(self, amount: int):
         self[Keys.x] += amount
-        return self
+        return self.TopLeft
     def Left(self, amount: int):
         self[Keys.x] -= amount
-        return self
+        return self.TopLeft
     def Up(self, amount: int):
         self[Keys.y] -= amount
-        return self
+        return self.TopLeft
     def Down(self, amount: int):
         self[Keys.y] += amount
-        return self
-
+        return self.TopLeft
 
 
 
     def ToTuple(self) -> Tuple[int, int, int, int]: return self.x, self.y, self.width, self.height
-    def ToPointSize(self) -> Tuple[Point, Size]: return Point.Create(self.x, self.y), Size.Create(self.width, self.height)
-    def ToPoints(self) -> Tuple[Point, Point]: return Point.Create(self.x, self.y), Point.Create(self.x + self.width, self.y + self.height)
+    def ToPointSize(self) -> Tuple[Point, Size]: return self.TopLeft, Size.Create(self.width, self.height)
+    def ToPoints(self) -> Tuple[Point, Point]: return self.TopLeft, self.BottomRight
+    def BoundaryPoints(self) -> Tuple[Point, Point, Point, Point]: return self.TopLeft, self.TopRight, self.BottomLeft, self.BottomRight
+
+    @property
+    def TopLeft(self) -> Point: return Point.Create(self.x, self.y)
+    @property
+    def TopRight(self) -> Point: return Point.Create(self.x + self.width, self.y)
+    @property
+    def BottomLeft(self) -> Point: return Point.Create(self.x, self.y + self.height)
+    @property
+    def BottomRight(self) -> Point: return Point.Create(self.x + self.width, self.y + self.height)
 
     # noinspection PyMethodOverriding
     @classmethod
     def Create(cls, x: int, y: int, width: int, height: int):
         return cls({
-            Keys.x:      x,
-            Keys.y:      y,
-            Keys.width:  width,
-            Keys.height: height,
+            Keys.x:      int(x),
+            Keys.y:      int(y),
+            Keys.width:  int(width),
+            Keys.height: int(height),
             })
-
     @classmethod
     def Crop(cls, x: int, y: int, width: int, height: int, *, pic: Point, img: Size, edit: Size):
-        o = CropBox.Create(x, y, width, height)
+        o = cls.Create(x, y, width, height)
         o.Update(pic, img, edit)
         return o
-
     @classmethod
     def FromPoints(cls, start: Point, end: Point):
-        x1, y1 = start.ToTuple()
-        x2, y2 = end.ToTuple()
-        return CropBox.Create(x1, y1, x2 - x1, y2 - y1)
-
+        x1, y1 = start
+        x2, y2 = end
+        return cls.Create(x1, y1, x2 - x1, y2 - y1)
     @classmethod
     def FromPointSize(cls, start: Point, size: Size):
-        x1, y1 = start.ToTuple()
-        w, h = size.ToTuple()
-        return CropBox.Create(x1, y1, w, h)
+        x1, y1 = start
+        w, h = size
+        return cls.Create(x1, y1, w, h)
 
     @classmethod
-    def BoxSize(cls, start: Point, end: Point, pic_pos: Point, img_size: Size):
+    def Box(cls, start: Point, end: Point, pic: Point, img: Size):
         """
         :param start: root start point of the box, in (x, y) format.
         :param end: root end point of the box, in (x, y) format.
-        :param pic_pos:  root left point of the photo, in (x, y) format.
-        :param img_size:  size of the photo, in (width, height) format.
+        :param pic:  root left point of the photo, in (x, y) format.
+        :param img:  size of the photo, in (width, height) format.
         :return: adjusted box dimensions, ensuring that it resides within the photo.
         """
-        px, py = pic_pos.ToTuple()
-        pw, ph = img_size.ToTuple()
 
-        x1, y1 = start.ToTuple()
-        x2, y2 = end.ToTuple()
+        x1, y1 = start
+        x2, y2 = end
 
         # going right
-        x1 = x1 if x1 > px else px
-        y1 = y1 if y1 > py else py
+        x1 = x1 if x1 > pic.x else pic.x
+        y1 = y1 if y1 > pic.y else pic.y
 
         # going left
-        x1 = x1 if x1 < px + pw else px + pw
-        y1 = y1 if y1 < py + ph else py + ph
+        x1 = x1 if x1 < pic.x + img.width else pic.x + img.width
+        y1 = y1 if y1 < pic.y + img.height else pic.y + img.height
 
         # going right
-        x2 = x2 if x2 < px + pw else px + pw
-        y2 = y2 if y2 < py + ph else py + ph
+        x2 = x2 if x2 < pic.x + img.width else pic.x + img.width
+        y2 = y2 if y2 < pic.y + img.height else pic.y + img.height
 
         # going left
-        x2 = x2 if x2 > px else px
-        y2 = y2 if y2 > py else py
+        x2 = x2 if x2 > pic.x else pic.x
+        y2 = y2 if y2 > pic.y else pic.y
 
-        print(dict(x1=x1, y1=y1, x2=x2, y2=y2))
-        return CropBox.Create(int(x1), int(y1), int(x2 - x1), int(y2 - y1))
+        return cls.Create(int(x1), int(y1), int(x2 - x1), int(y2 - y1))
+    @classmethod
+    def BoxSize(cls, start: Point, end: Size, pic: Point, img: Size):
+        """
+        :param start: root start point of the box, in (x, y) format.
+        :param end: root end point of the box, in (x, y) format.
+        :param pic:  root left point of the photo, in (x, y) format.
+        :param img:  size of the photo, in (width, height) format.
+        :return: adjusted box dimensions, ensuring that it resides within the photo.
+        """
+        return cls.Box(start, Point.Create(start.x + end.width, start.y + end.height), pic, img)
+    @classmethod
+    def BoxDimensions(cls, x: int, y: int, width: int, height: int, pic: Point, img: Size):
+        """
+        :param x: root start point of the box, in (x, y) format.
+        :param y: root start point of the box, in (x, y) format.
+        :param width: root end point of the box, in (x, y) format.
+        :param height: root end point of the box, in (x, y) format.
+        :param pic:  root left point of the photo, in (x, y) format.
+        :param img:  size of the photo, in (width, height) format.
+        :return: adjusted box dimensions, ensuring that it resides within the photo.
+        """
+        return cls.Box(Point.Create(x, y), Point.Create(x + width, y + height), pic, img)
+
 
     @classmethod
     def Parse(cls, d):

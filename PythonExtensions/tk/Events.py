@@ -195,8 +195,9 @@ class Bindings(Enum):
     Scroll_Lock = 'Scroll_Lock'
     Semicolon = 'semicolon'
     Shift = 'Shift'
-    Shift_Down = '<Shift-Down>'
+    Shift_R = 'Shift_R'
     Shift_L = 'Shift_L'
+    Shift_Down = '<Shift-Down>'
     Shift_Left = '<Shift-Left>'
     Shift_Right = '<Shift-Right>'
     Shift_Up = '<Shift-Up>'
@@ -285,14 +286,13 @@ class Bindings(Enum):
         :rtype: Bindings
         """
         try: return Bindings(keysym)
-        except ValueError:
-            try: return getattr(Bindings, keysym)
-            except AttributeError as e:
-                for name in dir(Bindings):
-                    if name.lower() == keysym.lower():
-                        return getattr(Bindings, name)
+        except ValueError as e:
+            if hasattr(Bindings, keysym): return getattr(Bindings, keysym)
+            for name in dir(Bindings):
+                if name.lower() == keysym.lower():
+                    return getattr(Bindings, name)
 
-                raise ValueError('Cannot find matching event') from e
+            raise ValueError(f'Cannot find matching event: "{keysym}"') from e
 
     @staticmethod
     def FromEvent(event):
