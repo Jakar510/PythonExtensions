@@ -150,8 +150,12 @@ class ImageObject(object):
         elif isinstance(size, tuple): kwargs['size'] = tuple(map(int, size))
         else: kwargs['size'] = self._CalculateNewSize()
 
-        PrettyPrint('__kwargs__', kwargs)
-        self._img = self._img.resize(**kwargs)
+        try:
+            self._img = self._img.resize(**kwargs)
+        except:
+            PrettyPrint('__resize__kwargs__', kwargs)
+            raise
+
         return self
 
     def ToPhotoImage(self, master=None, **kwargs) -> ImageTk.PhotoImage: return ImageTk.PhotoImage(master=master, image=self._img, **kwargs)
