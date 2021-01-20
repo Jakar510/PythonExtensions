@@ -96,7 +96,7 @@ class ImageObject(object):
     def _factors(self) -> Tuple[float, float]: return self._widthMax / self._img.width, self._heightMax / self._img.height
     def Maximum_ScalingFactor(self) -> float: return max(self._factors)
     def Minimum_ScalingFactor(self) -> float: return min(self._factors)
-    def _CalculateNewSize(self) -> Tuple[int, int]:
+    def CalculateNewSize(self) -> Tuple[int, int]:
         scalingFactor = self.Minimum_ScalingFactor()
         return int(scalingFactor * self._img.width), int(scalingFactor * self._img.height)
     def _Scale(self, factor: float) -> Tuple[int, int]: return int(self._img.width * (factor or 1)), int(self._img.height * (factor or 1))
@@ -142,7 +142,7 @@ class ImageObject(object):
                         _widthMax=self._widthMax,
                         _heightMax=self._heightMax,
                         result=self.size,
-                        _CalculateNewSize=self._CalculateNewSize())
+                        _CalculateNewSize=self.CalculateNewSize())
 
 
     def Zoom(self, factor: float, *, reducing_gap: float = None) -> 'ImageObject':
@@ -165,7 +165,7 @@ class ImageObject(object):
 
         if isinstance(size, Size): kwargs['size'] = size.ToTuple()
         elif isinstance(size, tuple): kwargs['size'] = tuple(map(int, size))
-        elif isinstance(self._widthMax, (int, float)) and isinstance(self._heightMax, (int, float)): kwargs['size'] = self._CalculateNewSize()
+        elif isinstance(self._widthMax, (int, float)) and isinstance(self._heightMax, (int, float)): kwargs['size'] = self.CalculateNewSize()
 
         try:
             self._img = self._img.resize(**kwargs)
