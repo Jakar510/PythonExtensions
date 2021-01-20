@@ -131,7 +131,7 @@ class ImageObject(object):
 
             self._img = self._img.resize(size=size, reducing_gap=reducing_gap)
             self.Crop(box)
-            return self.Resize(size, reducing_gap=reducing_gap, check_metadata=False)
+            return self.Resize(reducing_gap=reducing_gap, check_metadata=False)
         except:
             PrettyPrint('__CropZoom__kwargs__', box=box, size=size, reducing_gap=reducing_gap)
             raise
