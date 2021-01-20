@@ -479,6 +479,9 @@ class CropBox(BaseDictModel[str, int]):
     def Parse(cls, d):
         if isinstance(d, dict):
             AssertKeys(d, Keys.width, Keys.height, Keys.x, Keys.y)
+            for k, v in d.items():
+                d[k] = int(v)
+
             return cls(d)
 
         throw(d, dict)
