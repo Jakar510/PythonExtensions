@@ -11,12 +11,13 @@ from io import BytesIO
 from urllib.request import urlopen
 
 from PIL import ImageFile, ImageTk
-from PIL.Image import BICUBIC, EXTENSION, Exif, Image, init, open as img_open
+from PIL.Image import BICUBIC, EXTENSION, Exif, Image, init, new, open as img_open
 
 from .ImageExtensions import *
 from ..Exceptions import ArgumentError
 from ..Files import *
 from ..Json import *
+from ..debug import PrettyPrint
 
 
 
@@ -47,6 +48,8 @@ class ImageObject(object):
 
     @staticmethod
     def open(fp, **kwargs) -> Image: return img_open(fp, **kwargs)
+    @staticmethod
+    def NewImage(size: Tuple[int, int], mode: str = 'RGB', color: Tuple[int, int, int] = (0, 0, 0)) -> Image: return new(mode, size, color=color)
 
 
     def __name__(self, extension: ImageExtensions) -> str:
@@ -99,7 +102,7 @@ class ImageObject(object):
     def _Scale(self, factor: float) -> Tuple[int, int]: return int(self._img.width * (factor or 1)), int(self._img.height * (factor or 1))
 
 
-    def Rotate(self, angle: int = None, *, expand: bool = True, Offset: Tuple[int, int] = None, fill_color=None, center=None, resample=BICUBIC) -> 'ImageObject':
+    def Rotate(self, angle: Union[int, RotationAngle] = None, *, expand: bool = True, Offset: Tuple[int, int] = None, fill_color=None, center=None, resample=BICUBIC) -> 'ImageObject':
         """
             CAUTION: Offset will TRIM the image if moved out of bounds of the
 
@@ -112,6 +115,7 @@ class ImageObject(object):
         :return:
         """
         if angle is None: return self
+        if isinstance(angle, RotationAngle): angle = angle.value
         self._img = self._img.rotate(angle=angle, expand=expand, translate=Offset, fillcolor=fill_color, center=center, resample=resample)
         return self
 
@@ -119,33 +123,34 @@ class ImageObject(object):
         self._img = self._img.crop(box.ToTuple())
         return self
 
-    def CropZoom(self, box: Optional[CropBox], size: Union[Size, Tuple[int, int]], *, reducing_gap: float = 3.0) -> 'ImageObject':
+    def CropZoom(self, box: Optional[CropBox], size: Union[Size, Tuple[int, int]], *, reducing_gap: float = None) -> 'ImageObject':
         if isinstance(size, Size): size = size.ToTuple()
-        self._img = self._img.resize(size=size, reducing_gap=reducing_gap)
-        return self.Resize(box=box, reducing_gap=reducing_gap, check_metadata=False)
+        # self._img = self._img.resize(size=size, reducing_gap=reducing_gap)
+        return self.Resize(size, box, reducing_gap=reducing_gap, check_metadata=False)
 
-    def Zoom(self, factor: float, *, reducing_gap: float = 3.0) -> 'ImageObject':
+    def Zoom(self, factor: float, *, reducing_gap: float = None) -> 'ImageObject':
         self._img = self._img.resize(size=self._Scale(factor), reducing_gap=reducing_gap)
         return self
 
-    def Resize(self, size: Union[Size, Tuple[int, int]] = None, box: CropBox = None, *, check_metadata: bool, reducing_gap: float = 3.0, resample=BICUBIC) -> 'ImageObject':
+    def Resize(self, size: Union[Size, Tuple[int, int]] = None, box: CropBox = None, *, check_metadata: bool, reducing_gap: float = None, resample=BICUBIC) -> 'ImageObject':
         if check_metadata:
             exif: Exif = self._img.getexif()
             if 'Orientation' in exif:  # check if image has exif metadata.
                 if exif['Orientation'] == 3:
-                    self.Rotate(180)
+                    self.Rotate(RotationAngle.upside_down)
                 elif exif['Orientation'] == 6:
-                    self.Rotate(270)
+                    self.Rotate(RotationAngle.left)
                 elif exif['Orientation'] == 8:
-                    self.Rotate(90)
+                    self.Rotate(RotationAngle.right)
 
         kwargs = dict(resample=resample, reducing_gap=reducing_gap)
-        if box: kwargs['box'] = box.EnforceBounds(image_size=self._img.size)
+        if box: kwargs['box'] =  box.EnforceBounds(image_size=self._img.size)
 
         if isinstance(size, Size): kwargs['size'] = size.ToTuple()
-        elif isinstance(size, tuple): kwargs['size'] = size
+        elif isinstance(size, tuple): kwargs['size'] = tuple(map(int, size))
         else: kwargs['size'] = self._CalculateNewSize()
 
+        PrettyPrint('__kwargs__', kwargs)
         self._img = self._img.resize(**kwargs)
         return self
 

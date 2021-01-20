@@ -249,15 +249,15 @@ class RotationAngle(IntEnum):
         return RotationAngle((self.value + angle) % 360)
 
 
-
+# noinspection DuplicatedCode
 class Size(BaseDictModel):
     __slots__ = []
     @property
-    def width(self) -> int: return self.get(Keys.width)
+    def width(self) -> int: return self[Keys.width]
     @property
-    def height(self) -> int: return self.get(Keys.height)
+    def height(self) -> int: return self[Keys.height]
 
-    def ToTuple(self) -> Tuple[int, int]: return self.width, self.height
+    def ToTuple(self) -> Tuple[int, int]: return int(self.width), int(self.height)
 
     @staticmethod
     def FromTuple(v: Tuple[int, int]): return Size.Create(*v)
@@ -280,6 +280,7 @@ class Ratios(Size):
 
 
 
+# noinspection DuplicatedCode
 class Point(BaseDictModel[str, int]):
     __slots__ = []
     @property
@@ -287,7 +288,7 @@ class Point(BaseDictModel[str, int]):
     @property
     def x(self) -> int: return self[Keys.x]
 
-    def ToTuple(self) -> Tuple[int, int]: return self.x, self.y
+    def ToTuple(self) -> Tuple[int, int]: return int(self.x), int(self.y)
 
     @staticmethod
     def FromTuple(v: Tuple[int, int]): return Point.Create(*v)
@@ -318,9 +319,9 @@ class CropBox(BaseDictModel[str, int]):
         return self
 
     @property
-    def width(self) -> int: return self.get(Keys.width)
+    def width(self) -> int: return self[Keys.width]
     @property
-    def height(self) -> int: return self.get(Keys.height)
+    def height(self) -> int: return self[Keys.height]
 
     def Resize(self, width: int, height: int):
         self[Keys.width] = width
@@ -385,10 +386,10 @@ class CropBox(BaseDictModel[str, int]):
 
         img_w, img_h = convert(image_size)
         return (
-            self.x if self.x >= 0 else 0,
-            self.y if self.y >= 0 else 0,
-            self.width if self.width <= img_w else img_w,
-            self.height if self.height <= img_h else img_h,
+            int(self.x if self.x >= 0 else 0),
+            int(self.y if self.y >= 0 else 0),
+            int(self.width if self.width <= img_w else img_w),
+            int(self.height if self.height <= img_h else img_h),
             )
 
 
