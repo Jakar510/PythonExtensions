@@ -124,12 +124,16 @@ class ImageObject(object):
         return self
 
     def CropZoom(self, box: Optional[CropBox], size: Union[Size, Tuple[int, int]], *, reducing_gap: float = None) -> 'ImageObject':
-        if isinstance(size, Size): size = size.ToTuple()
         try:
+            if isinstance(size, Size): size = size.ToTuple()
+            elif isinstance(size, tuple): size = tuple(map(int, size))
+            else: raise TypeError(type(size), Size, tuple)
+
             self._img = self._img.resize(size=size, reducing_gap=reducing_gap)
         except:
             PrettyPrint('__CropZoom__kwargs__', size=size, reducing_gap=reducing_gap)
             raise
+
         return self.Resize(box, reducing_gap=reducing_gap, check_metadata=False)
 
     def Zoom(self, factor: float, *, reducing_gap: float = None) -> 'ImageObject':
