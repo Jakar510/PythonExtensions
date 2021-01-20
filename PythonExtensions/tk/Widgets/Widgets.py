@@ -341,7 +341,7 @@ class Listbox(tk.Listbox, BaseTextTkinterWidget, CommandMixin):
         self.command_cb = self.Bind(Bindings.ListboxSelect, self._cmd, add=add)
         return self
     def ResetColors(self, color: str):
-        for i in range(self.size()):
+        for i in range(self.Count):
             self.itemconfig(i, background=color)
 
     @property
@@ -359,7 +359,7 @@ class Listbox(tk.Listbox, BaseTextTkinterWidget, CommandMixin):
         return count
 
     @property
-    def Count(self) -> int: return self.size()
+    def Count(self) -> int: return tk.Listbox.size(self)
 
     @property
     def Index(self) -> int or None: return self._Current_ListBox_Index
@@ -406,7 +406,7 @@ class Canvas(tk.Canvas, BaseTkinterWidget):
             with Image.open(buf) as tempImg:
                 return self.CreateImage(image=tempImg, x=x, y=y)
     def CreateImage(self, image: Image.Image, x: int, y: int, anchor: str or AnchorAndSticky = tk.NW) -> Tuple[ImageTk.PhotoImage, Tuple[int, int], int]:
-        img_tk = ImageTk.PhotoImage(image)
+        img_tk = ImageTk.PhotoImage(image, size=image.size)
         return img_tk, image.size, self.create_image(x, y, anchor=anchor, image=img_tk)
 
 

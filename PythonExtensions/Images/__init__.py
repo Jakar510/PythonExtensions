@@ -39,12 +39,18 @@ class ImageObject(object):
         self._img = img
         self.SetMaxSize(widthMax, heightMax)
         if AutoResize and widthMax and heightMax:
+            print('AutoResized')
             self.Resize(check_metadata=True)
         ImageFile.LOAD_TRUNCATEDImageS = LOAD_TRUNCATED_IMAGES
-    def __hash__(self): return hash(self._img)
 
     @property
     def Raw(self) -> Image: return self._img
+    @property
+    def width(self) -> int: return self._img.width
+    @property
+    def height(self) -> int: return self._img.height
+    @property
+    def size(self) -> Size: return Size.Create(self._img.width, self._img.height)
 
     @staticmethod
     def open(fp, **kwargs) -> Image: return img_open(fp, **kwargs)
@@ -85,15 +91,9 @@ class ImageObject(object):
         self._widthMax = widthMax
         self._heightMax = heightMax
 
-    @property
-    def size(self) -> Size: return Size.Create(self._img.width, self._img.height)
 
     @property
-    def _factors(self) -> Tuple[float, float]:
-        if isinstance(self._widthMax, (int, float)) and isinstance(self._heightMax, (int, float)):
-            return self._widthMax / self._img.width, self._heightMax / self._img.height
-
-        return 1, 1
+    def _factors(self) -> Tuple[float, float]: return self._widthMax / self._img.width, self._heightMax / self._img.height
     def Maximum_ScalingFactor(self) -> float: return max(self._factors)
     def Minimum_ScalingFactor(self) -> float: return min(self._factors)
     def _CalculateNewSize(self) -> Tuple[int, int]:
@@ -129,13 +129,20 @@ class ImageObject(object):
             elif isinstance(size, tuple): size = tuple(map(int, size))
             else: raise TypeError(type(size), (Size, tuple))
 
-            self._img = self._img.resize(size=size, reducing_gap=reducing_gap)
+            # self._img = self._img.resize(size=size, reducing_gap=reducing_gap)
+            self.Resize(size, reducing_gap=reducing_gap, check_metadata=False)
             self.Crop(box)
-            self._img = self._img.resize(size=self._CalculateNewSize(), reducing_gap=reducing_gap)
-            # self.Resize(reducing_gap=reducing_gap, check_metadata=False)
+            self.Resize(reducing_gap=reducing_gap, check_metadata=False)
             return self
         finally:
-            PrettyPrint('__CropZoom__kwargs__', box=box, size=size, reducing_gap=reducing_gap, _widthMax=self._widthMax, _heightMax=self._heightMax, result=self.size)
+            PrettyPrint('__CropZoom__kwargs__',
+                        box=box,
+                        size=size,
+                        reducing_gap=reducing_gap,
+                        _widthMax=self._widthMax,
+                        _heightMax=self._heightMax,
+                        result=self.size,
+                        _CalculateNewSize=self._CalculateNewSize())
 
 
     def Zoom(self, factor: float, *, reducing_gap: float = None) -> 'ImageObject':
@@ -158,7 +165,7 @@ class ImageObject(object):
 
         if isinstance(size, Size): kwargs['size'] = size.ToTuple()
         elif isinstance(size, tuple): kwargs['size'] = tuple(map(int, size))
-        else: kwargs['size'] = self._CalculateNewSize()
+        elif isinstance(self._widthMax, (int, float)) and isinstance(self._heightMax, (int, float)): kwargs['size'] = self._CalculateNewSize()
 
         try:
             self._img = self._img.resize(**kwargs)
