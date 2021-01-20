@@ -125,8 +125,8 @@ class ImageObject(object):
 
     def CropZoom(self, box: Optional[CropBox], size: Union[Size, Tuple[int, int]], *, reducing_gap: float = None) -> 'ImageObject':
         if isinstance(size, Size): size = size.ToTuple()
-        # self._img = self._img.resize(size=size, reducing_gap=reducing_gap)
-        return self.Resize(size, box, reducing_gap=reducing_gap, check_metadata=False)
+        self._img = self._img.resize(size=size, reducing_gap=reducing_gap)
+        return self.Resize(box, reducing_gap=reducing_gap, check_metadata=False)
 
     def Zoom(self, factor: float, *, reducing_gap: float = None) -> 'ImageObject':
         self._img = self._img.resize(size=self._Scale(factor), reducing_gap=reducing_gap)
