@@ -39,7 +39,6 @@ class ImageObject(object):
         self._img = img
         self.SetMaxSize(widthMax, heightMax)
         if AutoResize and widthMax and heightMax:
-            print('AutoResized')
             self.Resize(check_metadata=True)
         ImageFile.LOAD_TRUNCATEDImageS = LOAD_TRUNCATED_IMAGES
 
