@@ -250,7 +250,7 @@ class RotationAngle(IntEnum):
 
 
 # noinspection DuplicatedCode
-class Size(BaseDictModel):
+class Size(BaseDictModel[str, int]):
     __slots__ = []
     @property
     def width(self) -> int: return self[Keys.width]
@@ -260,10 +260,79 @@ class Size(BaseDictModel):
     def ToTuple(self) -> Tuple[int, int]: return int(self.width), int(self.height)
     def __iter__(self) -> Iterable[int]: return iter(self.ToTuple())
 
+    def __eq__(self, other: Union[Tuple[int, int], List[int], 'Size']):
+        if isinstance(other, (tuple, list)):
+            other = Size.FromTuple(other)
+        if isinstance(other, Size):
+            return self.width == other.width and self.height == other.height
+
+        raise TypeError(type(other), (Size, tuple, list))
+    def __ne__(self, other: Union[Tuple[int, int], List[int], 'Size']): return not self.__eq__(other)
+
+    def __gt__(self, other: Union[Tuple[int, int], List[int], 'Size']):
+        if isinstance(other, (tuple, list)):
+            other = Size.FromTuple(other)
+        if isinstance(other, Size):
+            return self.width > other.width and self.height > other.height
+
+        raise TypeError(type(other), (Size, tuple, list))
+    def __lt__(self, other: Union[Tuple[int, int], List[int], 'Size']):
+        if isinstance(other, (tuple, list)):
+            other = Size.FromTuple(other)
+        if isinstance(other, Size):
+            return self.width < other.width and self.height < other.height
+
+        raise TypeError(type(other), (Size, tuple, list))
+    def __ge__(self, other: Union[Tuple[int, int], List[int], 'Size']):
+        if isinstance(other, (tuple, list)):
+            other = Size.FromTuple(other)
+        if isinstance(other, Size):
+            return self.width >= other.width and self.height >= other.height
+
+        raise TypeError(type(other), (Size, tuple, list))
+    def __le__(self, other: Union[Tuple[int, int], List[int], 'Size']):
+        if isinstance(other, (tuple, list)):
+            other = Size.FromTuple(other)
+        if isinstance(other, Size):
+            return self.width <= other.width and self.height <= other.height
+
+        raise TypeError(type(other), (Size, tuple, list))
+
+
+    @staticmethod
+    def convert(o: Union['Size', _Image, Tuple[int, int]]) -> Tuple[int, int]:
+        if isinstance(o, Size): return o.ToTuple()
+        elif isinstance(o, _Image): return o.size
+        elif isinstance(o, tuple): return o
+        throw(o, Size, _Image, tuple)
+
+    def Factors(self, widthMax: int, heightMax: int) -> Tuple[float, float]:
+        # if widthMax > self.width or heightMax > self.height:
+        #     return self.width / widthMax , self.height / heightMax
+
+        return widthMax / self.width, heightMax / self.height
+
+    def MinScalingFactor(self, widthMax: int, heightMax: int) -> float: return min(self.Factors(widthMax, heightMax))
+    def MaxScalingFactor(self, widthMax: int, heightMax: int) -> float: return max(self.Factors(widthMax, heightMax))
+
+
+    @overload
+    def Scale(self, size: Union['Size', _Image, Tuple[int, int]], AsSize: bool) -> 'Size': ...
+    @overload
+    def Scale(self, size: Union['Size', _Image, Tuple[int, int]]) -> Tuple[int, int]: ...
+
+    def Scale(self, size: Union['Size', _Image, Tuple[int, int]], AsSize: bool = False) -> Union['Size', tuple[int, int]]:
+        w, h = self.convert(size)
+        factor = self.MinScalingFactor(w, h)
+        result = Size.Create(self.width * factor, self.height * factor)
+        if AsSize: return result
+
+        return result.ToTuple()
+
     @staticmethod
     def FromTuple(v: Tuple[int, int]): return Size.Create(*v)
     @classmethod
-    def Create(cls, width: int, height: int): return cls({ Keys.width: width, Keys.height: height })
+    def Create(cls, width: Union[int, float], height: Union[int, float]): return cls({ Keys.width: int(width), Keys.height: int(height) })
     @classmethod
     def Parse(cls, d):
         if d is None: return None
@@ -290,6 +359,44 @@ class Point(BaseDictModel[str, int]):
 
     def ToTuple(self) -> Tuple[int, int]: return int(self.x), int(self.y)
     def __iter__(self) -> Iterable[int]: return iter(self.ToTuple())
+
+    def __eq__(self, other: Union[Tuple[int, int], List[int], 'Point']):
+        if isinstance(other, (tuple, list)):
+            other = Point.FromTuple(other)
+        if isinstance(other, Point):
+            return self.x == other.y and self.y == other.y
+
+        raise TypeError(type(other), (Point, tuple, list))
+    def __ne__(self, other: Union[Tuple[int, int], List[int], 'Size']): return not self.__eq__(other)
+
+    def __gt__(self, other: Union[Tuple[int, int], List[int], 'Point']):
+        if isinstance(other, (tuple, list)):
+            other = Point.FromTuple(other)
+        if isinstance(other, Point):
+            return self.x > other.x and self.y > other.y
+
+        raise TypeError(type(other), (Size, tuple, list))
+    def __lt__(self, other: Union[Tuple[int, int], List[int], 'Point']):
+        if isinstance(other, (tuple, list)):
+            other = Point.FromTuple(other)
+        if isinstance(other, Point):
+            return self.x < other.x and self.y < other.y
+
+        raise TypeError(type(other), (Size, tuple, list))
+    def __ge__(self, other: Union[Tuple[int, int], List[int], 'Point']):
+        if isinstance(other, (tuple, list)):
+            other = Point.FromTuple(other)
+        if isinstance(other, Point):
+            return self.x >= other.x and self.y >= other.y
+
+        raise TypeError(type(other), (Size, tuple, list))
+    def __le__(self, other: Union[Tuple[int, int], List[int], 'Point']):
+        if isinstance(other, (tuple, list)):
+            other = Point.FromTuple(other)
+        if isinstance(other, Point):
+            return self.x <= other.x and self.y <= other.y
+
+        raise TypeError(type(other), (Size, tuple, list))
 
     @staticmethod
     def FromTuple(v: Tuple[int, int]): return Point.Create(*v)
@@ -329,7 +436,15 @@ class CropBox(BaseDictModel[str, int]):
         return self
 
     def __iter__(self) -> Iterable[int]: return iter(self.ToTuple())
-    def Update(self, pic: Point, img: Size, view: Size) -> bool:
+
+    def IsAllVisible(self, pic: Point, img: Size) -> bool:
+        return (pic.x >= 0 and
+                pic.y >= 0 and
+                (pic.y + img.height) <= self.height and
+                (pic.x + img.width) <= self.width)
+
+
+    def Update(self, pic: Point, img: Size, view: Size):
         """
             The goal is to find the area of the object that is visible, and return it's coordinates.
 
@@ -337,63 +452,79 @@ class CropBox(BaseDictModel[str, int]):
             : bottom right point of the box, in (x, y) format.
 
         :param view: size of the view where the photo/object is displayed
-        :param pic:  where the photo is placed, in (x, y) format. For Example: Canvas placements
+        :param pic:  where the photo is placed, in (x, y) format. For Example: Canvas placements. This can be any integer
         :param img:  size of the photo, in (Width, Height) format.
         :return: True if all of the object will be visible, otherwise false.
         """
-        if pic.x >= 0 and pic.y >= 0 and (pic.y + img.height) <= view.height and (pic.x + img.width) <= view.height: return True
+        def XY(_v: int): return _v if _v > 0 else 0
 
-        self[Keys.x] = 0 if pic.x > 0 else abs(self.x)
+        self[Keys.x] = XY(pic.x)
+        self[Keys.y] = XY(pic.y)
 
+        def height(_y: int, img_h: int, edit_h: int) -> int:
+            if _y == 0:
+                if img_h < edit_h:
+                    return img_h
 
-        def y(pic_y: int) -> int:
-            if pic_y > 0:  return 0
-            return abs(pic_y)
-        # self[Keys.y] = y(pic.y)
-        self[Keys.y] = y(pic_y=pic.y)
+                # img_h >= edit_h:
+                return edit_h
 
+            elif _y > 0:
+                if _y + img_h >= edit_h:
+                    return img_h - edit_h + _y
 
+                if _y + img_h < edit_h:
+                    return img_h
 
-        def height(_y: int, _height: int, pic_y: int, img_h: int, edit_h: int) -> int:
-            if pic_y + img_h >= edit_h: return edit_h + abs(pic_y)
-            elif pic_y < 0 and _y + _height < edit_h: return img_h + pic_y
+                return img_h
 
-            return pic_y + img_h
-        # self[Keys.height] = height(self.y, self.height, pic.y, img.height, edit.height)
-        self[Keys.height] = height(_y=self.y, _height=self.height, pic_y=pic.y, img_h=img.height, edit_h=view.height)
+            else:  # _y < 0
+                if _y + img_h < edit_h:
+                    return img_h + _y
 
+                # _y + img_h >= edit_h
+                return edit_h
+        # self[Keys.height] = height(self.y, img.height, edit.height)
+        self[Keys.height] = height(_y=pic.y, img_h=img.height, edit_h=view.height)
 
 
         def width(_x: int, img_w: int, edit_w: int) -> int:
-            if img_w + _x > edit_w: return edit_w - _x
+            if _x == 0:
+                if img_w < edit_w:
+                    return img_w
 
-            return img_w
+                # img_w >= edit_w:
+                return edit_w
+
+            elif _x > 0:
+                if _x + img_w >= edit_w:
+                    return img_w - edit_w + _x
+
+                if _x + img_w < edit_w:
+                    return img_w
+
+                return img_w
+
+            else:  # _x < 0
+                if _x + img_w < edit_w:
+                    return img_w + _x
+
+                # _y + img_w >= edit_w
+                return edit_w
         # self[Keys.width] = width(self.x, img.width, edit.width)
-        self[Keys.width] = width(_x=self.x, img_w=img.width, edit_w=view.width)
+        self[Keys.width] = width(_x=pic.x, img_w=img.width, edit_w=view.width)
 
-        return False
 
-    @staticmethod
-    def convert(o: Union[Size, _Image, Tuple[int, int]]) -> Tuple[int, int]:
-        if isinstance(o, Size): return o.ToTuple()
-        elif isinstance(o, _Image): return o.size
-        elif isinstance(o, tuple): return o
-        throw(o, Size, _Image, tuple)
-    def MinScalingFactor(self, MaxWidth: int, MaxHeight: int) -> float: return min(MaxWidth / self.width, MaxHeight / self.height)
-    def MaxScalingFactor(self, MaxWidth: int, MaxHeight: int) -> float: return max(MaxWidth / self.width, MaxHeight / self.height)
-    def Scale(self, size: Union[Size, _Image, Tuple[int, int]]) -> Tuple[int, int]:
-        w, h = self.convert(size)
-        factor = self.MinScalingFactor(w, h)
-        return int(w * factor), int(h * factor)
-
+    def Scale(self, image_size: Union[Size, _Image, Tuple[int, int]]) -> Size: return self.ToPointSize()[1].Scale(image_size, AsSize=True)
     def EnforceBounds(self, image_size: Union[Size, _Image, Tuple[int, int]]) -> Tuple[int, int, int, int]:
-        img_w, img_h = self.convert(image_size)
+        img_w, img_h = Size.convert(image_size)
         self.Set(int(self.x if self.x >= 0 else 0),
                  int(self.y if self.y >= 0 else 0))
         self.Resize(int(self.width if self.width <= img_w else img_w),
                     int(self.height if self.height <= img_h else img_h))
 
         return self.ToTuple()
+
 
     def Right(self, amount: int):
         self[Keys.x] += amount

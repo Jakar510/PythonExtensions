@@ -9,22 +9,20 @@ from PythonExtensions.tk import *
 
 
 # from Tests import RUN_TESTS
+def CheckPaths():
+    d = Path.MakeDirectories(Path.Join('.', 'temp'))
+    print(d)
+    print(d.FileName)
+    print(d.extension())
+    file = Path.Join(d, 't.txt')
+    with open(file, 'w') as f: f.write(str(d))
+    print(file)
+    print(file.FileName)
+    print(file.extension())
 
-
-if __name__ == '__main__':
-    # d = Path.MakeDirectories(Path.Join('.', 'temp'))
-    # print(d)
-    # print(d.FileName)
-    # print(d.extension())
-    # file = Path.Join(d, 't.txt')
-    # with open(file, 'w') as f: f.write(str(d))
-    # print(file)
-    # print(file.FileName)
-    # print(file.extension())
-    #
-    # file.Remove()
-    # d.Remove()
-
+    file.Remove()
+    d.Remove()
+def checkImage():
     root = tkRoot()
     frame = Frame(root).PlaceFull()
     label = Canvas(frame).PlaceFull()
@@ -38,9 +36,9 @@ if __name__ == '__main__':
     with open(path, 'rb') as f:
         with ImageObject.open(f) as img:
             print('init: ', img.size)
-            print('label: ', label.size)
+            print('label: ', label.img_size)
             img = ImageObject(img, label.width, label.height, AutoResize=False)
-            box = CropBox.Create(0, 0, img.width / 0.75, img.height / 0.75)
+            box = CropBox.Create(0, 0, label.width, label.height)
             img.CropZoom(box, size=(img.width, img.height))
             # img.Resize(box=box, check_metadata=False)
             # img.Resize(size=(2960 * 1.2, 1440 * 1.2), box=box, check_metadata=False)
@@ -52,3 +50,48 @@ if __name__ == '__main__':
             items = label.CreateImage(img.Raw, x, y)
             print(items)
     root.mainloop()
+
+if __name__ == '__main__':
+    # screen = Size.Create(1920, 1080)
+    # screen = Size.Create(1366, 768)
+    screen = Size.Create(3820, 2160)
+
+    window = Size.Create(1536, 864)
+    # img_size = Size.Create(1920, 1080)
+    start = Point.Create(0, 0)
+
+    # print(img_size.Scale(screen))
+
+    for w in (480, 600, 780, 1024, 1366, 1536, 1750, 1920, 2160):
+        for h in (480, 480, 600, 768, 768, 864, 1024, 1080, 2160):
+            img_size = Size.Create(w, w)
+
+            # box = CropBox.FromPointSize(start, window)
+            # box.Update(start, img=img_size, view=window)
+            # if box.IsAllVisible(start, img_size):
+            #     print('_______UPDATE______', w, h, window)
+
+            box = CropBox.BoxSize(start, window, start, img_size)
+            if box.IsAllVisible(start, img_size):
+                print('_______BOX______', w, h, window)
+                print()
+
+            # result = box.Scale(screen)
+            # print('__Scale__', result <= screen)
+
+    # for x in range(-100, 100, 25):
+    #     for y in range(-100, 100, 25):
+    #         point = Point.Create(x, y)
+    #
+    #         print()
+    #         box = CropBox.FromPointSize(start, window)
+    #         box.Update(point, img=img_size, view=window)
+    #         print('_______UPDATE______', x, y, box.IsAllVisible(point, img_size))
+    #
+    #
+    #         box = CropBox.BoxSize(start, window, point, img_size)
+    #         print('_______BOX______', x, y, box.IsAllVisible(point, img_size))
+    #
+    #         result = box.Scale(screen).ToTuple()
+    #         print('__Scale__', result, result > screen)
+    #         print()
