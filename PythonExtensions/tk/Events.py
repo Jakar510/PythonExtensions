@@ -173,6 +173,7 @@ class Bindings(Enum):
     Down = 'Down'
     End = 'End'
     EnterKey = 'Enter'
+    ControlEnter = '<Control-KeyPress-Return>'
     Equal = 'equal'
     Escape = 'Escape'
     Home = 'Home'
@@ -422,7 +423,7 @@ class TkinterEvent(tkEvent):
     # def __repr__(self) -> str: return self.ToString()
 
     def ToString(self) -> str: return f"""<{self.__class__.__name__} ({repr(self).replace('>', '').replace('<', '')}) Object.
-State: {pprint.pformat(self.ToDict(), indent=4)} >"""
+{pprint.pformat(self.ToDict(), indent=4)} >"""
     def ToDict(self) -> dict:
         """
             {
@@ -493,7 +494,7 @@ State: {pprint.pformat(self.ToDict(), indent=4)} >"""
     def Debug(event: tkEvent):
         print('Debug.tkEvent', event)
         event = TkinterEvent(event)
-        print('Debug.TkinterEvent', event)
+        print('Debug.TkinterEvent', event.ToString())
         print(event.KeySynonym)
 
     def Point(self) -> Optional[Point]:
