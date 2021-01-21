@@ -497,8 +497,8 @@ class CropBox(BaseDictModel[str, int]):
                     return _v
 
                 else:  # _y < 0
-                    if _v + _img < _edit:
-                        return _img - _edit
+                    if _v + _img <= _edit:
+                        return - (_img - _edit)
 
                     if _v + _img > _edit:
                         return _v

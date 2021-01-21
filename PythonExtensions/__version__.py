@@ -9,6 +9,6 @@
 # ------------------------------------------------------------------------------
 
 # major.minor[.maintenance]
-VERSION = (1, 0, 45)
+VERSION = (1, 0, 46)
 
 version = '.'.join(map(str, VERSION))
