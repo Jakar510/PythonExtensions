@@ -56,28 +56,30 @@ if __name__ == '__main__':
     # screen = Size.Create(1366, 768)
     screen = Size.Create(3820, 2160)
 
-    window = Size.Create(1536, 864)
     # img_size = Size.Create(1920, 1080)
-    start = Point.Create(0, 0)
+    # start = Point.Create(0, 0)
 
-    # print(img_size.Scale(screen))
+    window = Size.Create(1920, 1080)
 
-    for w in (480, 600, 780, 1024, 1366, 1536, 1750, 1920, 2160):
-        for h in (480, 480, 600, 768, 768, 864, 1024, 1080, 2160):
-            img_size = Size.Create(w, w)
+    for w in (2560,):  # 1024, 1366,  1920, 3820
+        for h in (1600,):  # 768, 864, 1080, 2160
+            for x in range(-1500, 500, 50):
+                for y in range(-750, 500, 50):
+                    start = Point.Create(x, y)
+                    img_size = Size.Create(w, h)
 
-            # box = CropBox.FromPointSize(start, window)
-            # box.Update(start, img=img_size, view=window)
-            # if box.IsAllVisible(start, img_size):
-            #     print('_______UPDATE______', w, h, window)
+                    box = CropBox.FromPointSize(start, window)
+                    box.Update(start, img=img_size, view=window, ZeroOrLess=True)
+                    # if box.IsAllVisible(start, img_size):
+                    #     print('_______UPDATE______', w, h, window)
 
-            box = CropBox.BoxSize(start, window, start, img_size)
-            if box.IsAllVisible(start, img_size):
-                print('_______BOX______', w, h, window)
-                print()
+                    # box = CropBox.BoxSize(start, window, start, img_size)
+                    if not box.IsAllVisible(start, img_size):
+                        print('_______BOX______', start.ToTuple(), img_size.ToTuple(), box)
+                        print()
 
-            # result = box.Scale(screen)
-            # print('__Scale__', result <= screen)
+                    # result = box.Scale(screen)
+                    # print('__Scale__', result <= screen)
 
     # for x in range(-100, 100, 25):
     #     for y in range(-100, 100, 25):

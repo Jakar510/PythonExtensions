@@ -8,6 +8,7 @@ from PIL.Image import Image as _Image
 
 from .Keys import Keys
 from .MixIns import *
+from ..debug import *
 
 
 
@@ -443,8 +444,18 @@ class CropBox(BaseDictModel[str, int]):
                 (pic.y + img.height) <= self.height and
                 (pic.x + img.width) <= self.width)
 
+    @overload
+    def Update(self, pic: Point, img: Size, view: Size): ...
+    @overload
+    def Update(self, pic: Point, img: Size, view: Size, OnlyZero: Any): ...
+    @overload
+    def Update(self, pic: Point, img: Size, view: Size, ZeroOrMore: Any): ...
+    @overload
+    def Update(self, pic: Point, img: Size, view: Size, ZeroOrLess: Any): ...
+    @overload
+    def Update(self, pic: Point, img: Size, view: Size, KeepInView: Any): ...
 
-    def Update(self, pic: Point, img: Size, view: Size):
+    def Update(self, pic: Point, img: Size, view: Size, **kwargs):
         """
             The goal is to find the area of the object that is visible, and return it's coordinates.
 
@@ -456,64 +467,104 @@ class CropBox(BaseDictModel[str, int]):
         :param img:  size of the photo, in (Width, Height) format.
         :return: True if all of the object will be visible, otherwise false.
         """
-        def XY(_v: int): return _v if _v > 0 else 0
+        def XY(_v: int, _img: int, _edit: int, args: KeysView) -> int:
+            if 'OnlyZero' in args:
+                return 0
 
-        self[Keys.x] = XY(pic.x)
-        self[Keys.y] = XY(pic.y)
+            if 'ZeroOrMore' in args:
+                return _v if _v >= 0 else 0
 
-        def height(_y: int, img_h: int, edit_h: int) -> int:
-            if _y == 0:
-                if img_h < edit_h:
-                    return img_h
+            if 'ZeroOrLess' in args:
+                return _v if _v <= 0 else 0
+
+            if 'KeepInView' in args:
+                if _v == 0:
+                    if _img < _edit:
+                        return 0
+
+                    if _img >= _edit:
+                        return _v
+
+                    return _v
+
+                elif _v > 0:
+                    if _v + _img >= _edit:
+                        return 0
+
+                    if _v + _img < _edit:
+                        return _v
+
+                    return _v
+
+                else:  # _y < 0
+                    if _v + _img < _edit:
+                        return _img - _edit
+
+                    if _v + _img > _edit:
+                        return _v
+
+                    return _v
+
+            return _v
+
+        self[Keys.x] = XY(pic.x, img.width, view.width, kwargs.keys())
+        self[Keys.y] = XY(pic.y, img.height, view.height, kwargs.keys())
+
+
+        @Debug()
+        def Width(_v: int, _img: int, _edit: int) -> int:
+            if _v == 0:
+                if _img < _edit:
+                    return _img
 
                 # img_h >= edit_h:
-                return edit_h
+                return _edit
 
-            elif _y > 0:
-                if _y + img_h >= edit_h:
-                    return img_h - edit_h + _y
+            elif _v > 0:
+                if _v + _img >= _edit:
+                    return _edit - _v
 
-                if _y + img_h < edit_h:
-                    return img_h
+                if _v + _img < _edit:
+                    return _img
 
-                return img_h
+                return _img
 
             else:  # _y < 0
-                if _y + img_h < edit_h:
-                    return img_h + _y
+                if _v + _img < _edit:
+                    # print('__Width__', _v, _img, _edit)
+                    return _img + _v
 
                 # _y + img_h >= edit_h
-                return edit_h
-        # self[Keys.height] = height(self.y, img.height, edit.height)
-        self[Keys.height] = height(_y=pic.y, img_h=img.height, edit_h=view.height)
+                return _edit
+        self[Keys.width] = Width(self.x, img.width, view.width)
 
 
-        def width(_x: int, img_w: int, edit_w: int) -> int:
-            if _x == 0:
-                if img_w < edit_w:
-                    return img_w
+        @Debug()
+        def Height(_v: int, _img: int, _edit: int) -> int:
+            if _v == 0:
+                if _img < _edit:
+                    return _img
 
-                # img_w >= edit_w:
-                return edit_w
+                # img_h >= edit_h:
+                return _edit
 
-            elif _x > 0:
-                if _x + img_w >= edit_w:
-                    return img_w - edit_w + _x
+            elif _v > 0:
+                if _v + _img >= _edit:
+                    return _edit - _v
 
-                if _x + img_w < edit_w:
-                    return img_w
+                if _v + _img < _edit:
+                    return _img
 
-                return img_w
+                return _img
 
-            else:  # _x < 0
-                if _x + img_w < edit_w:
-                    return img_w + _x
+            else:  # _y < 0
+                if _v + _img < _edit:
+                    # print('__Height__', _v, _img, _edit)
+                    return _img + _v
 
-                # _y + img_w >= edit_w
-                return edit_w
-        # self[Keys.width] = width(self.x, img.width, edit.width)
-        self[Keys.width] = width(_x=pic.x, img_w=img.width, edit_w=view.width)
-
+                # _y + img_h >= edit_h
+                return _edit
+        self[Keys.height] = Height(self.y, img.height, view.height)
 
     def Scale(self, image_size: Union[Size, _Image, Tuple[int, int]]) -> Size: return self.ToPointSize()[1].Scale(image_size, AsSize=True)
     def EnforceBounds(self, image_size: Union[Size, _Image, Tuple[int, int]]) -> Tuple[int, int, int, int]:
