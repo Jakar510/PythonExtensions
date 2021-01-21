@@ -87,9 +87,7 @@ class Printer(object):
         self._pp = _pp or NoStringWrappingPrettyPrinter.Create()
 
     @property
-    def DEBUG(self) -> bool: return __debug__
-    @property
-    def can_print(self) -> bool: return not self.DEBUG
+    def can_print(self) -> bool: return __debug__
 
     def __enter__(self):
         self._active = True
@@ -101,19 +99,20 @@ class Printer(object):
 
 
     def Print(self, *args):
-        if self.can_print: return
-        if self._active:
-            return self.print(*args)
+        if self.can_print:
+            if self._active:
+                return self.print(*args)
 
-        with self as p:
-            return p.print(*args)
+            with self as p:
+                return p.print(*args)
 
     def print(self, *args):
-        if self._active:
-            return print(*args, sep='\n', end=self._end, file=self._file)
+        if self.can_print:
+            if self._active:
+                return print(*args, sep='\n', end=self._end, file=self._file)
 
-        with self:
-            return print(*args, sep='\n', end=self._end, file=self._file)
+            with self:
+                return print(*args, sep='\n', end=self._end, file=self._file)
 
     @overload
     def PrettyPrint(self, *args): ...
@@ -124,26 +123,33 @@ class Printer(object):
     @overload
     def PrettyPrint(self, title: str, **kwargs): ...
 
-    def PrettyPrint(self, *args, **kwargs):
+    @staticmethod
+    def _PrettyPrint(obj, *args, **kwargs):
+        assert (isinstance(obj, Printer))
         if kwargs:
-            with self as p:
-                if args and isinstance(args[0], str):
-                    title = args[0]
-                    p.Print(title)
-                    p._pp.pprint(kwargs)
+            if args and isinstance(args[0], str):
+                title = args[0]
+                obj.Print(title)
+                obj._pp.pprint(kwargs)
 
-                else: p._pp.pprint(kwargs)
+            else: obj._pp.pprint(kwargs)
 
         elif args:
-            with self as p:
-                if isinstance(args[0], str):
-                    title = args[0]
-                    args = args[1:]
-                    p.Print(title)
-                    p._pp.pprint(args)
+            if isinstance(args[0], str):
+                title = args[0]
+                args = args[1:]
+                obj.Print(title)
+                obj._pp.pprint(args)
 
-                else: p._pp.pprint(args)
+            else: obj._pp.pprint(args)
+    def PrettyPrint(self, *args, **kwargs):
+        if self.can_print:
+            if self._active:
+                self._PrettyPrint(self, *args, **kwargs)
 
+            else:
+                with self as p:
+                    self._PrettyPrint(p, *args, **kwargs)
 
 
 
@@ -170,13 +176,12 @@ class Printer(object):
         occurred with a caret on the next line indicating the approximate
         position of the error.
         """
-        if self.can_print: return
+        if self.can_print:
+            if self._active:
+                return traceback.print_exception(type(e), e, e.__traceback__, limit, file, chain)
 
-        if self._active:
-            return traceback.print_exception(type(e), e, e.__traceback__, limit, file, chain)
-
-        with self._lock:
-            return traceback.print_exception(type(e), e, e.__traceback__, limit, file, chain)
+            with self._lock:
+                return traceback.print_exception(type(e), e, e.__traceback__, limit, file, chain)
 
     def print_stack_trace(self, f=None, limit=None, file=None):
         """Print a stack trace from its invocation point.
@@ -185,13 +190,12 @@ class Printer(object):
         stack frame at which to start. The optional 'limit' and 'file'
         arguments have the same meaning as for print_exception().
         """
-        if self.can_print: return
+        if self.can_print:
+            if self._active:
+                return traceback.print_stack(f, limit, file)
 
-        if self._active:
-            return traceback.print_stack(f, limit, file)
-
-        with self._lock:
-            return traceback.print_stack(f, limit, file)
+            with self._lock:
+                return traceback.print_stack(f, limit, file)
 
 
     def get_func_details(self, func: callable, tag: str, result: Any, args, kwargs) -> Tuple[Any, str, str, str, str]:
@@ -217,14 +221,14 @@ class Printer(object):
         return result, tag, name, signature, pp_result
 
     def print_signature(self, func: callable, tag: str, *args, **kwargs):
-        if not self.DEBUG: return
-        assert ('{0}' in tag)
+        if self.can_print:
+            assert ('{0}' in tag)
 
-        result = func(*args, **kwargs)
-        result, _tag, name, signature, pp_result = self.get_func_details(func, tag, result, args, kwargs)
-        self.Print(tag, f'{name}(\n      {signature}\n   )', name, f'returned: \n{self.getPPrintStr(result)}')
+            result = func(*args, **kwargs)
+            result, _tag, name, signature, pp_result = self.get_func_details(func, tag, result, args, kwargs)
+            self.Print(tag, f'{name}(\n      {signature}\n   )', name, f'returned: \n{self.getPPrintStr(result)}')
 
-        return result
+            return result
 
     @classmethod
     def Default(cls): return cls(use_double_quotes=True, end='\n\n')
@@ -235,7 +239,7 @@ class Printer(object):
         :param _pp: Printer class instance to be used for all printing.
         :type _pp: Printer
         """
-        assert (isinstance(_pp, Printer))
+        if not isinstance(_pp, Printer): raise TypeError(type(_pp), (Printer,))
         global pp
         pp = _pp
 
@@ -290,6 +294,6 @@ def PrettyPrint(**kwargs): ...
 @overload
 def PrettyPrint(title: str, **kwargs): ...
 
-
 def PrettyPrint(*args, **kwargs):
-    return pp.PrettyPrint(*args, **kwargs)
+    with pp as p:
+        return p.PrettyPrint(*args, **kwargs)
