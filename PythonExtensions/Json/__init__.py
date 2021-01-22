@@ -391,6 +391,19 @@ class Point(BaseDictModel[str, int]):
 
         raise TypeError(type(other), (self.__class__, tuple, list))
 
+    def Right(self, amount: int):
+        self[Keys.x] += amount
+        return self
+    def Left(self, amount: int):
+        self[Keys.x] -= amount
+        return self
+    def Up(self, amount: int):
+        self[Keys.y] -= amount
+        return self
+    def Down(self, amount: int):
+        self[Keys.y] += amount
+        return self
+
     @staticmethod
     def FromTuple(v: Tuple[int, int]): return Point.Create(*v)
     @classmethod
@@ -470,25 +483,16 @@ class CropBox(BaseDictModel[str, int]):
                 return _v if _v <= 0 else 0
 
             if 'KeepInView' in args:
-                if _v == 0:
-                    if _img < _edit:
+                if _v > 0:
+                    if _v + _img < _edit:
                         return 0
 
-                    if _img >= _edit:
-                        return _v
-
-                    return _v
-
-                elif _v > 0:
                     if _v + _img >= _edit:
                         return 0
 
-                    if _v + _img < _edit:
-                        return _v
-
                     return _v
 
-                else:  # _y < 0
+                elif _v < 0:
                     if _v + _img <= _edit:
                         return - abs(_img - _edit)
 
@@ -569,18 +573,6 @@ class CropBox(BaseDictModel[str, int]):
         return self.ToTuple()
 
 
-    def Right(self, amount: int):
-        self[Keys.x] += amount
-        return self.TopLeft
-    def Left(self, amount: int):
-        self[Keys.x] -= amount
-        return self.TopLeft
-    def Up(self, amount: int):
-        self[Keys.y] -= amount
-        return self.TopLeft
-    def Down(self, amount: int):
-        self[Keys.y] += amount
-        return self.TopLeft
 
 
 

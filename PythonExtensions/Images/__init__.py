@@ -134,7 +134,7 @@ class ImageObject(object):
             self.Crop(box)
             self.Resize(reducing_gap=reducing_gap, check_metadata=False)
             return self
-        finally:
+        except:
             PrettyPrint('__CropZoom__kwargs__',
                         box=box,
                         size=size,
@@ -144,6 +144,7 @@ class ImageObject(object):
                         result=self.size,
                         _CalculateNewSize=self.CalculateNewSize())
 
+            raise
 
     def Zoom(self, factor: float, *, reducing_gap: float = None) -> 'ImageObject':
         self._img = self._img.resize(size=self._Scale(factor), reducing_gap=reducing_gap)

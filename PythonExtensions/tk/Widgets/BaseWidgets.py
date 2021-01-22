@@ -117,6 +117,12 @@ class BaseTkinterWidget(tk.Widget, ABC):
     def y(self) -> int: return self.winfo_rooty()
 
 
+    @overload
+    def show(self) -> bool: ...
+    @overload
+    def show(self, TakeFocus: bool) -> bool: ...
+    @overload
+    def show(self, TakeFocus: bool, State: ViewState) -> bool: ...
 
     def show(self, **kwargs) -> bool:
         """
@@ -125,8 +131,10 @@ class BaseTkinterWidget(tk.Widget, ABC):
         """
         if self._manager_ is None: return False
 
-        state = kwargs.get('state', None) or kwargs.get('State', ViewState.Normal)
+        state = kwargs.get('State', ViewState.Normal)
         assert (isinstance(state, ViewState))
+
+        if 'TakeFocus' in kwargs: self.focus_set()
 
         if self._manager_ == Layout.pack:
             self.pack(self._pi)
@@ -147,12 +155,19 @@ class BaseTkinterWidget(tk.Widget, ABC):
         self._cb = self.after(10, self.OnAppearing)
         return True
 
-    def hide(self) -> bool:
+    @overload
+    def hide(self) -> bool: ...
+    @overload
+    def hide(self, parent: tk.Widget) -> bool: ...
+
+    def hide(self, parent: tk.Widget = None) -> bool:
         """
         Hides the current widget or _root_frame, based on the current geometry manager.
         Can be overridden to add additional functionality if needed.
         """
         if self._manager_ is None: return False
+
+        if parent: parent.focus_set()
 
         self.OnDisppearing()
         if self._manager_ == Layout.pack:
