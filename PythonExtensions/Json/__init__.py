@@ -391,6 +391,22 @@ class Point(BaseDictModel[str, int]):
 
         raise TypeError(type(other), (self.__class__, tuple, list))
 
+    @staticmethod
+    def FromTuple(v: Tuple[int, int]): return Point.Create(*v)
+    @classmethod
+    def Zero(cls): return cls.Create(0, 0)
+    @classmethod
+    def Create(cls, x: int, y: int): return cls({ Keys.x: x, Keys.y: y })
+    @classmethod
+    def Parse(cls, d):
+        if d is None: return None
+        if isinstance(d, dict):
+            AssertKeys(d, Keys.x, Keys.y)
+            return cls(d)
+
+        throw(d, dict)
+
+class Placement(Point):
     def Right(self, amount: int):
         self[Keys.x] += amount
         return self
@@ -404,18 +420,66 @@ class Point(BaseDictModel[str, int]):
         self[Keys.y] += amount
         return self
 
-    @staticmethod
-    def FromTuple(v: Tuple[int, int]): return Point.Create(*v)
-    @classmethod
-    def Create(cls, x: int, y: int): return cls({ Keys.x: x, Keys.y: y })
-    @classmethod
-    def Parse(cls, d):
-        if d is None: return None
-        if isinstance(d, dict):
-            AssertKeys(d, Keys.x, Keys.y)
-            return cls(d)
+    @overload
+    def Update(self, pic: 'Placement', img: Size, view: Size): ...
+    @overload
+    def Update(self, pic: 'Placement', img: Size, view: Size, OnlyZero: Any): ...
+    @overload
+    def Update(self, pic: 'Placement', img: Size, view: Size, ZeroOrMore: Any): ...
+    @overload
+    def Update(self, pic: 'Placement', img: Size, view: Size, ZeroOrLess: Any): ...
+    @overload
+    def Update(self, pic: 'Placement', img: Size, view: Size, KeepInView: Any): ...
 
-        throw(d, dict)
+    def Update(self, pic: 'Placement', img: Size, view: Size, **kwargs):
+        """
+            The goal is enforce the object comply with it's bounds
+
+            x, y: root left point of the box, in (x, y) format.
+            : bottom right point of the box, in (x, y) format.
+
+        :param view: size of the view where the photo/object is displayed
+        :param pic:  where the photo is placed, in (x, y) format. For Example: Canvas placements. This can be any integer
+        :param img:  size of the photo, in (Width, Height) format.
+        :return: True if all of the object will be visible, otherwise false.
+        """
+        def XY(_v: int, _img: int, _edit: int, args: KeysView) -> int:
+            if 'OnlyZero' in args:
+                return 0
+
+            if 'ZeroOrMore' in args:
+                return _v if _v >= 0 else 0
+
+            if 'ZeroOrLess' in args:
+                return _v if _v <= 0 else 0
+
+            if 'KeepInView' in args:
+                if _v > 0:
+                    if _img >= _edit:
+                        return 0
+
+                    if _v + _img < _edit:
+                        return _v
+
+                    if _v + _img >= _edit:
+                        return 0
+
+                    return _v
+
+                elif _v < 0:
+                    if _v + _img <= _edit:
+                        return - abs(_img - _edit)
+
+                    if _v + _img > _edit:
+                        return _v
+
+                    return _v
+
+            return _v
+
+        self[Keys.x] = XY(pic.x, img.width, view.width, kwargs.keys())
+        self[Keys.y] = XY(pic.y, img.height, view.height, kwargs.keys())
+
 
 
 class CropBox(BaseDictModel[str, int]):
@@ -443,26 +507,15 @@ class CropBox(BaseDictModel[str, int]):
 
     def __iter__(self) -> Iterable[int]: return iter(self.ToTuple())
 
-    def IsAllVisible(self, pic: Point, img: Size) -> bool:
+    def IsAllVisible(self, pic: Placement, img: Size) -> bool:
         return (pic.x >= 0 and
                 pic.y >= 0 and
                 (pic.y + img.height) <= self.height and
                 (pic.x + img.width) <= self.width)
 
-    @overload
-    def Update(self, pic: Point, img: Size, view: Size): ...
-    @overload
-    def Update(self, pic: Point, img: Size, view: Size, OnlyZero: Any): ...
-    @overload
-    def Update(self, pic: Point, img: Size, view: Size, ZeroOrMore: Any): ...
-    @overload
-    def Update(self, pic: Point, img: Size, view: Size, ZeroOrLess: Any): ...
-    @overload
-    def Update(self, pic: Point, img: Size, view: Size, KeepInView: Any): ...
-
-    def Update(self, pic: Point, img: Size, view: Size, **kwargs):
+    def Update(self, pic: Placement, img: Size, view: Size):
         """
-            The goal is to find the area of the object that is visible, and return it's coordinates.
+            The goal is to find the area of the object that is visible.
 
             x, y: root left point of the box, in (x, y) format.
             : bottom right point of the box, in (x, y) format.
@@ -472,39 +525,28 @@ class CropBox(BaseDictModel[str, int]):
         :param img:  size of the photo, in (Width, Height) format.
         :return: True if all of the object will be visible, otherwise false.
         """
-        def XY(_v: int, _img: int, _edit: int, args: KeysView) -> int:
-            if 'OnlyZero' in args:
-                return 0
+        def XY(_v: int, _img: int, _edit: int) -> int:
+            if _v > 0:
+                if _v + _img < _edit:
+                    return 0
 
-            if 'ZeroOrMore' in args:
-                return _v if _v >= 0 else 0
+                if _v + _img >= _edit:
+                    return 0
 
-            if 'ZeroOrLess' in args:
-                return _v if _v <= 0 else 0
+                return _v
 
-            if 'KeepInView' in args:
-                if _v > 0:
-                    if _v + _img < _edit:
-                        return 0
+            elif _v < 0:
+                if _v + _img <= _edit:
+                    return - abs(_img - _edit)
 
-                    if _v + _img >= _edit:
-                        return 0
-
+                if _v + _img > _edit:
                     return _v
 
-                elif _v < 0:
-                    if _v + _img <= _edit:
-                        return - abs(_img - _edit)
+                return _v
 
-                    if _v + _img > _edit:
-                        return _v
 
-                    return _v
-
-            return _v
-
-        self[Keys.x] = XY(pic.x, img.width, view.width, kwargs.keys())
-        self[Keys.y] = XY(pic.y, img.height, view.height, kwargs.keys())
+        self[Keys.x] = XY(pic.x, img.width, view.width)
+        self[Keys.y] = XY(pic.y, img.height, view.height)
 
 
         @Debug()
@@ -562,6 +604,8 @@ class CropBox(BaseDictModel[str, int]):
                 return _edit
         self[Keys.height] = Height(self.y, img.height, view.height)
 
+        return self
+
     def Scale(self, image_size: Union[Size, _Image, Tuple[int, int]]) -> Size: return self.ToPointSize()[1].Scale(image_size, AsSize=True)
     def EnforceBounds(self, image_size: Union[Size, _Image, Tuple[int, int]]) -> Tuple[int, int, int, int]:
         img_w, img_h = Size.convert(image_size)
@@ -577,10 +621,12 @@ class CropBox(BaseDictModel[str, int]):
 
 
     def ToTuple(self) -> Tuple[int, int, int, int]: return self.x, self.y, self.width, self.height
-    def ToPointSize(self) -> Tuple[Point, Size]: return self.TopLeft, Size.Create(self.width, self.height)
+    def ToPointSize(self) -> Tuple[Point, Size]: return self.TopLeft, self.Size
     def ToPoints(self) -> Tuple[Point, Point]: return self.TopLeft, self.BottomRight
     def BoundaryPoints(self) -> Tuple[Point, Point, Point, Point]: return self.TopLeft, self.TopRight, self.BottomLeft, self.BottomRight
 
+    @property
+    def Size(self) -> Size: return Size.Create(self.width, self.height)
     @property
     def TopLeft(self) -> Point: return Point.Create(self.x, self.y)
     @property
