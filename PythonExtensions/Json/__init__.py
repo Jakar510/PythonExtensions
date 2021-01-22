@@ -466,7 +466,7 @@ class PlacePosition(Point):
                         return _v
 
                     if _v + _img >= _edit:
-                        return 0
+                        return abs(_img - _edit)
 
                     return _v
 
@@ -484,6 +484,7 @@ class PlacePosition(Point):
         self[Keys.x] = XY(pic.x, img.width, view.width, kwargs.keys())
         self[Keys.y] = XY(pic.y, img.height, view.height, kwargs.keys())
 
+        return self
 
 
 class CropBox(BaseDictModel[str, int]):
