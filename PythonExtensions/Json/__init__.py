@@ -8,7 +8,6 @@ from PIL.Image import Image as _Image
 
 from .Keys import Keys
 from .MixIns import *
-from ..debug import *
 
 
 
@@ -549,12 +548,13 @@ class CropBox(BaseDictModel[str, int]):
 
                 return _v
 
+            return 0
+
 
         self[Keys.x] = XY(pic.x, img.width, view.width)
         self[Keys.y] = XY(pic.y, img.height, view.height)
 
 
-        @Debug()
         def Width(_v: int, _img: int, _edit: int) -> int:
             if _v == 0:
                 if _img < _edit:
@@ -582,7 +582,6 @@ class CropBox(BaseDictModel[str, int]):
         self[Keys.width] = Width(self.x, img.width, view.width)
 
 
-        @Debug()
         def Height(_v: int, _img: int, _edit: int) -> int:
             if _v == 0:
                 if _img < _edit:

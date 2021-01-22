@@ -397,10 +397,10 @@ class Canvas(tk.Canvas, BaseTkinterWidget):
         if not isinstance(image, ImageTk.PhotoImage):
             image = ImageTk.PhotoImage(image, size=image.size)
         return image, (image.width(), image.height()), self.create_image(x, y, anchor=anchor, image=image)
-    def GetItemPostion(self, _id) -> PlacePosition:
+    def GetItemPostion(self, _id) -> Optional[PlacePosition]:
         try:
             return PlacePosition.FromTuple(self.coords(_id))
-        except tk.TclError: return PlacePosition.Zero()
+        except tk.TclError: return None
 
 
     def _setupBindings(self):
