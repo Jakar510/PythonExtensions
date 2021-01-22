@@ -411,6 +411,7 @@ class Point(BaseDictModel[str, int]):
         throw(d, dict)
 
 class PlacePosition(Point):
+    """ tkinter uses top boundary as x axis. """
     def Right(self, amount: int):
         self[Keys.x] += amount
         return self
