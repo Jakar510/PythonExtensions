@@ -406,7 +406,7 @@ class Point(BaseDictModel[str, int]):
 
         throw(d, dict)
 
-class Placement(Point):
+class PlacePosition(Point):
     def Right(self, amount: int):
         self[Keys.x] += amount
         return self
@@ -421,17 +421,17 @@ class Placement(Point):
         return self
 
     @overload
-    def Update(self, pic: 'Placement', img: Size, view: Size): ...
+    def Update(self, pic: 'PlacePosition', img: Size, view: Size): ...
     @overload
-    def Update(self, pic: 'Placement', img: Size, view: Size, OnlyZero: Any): ...
+    def Update(self, pic: 'PlacePosition', img: Size, view: Size, OnlyZero: Any): ...
     @overload
-    def Update(self, pic: 'Placement', img: Size, view: Size, ZeroOrMore: Any): ...
+    def Update(self, pic: 'PlacePosition', img: Size, view: Size, ZeroOrMore: Any): ...
     @overload
-    def Update(self, pic: 'Placement', img: Size, view: Size, ZeroOrLess: Any): ...
+    def Update(self, pic: 'PlacePosition', img: Size, view: Size, ZeroOrLess: Any): ...
     @overload
-    def Update(self, pic: 'Placement', img: Size, view: Size, KeepInView: Any): ...
+    def Update(self, pic: 'PlacePosition', img: Size, view: Size, KeepInView: Any): ...
 
-    def Update(self, pic: 'Placement', img: Size, view: Size, **kwargs):
+    def Update(self, pic: 'PlacePosition', img: Size, view: Size, **kwargs):
         """
             The goal is enforce the object comply with it's bounds
 
@@ -507,13 +507,13 @@ class CropBox(BaseDictModel[str, int]):
 
     def __iter__(self) -> Iterable[int]: return iter(self.ToTuple())
 
-    def IsAllVisible(self, pic: Placement, img: Size) -> bool:
+    def IsAllVisible(self, pic: PlacePosition, img: Size) -> bool:
         return (pic.x >= 0 and
                 pic.y >= 0 and
                 (pic.y + img.height) <= self.height and
                 (pic.x + img.width) <= self.width)
 
-    def Update(self, pic: Placement, img: Size, view: Size):
+    def Update(self, pic: PlacePosition, img: Size, view: Size):
         """
             The goal is to find the area of the object that is visible.
 

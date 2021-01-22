@@ -324,7 +324,7 @@ class KeyboardMixin:
         class KeyboardEntry(Entry, KeyboardMixin):
             def __init__(self, master, *,
                          root: tkRoot,
-                         placement: PlacementSet = PlacementSet(Placement.Auto),
+                         placement: PlacementSet = PlacementSet(PlacePosition.Auto),
                          keysize: int = None,
                          keycolor: str = None,
                          insertbackground: str = 'red',
@@ -527,7 +527,7 @@ class BaseTitled(Frame, value_title_mixin):
         self.Entry = cls(self, **value_kwargs).Grid(row=1, column=0, padx=RowPadding, pady=RowPadding)
 
     # @classmethod
-    # def TEST(cls, master, root: tkRoot, d: Dict[str, Dict[str, Union[Placement, str, int]]], frame_bg: str = 'light blue'):
+    # def TEST(cls, master, root: tkRoot, d: Dict[str, Dict[str, Union[PlacePosition, str, int]]], frame_bg: str = 'light blue'):
     #     frame: KeyBaordTestFrame[cls] = KeyBaordTestFrame(master, background=frame_bg)
     #     for key, value in d.items():
     #         w = cls(frame, title=key, **value).PackHorizontal()
@@ -562,7 +562,7 @@ class BaseTitledKeyboard(Frame, value_title_mixin):
         self.Entry = cls(self, root=root, **value_kwargs).Grid(row=1, column=0, padx=RowPadding, pady=RowPadding)
 
     # @classmethod
-    # def TEST(cls, master, root: tkRoot, d: Dict[str, Dict[str, Union[Placement, str, int]]], frame_bg: str = 'light blue'):
+    # def TEST(cls, master, root: tkRoot, d: Dict[str, Dict[str, Union[PlacePosition, str, int]]], frame_bg: str = 'light blue'):
     #     frame: KeyBaordTestFrame[cls] = KeyBaordTestFrame(master, background=frame_bg)
     #     for key, value in d.items():
     #         w = cls(frame, root=root, title=key, **value).PackHorizontal()
@@ -601,7 +601,7 @@ class BaseFramed(LabelFrame, value_title_mixin):
     def title(self, value: str): self.txt = value
 
     # @classmethod
-    # def TEST(cls, master, root: tkRoot, d: Dict[str, Dict[str, Union[Placement, str, int]]], frame_bg: str = 'light blue'):
+    # def TEST(cls, master, root: tkRoot, d: Dict[str, Dict[str, Union[PlacePosition, str, int]]], frame_bg: str = 'light blue'):
     #     frame: KeyBaordTestFrame[cls] = KeyBaordTestFrame(master, background=frame_bg)
     #     for key, value in d.items():
     #         w = cls(frame, title=key, **value).PackHorizontal()
@@ -636,7 +636,7 @@ class BaseFramedKeyboard(LabelFrame, value_title_mixin):
     def title(self, value: str): self.txt = value
 
     # @classmethod
-    # def TEST(cls, master, root: tkRoot, d: Dict[str, Dict[str, Union[Placement, str, int]]], frame_bg: str = 'light blue'):
+    # def TEST(cls, master, root: tkRoot, d: Dict[str, Dict[str, Union[PlacePosition, str, int]]], frame_bg: str = 'light blue'):
     #     frame: KeyBaordTestFrame[cls] = KeyBaordTestFrame(master, background=frame_bg)
     #     for key, value in d.items():
     #         w = cls(frame, root=root, title=key, **value).PackHorizontal()
