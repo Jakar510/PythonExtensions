@@ -12,13 +12,15 @@ import os
 from typing import *
 from urllib.request import urlopen
 
+from Images import ImageObject
+from Json import PlacePosition
 from .BaseWidgets import *
 from .Frames import Frame
 from ..Enumerations import *
 from ..Events import *
 from ..Widgets.base import *
 
-
+from PIL.Image import open as img_open
 
 
 __all__ = [
@@ -382,35 +384,32 @@ class Canvas(tk.Canvas, BaseTkinterWidget):
         tk.Canvas.__init__(self, master, *args, **kwargs)
         self._setupBindings()
         BaseTkinterWidget.__init__(self, Color)
+
+    def DownloadImage(self, url: str, x: int, y: int, width: int = None, height: int = None): return self.SetImageFromBytes(urlopen(url).read(), x, y, width, height)
+    def OpenImage(self, path: str, x: int, y: int, width: int = None, height: int = None) -> Tuple[ImageTk.PhotoImage, Tuple[int, int], int]:
+        assert (os.path.isfile(path))
+        img = ImageObject.FromFile(path, width=width, height=height, AsPhotoImage=self)
+        return self.CreateImage(image=img, x=x, y=y)
+    def SetImageFromBytes(self, data: bytes, x: int, y: int, width: int = None, height: int = None) -> Tuple[ImageTk.PhotoImage, Tuple[int, int], int]:
+        assert (isinstance(data, bytes))
+        img = ImageObject.FromBytes(data, width=width, height=height, AsPhotoImage=self)
+        return self.CreateImage(image=img, x=x, y=y)
+    def CreateImage(self, image: Union[Image, ImageTk.PhotoImage], x: int, y: int, anchor: str or AnchorAndSticky = tk.NW) -> Tuple[ImageTk.PhotoImage, Tuple[int, int], int]:
+        if not isinstance(image, ImageTk.PhotoImage):
+            image = ImageTk.PhotoImage(image, size=image.size)
+        return image, (image.width(), image.height()), self.create_image(x, y, anchor=anchor, image=image)
+    def GetItemPostion(self, _id) -> PlacePosition:
+        try:
+            return PlacePosition.FromTuple(self.coords(_id))
+        except tk.TclError: return PlacePosition.Zero()
+
+
     def _setupBindings(self):
         self.bind(Bindings.ButtonPress.value, func=self.HandleRelease)
         self.bind(Bindings.ButtonRelease.value, func=self.HandlePress)
 
         self.bind(Bindings.FocusIn.value, func=self.HandleFocusIn)
         self.bind(Bindings.FocusOut.value, func=self.HandleFocusOut)
-
-    def SetImage(self, x: int, y: int, path: str = None, data: str = None, url: str = None) -> Tuple[ImageTk.PhotoImage, Tuple[int, int], int]:
-        if url: return self.DownloadImage(url, x, y)
-        elif data and path: raise KeyError('Cannot use both ImageData and ImageName')
-        elif data: return self.SetImageFromBytes(base64.b64decode(data), x, y)
-        elif path: return self.OpenImage(path, x=x, y=y)
-    def DownloadImage(self, url: str, x: int, y: int): return self.SetImageFromBytes(urlopen(url).read(), x, y)
-    def OpenImage(self, path: str, x: int, y: int) -> Tuple[ImageTk.PhotoImage, Tuple[int, int], int]:
-        assert (os.path.isfile(path))
-        with open(path, 'rb') as f:
-            with Image.open(f) as img:
-                return self.CreateImage(image=img, x=x, y=y)
-    def SetImageFromBytes(self, data: bytes, x: int, y: int) -> Tuple[ImageTk.PhotoImage, Tuple[int, int], int]:
-        assert (isinstance(data, bytes))
-        with io.BytesIO(data) as buf:
-            with Image.open(buf) as tempImg:
-                return self.CreateImage(image=tempImg, x=x, y=y)
-    def CreateImage(self, image: Union[Image, ImageTk.PhotoImage], x: int, y: int, anchor: str or AnchorAndSticky = tk.NW) -> Tuple[ImageTk.PhotoImage, Tuple[int, int], int]:
-        if not isinstance(image, ImageTk.PhotoImage):
-            image = ImageTk.PhotoImage(image, size=image.size)
-        return image, (image.width(), image.height()), self.create_image(x, y, anchor=anchor, image=image)
-
-
 
     def HandlePress(self, event: tkEvent):
         """

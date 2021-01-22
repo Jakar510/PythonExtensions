@@ -350,6 +350,11 @@ class Point(BaseDictModel[str, int]):
     @property
     def x(self) -> int: return self[Keys.x]
 
+    def Set(self, x: int, y: int):
+        self[Keys.x] = x
+        self[Keys.y] = y
+        return self
+
     def ToTuple(self) -> Tuple[int, int]: return int(self.x), int(self.y)
     def __iter__(self) -> Iterable[int]: return iter(self.ToTuple())
 
@@ -646,7 +651,7 @@ class CropBox(BaseDictModel[str, int]):
             Keys.height: int(height),
             })
     @classmethod
-    def Crop(cls, x: int, y: int, width: int, height: int, *, pic: Point, img: Size, edit: Size):
+    def Crop(cls, x: int, y: int, width: int, height: int, *, pic: PlacePosition, img: Size, edit: Size):
         o = cls.Create(x, y, width, height)
         o.Update(pic, img, edit)
         return o
@@ -661,8 +666,43 @@ class CropBox(BaseDictModel[str, int]):
         w, h = size
         return cls.Create(x1, y1, w, h)
 
+
+
     @classmethod
-    def Box(cls, start: Point, end: Point, pic: Point, img: Size):
+    @overload
+    def Box(cls, start: Point, end: Point, pic: PlacePosition, img: Size) -> 'CropBox': ...
+    @classmethod
+    @overload
+    def Box(cls, start: Point, end: Size, pic: PlacePosition, img: Size) -> 'CropBox': ...
+    @classmethod
+    @overload
+    def Box(cls, x: int, y: int, width: int, height: int, pic: PlacePosition, img: Size) -> 'CropBox': ...
+
+    @classmethod
+    def Box(cls, **kwargs) -> 'CropBox':
+        pic = kwargs['pic']
+        img = kwargs['img']
+        assert (isinstance(pic, PlacePosition))
+        assert (isinstance(img, Size))
+        if 'x' in kwargs:
+            x, y = kwargs['x'], kwargs['y']
+            width, height = kwargs['width'], kwargs['height']
+            assert (isinstance(x, int))
+            assert (isinstance(y, int))
+            assert (isinstance(width, int))
+            assert (isinstance(height, int))
+            return cls._Box(Point.Create(x, y), Point.Create(x + width, y + height), pic, img)
+        else:
+            start = kwargs['start']
+            end = kwargs['end']
+            assert (isinstance(start, Point))
+            if isinstance(end, Size):
+                return cls._Box(start, Point.Create(start.x + end.width, start.y + end.height), pic, img)
+
+            assert (isinstance(end, Point))
+            return cls._Box(start, Point.Create(end.x, end.y), pic, img)
+    @classmethod
+    def _Box(cls, start: Point, end: Point, pic: PlacePosition, img: Size) -> 'CropBox':
         """
         :param start: root start point of the box, in (x, y) format.
         :param end: root end point of the box, in (x, y) format.
@@ -691,28 +731,7 @@ class CropBox(BaseDictModel[str, int]):
         y2 = y2 if y2 > pic.y else pic.y
 
         return cls.Create(int(x1), int(y1), int(x2 - x1), int(y2 - y1))
-    @classmethod
-    def BoxSize(cls, start: Point, end: Size, pic: Point, img: Size):
-        """
-        :param start: root start point of the box, in (x, y) format.
-        :param end: root end point of the box, in (x, y) format.
-        :param pic:  root left point of the photo, in (x, y) format.
-        :param img:  size of the photo, in (width, height) format.
-        :return: adjusted box dimensions, ensuring that it resides within the photo.
-        """
-        return cls.Box(start, Point.Create(start.x + end.width, start.y + end.height), pic, img)
-    @classmethod
-    def BoxDimensions(cls, x: int, y: int, width: int, height: int, pic: Point, img: Size):
-        """
-        :param x: root start point of the box, in (x, y) format.
-        :param y: root start point of the box, in (x, y) format.
-        :param width: root end point of the box, in (x, y) format.
-        :param height: root end point of the box, in (x, y) format.
-        :param pic:  root left point of the photo, in (x, y) format.
-        :param img:  size of the photo, in (width, height) format.
-        :return: adjusted box dimensions, ensuring that it resides within the photo.
-        """
-        return cls.Box(Point.Create(x, y), Point.Create(x + width, y + height), pic, img)
+
 
 
     @classmethod
