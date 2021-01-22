@@ -333,7 +333,7 @@ class KeyboardMixin:
                          insertwidth: int = 3,
                          text: str = '',
                          Override_var: tk.StringVar = None,
-                         Color: dict = None, **kwargs):
+                         Color: Dict[str, str] = None, **kwargs):
                 Entry.__init__(self, master,
                                text=text,
                                Override_var=Override_var,

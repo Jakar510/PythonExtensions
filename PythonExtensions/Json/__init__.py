@@ -1,5 +1,5 @@
 import copy as _copy
-from enum import Enum, IntEnum
+from enum import Enum
 from json import dumps as _dumps, loads as _loads
 from typing import *
 from typing import BinaryIO
@@ -52,44 +52,6 @@ def RaiseKeyError(key, d: Dict): raise KeyError(f'{key} not in {d.keys()}')
 
 
 
-# noinspection DuplicatedCode
-def _serialize(o):
-    if isinstance(o, Enum): return o.value
-
-    if isinstance(o, BaseSetModel): return o.ToList()
-
-    if isinstance(o, BaseListModel): return o
-
-    if isinstance(o, BaseDictModel): return o.ToDict()
-
-    if hasattr(o, 'ToList') and callable(o.ToList): return o.ToList()
-
-    if hasattr(o, 'ToDict') and callable(o.ToDict): return o.ToDict()
-
-    return o
-
-
-# noinspection DuplicatedCode
-def _ToDict(o: Dict) -> Dict[_KT, Union[_VT, Dict, str]]:
-    d = { }
-    for key, value in o.items():
-        if isinstance(value, Enum): d[key] = value.value
-
-        elif isinstance(value, BaseListModel): d[key] = value
-
-        elif isinstance(value, BaseSetModel): d[key] = value.ToList()
-
-        elif isinstance(value, BaseDictModel): d[key] = value.ToDict()
-
-        elif hasattr(value, 'ToList') and callable(value.ToList): d[key] = value.ToList()
-
-        elif hasattr(value, 'ToDict') and callable(value.ToDict): d[key] = value.ToDict()
-
-        elif hasattr(value, 'ToString') and callable(value.ToString): d[key] = value.ToString()
-
-        else: d[key] = value
-    return d
-
 
 
 class BaseModel(object):
@@ -102,8 +64,6 @@ class BaseModel(object):
         except AttributeError:
             return f'<{self.__class__.__name__} Object() [ {self.ToJsonString()} ]'
     def _Filter(self, func: callable): raise NotImplementedError()
-    def ToDict(self): raise NotImplementedError()
-    def ToList(self): raise NotImplementedError()
     def enumerate(self): raise NotImplementedError()
     def Count(self) -> int: raise NotImplementedError()
     def Empty(self) -> bool: raise NotImplementedError()
@@ -113,8 +73,48 @@ class BaseModel(object):
     def Parse(cls, d): return cls()
     @classmethod
     def FromJson(cls, string: Union[str, bytes, bytearray], **kwargs): return cls.Parse(_loads(string, **kwargs))
-    def ToJsonString(self) -> str: return _dumps(self, indent=4, default=_serialize)  # , cls=JsonEncoder)
+    def ToJsonString(self, indent=4, ) -> str: return _dumps(self, indent=indent, default=self._serialize)
 
+
+    @staticmethod
+    def _serialize(obj):
+        if isinstance(obj, Enum): return obj.value
+
+        if isinstance(obj, BaseSetModel): return obj.ToList()
+
+        if isinstance(obj, BaseListModel): return obj
+
+        if isinstance(obj, BaseDictModel): return obj.ToDict()
+
+        if hasattr(obj, 'ToList') and callable(obj.ToList): return obj.ToList()
+
+        if hasattr(obj, 'ToTuple') and callable(obj.ToTuple): return obj.ToTuple()
+
+        if hasattr(obj, 'ToDict') and callable(obj.ToDict): return obj.ToDict()
+
+        return obj
+    @staticmethod
+    def _ToDict(o: Dict) -> Dict[_KT, Union[_VT, Dict, str]]:
+        d = { }
+        for key, value in o.items():
+            if isinstance(value, Enum): d[key] = value.value
+
+            elif isinstance(value, BaseListModel): d[key] = value
+
+            elif isinstance(value, BaseSetModel): d[key] = value.ToList()
+
+            elif isinstance(value, BaseDictModel): d[key] = value.ToDict()
+
+            elif hasattr(value, 'ToList') and callable(value.ToList): d[key] = value.ToList()
+
+            elif hasattr(value, 'ToTuple') and callable(value.ToTuple): d[key] = value.ToTuple()
+
+            elif hasattr(value, 'ToDict') and callable(value.ToDict): d[key] = value.ToDict()
+
+            elif hasattr(value, 'ToString') and callable(value.ToString): d[key] = value.ToString()
+
+            else: d[key] = value
+        return d
 
 
 class BaseListModel(list, BaseModel, List[_T]):
@@ -226,7 +226,7 @@ class BaseDictModel(dict, BaseModel, Dict[_KT, _VT]):
     def _Filter(self, func: callable) -> List[_VT]: return list(filter(func, self.values()))
 
     def ToList(self) -> List[_T]: return list(self.items())
-    def ToDict(self) -> Dict[_KT, Union[_VT, Dict, str]]: return _ToDict(self)
+    def ToDict(self) -> Dict[_KT, Union[_VT, Dict, str]]: return self._ToDict(self)
 
     @classmethod
     def Parse(cls, d):
@@ -240,14 +240,6 @@ class BaseDictModel(dict, BaseModel, Dict[_KT, _VT]):
         return cls(kwargs)
 
 
-class RotationAngle(IntEnum):
-    none = 0
-    right = 90
-    upside_down = 180
-    left = 270
-
-    def Rotate(self, angle: int = -90):
-        return RotationAngle((self.value + angle) % 360)
 
 
 # noinspection DuplicatedCode
@@ -264,40 +256,40 @@ class Size(BaseDictModel[str, int]):
     def __eq__(self, other: Union[Tuple[int, int], List[int], 'Size']):
         if isinstance(other, (tuple, list)):
             other = Size.FromTuple(other)
-        if isinstance(other, Size):
+        if isinstance(other, self.__class__):
             return self.width == other.width and self.height == other.height
 
-        raise TypeError(type(other), (Size, tuple, list))
+        raise TypeError(type(other), (self.__class__, tuple, list))
     def __ne__(self, other: Union[Tuple[int, int], List[int], 'Size']): return not self.__eq__(other)
 
     def __gt__(self, other: Union[Tuple[int, int], List[int], 'Size']):
         if isinstance(other, (tuple, list)):
             other = Size.FromTuple(other)
-        if isinstance(other, Size):
+        if isinstance(other, self.__class__):
             return self.width > other.width and self.height > other.height
 
-        raise TypeError(type(other), (Size, tuple, list))
+        raise TypeError(type(other), (self.__class__, tuple, list))
     def __lt__(self, other: Union[Tuple[int, int], List[int], 'Size']):
         if isinstance(other, (tuple, list)):
             other = Size.FromTuple(other)
-        if isinstance(other, Size):
+        if isinstance(other, self.__class__):
             return self.width < other.width and self.height < other.height
 
-        raise TypeError(type(other), (Size, tuple, list))
+        raise TypeError(type(other), (self.__class__, tuple, list))
     def __ge__(self, other: Union[Tuple[int, int], List[int], 'Size']):
         if isinstance(other, (tuple, list)):
             other = Size.FromTuple(other)
-        if isinstance(other, Size):
+        if isinstance(other, self.__class__):
             return self.width >= other.width and self.height >= other.height
 
-        raise TypeError(type(other), (Size, tuple, list))
+        raise TypeError(type(other), (self.__class__, tuple, list))
     def __le__(self, other: Union[Tuple[int, int], List[int], 'Size']):
         if isinstance(other, (tuple, list)):
             other = Size.FromTuple(other)
-        if isinstance(other, Size):
+        if isinstance(other, self.__class__):
             return self.width <= other.width and self.height <= other.height
 
-        raise TypeError(type(other), (Size, tuple, list))
+        raise TypeError(type(other), (self.__class__, tuple, list))
 
 
     @staticmethod
@@ -364,40 +356,40 @@ class Point(BaseDictModel[str, int]):
     def __eq__(self, other: Union[Tuple[int, int], List[int], 'Point']):
         if isinstance(other, (tuple, list)):
             other = Point.FromTuple(other)
-        if isinstance(other, Point):
+        if isinstance(other, self.__class__):
             return self.x == other.y and self.y == other.y
 
-        raise TypeError(type(other), (Point, tuple, list))
+        raise TypeError(type(other), (self.__class__, tuple, list))
     def __ne__(self, other: Union[Tuple[int, int], List[int], 'Size']): return not self.__eq__(other)
 
     def __gt__(self, other: Union[Tuple[int, int], List[int], 'Point']):
         if isinstance(other, (tuple, list)):
             other = Point.FromTuple(other)
-        if isinstance(other, Point):
+        if isinstance(other, self.__class__):
             return self.x > other.x and self.y > other.y
 
-        raise TypeError(type(other), (Size, tuple, list))
+        raise TypeError(type(other), (self.__class__, tuple, list))
     def __lt__(self, other: Union[Tuple[int, int], List[int], 'Point']):
         if isinstance(other, (tuple, list)):
             other = Point.FromTuple(other)
-        if isinstance(other, Point):
+        if isinstance(other, self.__class__):
             return self.x < other.x and self.y < other.y
 
-        raise TypeError(type(other), (Size, tuple, list))
+        raise TypeError(type(other), (self.__class__, tuple, list))
     def __ge__(self, other: Union[Tuple[int, int], List[int], 'Point']):
         if isinstance(other, (tuple, list)):
             other = Point.FromTuple(other)
-        if isinstance(other, Point):
+        if isinstance(other, self.__class__):
             return self.x >= other.x and self.y >= other.y
 
-        raise TypeError(type(other), (Size, tuple, list))
+        raise TypeError(type(other), (self.__class__, tuple, list))
     def __le__(self, other: Union[Tuple[int, int], List[int], 'Point']):
         if isinstance(other, (tuple, list)):
             other = Point.FromTuple(other)
-        if isinstance(other, Point):
+        if isinstance(other, self.__class__):
             return self.x <= other.x and self.y <= other.y
 
-        raise TypeError(type(other), (Size, tuple, list))
+        raise TypeError(type(other), (self.__class__, tuple, list))
 
     @staticmethod
     def FromTuple(v: Tuple[int, int]): return Point.Create(*v)

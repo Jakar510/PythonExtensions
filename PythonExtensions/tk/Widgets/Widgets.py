@@ -63,13 +63,13 @@ class Button(tk.Button, BaseTextTkinterWidget, ImageMixin, CommandMixin):
         command, compound, default, height,
         overrelief, state, width
     """
-    def __init__(self, master, text: str = '', Override_var: tk.StringVar = None, Color: dict = None, Command: callable = None, **kwargs):
-        tk.Button.__init__(self, master=master, **kwargs)
+    def __init__(self, master, text: str = '', Override_var: tk.StringVar = None, Color: Dict[str, str] = None, Command: callable = None, **kwargs):
+        tk.Button.__init__(self, master, **kwargs)
         cmd = kwargs.pop('command', None)
         if cmd: self.SetCommand(cmd)
 
         if Command: self.SetCommand(Command)
-        BaseTextTkinterWidget.__init__(self, Override_var=Override_var, text=text, Color=Color)
+        BaseTextTkinterWidget.__init__(self, text, Override_var, Color)
 
     def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
 
@@ -93,9 +93,9 @@ class Label(tk.Label, BaseTextTkinterWidget, ImageMixin, CommandMixin):
         height, state, width
 
     """
-    def __init__(self, master, text: str = '', Override_var: tk.StringVar = None, Color: dict = None, **kwargs):
-        tk.Label.__init__(self, master=master, **kwargs)
-        BaseTextTkinterWidget.__init__(self, Override_var=Override_var, text=text, Color=Color)
+    def __init__(self, master, text: str = '', Override_var: tk.StringVar = None, Color: Dict[str, str] = None, **kwargs):
+        tk.Label.__init__(self, master, **kwargs)
+        BaseTextTkinterWidget.__init__(self, text, Override_var, Color)
 
 
 
@@ -131,9 +131,9 @@ class Entry(tk.Entry, BaseTextTkinterWidget, CommandMixin):
     textvariable, validate, validatecommand, vcmd, width,
     xscrollcommand.
     """
-    def __init__(self, master, text: str = '', Override_var: tk.StringVar = None, Color: dict = None, **kwargs):
-        tk.Entry.__init__(self, master=master, **kwargs)
-        BaseTextTkinterWidget.__init__(self, Override_var=Override_var, text=text, Color=Color)
+    def __init__(self, master, text: str = '', Override_var: tk.StringVar = None, Color: Dict[str, str] = None, **kwargs):
+        tk.Entry.__init__(self, master, **kwargs)
+        BaseTextTkinterWidget.__init__(self, text, Override_var, Color)
 
     def Clear(self):
         self.delete(0, Tags.End.value)
@@ -209,9 +209,9 @@ class CheckButton(tk.Checkbutton, BaseTextTkinterWidget, ImageMixin, CommandMixi
 
     """
     _value: tk.BooleanVar
-    def __init__(self, master, text: str = '', Override_var: tk.StringVar = None, Color: dict = None, **kwargs):
-        tk.Checkbutton.__init__(self, master=master, **kwargs)
-        BaseTextTkinterWidget.__init__(self, Override_var=Override_var, text=text, Color=Color)
+    def __init__(self, master, text: str = '', Override_var: tk.StringVar = None, Color: Dict[str, str] = None, **kwargs):
+        tk.Checkbutton.__init__(self, master, **kwargs)
+        BaseTextTkinterWidget.__init__(self, text, Override_var, Color)
         self._value = tk.BooleanVar(master=self, value=False)
         self.configure(variable=self._value)
 
@@ -242,9 +242,9 @@ class Listbox(tk.Listbox, BaseTextTkinterWidget, CommandMixin):
     Allowed WordWrap modes are ('word', 'none', 'char')
     """
     _Current_ListBox_Index: int = None
-    def __init__(self, master, *, Command: callable = None, z=None, selectMode: Union[str, SelectionMode] = tk.SINGLE, Color: dict = None, **kwargs):
-        tk.Listbox.__init__(self, master=master, **kwargs)
-        BaseTextTkinterWidget.__init__(self, text='', Color=Color, configure=False)
+    def __init__(self, master, *, Command: callable = None, z=None, selectMode: Union[str, SelectionMode] = tk.SINGLE, Color: Dict[str, str] = None, **kwargs):
+        tk.Listbox.__init__(self, master, **kwargs)
+        BaseTextTkinterWidget.__init__(self, '', None, Color, configure=False)
         self.SetSelectMode(selectMode)
         if Command is not None: self.SetCommand(Command, z=z)
     def SetSelectMode(self, mode: Union[str, SelectionMode] = tk.SINGLE):
@@ -378,7 +378,7 @@ class Listbox(tk.Listbox, BaseTextTkinterWidget, CommandMixin):
 # ------------------------------------------------------------------------------------------
 
 class Canvas(tk.Canvas, BaseTkinterWidget):
-    def __init__(self, master, *args, Color: dict = None, **kwargs):
+    def __init__(self, master, *args, Color: Dict[str, str] = None, **kwargs):
         tk.Canvas.__init__(self, master, *args, **kwargs)
         self._setupBindings()
         BaseTkinterWidget.__init__(self, Color)
@@ -405,9 +405,10 @@ class Canvas(tk.Canvas, BaseTkinterWidget):
         with io.BytesIO(data) as buf:
             with Image.open(buf) as tempImg:
                 return self.CreateImage(image=tempImg, x=x, y=y)
-    def CreateImage(self, image: Image.Image, x: int, y: int, anchor: str or AnchorAndSticky = tk.NW) -> Tuple[ImageTk.PhotoImage, Tuple[int, int], int]:
-        img_tk = ImageTk.PhotoImage(image, size=image.size)
-        return img_tk, image.size, self.create_image(x, y, anchor=anchor, image=img_tk)
+    def CreateImage(self, image: Union[Image, ImageTk.PhotoImage], x: int, y: int, anchor: str or AnchorAndSticky = tk.NW) -> Tuple[ImageTk.PhotoImage, Tuple[int, int], int]:
+        if not isinstance(image, ImageTk.PhotoImage):
+            image = ImageTk.PhotoImage(image, size=image.size)
+        return image, (image.width(), image.height()), self.create_image(x, y, anchor=anchor, image=image)
 
 
 

@@ -76,7 +76,7 @@ def example4():
         def __init__(self, id):
             self.id = id
         def __eq__(self, other):
-            if isinstance(other, base):
+            if isinstance(other, self.__class__):
                 return other.id == self.id
             return False
 

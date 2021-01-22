@@ -62,9 +62,10 @@ class ComboBoxThemed(ttk.Combobox, BaseTextTkinterWidget, CommandMixin):
         height
         width
     """
-    def __init__(self, master, text: str = '', Override_var: tk.StringVar = None, Color: dict = None, **kwargs):
-        ttk.Combobox.__init__(self, master=master, **kwargs)
-        BaseTextTkinterWidget.__init__(self, Override_var=Override_var, text=text, Color=Color)
+    def __init__(self, master, text: str = '', Override_var: tk.StringVar = None, Color: Dict[str, str] = None, **kwargs):
+        ttk.Combobox.__init__(self, master, **kwargs)
+        BaseTextTkinterWidget.__init__(self, text, Override_var, Color)
+
 
     @property
     def value(self) -> bool: return self._txt.get()
@@ -176,8 +177,8 @@ class TreeViewThemed(ttk.Treeview, BaseTkinterWidget, CommandMixin):
     SelectedItems: List = []
     items: Union[ListItem, ItemCollection] = None
 
-    def __init__(self, master: FrameTypes, Color: dict = None, selectmode: SelectionMode = SelectionMode.Extended, **kwargs):
-        ttk.Treeview.__init__(self, master=master, selectmode=selectmode.value, **kwargs)
+    def __init__(self, master: FrameTypes, Color: Dict[str, str] = None, selectmode: SelectionMode = SelectionMode.Extended, **kwargs):
+        ttk.Treeview.__init__(self, master, selectmode=selectmode.value, **kwargs)
         BaseTkinterWidget.__init__(self, Color)
         self.SetCommand(self.OnSelectRow)
 
@@ -291,7 +292,7 @@ class TreeViewHolderThemed(Frame):
     vsb: ScrollbarThemed
     hsb: ScrollbarThemed
     def __init__(self, master, backgroundColor: str, showScrollBars: ShowScrollBars = ShowScrollBars.Always, **kwargs):
-        Frame.__init__(self, master=master, bg=backgroundColor, **kwargs)
+        Frame.__init__(self, master, bg=backgroundColor, **kwargs)
 
         for i in range(1): self.Grid_RowConfigure(i, weight=1)
         for i in range(1): self.Grid_ColumnConfigure(i, weight=1)
@@ -335,13 +336,13 @@ class ButtonThemed(ttk.Button, BaseTextTkinterWidget, ImageMixin, CommandMixin):
         command, compound, default, height,
         overrelief, state, width
     """
-    def __init__(self, master, text: str = '', Override_var: tk.StringVar = None, Color: dict = None, Command: callable = None, **kwargs):
-        ttk.Button.__init__(self, master=master, **kwargs)
+    def __init__(self, master, text: str = '', Override_var: tk.StringVar = None, Color: Dict[str, str] = None, Command: callable = None, **kwargs):
+        ttk.Button.__init__(self, master, **kwargs)
         cmd = kwargs.pop('command', None)
         if cmd: self.SetCommand(cmd)
 
         if Command: self.SetCommand(Command)
-        BaseTextTkinterWidget.__init__(self, Override_var=Override_var, text=text, Color=Color)
+        BaseTextTkinterWidget.__init__(self, text, Override_var, Color)
 
 
     def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
@@ -366,9 +367,9 @@ class LabelThemed(ttk.Label, BaseTextTkinterWidget, ImageMixin):
         height, state, width
 
     """
-    def __init__(self, master, text: str = '', Override_var: tk.StringVar = None, Color: dict = None, **kwargs):
-        ttk.Label.__init__(self, master=master, **kwargs)
-        BaseTextTkinterWidget.__init__(self, Override_var=Override_var, text=text, Color=Color)
+    def __init__(self, master, text: str = '', Override_var: tk.StringVar = None, Color: Dict[str, str] = None, **kwargs):
+        ttk.Label.__init__(self, master, **kwargs)
+        BaseTextTkinterWidget.__init__(self, text, Override_var, Color)
 
     def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
 
@@ -386,9 +387,9 @@ class EntryThemed(ttk.Entry, BaseTextTkinterWidget, CommandMixin):
     textvariable, validate, validatecommand, vcmd, width,
     xscrollcommand.
     """
-    def __init__(self, master, text: str = '', Override_var: tk.StringVar = None, Color: dict = None, **kwargs):
-        ttk.Entry.__init__(self, master=master, **kwargs)
-        BaseTextTkinterWidget.__init__(self, Override_var=Override_var, text=text, Color=Color)
+    def __init__(self, master, text: str = '', Override_var: tk.StringVar = None, Color: Dict[str, str] = None, **kwargs):
+        ttk.Entry.__init__(self, master, **kwargs)
+        BaseTextTkinterWidget.__init__(self, text, Override_var, Color)
 
     def Clear(self): self.delete(0, Tags.End.value)
 
@@ -411,8 +412,8 @@ class EntryThemed(ttk.Entry, BaseTextTkinterWidget, CommandMixin):
 # ------------------------------------------------------------------------------------------
 
 class NotebookThemed(BaseTextTkinterWidget, ttk.Notebook):
-    def __init__(self, master, Color: dict = None, **kwargs):
-        ttk.Notebook.__init__(self, master=master, **kwargs)
+    def __init__(self, master, Color: Dict[str, str] = None, **kwargs):
+        ttk.Notebook.__init__(self, master, **kwargs)
         BaseTkinterWidget.__init__(self, Color=Color)
 
     def Add(self, w: BaseTkinterWidget, add: dict = dict(padding=2), *, title: str, **kwargs) -> int:
@@ -551,9 +552,9 @@ class CheckButtonThemed(ttk.Checkbutton, BaseTextTkinterWidget, ImageMixin, Comm
         command, offvalue, onvalue, variable
     """
     _value: tk.BooleanVar
-    def __init__(self, master, text: str = '', Override_var: tk.StringVar = None, Color: dict = None, **kwargs):
-        ttk.Checkbutton.__init__(self, master=master, **kwargs)
-        BaseTextTkinterWidget.__init__(self, Override_var=Override_var, text=text, Color=Color)
+    def __init__(self, master, text: str = '', Override_var: tk.StringVar = None, Color: Dict[str, str] = None, **kwargs):
+        ttk.Checkbutton.__init__(self, master, **kwargs)
+        BaseTextTkinterWidget.__init__(self, text, Override_var, Color)
         self._value = tk.BooleanVar(master=self, value=False)
         self.configure(variable=self._value)
 

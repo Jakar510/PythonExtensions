@@ -18,6 +18,7 @@ from ..Exceptions import ArgumentError
 from ..Files import *
 from ..Json import *
 from ..debug import PrettyPrint, print_stack_trace
+from ..tk import RotationAngle
 
 
 
@@ -174,7 +175,7 @@ class ImageObject(object):
 
         return self
 
-    def ToPhotoImage(self, master=None, **kwargs) -> ImageTk.PhotoImage: return ImageTk.PhotoImage(master=master, image=self._img, **kwargs)
+    def ToPhotoImage(self, master=None, **kwargs) -> ImageTk.PhotoImage: return ImageTk.PhotoImage(self._img, size=self._img.size, master=master, **kwargs)
 
 
 

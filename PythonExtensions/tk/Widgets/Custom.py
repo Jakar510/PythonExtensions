@@ -34,7 +34,7 @@ class ButtonGrid(Frame, ABC):
         :param pady: cell padding in y axis
         :type pady: int
         """
-        Frame.__init__(self, master=master)
+        Frame.__init__(self, master)
         self._rows = rows or len(self.ButtonTitles)
         self._cols = cols or 1
 

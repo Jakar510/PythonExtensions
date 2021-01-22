@@ -147,16 +147,16 @@ class Path(BaseDictModel[str, Union[str, bool]], os.PathLike):
         super(Path, self).__setitem__(key, value)
 
     def __eq__(self, other):
-        if not isinstance(other, Path): raise TypeError(type(other), Path)
+        if not isinstance(other, self.__class__): raise TypeError(type(other), self.__class__)
         return self._path == other._path
     def __ne__(self, other):
-        if not isinstance(other, Path): raise TypeError(type(other), Path)
+        if not isinstance(other, self.__class__): raise TypeError(type(other), self.__class__)
         return self._path != other._path
     def __gt__(self, other):
-        if not isinstance(other, Path): raise TypeError(type(other), Path)
+        if not isinstance(other, self.__class__): raise TypeError(type(other), self.__class__)
         return self._path > other._path
     def __lt__(self, other):
-        if not isinstance(other, Path): raise TypeError(type(other), Path)
+        if not isinstance(other, self.__class__): raise TypeError(type(other), self.__class__)
         return self._path < other._path
 
     @classmethod

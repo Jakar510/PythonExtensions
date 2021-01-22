@@ -37,7 +37,7 @@ class AutoScroll(BaseTkinterWidget):
     """
     vsb: ScrollbarThemed
     hsb: ScrollbarThemed
-    def __init__(self, master: BaseTkinterWidget, Color: dict = None):
+    def __init__(self, master: BaseTkinterWidget, Color: Dict[str, str] = None):
         super().__init__(Color)
         self.master = master
 

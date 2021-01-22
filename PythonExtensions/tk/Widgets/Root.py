@@ -5,9 +5,10 @@
 # ------------------------------------------------------------------------------
 #
 # ------------------------------------------------------------------------------
-from enum import Enum, IntEnum
-
+from enum import Enum
+from typing import *
 from .BaseWidgets import BaseTkinterWidget
+from ..Enumerations import Orientation
 from ..Widgets.Style import *
 from ..Widgets.base import *
 
@@ -15,12 +16,9 @@ from ..Widgets.base import *
 
 
 __all__ = [
-        'tkRoot', 'tkTopLevel', 'Orientation',
-        ]
+    'tkRoot', 'tkTopLevel',
+    ]
 
-class Orientation(IntEnum):
-    Landscape = 0
-    Portrait = 1
 
 
 class _rootMixin:
@@ -64,18 +62,18 @@ class _rootMixin:
         self.resizable(width=resizable, height=resizable)
         return self
 
-    def Bind(self, sequence: str or Enum = None, func: callable = None, add: bool = None):
+    def Bind(self, sequence: Union[str, Enum] = None, func: callable = None, add: bool = None):
         if isinstance(sequence, Enum): sequence = sequence.value
         return self.bind(sequence, func, add)
 
-    def MultiUnbindAll(self, *args: str or Enum):
+    def MultiUnbindAll(self, *args: Union[str, Enum]):
         for arg in args: self.UnbindAll(arg)
-    def UnbindAll(self, sequence: str or Enum = None):
+    def UnbindAll(self, sequence: Union[str, Enum] = None):
         """Unbind for all widgets for event SEQUENCE all functions."""
         if isinstance(sequence, Enum): sequence = sequence.value
         return self.unbind_all(sequence)
 
-    def BindAll(self, sequence: str or Enum = None, func: callable = None, add: bool = None):
+    def BindAll(self, sequence: Union[str, Enum] = None, func: callable = None, add: bool = None):
         """Bind to all widgets at an event SEQUENCE a call to function FUNC.
         An additional boolean parameter ADD specifies whether FUNC will
         be called additionally to the other bound function or whether
@@ -114,7 +112,7 @@ class tkRoot(tk.Tk, _rootMixin):
 
 class tkTopLevel(tk.Toplevel, _rootMixin):
     def __init__(self, master, *, Screen_Width: int = None, Screen_Height: int = None, x: int = 0, y: int = 0, fullscreen: bool = None, **kwargs):
-        super().__init__(master=master, **kwargs)
+        super().__init__(master, **kwargs)
         self.SetDimmensions(Screen_Width, Screen_Height, x, y)
         if fullscreen is not None: self.SetFullScreen(fullscreen)
 

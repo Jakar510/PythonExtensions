@@ -50,7 +50,7 @@ class BindingCollection(dict, Dict[Bindings, Set[str]]):
 
 class BaseTkinterWidget(tk.Widget, ABC):
     # noinspection PyMissingConstructor
-    def __init__(self, Color: dict = None):
+    def __init__(self, Color: Dict[str, str] = None):
         if Color: self.configure(**Color)
 
     __bindings__: BindingCollection = BindingCollection()
@@ -384,7 +384,7 @@ class BaseTkinterWidget(tk.Widget, ABC):
 class BaseTextTkinterWidget(BaseTkinterWidget):
     _txt: tk.StringVar
     # noinspection PyMissingConstructor
-    def __init__(self, *, Override_var: tk.StringVar = None, text: str, Color: dict = None, configure: bool = True):
+    def __init__(self, text: str, Override_var: Optional[tk.StringVar], Color: Optional[Dict[str, str]], configure: bool = True):
         if Override_var is not None: self._txt = Override_var
         else: self._txt = tk.StringVar(master=self, value=text)
 

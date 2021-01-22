@@ -14,7 +14,7 @@ from tkinter.constants import *
 
 __all__ = [
         'ActiveStyle', 'AnchorAndSticky', 'Fill', 'Side', 'Relief', 'Orient', 'Wrap', 'BorderMode', 'Tags', 'ViewState', 'MenuItemTypes', 'SelectionMode', 'CanvasStyles', 'Layout',
-        'ViewArguments', 'ShowScrollBars', 'Bools',
+        'ViewArguments', 'ShowScrollBars', 'Bools', 'RotationAngle', 'Orientation'
         ]
 
 class ShowScrollBars(IntEnum):
@@ -132,3 +132,15 @@ class ViewArguments(Enum):  # Arguments to xview/yview
     Scroll = SCROLL
     Units = UNITS
     Pages = PAGES
+
+class RotationAngle(IntEnum):
+    none = 0
+    right = 90
+    upside_down = 180
+    left = 270
+
+    def Rotate(self, angle: int = -90): return RotationAngle((self.value + angle) % 360)
+
+class Orientation(IntEnum):
+    Landscape = 0
+    Portrait = 1

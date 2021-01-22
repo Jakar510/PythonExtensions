@@ -41,7 +41,7 @@ q = queue.Queue()
 class HTMLViewer(HTMLLabel):
     def __init__(self, master, **frame_kwargs):
         self.master = master
-        super().__init__(master=master, **frame_kwargs)
+        super().__init__(master, **frame_kwargs)
 
     # def HandlePress(self, event: tkEvent): TkinterEvent.Debug(event)
     # def HandleRelease(self, event: tkEvent): TkinterEvent.Debug(event)

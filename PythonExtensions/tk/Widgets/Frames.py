@@ -66,9 +66,9 @@ class LabelFrame(tk.LabelFrame, BaseTextTkinterWidget, BaseFrameMixin):
         height, labelanchor, labelwidget,
         visual, width
     """
-    def __init__(self, master, text: str = '', **kwargs):
-        tk.LabelFrame.__init__(self, master=master, text=text, **kwargs)
-        BaseTextTkinterWidget.__init__(self, text=text, configure=False)
+    def __init__(self, master, text: str = '', Color: Dict[str, str] = None, **kwargs):
+        tk.LabelFrame.__init__(self, master, text=text, **kwargs)
+        BaseTextTkinterWidget.__init__(self, text, None, Color, configure=False)
 
     @property
     def txt(self) -> str: return self._txt.get()
@@ -82,7 +82,7 @@ class LabelFrame(tk.LabelFrame, BaseTextTkinterWidget, BaseFrameMixin):
 # noinspection DuplicatedCode
 class FrameThemed(ttk.Frame, BaseTkinterWidget, BaseFrameMixin):
     def __init__(self, master, **kwargs):
-        ttk.Frame.__init__(self, master=master, **kwargs)
+        ttk.Frame.__init__(self, master, **kwargs)
 
     def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
 
@@ -103,9 +103,9 @@ class LabelFrameThemed(ttk.LabelFrame, BaseTextTkinterWidget, BaseFrameMixin):
         height, labelanchor, labelwidget,
         visual, width
     """
-    def __init__(self, master, text: str = '', **kwargs):
-        ttk.LabelFrame.__init__(self, master=master, text=text, **kwargs)
-        BaseTextTkinterWidget.__init__(self, text=text, configure=False)
+    def __init__(self, master, text: str = '', Color: Dict[str, str] = None, **kwargs):
+        ttk.LabelFrame.__init__(self, master, text=text, **kwargs)
+        BaseTextTkinterWidget.__init__(self, text, None, Color, configure=False)
 
     @property
     def txt(self) -> str: return self._txt.get()
