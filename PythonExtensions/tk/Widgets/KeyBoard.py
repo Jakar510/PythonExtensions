@@ -13,6 +13,7 @@ from .Frames import *
 from .Root import *
 from .Widgets import *
 from .base import *
+from ..Enumerations import EventType
 from ..Events import *
 from ..HID_BUFFER import HID_BUFFER
 
@@ -20,10 +21,10 @@ from ..HID_BUFFER import HID_BUFFER
 
 
 __all__ = [
-        'KeyboardMixin', 'KeyBoardState',
-        'PopupKeyboard', 'Placement', 'PlacementSet',
-        'value_title_mixin', 'BaseFramed', 'BaseFramedKeyboard', 'BaseTitled', 'BaseTitledKeyboard',
-        ]
+    'KeyboardMixin', 'KeyBoardState',
+    'PopupKeyboard', 'Placement', 'PlacementSet',
+    'value_title_mixin', 'BaseFramed', 'BaseFramedKeyboard', 'BaseTitled', 'BaseTitledKeyboard',
+    ]
 
 
 

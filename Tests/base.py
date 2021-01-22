@@ -12,7 +12,7 @@ def Test_base():
     pic_pos = Point.Create(10, 10)
     img_size = Size.Create(200, 200)
 
-    print(CropBox.BoxSize(start, end, pic_pos, img_size))
+    print(CropBox.Box(start, end, pic_pos, img_size))
 
 
 

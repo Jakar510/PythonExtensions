@@ -8,7 +8,7 @@ from PythonExtensions.tk import *
 
 
 
-# from Tests import RUN_TESTS
+from Tests import RUN_TESTS
 def CheckPaths():
     d = Path.MakeDirectories(Path.Join('.', 'temp'))
     print(d)
@@ -50,8 +50,11 @@ def checkImage():
             items = label.CreateImage(img.Raw, x, y)
             print(items)
     root.mainloop()
+def run():
+    RUN_TESTS()
 
 if __name__ == '__main__':
+    run()
     # screen = Size.Create(1920, 1080)
     # screen = Size.Create(1366, 768)
     screen = Size.Create(3820, 2160)

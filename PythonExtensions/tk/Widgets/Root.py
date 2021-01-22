@@ -7,6 +7,7 @@
 # ------------------------------------------------------------------------------
 from enum import Enum
 from typing import *
+
 from .BaseWidgets import BaseTkinterWidget
 from ..Enumerations import Orientation
 from ..Widgets.Style import *

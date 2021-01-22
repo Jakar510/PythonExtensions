@@ -7,15 +7,16 @@
 # ------------------------------------------------------------------------------
 
 from enum import Enum, IntEnum
+from tkinter import EventType
 from tkinter.constants import *
 
 
 
 
 __all__ = [
-        'ActiveStyle', 'AnchorAndSticky', 'Fill', 'Side', 'Relief', 'Orient', 'Wrap', 'BorderMode', 'Tags', 'ViewState', 'MenuItemTypes', 'SelectionMode', 'CanvasStyles', 'Layout',
-        'ViewArguments', 'ShowScrollBars', 'Bools', 'RotationAngle', 'Orientation'
-        ]
+    'ActiveStyle', 'AnchorAndSticky', 'Fill', 'Side', 'Relief', 'Orient', 'Wrap', 'BorderMode', 'Tags', 'ViewState', 'MenuItemTypes', 'SelectionMode', 'CanvasStyles', 'Layout',
+    'ViewArguments', 'ShowScrollBars', 'Bools', 'RotationAngle', 'Orientation', 'EventType'
+    ]
 
 class ShowScrollBars(IntEnum):
     Never = 0
@@ -37,8 +38,8 @@ class Bools(IntEnum):
     # NO = NO
     # YES = YES
 
-    NO=FALSE=OFF=0
-    YES=TRUE=ON=1
+    NO = FALSE = OFF = 0
+    YES = TRUE = ON = 1
 class AnchorAndSticky(Enum):
     North = N
     South = S

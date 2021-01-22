@@ -15,7 +15,8 @@ from types import FunctionType, MethodType
 from typing import *
 from urllib.request import urlopen
 
-from PIL import Image, ImageTk
+from PIL import ImageTk
+from PIL.Image import Image, open as img_open
 
 from .. import Bindings
 from ..Enumerations import *
@@ -537,7 +538,7 @@ class ImageMixin:
 
         if WidthMax <= 0: raise ValueError(f'WidthMax must be positive. Value: {WidthMax}')
         if HeightMax <= 0: raise ValueError(f'HeightMax must be positive. Value: {HeightMax}')
-        with Image.open(f) as img:
+        with img_open(f) as img:
             img = ImageObject(img, WidthMax, HeightMax)
             img.Resize(check_metadata=False)
             self._IMG = img.ToPhotoImage(master=self, size=img.Raw.size)
