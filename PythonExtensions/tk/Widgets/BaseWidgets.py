@@ -541,7 +541,7 @@ class ImageMixin:
         with img_open(f) as img:
             img = ImageObject(img, WidthMax, HeightMax)
             img.Resize(check_metadata=False)
-            self._IMG = img.ToPhotoImage(master=self, size=img.Raw.size)
+            self._IMG = img.ToPhotoImage(master=self)
             self.configure(image=self._IMG)
 
         return self
