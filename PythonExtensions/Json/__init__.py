@@ -395,8 +395,8 @@ class Point(BaseDictModel[str, int]):
 
         raise TypeError(type(other), (self.__class__, tuple, list))
 
-    @staticmethod
-    def FromTuple(v: Tuple[int, int]): return Point.Create(*v)
+    @classmethod
+    def FromTuple(cls, v: Tuple[int, int]): return cls.Create(*v)
     @classmethod
     def Zero(cls): return cls.Create(0, 0)
     @classmethod
