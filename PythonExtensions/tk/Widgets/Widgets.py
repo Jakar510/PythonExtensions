@@ -6,21 +6,18 @@
 #
 # ------------------------------------------------------------------------------
 
-import base64
-import io
 import os
 from typing import *
 from urllib.request import urlopen
 
-from Images import ImageObject
-from Json import PlacePosition
 from .BaseWidgets import *
 from .Frames import Frame
 from ..Enumerations import *
 from ..Events import *
 from ..Widgets.base import *
+from ...Json import PlacePosition
 
-from PIL.Image import open as img_open
+
 
 
 __all__ = [
@@ -388,10 +385,12 @@ class Canvas(tk.Canvas, BaseTkinterWidget):
     def DownloadImage(self, url: str, x: int, y: int, width: int = None, height: int = None): return self.SetImageFromBytes(urlopen(url).read(), x, y, width, height)
     def OpenImage(self, path: str, x: int, y: int, width: int = None, height: int = None) -> Tuple[ImageTk.PhotoImage, Tuple[int, int], int]:
         assert (os.path.isfile(path))
+        from ...Images import ImageObject
         img = ImageObject.FromFile(path, width=width, height=height, AsPhotoImage=self)
         return self.CreateImage(image=img, x=x, y=y)
     def SetImageFromBytes(self, data: bytes, x: int, y: int, width: int = None, height: int = None) -> Tuple[ImageTk.PhotoImage, Tuple[int, int], int]:
         assert (isinstance(data, bytes))
+        from ...Images import ImageObject
         img = ImageObject.FromBytes(data, width=width, height=height, AsPhotoImage=self)
         return self.CreateImage(image=img, x=x, y=y)
     def CreateImage(self, image: Union[Image, ImageTk.PhotoImage], x: int, y: int, anchor: str or AnchorAndSticky = tk.NW) -> Tuple[ImageTk.PhotoImage, Tuple[int, int], int]:

@@ -68,11 +68,11 @@ if __name__ == '__main__':
         for h in (1600,):  # 768, 864, 1080, 2160
             for x in range(-1500, 500, 50):
                 for y in range(-750, 500, 50):
-                    start = Point.Create(x, y)
+                    start = PlacePosition.Create(x, y)
                     img_size = Size.Create(w, h)
 
                     box = CropBox.FromPointSize(start, window)
-                    box.Update(start, img=img_size, view=window, ZeroOrLess=True)
+                    box.Update(start, img=img_size, view=window)
                     # if box.IsAllVisible(start, img_size):
                     #     print('_______UPDATE______', w, h, window)
 
