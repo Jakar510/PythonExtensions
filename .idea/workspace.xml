@@ -3,7 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="7a6e45bf-6aac-404f-8876-27fa1a8fc2c2" name="Default Changelist" comment="bug fixes / updates">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/Json/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/Json/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PythonExtensions/__version__.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/__version__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PythonExtensions/tk/Events.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/tk/Events.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,7 +49,7 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="true" />
     <property name="last.edited.regexp" value="3.22345" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../SmartPhotoFrame" />
     <property name="restartRequiresConfirmation" value="false" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
     <property name="settings.editor.selected.configurable" value="Jupyter Settings" />
@@ -195,14 +196,10 @@
       <workItem from="1611067605658" duration="35205000" />
       <workItem from="1611155913282" duration="7547000" />
       <workItem from="1611193750864" duration="569000" />
-      <workItem from="1611194337775" duration="44679000" />
-    </task>
-    <task id="LOCAL-00019" summary="bug fixes / updates">
-      <created>1611074457248</created>
-      <option name="number" value="00019" />
-      <option name="presentableId" value="LOCAL-00019" />
-      <option name="project" value="LOCAL" />
-      <updated>1611074457248</updated>
+      <workItem from="1611194337775" duration="45250000" />
+      <workItem from="1611449651685" duration="37000" />
+      <workItem from="1611590139220" duration="1545000" />
+      <workItem from="1611677254002" duration="1837000" />
     </task>
     <task id="LOCAL-00020" summary="bug fixes / updates">
       <created>1611075220579</created>
@@ -540,7 +537,14 @@
       <option name="project" value="LOCAL" />
       <updated>1611301914148</updated>
     </task>
-    <option name="localTasksCounter" value="68" />
+    <task id="LOCAL-00068" summary="bug fixes / updates">
+      <created>1611311491863</created>
+      <option name="number" value="00068" />
+      <option name="presentableId" value="LOCAL-00068" />
+      <option name="project" value="LOCAL" />
+      <updated>1611311491863</updated>
+    </task>
+    <option name="localTasksCounter" value="69" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
