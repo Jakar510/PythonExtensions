@@ -6,7 +6,6 @@
 
 import base64
 import os
-import tempfile
 from io import BytesIO
 from urllib.request import urlopen
 
@@ -31,9 +30,9 @@ __all__ = [
 
 class ImageObject(object):
     __slots__ = ['_img', '_path', '_fp', '_widthMax', '_heightMax', '_name_']
-    _path: Path
-    _fp: Optional[BytesIO]
     _img: Image
+    _path: FilePath
+    _fp: Optional[BinaryIO]
     _widthMax: Optional[int]
     _heightMax: Optional[int]
     def __init__(self, img: Optional[Image], widthMax: Optional[int] = None, heightMax: Optional[int] = None, *, AutoResize: bool = True, LOAD_TRUNCATED_IMAGES: bool = True):
@@ -57,14 +56,14 @@ class ImageObject(object):
     @staticmethod
     def NewImage(size: Tuple[int, int], mode: str = 'RGB', color: Tuple[int, int, int] = (0, 0, 0)) -> Image: return new(mode, size, color=color)
 
-
+    def __hash__(self): return hash((self._img.size, (self._heightMax, self._widthMax), self._fp))
     def __name__(self, extension: ImageExtensions) -> str:
         try:
             return self._name_
         except AttributeError:
             self._name_ = f'{hash(self)}.{extension.value}'
             return self._name_
-    def _TempFilePath(self, extension: ImageExtensions) -> Path: return File.TemporaryFile(self.__module__, name=self.__name__(extension), root_dir=tempfile.gettempdir())
+    def _TempFilePath(self, extension: ImageExtensions) -> FilePath: return FilePath.Temporary(self.__module__, self.__name__(extension))
     def __enter__(self):
         # noinspection PyTypeChecker
         self._fp = open(self._path, 'wb')
@@ -79,9 +78,12 @@ class ImageObject(object):
             self._img.close()
             self._fp.close()
             self._fp = None
-    def __call__(self, path: Path = None, *, extension: ImageExtensions = None):
+    def __call__(self, path: FilePath = None, *, extension: ImageExtensions = None):
         if not path and not extension:
             raise ArgumentError('Must Provide either the file path or the image type extension')
+
+        if hasattr(self, '_name_'): del self._name_
+        if hasattr(self, '_path') and self._path and self._path.IsTemporary: del self._path
 
         self._path = path or self._TempFilePath(extension)  # ImageExtensions(path.extension({ '.': '' })
         return self
@@ -102,7 +104,8 @@ class ImageObject(object):
     def _Scale(self, factor: float) -> Tuple[int, int]: return int(self._img.width * (factor or 1)), int(self._img.height * (factor or 1))
 
 
-    def Rotate(self, angle: Union[int, RotationAngle] = None, *, expand: bool = True, Offset: Tuple[int, int] = None, fill_color=None, center=None, resample=BICUBIC) -> 'ImageObject':
+    def Rotate(self, angle: Union[int, RotationAngle] = None, *, expand: bool = True, Offset: Tuple[int, int] = None, fill_color=None, center=None,
+               resample=BICUBIC) -> 'ImageObject':
         """
             CAUTION: Offset will TRIM the image if moved out of bounds of the
 
@@ -182,14 +185,14 @@ class ImageObject(object):
 
     @classmethod
     @overload
-    def FromFile(cls, path: Union[str, Path], *, width: int = None, height: int = None, AsPhotoImage) -> ImageTk.PhotoImage: ...
+    def FromFile(cls, path: Union[str, FilePath], *, width: int = None, height: int = None, AsPhotoImage) -> ImageTk.PhotoImage: ...
     @classmethod
     @overload
-    def FromFile(cls, path: Union[str, Path], *, width: int = None, height: int = None) -> Image: ...
+    def FromFile(cls, path: Union[str, FilePath], *, width: int = None, height: int = None) -> Image: ...
 
     @classmethod
-    def FromFile(cls, path: Union[str, Path], *, width: int = None, height: int = None, AsPhotoImage=None):
-        Assert(path, str, Path)
+    def FromFile(cls, path: Union[str, FilePath], *, width: int = None, height: int = None, AsPhotoImage=None):
+        Assert(path, str, FilePath)
 
         print_stack_trace()
         with open(path, 'rb') as f:
@@ -266,14 +269,14 @@ class ImageObject(object):
     def IsImage(path: str, *file_types: str) -> bool: ...
     @staticmethod
     @overload
-    def IsImage(path: Path, *file_types: str) -> bool: ...
+    def IsImage(path: FilePath, *file_types: str) -> bool: ...
     @staticmethod
     @overload
     def IsImage(path: bytes, *file_types: str) -> bool: ...
 
     @staticmethod
-    def IsImage(path: Union[str, Path, bytes], *file_types: str) -> bool:
-        if isinstance(path, Path): path = path.Value
+    def IsImage(path: Union[str, FilePath, bytes], *file_types: str) -> bool:
+        if isinstance(path, FilePath): path = path.Value
 
         if isinstance(path, str):
             if not file_types:

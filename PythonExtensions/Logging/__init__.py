@@ -1,33 +1,34 @@
 import logging
 import logging.config
-import os
 import sys
 import tarfile
 from logging.handlers import RotatingFileHandler
 from typing import *
 
+from ..Files import FilePath
+
 
 
 
 __all__ = [
-        'logging',
-        'LoggingManager',
-        'Error_Handler',
-        'Info_Handler',
-        'Console_Error', 'Console_Debug', 'Console_Info',
-        'InfoFilter', 'ErrorFilter', 'DebugFilter', 'PngImagePlugin_Filter',
-        'LogPaths', 'Formats'
-        ]
+    'logging',
+    'LoggingManager',
+    'Error_Handler',
+    'Info_Handler',
+    'Console_Error', 'Console_Debug', 'Console_Info',
+    'InfoFilter', 'ErrorFilter', 'DebugFilter', 'PngImagePlugin_Filter',
+    'LogPaths', 'Formats'
+    ]
 
 class Formats(object):
     def __init__(self,
-                 info="""%(name)s ---- %(message)s""",
+                 info: str = """%(name)s ---- %(message)s""",
 
-                 simple="""[ %(levelname)-10s ] [ %(module)s.%(funcName)s @ Line#: %(lineno)d ] [ %(processName)s.%(threadName)s ] 
+                 simple: str = """[ %(levelname)-10s ] [ %(module)s.%(funcName)s @ Line#: %(lineno)d ] [ %(processName)s.%(threadName)s ] 
 %(message)s
 """,
 
-                 detailed="""            
+                 detailed: str = """            
 [  %(levelname)-10s         %(asctime)s ] 
 [ FILE: "%(pathname)s" : %(module)s.%(funcName)s @ Line # %(lineno)d ] 
 [ Process ID: %(process)-7d | %(processName)s ] 
@@ -41,41 +42,66 @@ MESSAGE: %(message)s
 
 
 class LogPaths(object):
-    def __init__(self, *processes: str, app_name: str, root_path: str, max_logs: int = 5, max_log_size: int = 10240):
+    _logs: List[FilePath]
+    __log_paths__: Dict[str, FilePath] = { }
+    def __init__(self, app_name: str, root_path: Union[str, FilePath], max_logs: int, max_log_size: int):
         self.MAX_LOGS: Final[int] = max_logs
         self.MAX_LOG_SIZE: Final[int] = max_log_size
         self.APP_NAME: Final[str] = app_name
-        self._root_path: Final[str] = root_path
-        self.__log_paths__ = { }
-
-        for proc in set(processes):
-            self.__log_paths__[proc] = os.path.join(root_path, self.GetFileName(proc))
-            self.__log_paths__[self.GetErrorName(proc)] = os.path.join(root_path, self.GetErrorFileName(proc))
-
-        self.__dict__.update(self.__log_paths__)
+        self._root_path: Final[Union[str, FilePath]] = root_path
 
     @property
-    def logs(self) -> List[str]:
-        return [os.path.join(self._root_path, f'{name}.{i}') if i != 0 else name for i in range(self.MAX_LOGS + 1) for name in self.__log_paths__.keys()]
+    def logs(self) -> List[FilePath]:
+        _logs: List[FilePath] = []
+        for name, path in self.__log_paths__.items():
+            _logs.append(path)
+            for i in range(1, self.MAX_LOGS + 1):
+                _logs.append(FilePath.Join(path.DirectoryName, f'{path.FileName}.{i}'))
 
-    def Zip_Log_Files(self, path: str):
-        with tarfile.open(path, "w:gz") as tar:
+        return _logs
+
+    def Zip_Log_Files(self, path: str, mode: str = "w:gz"):
+        """
+            Open a tar archive for all logs.
+
+        :param path: path to save the result.
+        :param mode:
+            Must be one of the following:
+               'w' or 'w:'  open for writing without compression
+               'w:gz'       open for writing with gzip compression
+               'w:bz2'      open for writing with bzip2 compression
+               'w:xz'       open for writing with lzma compression
+
+               'w|'         open an uncompressed stream for writing
+               'w|gz'       open a gzip compressed stream for writing
+               'w|bz2'      open a bzip2 compressed stream for writing
+               'w|xz'       open an lzma compressed stream for writing
+        """
+        with tarfile.open(path, mode) as tar:
             for file in self.logs:
-                tar.add(file, arcname=os.path.basename(file))
+                tar.add(file, arcname=file.BaseName)
 
     def Delete_Log_Files(self):
-        for file in self.logs:
-            if os.path.isfile(file): os.remove(file)
+        for file in self.logs: file.Remove()
 
     @staticmethod
-    def GetFileName(base: str): return f'{base}.log'
+    def FileName(base: str): return f'{base}.log'
+
     @staticmethod
-    def GetErrorFileName(base: str): return f'{base}_errors.log'
-    @staticmethod
-    def GetErrorName(base: str): return f'{base}_errors'
+    def ErrorName(base: str): return f'{base}_errors'
 
+    def GetErrorFileName(self, base: str): return f'{self.ErrorName(base)}.log'
 
+    @classmethod
+    def Create(cls, app_name: str, root_path: Union[str, FilePath], *processes: str, max_logs: int = 5, max_log_size: int = 10240) -> 'LogPaths':
+        obj = cls(app_name, root_path, max_logs, max_log_size)
 
+        for proc in set(processes):
+            obj.__log_paths__[proc] = FilePath.Join(root_path, obj.FileName(proc))
+            obj.__log_paths__[obj.ErrorName(proc)] = FilePath.Join(root_path, obj.GetErrorFileName(proc))
+
+        obj.__dict__.update(obj.__log_paths__)
+        return obj
 
 
 class DebugFilter(logging.Filter):
@@ -145,14 +171,14 @@ class Console_Error(logging.StreamHandler):
 
 
 class LoggingManager(object):
-    mapper: Dict[Type, str]
-    def __init__(self, *types: Type, mapper: Dict[Type, str] = None, paths: LogPaths, fmt: Formats = Formats()):
+    _mapper: Dict[Type, str]
+    def __init__(self, paths: LogPaths, fmt: Formats, mapper: Dict[Type, str] = None, *types: Type, ):
         self.fmt = fmt
         self.paths = paths
         if not isinstance(mapper, dict):
             mapper = { item: item.__name__ for item in set(types) }
 
-        self.mapper = mapper
+        self._mapper = mapper
         logging.basicConfig(format=fmt.DETAILED, level=logging.DEBUG)
         self._root_logger = logging.getLogger()
         self._root_logger.handlers.clear()
@@ -162,13 +188,13 @@ class LoggingManager(object):
         logging.getLogger("PIL.PngImagePlugin").disabled = True
 
     def CreateLogger(self, source, *, debug: bool = __debug__) -> logging.Logger:
-        for key, value in self.mapper.items():
+        for key, value in self._mapper.items():
             # if issubclass(source, key): raise InstanceError('source is not identified')
 
             if isinstance(source, key):
                 logger = self.app_logger.getChild(source.__class__.__name__)
                 logger.addHandler(Info_Handler(file=self.paths.__log_paths__[value], fmt=self.fmt))
-                logger.addHandler(Error_Handler(file=self.paths.__log_paths__[LogPaths.GetErrorName(value)], fmt=self.fmt, path=self.paths))
+                logger.addHandler(Error_Handler(file=self.paths.__log_paths__[LogPaths.ErrorName(value)], fmt=self.fmt, path=self.paths))
 
                 logger.addHandler(Console_Error(fmt=self.fmt))
                 logger.addHandler(Console_Debug(fmt=self.fmt))
@@ -178,11 +204,9 @@ class LoggingManager(object):
                 return logger
 
         else:
-            raise ValueError(f'source is not identified: [ {source} ]')
+            raise ValueError(f'source is not identified: [ {source} ]  Expected one of {tuple(self._mapper.keys())}')
 
     @classmethod
-    def FromTypes(cls, *types: Type, app_name: str, root_path: str):
-        mapper = { item: item.__name__ for item in types }
-        return cls(mapper=mapper,
-                   paths=LogPaths(*mapper.values(), app_name=app_name, root_path=root_path))
-
+    def FromTypes(cls, *types: Type, app_name: str, root_path: Union[str, FilePath], logs: Type[LogPaths] = LogPaths, fmt: Formats = Formats()):
+        mapper = { item: item.__name__ for item in set(types) }
+        return cls(logs.Create(app_name, root_path, *mapper.values()), fmt, mapper)

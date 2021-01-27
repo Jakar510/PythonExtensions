@@ -10,11 +10,11 @@ from PythonExtensions.tk import *
 
 from Tests import RUN_TESTS
 def CheckPaths():
-    d = Path.MakeDirectories(Path.Join('.', 'temp'))
+    d = FilePath.MakeDirectories(FilePath.Join('.', 'temp'))
     print(d)
     print(d.FileName)
     print(d.extension())
-    file = Path.Join(d, 't.txt')
+    file = FilePath.Join(d, 't.txt')
     with open(file, 'w') as f: f.write(str(d))
     print(file)
     print(file.FileName)
@@ -31,7 +31,7 @@ def checkImage():
 
     # init = (1335, 1080)
     # RUN_TESTS()
-    paths = Path.ListDir(r'D:\WorkSpace\SmartPhotoFrame\client\src\.images')
+    paths = FilePath.ListDir(r'D:\WorkSpace\SmartPhotoFrame\client\src\.images')
     path = random.choice(paths)
     with open(path, 'rb') as f:
         with ImageObject.open(f) as img:

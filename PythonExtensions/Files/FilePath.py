@@ -1,36 +1,48 @@
 import base64
 import hashlib
 import os
+import tempfile
 from os.path import *
-from pathlib import Path as FilePath
+from pathlib import Path
 from shutil import rmtree
-from typing import *
-from typing import BinaryIO
 
-from ..Json import AssertKeys, BaseDictModel, Keys, throw
+from ..Json import *
 
 
 
 
 __all__ = [
-    'Path',
-    'FileData'
+    'FilePath',
     ]
 
-class FileData(Protocol[AnyStr]):
-    def load(self, f: BinaryIO) -> Any: ...
-    def dump(self, data: AnyStr, f: BinaryIO) -> Any: ...
-
-
-
-class Path(BaseDictModel[str, Union[str, bool]], os.PathLike):
+class FilePath(dict, BaseModel, os.PathLike):
     _hash: str
+    _temporary: bool = False
+    def __init__(self, obj: Union[str, Dict, Path, 'FilePath'] = { }):
+        d = { }
+        if isinstance(obj, dict):
+            AssertKeys(obj, Keys.Path)
+            d = obj
+
+        elif isinstance(obj, str):
+            d[Keys.Path] = abspath(obj)
+
+        elif isinstance(obj, Path):
+            d[Keys.Path] = obj.resolve()
+
+        elif isinstance(obj, FilePath):
+            d[Keys.Path] = obj._path
+
+        else: throw(obj, str, Path, FilePath, dict)
+
+        dict.__init__(self, d)
+
     @property
     def Value(self) -> str: return self._path
     @property
     def _path(self) -> str: return self[Keys.Path]
     @property
-    def IsTemporary(self) -> bool: return Keys.Temporary in self
+    def IsTemporary(self) -> bool: return self._temporary
 
     @property
     def Exists(self) -> bool: return exists(self._path)
@@ -45,7 +57,7 @@ class Path(BaseDictModel[str, Union[str, bool]], os.PathLike):
     def rename(self, new: str): return os.rename(self._path, join(self.BaseName, new))
     def Remove(self):
         if self.Exists:
-            if self.IsFile: return os.remove(self._path)
+            if self.IsFile: return os.remove(self)
             elif self.IsDirectory: return rmtree(self)
 
     def chmod(self, mode: int, dir_fd=None, follow_symlinks: bool = False) -> None:
@@ -53,7 +65,7 @@ class Path(BaseDictModel[str, Union[str, bool]], os.PathLike):
         Change the access permissions of a file.
 
           path
-            Path to be modified.  May always be specified as a str, bytes, or a path-like object.
+            FilePath to be modified.  May always be specified as a str, bytes, or a path-like object.
             On some platforms, path may also be specified as an open file descriptor.
             If this functionality is unavailable, using it raises an exception.
           mode
@@ -76,21 +88,21 @@ class Path(BaseDictModel[str, Union[str, bool]], os.PathLike):
 
     @property
     def FileName(self) -> Optional[str]:
-        if not self.IsFile: return None
-        return FilePath(self._path).name
+        if self.IsDirectory: return None
+        return Path(self._path).name
 
     @overload
-    def extension(self) -> Optional[str]: ...
+    def Extension(self) -> Optional[str]: ...
     @overload
-    def extension(self, raw: Any) -> Optional[str]: ...
+    def Extension(self, raw: Any) -> Optional[str]: ...
     @overload
-    def extension(self, replacements: Dict[str, str]) -> Optional[str]: ...
+    def Extension(self, replacements: Dict[str, str]) -> Optional[str]: ...
     @overload
-    def extension(self, replacements: Dict[str, str], lower: Any) -> Optional[str]: ...
+    def Extension(self, replacements: Dict[str, str], lower: Any) -> Optional[str]: ...
     @overload
-    def extension(self, replacements: Dict[str, str], upper: Any) -> Optional[str]: ...
+    def Extension(self, replacements: Dict[str, str], upper: Any) -> Optional[str]: ...
 
-    def extension(self, replacements: Dict[str, str] = { }, **kwargs) -> Optional[str]:
+    def Extension(self, replacements: Dict[str, str] = { }, **kwargs) -> Optional[str]:
         name = self.FileName
         if not name: return None
         ext = name.split('.')[-1]
@@ -108,13 +120,13 @@ class Path(BaseDictModel[str, Union[str, bool]], os.PathLike):
         return ext
 
     @property
-    def BaseName(self) -> 'Path': return Path.FromString(basename(self._path))
+    def BaseName(self) -> 'FilePath': return FilePath.FromString(basename(self._path))
     @property
-    def DirectoryName(self) -> 'Path': return Path.FromString(dirname(self._path))
+    def DirectoryName(self) -> 'FilePath': return FilePath.FromString(dirname(self._path))
 
     @property
     def Size(self) -> int: return getsize(self._path)
-    def ToUri(self): return FilePath(self._path).as_uri()
+    def ToUri(self): return Path(self._path).as_uri()
 
     def GetHashID(self, BlockSize: int = 65536) -> str:
         """
@@ -135,8 +147,12 @@ class Path(BaseDictModel[str, Union[str, bool]], os.PathLike):
             self._hash = base64.urlsafe_b64encode(_hasher.digest()).decode()
             return self._hash
 
-    def __del__(self):
-        if self.IsTemporary and self.Exists: return self.Remove()
+    def ToString(self) -> str:
+        try:
+            return f'<{self.__class__.__qualname__}() "{self._path}">'
+        except AttributeError:
+            return f'<{self.__class__.__name__}() "{self._path}">'
+    def __repr__(self): return self.ToString()
     def __str__(self): return self._path
     def __fspath__(self): return self._path
     def __bytes__(self):
@@ -144,39 +160,50 @@ class Path(BaseDictModel[str, Union[str, bool]], os.PathLike):
         return os.fsencode(self._path)
     def __setitem__(self, key, value):
         if hasattr(self, '_hash'): del self._hash
-        super(Path, self).__setitem__(key, value)
+        super(FilePath, self).__setitem__(key, value)
+    def __del__(self):
+        if self.IsTemporary and self.Exists: return self.Remove()
 
     def __eq__(self, other):
         if not isinstance(other, self.__class__): raise TypeError(type(other), self.__class__)
         return self._path == other._path
-    def __ne__(self, other):
-        if not isinstance(other, self.__class__): raise TypeError(type(other), self.__class__)
-        return self._path != other._path
+    def __ne__(self, other): return not self.__eq__(other)
     def __gt__(self, other):
         if not isinstance(other, self.__class__): raise TypeError(type(other), self.__class__)
         return self._path > other._path
     def __lt__(self, other):
         if not isinstance(other, self.__class__): raise TypeError(type(other), self.__class__)
         return self._path < other._path
+    def Create(self, data: Union[str, bytes] = None, mode: int = 0o777, exist_ok: bool = True):
+        os.makedirs(self.BaseName, mode, exist_ok)
+        if self.Exists: return self
+        if isinstance(data, str):
+            with open(self, 'w') as f:
+                f.write(data)
+
+            return self
+
+        if isinstance(data, bytes):
+            with open(self, 'wb') as f:
+                f.write(data)
+
+        else:
+            with open(self, 'wb'): pass
+
+        return self
 
     @classmethod
-    def FromString(cls, _path: Union[str, 'Path']) -> 'Path': return cls.Init(_path)
+    def FromString(cls, _path: Union[str, 'FilePath']) -> 'FilePath': return cls(_path)
+    @classmethod
+    def FromPath(cls, _path: Path) -> 'FilePath': return cls(str(_path.resolve()))
 
     @classmethod
-    def FromPathLibPath(cls, _path: FilePath) -> 'Path': return cls.Init(str(_path.resolve()))
+    def Join(cls, *args: Union[str, 'FilePath']) -> 'FilePath': return cls(join(*args))
 
     @classmethod
-    def Join(cls, *args: Union[str, 'Path'], temporary_file: bool = False) -> 'Path': return cls.Init(join(*args), temporary_file=temporary_file)
-
-    @classmethod
-    def MakeDirectories(cls, path: Union[str, 'Path'], mode: int = 0o777, exist_ok: bool = True) -> 'Path':
-        os.makedirs(path, mode, exist_ok)
-        return cls.Init(path)
-
-    @classmethod
-    def ListDir(cls, path: Union[str, 'Path']) -> List['Path']:
-        if not isinstance(path, Path):
-            path = Path.Init(path)
+    def ListDir(cls, path: Union[str, 'FilePath']) -> List['FilePath']:
+        if not isinstance(path, FilePath):
+            path = cls(path)
 
         if path.IsFile: return [cls.FromString(path)]
 
@@ -185,14 +212,31 @@ class Path(BaseDictModel[str, Union[str, bool]], os.PathLike):
         return sorted(map(_join, os.listdir(path)))
 
     @classmethod
-    def Init(cls, path: str, *, temporary_file: bool = False) -> 'Path':
-        if temporary_file: return cls({ Keys.Path: abspath(path), Keys.Temporary: temporary_file })
-        return cls({ Keys.Path: abspath(path) })
+    def Temporary(cls, *args: str, root_dir: str = None):
+        path = cls.Join(root_dir or tempfile.gettempdir(), *args)
+        path._temporary = True
+        return path.Create()
 
     @classmethod
-    def Parse(cls, d) -> 'Path':
+    def Parse(cls, d) -> 'FilePath':
         if isinstance(d, dict):
-            AssertKeys(d, Keys.Path)
             return cls(d)
 
         throw(d, dict)
+
+    def __state__(self):
+        d = { }
+        for k in set(dir(self)).difference(dir(dict)):
+            if k.startswith('_'): continue
+            if k in ('Remove', 'GetHashID'): continue
+
+            try:
+                v = getattr(self, k)
+                if isinstance(v, classmethod): continue
+                if callable(v):
+                    v = v()
+            except (ValueError, TypeError, FileNotFoundError): pass
+            else:
+                d[k] = v
+
+        return d

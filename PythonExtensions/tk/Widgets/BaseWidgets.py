@@ -21,7 +21,7 @@ from PIL.Image import Image, open as img_open
 from .. import Bindings
 from ..Enumerations import *
 from ..Widgets.base import *
-from ...Files import Path
+from ...Files import FilePath
 from ...Images import *
 from ...Json import Size
 
@@ -535,7 +535,7 @@ class ImageMixin:
     update_idletasks: callable
     update: callable
     _IMG: Union[ImageTk.PhotoImage, tk.PhotoImage] = None
-    def SetImage(self, path: Union[str, Path] = None, *, WidthMax: int = None, HeightMax: int = None):
+    def SetImage(self, path: Union[str, FilePath] = None, *, WidthMax: int = None, HeightMax: int = None):
         if not os.path.isfile(path): raise FileNotFoundError(path)
         with open(path, 'rb') as f:
             return self._open(f, WidthMax, HeightMax)

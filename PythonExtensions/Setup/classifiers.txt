@@ -462,9 +462,9 @@ Topic :: Communications :: Email :: Post-Office :: IMAP
 Topic :: Communications :: Email :: Post-Office :: POP3
 Topic :: Communications :: FIDO
 Topic :: Communications :: Fax
-Topic :: Communications :: File Sharing
-Topic :: Communications :: File Sharing :: Gnutella
-Topic :: Communications :: File Sharing :: Napster
+Topic :: Communications :: FileIO Sharing
+Topic :: Communications :: FileIO Sharing :: Gnutella
+Topic :: Communications :: FileIO Sharing :: Napster
 Topic :: Communications :: Ham Radio
 Topic :: Communications :: Internet Phone
 Topic :: Communications :: Telephony
@@ -473,7 +473,7 @@ Topic :: Database
 Topic :: Database :: Database Engines/Servers
 Topic :: Database :: Front-Ends
 Topic :: Desktop Environment
-Topic :: Desktop Environment :: File Managers
+Topic :: Desktop Environment :: FileIO Managers
 Topic :: Desktop Environment :: GNUstep
 Topic :: Desktop Environment :: Gnome
 Topic :: Desktop Environment :: K Desktop Environment (KDE)
@@ -534,7 +534,7 @@ Topic :: Games/Entertainment :: Simulation
 Topic :: Games/Entertainment :: Turn Based Strategy
 Topic :: Home Automation
 Topic :: Internet
-Topic :: Internet :: File Transfer Protocol (FTP)
+Topic :: Internet :: FileIO Transfer Protocol (FTP)
 Topic :: Internet :: Finger
 Topic :: Internet :: Log Analysis
 Topic :: Internet :: Name Service (DNS)

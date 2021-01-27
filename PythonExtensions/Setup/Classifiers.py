@@ -465,9 +465,9 @@ class Topic(object):
         FIDO = "Topic :: Communications :: FIDO" 
         Fax = "Topic :: Communications :: Fax" 
         class File_Sharing(object):
-            File_Sharing = "Topic :: Communications :: File Sharing" 
-            Gnutella = "Topic :: Communications :: File Sharing :: Gnutella" 
-            Napster = "Topic :: Communications :: File Sharing :: Napster" 
+            File_Sharing = "Topic :: Communications :: FileIO Sharing"
+            Gnutella = "Topic :: Communications :: FileIO Sharing :: Gnutella"
+            Napster = "Topic :: Communications :: FileIO Sharing :: Napster"
         Ham_Radio = "Topic :: Communications :: Ham Radio" 
         Internet_Phone = "Topic :: Communications :: Internet Phone" 
         Telephony = "Topic :: Communications :: Telephony" 
@@ -478,7 +478,7 @@ class Topic(object):
         FrontEnds = "Topic :: Database :: Front-Ends" 
     class Desktop_Environment(object):
         Desktop_Environment = "Topic :: Desktop Environment" 
-        File_Managers = "Topic :: Desktop Environment :: File Managers" 
+        File_Managers = "Topic :: Desktop Environment :: FileIO Managers"
         GNUstep = "Topic :: Desktop Environment :: GNUstep" 
         Gnome = "Topic :: Desktop Environment :: Gnome" 
         class K_Desktop_Environment_KDE(object):
@@ -559,7 +559,7 @@ class Topic(object):
     Home_Automation = "Topic :: Home Automation" 
     class Internet(object):
         Internet = "Topic :: Internet" 
-        File_Transfer_Protocol_FTP = "Topic :: Internet :: File Transfer Protocol (FTP)" 
+        File_Transfer_Protocol_FTP = "Topic :: Internet :: FileIO Transfer Protocol (FTP)"
         Finger = "Topic :: Internet :: Finger" 
         Log_Analysis = "Topic :: Internet :: Log Analysis" 
         Name_Service_DNS = "Topic :: Internet :: Name Service (DNS)" 

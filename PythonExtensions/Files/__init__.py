@@ -1,3 +1,3 @@
-from .File import *
+from .FileIO import *
 from .FileLock import *
-from .Path import *
+from .FilePath import *

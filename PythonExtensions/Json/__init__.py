@@ -31,9 +31,11 @@ def throw(d: Any, t: Type): ...
 @overload
 def throw(d: Any, *types: Type): ...
 def throw(d: Any, *types: Type):
-    if not types: raise ValueError('expected types must be provided')
+    if not types:
+        raise ValueError('expected types must be provided')
 
-    if len(types) == 1: raise TypeError(f'Expecting {types[0]}   got type {type(d)}')
+    if len(types) == 1:
+        raise TypeError(f'Expecting {types[0]}   got type {type(d)}')
 
     raise TypeError(f'Expecting one of {types}   got type {type(d)}')
 
@@ -62,16 +64,13 @@ class BaseModel(object):
             return f'<{self.__class__.__qualname__} Object() [ {self.ToJsonString()} ]'
         except AttributeError:
             return f'<{self.__class__.__name__} Object() [ {self.ToJsonString()} ]'
-    def _Filter(self, func: callable): raise NotImplementedError()
-    def enumerate(self): raise NotImplementedError()
-    def Count(self) -> int: raise NotImplementedError()
-    def Empty(self) -> bool: raise NotImplementedError()
-
 
     @classmethod
-    def Parse(cls, d): return cls()
+    def Parse(cls, d): raise NotImplementedError()
+
     @classmethod
     def FromJson(cls, string: Union[str, bytes, bytearray], **kwargs): return cls.Parse(_loads(string, **kwargs))
+
     def ToJsonString(self, indent=4, ) -> str: return _dumps(self, indent=indent, default=self._serialize)
 
 
@@ -115,8 +114,16 @@ class BaseModel(object):
             else: d[key] = value
         return d
 
+class BaseObjectModel(BaseModel):
+    @classmethod
+    def Parse(cls, d): raise NotImplementedError()
 
-class BaseListModel(list, BaseModel, List[_T]):
+    def _Filter(self, func: callable): raise NotImplementedError()
+    def enumerate(self): raise NotImplementedError()
+    def Count(self) -> int: raise NotImplementedError()
+    def Empty(self) -> bool: raise NotImplementedError()
+
+class BaseListModel(list, BaseObjectModel, List[_T]):
     def __init__(self, source: Union[List, Iterable] = None):
         super().__init__(source or [])
     def __str__(self): return self.ToString()
@@ -133,6 +140,7 @@ class BaseListModel(list, BaseModel, List[_T]):
     def Count(self) -> int: return len(self)
     @property
     def Empty(self) -> bool: return self.Count == 0
+    def __bool__(self): return not self.Empty
 
     def Iter(self) -> Iterable[int]: return range(len(self))
 
@@ -162,7 +170,7 @@ class BaseListModel(list, BaseModel, List[_T]):
 
 
 
-class BaseSetModel(set, BaseModel, Set[_T]):
+class BaseSetModel(set, BaseObjectModel, Set[_T]):
     def __str__(self): return self.ToString()
     def __contains__(self, item: _T): return super().__contains__(item)
     def __delitem__(self, item: _T): return self.discard(item)
@@ -175,6 +183,7 @@ class BaseSetModel(set, BaseModel, Set[_T]):
     def Count(self) -> int: return len(self)
     @property
     def Empty(self) -> bool: return self.Count == 0
+    def __bool__(self): return not self.Empty
 
     def _Filter(self, func: callable): return filter(func, self)
     def extend(self, items: Union[List[_T], Set[_T]]):
@@ -200,7 +209,7 @@ class BaseSetModel(set, BaseModel, Set[_T]):
 
 
 
-class BaseDictModel(dict, BaseModel, Dict[_KT, _VT]):
+class BaseDictModel(dict, BaseObjectModel, Dict[_KT, _VT]):
     def __init__(self, source: dict = None, **kwargs):
         if source is not None: super().__init__(source, **kwargs)
         else: super().__init__(**kwargs)
@@ -221,10 +230,11 @@ class BaseDictModel(dict, BaseModel, Dict[_KT, _VT]):
     def Count(self) -> int: return len(self)
     @property
     def Empty(self) -> bool: return self.Count == 0
+    def __bool__(self): return not self.Empty
 
     def _Filter(self, func: callable) -> List[_VT]: return list(filter(func, self.values()))
 
-    def ToList(self) -> List[_T]: return list(self.items())
+    def ToList(self) -> List[Tuple[_KT, _VT]]: return list(self.items())
     def ToDict(self) -> Dict[_KT, Union[_VT, Dict, str]]: return self._ToDict(self)
 
     @classmethod
