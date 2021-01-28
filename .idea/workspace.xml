@@ -2,22 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7a6e45bf-6aac-404f-8876-27fa1a8fc2c2" name="Default Changelist" comment="bug fixes / updates">
-      <change afterPath="$PROJECT_DIR$/Tests/TestLogging.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/PythonExtensions.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/PythonExtensions.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/Files/File.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/Files/FileIO.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/Files/Path.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/Files/FilePath.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/Files/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/Files/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PythonExtensions/Files/FilePath.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/Files/FilePath.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PythonExtensions/Images/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/Images/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/Json/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/Json/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/Logging/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/Logging/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/Setup/Classifiers.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/Setup/Classifiers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/Setup/classifiers.txt" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/Setup/classifiers.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/__version__.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/__version__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/tk/Widgets/BaseWidgets.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/tk/Widgets/BaseWidgets.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tests/base.py" beforeDir="false" afterPath="$PROJECT_DIR$/Tests/base.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tests/test_files.py" beforeDir="false" afterPath="$PROJECT_DIR$/Tests/test_files.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/run.py" beforeDir="false" afterPath="$PROJECT_DIR$/run.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -238,14 +225,9 @@
       <workItem from="1611677254002" duration="3118000" />
       <workItem from="1611702085881" duration="4000" />
       <workItem from="1611761096964" duration="3385000" />
-      <workItem from="1611768886822" duration="13464000" />
-    </task>
-    <task id="LOCAL-00021" summary="bug fixes / updates">
-      <created>1611075344202</created>
-      <option name="number" value="00021" />
-      <option name="presentableId" value="LOCAL-00021" />
-      <option name="project" value="LOCAL" />
-      <updated>1611075344202</updated>
+      <workItem from="1611768886822" duration="13519000" />
+      <workItem from="1611855391149" duration="266000" />
+      <workItem from="1611855672451" duration="5108000" />
     </task>
     <task id="LOCAL-00022" summary="bug fixes / updates">
       <created>1611075687705</created>
@@ -583,7 +565,14 @@
       <option name="project" value="LOCAL" />
       <updated>1611690511845</updated>
     </task>
-    <option name="localTasksCounter" value="70" />
+    <task id="LOCAL-00070" summary="bug fixes / updates">
+      <created>1611782643648</created>
+      <option name="number" value="00070" />
+      <option name="presentableId" value="LOCAL-00070" />
+      <option name="project" value="LOCAL" />
+      <updated>1611782643648</updated>
+    </task>
+    <option name="localTasksCounter" value="71" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

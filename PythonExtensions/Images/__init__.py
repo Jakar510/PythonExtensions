@@ -35,12 +35,10 @@ class ImageObject(object):
     _fp: Optional[BinaryIO]
     _widthMax: Optional[int]
     _heightMax: Optional[int]
-    def __init__(self, img: Optional[Image], widthMax: Optional[int] = None, heightMax: Optional[int] = None, *, AutoResize: bool = True, LOAD_TRUNCATED_IMAGES: bool = True):
+    def __init__(self, img: Optional[Image], widthMax: Optional[int] = None, heightMax: Optional[int] = None, *, LOAD_TRUNCATED_IMAGES: bool = True):
         self._img = img
         self.SetMaxSize(widthMax, heightMax)
-        if AutoResize and widthMax and heightMax:
-            self.Resize(check_metadata=True)
-        ImageFile.LOAD_TRUNCATEDImageS = LOAD_TRUNCATED_IMAGES
+        ImageFile.LOAD_TRUNCATED_IMAGES = LOAD_TRUNCATED_IMAGES
 
     @property
     def Raw(self) -> Image: return self._img
@@ -132,13 +130,12 @@ class ImageObject(object):
             elif isinstance(size, tuple): size = tuple(map(int, size))
             else: raise TypeError(type(size), (Size, tuple))
 
-            # self._img = self._img.resize(size=size, reducing_gap=reducing_gap)
-            self.Resize(size, reducing_gap=reducing_gap, check_metadata=False)
+            self.Resize(size, reducing_gap=reducing_gap)
             self.Crop(box)
-            self.Resize(reducing_gap=reducing_gap, check_metadata=False)
+            self.Resize(reducing_gap=reducing_gap)
             return self
         except:
-            PrettyPrint('__CropZoom__kwargs__',
+            PrettyPrint(self.CropZoom.__qualname__,
                         box=box,
                         size=size,
                         reducing_gap=reducing_gap,
@@ -153,7 +150,8 @@ class ImageObject(object):
         self._img = self._img.resize(size=self._Scale(factor), reducing_gap=reducing_gap)
         return self
 
-    def Resize(self, size: Union[Size, Tuple[int, int]] = None, box: CropBox = None, *, check_metadata: bool, reducing_gap: float = None, resample=BICUBIC) -> 'ImageObject':
+    def Resize(self, size: Union[Size, Tuple[int, int]] = None, box: CropBox = None, *,
+               check_metadata: bool = False, reducing_gap: float = None, resample=BICUBIC) -> 'ImageObject':
         if check_metadata:
             exif: Exif = self._img.getexif()
             if 'Orientation' in exif:  # check if image has exif metadata.
