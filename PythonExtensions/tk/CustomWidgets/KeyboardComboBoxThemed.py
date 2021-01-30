@@ -6,19 +6,18 @@
 
 from typing import *
 
-from .BaseWidgets import *
 from .KeyBoard import *
-from .Root import *
-from .Themed import *
-from .base import *
+from ..Base import *
+from ..Core import *
 from ..Events import *
+from ..Themed import *
 
 
 
 
 __all__ = [
-        'KeyboardComboBoxThemed', 'TitledKeyboardComboBoxThemed', 'TitledComboBoxThemed', 'FramedKeyboardComboBoxThemed', 'FramedComboBoxThemed'
-        ]
+    'KeyboardComboBoxThemed', 'TitledKeyboardComboBoxThemed', 'TitledComboBoxThemed', 'FramedKeyboardComboBoxThemed', 'FramedComboBoxThemed'
+    ]
 
 class KeyboardComboBoxThemed(ComboBoxThemed, KeyboardMixin):
     def __init__(self, master, *, root: tkRoot, placement: PlacementSet = PlacementSet(Placement.Auto), keysize: int = None, keycolor: str = None,

@@ -6,8 +6,8 @@
 
 from tkinter.messagebox import *
 
-from .BaseWidgets import *
-from .Root import *
+from ..Base import *
+from ..Core import *
 
 
 

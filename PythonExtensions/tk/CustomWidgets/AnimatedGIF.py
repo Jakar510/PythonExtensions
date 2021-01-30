@@ -7,17 +7,17 @@
 import base64
 from typing import List, Union
 
-from PIL import Image, ImageTk
+from PIL import Image
 
-from .Widgets import *
-from .base import *
+from ..Base import *
+from ..Widgets import *
 
 
 
 
 __all__ = [
-        'AnimatedGIF',
-        ]
+    'AnimatedGIF',
+    ]
 
 class AnimatedGIF(Label, object):
     """

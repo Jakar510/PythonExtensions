@@ -1,17 +1,12 @@
-# ------------------------------------------------------------------------------
-#  Created by Tyler Stegmaier
-#  Copyright (c) 2020.
-#
-# ------------------------------------------------------------------------------
-
 from typing import *
 
-from ..Widgets.base import *
+from ..Base import *
 
 
 
-
-__all__ = ['Style']
+__all__ = [
+    'Style'
+    ]
 
 class Style(ttk.Style):
     def Configure_Root(self, background: str, foreground: str, selected: str, active: str, font: str):

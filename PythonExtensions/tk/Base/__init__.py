@@ -3,14 +3,13 @@
 #  Property of TrueLogic Company.
 #  Copyright (c) 2020.
 # ------------------------------------------------------------------------------
-#
-# ------------------------------------------------------------------------------
 import base64
 import os
+import tkinter as tk
 from abc import ABC
 from enum import Enum
 from io import BytesIO
-from pprint import PrettyPrinter
+from tkinter import Event as tkEvent, ttk
 from types import FunctionType, MethodType
 from typing import *
 from urllib.request import urlopen
@@ -18,23 +17,22 @@ from urllib.request import urlopen
 from PIL import ImageTk
 from PIL.Image import Image, open as img_open
 
-from .. import Bindings
 from ..Enumerations import *
-from ..Widgets.base import *
+from ..Events import Bindings
 from ...Files import FilePath
 from ...Images import *
 from ...Json import Size
+from ...debug import pp
 
 
 
-
-pp = PrettyPrinter(indent=4)
 
 __all__ = [
     'BaseTkinterWidget', 'BaseTextTkinterWidget',
     'Image', 'ImageTk',
-    'CurrentValue', 'CallWrapper', 'CurrentValue',
     'CommandMixin', 'ImageMixin',
+    'CurrentValue', 'CallWrapper',
+    'tk', 'ttk', 'tkEvent'
     ]
 
 class BindingCollection(dict, Dict[Bindings, Set[str]]):
@@ -71,8 +69,8 @@ class BaseTkinterWidget(tk.Widget, ABC):
 
     def ToString(self, IncludeState: bool = None) -> str:
         start = self.__repr__().replace('>', '').replace('<', '').replace('object', 'Tkinter Widget')
-        if IncludeState is None: return f'<{start}. State: {pp.pformat(self.Details)}>'
-        if IncludeState: return f'<{start}. State: {pp.pformat(self.FullDetails)}>'
+        if IncludeState is None: return f'<{start}. State: {pp.getPPrintStr(self.Details)}>'
+        if IncludeState: return f'<{start}. State: {pp.getPPrintStr(self.FullDetails)}>'
 
         return f'<{start}>'
     @property

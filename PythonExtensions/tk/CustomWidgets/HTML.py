@@ -9,7 +9,7 @@ import tk_html_widgets as tk_html
 
 from ..Enumerations import ViewState
 from ..Events import Bindings, tkEvent
-from ..Widgets.Widgets import ScrolledText
+from ..Widgets import ScrolledText
 
 
 
@@ -21,7 +21,7 @@ __all__ = [
 class HTMLScrolledText(ScrolledText):
     _bindIDs: Set[str] = set()
     __doc__ = tk_html.HTMLScrolledText.__doc__
-    def __init__(self, *args, html: str = None, **frame_kwargs):
+    def __init__(self, html: str = None, **frame_kwargs):
         super().__init__(**frame_kwargs)
         self._w_init(frame_kwargs)
         self.html_parser = tk_html.html_parser.HTMLTextParser()

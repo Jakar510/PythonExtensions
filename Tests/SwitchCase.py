@@ -2,6 +2,11 @@ import logging
 
 from PythonExtensions.SwitchCase import *
 
+
+
+
+__all__ = ['test_switch_case']
+
 BREAK = ' ---> you should not see this'
 def example1(test=10):
     """
@@ -15,7 +20,7 @@ def example1(test=10):
         sc(2)
         print('example1 sub 1')
         sc(10)  # will break here due to match found.
-        print('example1 sub 2' + BREAK) #
+        print('example1 sub 2' + BREAK)  #
         sc(12)
 
 
@@ -50,13 +55,12 @@ def example3(*args, **kwargs):
     print()
     def run_test(*args, **kwargs):
         print({
-                'args':   args,
-                'kwargs': kwargs
-                })
+            'args':   args,
+            'kwargs': kwargs
+            })
 
     test = '10'
     with SwitchCallback(test) as sc:
-
         sc(2, run_test)
         print('example3 sub 1')
         sc('1', run_test)  # will break here due to match found.
@@ -71,6 +75,9 @@ def example4():
     :return:
     """
     print()
+
+
+
     class base(object):
         # id = uuid.uuid4()
         def __init__(self, id):
@@ -80,7 +87,10 @@ def example4():
                 return other.id == self.id
             return False
 
+
+
     class Test(base): pass
+
 
 
     target1 = Test('Target')
@@ -97,7 +107,7 @@ def example4():
         print('example4.1 sub 5' + BREAK)
         sc(int)
         print('example4.1 sub 6' + BREAK)
-        sc({})
+        sc({ })
         print('example4.1 sub 7' + BREAK)
         sc(Test('base'))
         print('example4.1 sub 8' + BREAK)
@@ -142,7 +152,7 @@ def example4():
         print('example4.3 sub 5')
         sc(int)
         print('example4.3 sub 6')
-        sc({})
+        sc({ })
         print('example4.3 sub 7')
         sc(base('base'))
         print('example4.3 sub 8')
@@ -167,4 +177,3 @@ def test_switch_case():
 
 if __name__ == '__main__':
     test_switch_case()
-

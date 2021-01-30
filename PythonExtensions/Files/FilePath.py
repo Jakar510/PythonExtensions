@@ -37,6 +37,7 @@ class FilePath(dict, BaseModel, os.PathLike):
 
         dict.__init__(self, d)
 
+    def __call__(self) -> str: return self.Value
     @property
     def Value(self) -> str: return self[Keys.Path]
     @property
@@ -188,7 +189,9 @@ class FilePath(dict, BaseModel, os.PathLike):
         if hasattr(self, '_hash'): del self._hash
         super(FilePath, self).__setitem__(key, value)
     def __del__(self):
-        if self.IsTemporary and self.Exists: return self.Remove()
+        try:
+            if self._temporary and self.Exists: return self.Remove()
+        except PermissionError: pass
 
     def __eq__(self, other):
         if not isinstance(other, self.__class__): raise TypeError(type(other), self.__class__)

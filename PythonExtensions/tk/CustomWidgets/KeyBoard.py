@@ -8,14 +8,12 @@ import string
 from enum import IntEnum, IntFlag
 from typing import *
 
-from .BaseWidgets import *
-from .Frames import *
-from .Root import *
-from .Widgets import *
-from .base import *
+from ..Base import *
+from ..Core import *
 from ..Enumerations import EventType
 from ..Events import *
-from ..HID_BUFFER import HID_BUFFER
+from ...HID_BUFFER import HID_BUFFER
+from ..Widgets import *
 
 
 
@@ -25,9 +23,6 @@ __all__ = [
     'PopupKeyboard', 'Placement', 'PlacementSet',
     'value_title_mixin', 'BaseFramed', 'BaseFramedKeyboard', 'BaseTitled', 'BaseTitledKeyboard',
     ]
-
-
-
 
 class KeyBoardState(IntEnum):
     Idle = 0
@@ -540,7 +535,8 @@ class BaseTitledKeyboard(Frame, value_title_mixin):
 
         Example:
             class TitledKeyboardEntry(BaseTitledKeyboard):
-                def __init__(self, master, *, root: tkRoot, RowPadding: int = 1, factor: int = 3, value: Dict = { }, title: Dict = { }, cls: Type[KeyboardEntry] = KeyboardEntry, **kwargs):
+                def __init__(self, master, *, root: tkRoot, RowPadding: int = 1, factor: int = 3, value: Dict = { }, title: Dict = { }, cls: Type[KeyboardEntry] =
+                KeyboardEntry, **kwargs):
                     assert (issubclass(cls, KeyboardEntry))
                     BaseTitledKeyboard.__init__(self, master, cls=cls, root=root, value=value, RowPadding=RowPadding, title=title, factor=factor, **kwargs)
 

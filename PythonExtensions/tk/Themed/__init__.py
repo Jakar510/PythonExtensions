@@ -8,19 +8,18 @@
 import random
 from typing import *
 
-from .BaseWidgets import *
-from .Frames import *
-from .base import *
-from ..Events import *
+from ..Base import *
+from ..Core import *
 from ..Enumerations import *
+from ..Events import *
 
 
 
 
 __all__ = [
-        'TreeViewThemed', 'TreeViewHolderThemed', 'ListItem', 'ItemCollection', 'DelimiterError',
-        'ComboBoxThemed', 'ButtonThemed', 'EntryThemed', 'LabelThemed', 'NotebookThemed', 'SeparatorThemed', 'ScrollbarThemed',
-        ]
+    'TreeViewThemed', 'TreeViewHolderThemed', 'ListItem', 'ItemCollection', 'DelimiterError',
+    'ComboBoxThemed', 'ButtonThemed', 'EntryThemed', 'LabelThemed', 'NotebookThemed', 'SeparatorThemed', 'ScrollbarThemed',
+    ]
 
 TODO = """
 --Button
@@ -177,7 +176,7 @@ class TreeViewThemed(ttk.Treeview, BaseTkinterWidget, CommandMixin):
     SelectedItems: List = []
     items: Union[ListItem, ItemCollection] = None
 
-    def __init__(self, master: FrameTypes, Color: Dict[str, str] = None, selectmode: SelectionMode = SelectionMode.Extended, **kwargs):
+    def __init__(self, master, Color: Dict[str, str] = None, selectmode: SelectionMode = SelectionMode.Extended, **kwargs):
         ttk.Treeview.__init__(self, master, selectmode=selectmode.value, **kwargs)
         BaseTkinterWidget.__init__(self, Color)
         self.SetCommand(self.OnSelectRow)

@@ -6,18 +6,17 @@
 
 from typing import *
 
-from .BaseWidgets import *
 from .KeyBoard import *
-from .Root import *
-from .Widgets import *
-from .base import *
+from ..Base import *
+from ..Core import *
+from ..Widgets import *
 
 
 
 
 __all__ = [
-        'TitledEntry', 'TitledKeyboardEntry', 'FramedKeyboardEntry', 'FramedEntry', 'KeyboardEntry'
-        ]
+    'TitledEntry', 'TitledKeyboardEntry', 'FramedKeyboardEntry', 'FramedEntry', 'KeyboardEntry'
+    ]
 
 class KeyboardEntry(Entry, KeyboardMixin):
     def __init__(self, master, *, root: tkRoot, placement: PlacementSet = PlacementSet(Placement.Auto), keysize: int = None, keycolor: str = None,

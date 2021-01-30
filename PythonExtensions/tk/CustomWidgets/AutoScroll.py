@@ -8,12 +8,13 @@
 #  in conjunction with Tcl version 8.6
 #    Nov 23, 2020 10:53:16 AM CST  platform: Windows NT
 import platform
+from typing import *
 
-from .BaseWidgets import *
-from .Frames import *
-from .Themed import ScrollbarThemed
+from ..Base import *
+from ..Core import *
+from ..Enumerations import *
 from ..Events import *
-from ..Misc.Enumerations import *
+from ..Themed import ScrollbarThemed
 
 
 

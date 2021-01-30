@@ -1,19 +1,11 @@
-# ------------------------------------------------------------------------------
-#  Created by Tyler Stegmaier.
-#  Property of TrueLogic Company.
-#  Copyright (c) 2020.
-# ------------------------------------------------------------------------------
-#
-# ------------------------------------------------------------------------------
 from enum import Enum
 from time import time
 from typing import *
 
-from .BaseWidgets import BaseTkinterWidget
+from .Style import *
+from ..Base import *
 from ..Enumerations import Orientation
 from ..Events import Bindings
-from ..Widgets.Style import *
-from ..Widgets.base import *
 
 
 
@@ -21,8 +13,6 @@ from ..Widgets.base import *
 __all__ = [
     'tkRoot', 'tkTopLevel',
     ]
-
-
 
 class _rootMixin:
     Style: Style = None
@@ -109,17 +99,18 @@ class _rootMixin:
         return self.attributes('-alpha', v)
 
 
+
 class tkRoot(tk.Tk, _rootMixin):
-    def __init__(self, Screen_Width: int = None, Screen_Height: int = None, x: int = 0, y: int = 0, fullscreen: bool = None, **kwargs):
+    def __init__(self, width: Optional[int], height: Optional[int], fullscreen: Optional[bool] = None, x: int = 0, y: int = 0, **kwargs):
         super().__init__(**kwargs)
-        self.SetDimmensions(Screen_Width, Screen_Height, x, y)
+        self.SetDimmensions(width, height, x, y)
         if fullscreen is not None: self.SetFullScreen(fullscreen)
         self.style = Style(master=self)
 
     def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
 
     def Create_Event(self, tag: Union[str, Bindings], *, num: int = '??', height: int = '??', width: int = '??', key_code: int = '??', state: int = '??',
-                     x: int = '??', y: int = '??', char: str = '??', keysym: int = '??', keysym_num: int = '??', delta: int = '??',
+                     x: int = '??', y: int = '??', char: str = '??', keysym: Union[str, Bindings] = '??', keysym_num: int = '??', delta: int = '??',
                      event_type: tk.EventType, widget: tk.Widget, current_time=time()):
         """
             example:
@@ -204,14 +195,21 @@ class tkRoot(tk.Tk, _rootMixin):
         :return:
         """
         if isinstance(tag, Bindings): tag = tag.value
+        if isinstance(keysym, Bindings): keysym = keysym.value
 
-        self.event_generate(sequence=tag, num=num, height=height, keycode=key_code, state=state, time=current_time, width=width, x=x, y=y, char=char, keysym=keysym,
+        self.event_generate(sequence=tag, num=num, width=width, height=height, keycode=key_code, state=state, time=current_time, x=x, y=y, char=char, keysym=keysym,
                             keysym_num=keysym_num, type=event_type, widget=widget, x_root=self.winfo_rootx(), y_root=self.winfo_rooty(), delta=delta)
 
+    @classmethod
+    def Create(cls, width: Optional[int] = None, height: Optional[int] = None, fullscreen: Optional[bool] = None, x: int = 0, y: int = 0, **kwargs):
+        return cls(width, height, fullscreen, x, y, **kwargs)
+
+
+
 class tkTopLevel(tk.Toplevel, _rootMixin):
-    def __init__(self, master, *, Screen_Width: int = None, Screen_Height: int = None, x: int = 0, y: int = 0, fullscreen: bool = None, **kwargs):
+    def __init__(self, master: tkRoot, *, width: int = None, height: int = None, x: int = 0, y: int = 0, fullscreen: bool = None, **kwargs):
         super().__init__(master, **kwargs)
-        self.SetDimmensions(Screen_Width, Screen_Height, x, y)
+        self.SetDimmensions(width, height, x, y)
         if fullscreen is not None: self.SetFullScreen(fullscreen)
 
         self.style = master.style

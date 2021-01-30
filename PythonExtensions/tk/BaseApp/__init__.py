@@ -1,0 +1,70 @@
+from logging import Logger
+from typing import *
+
+from ..Core import *
+from ..Events import Bindings, TkinterEvent
+from ...Files import FilePath
+from ...Logging import LoggingManager
+
+
+
+
+__all__ = [
+    'BaseApp',
+    'BaseWindow', 'BaseLabelWindow',
+    ]
+
+class BaseApp(object):
+    """ Override to extend functionallity. Intented to be the base class for the Application level class, which is passed to all child windows and frames. """
+    root: tkRoot
+    logger: Logger
+    _logging_manager: LoggingManager
+    def __init__(self, *types: Type, app_name: str, root_path: Union[str, FilePath],
+                 Screen_Width: Optional[int], Screen_Height: Optional[int], fullscreen: Optional[bool] = None, x: int = 0, y: int = 0, **kwargs):
+        self._logging_manager = LoggingManager.FromTypes(self.__class__, *types, app_name=app_name, root_path=root_path)
+        self.logger = self._logging_manager.CreateLogger(self, debug=self.DEBUG)
+
+        if fullscreen is None: fullscreen = not self.DEBUG
+        self.root = tkRoot.Create(Screen_Width, Screen_Height, fullscreen, x, y, **kwargs)
+        self.root.protocol('WM_DELETE_WINDOW', self.Close)
+
+        self.root.Bind(Bindings.ButtonPress, self.Handle_Press)
+        self.root.Bind(Bindings.Key, self.Handle_KeyPress)
+
+
+    def Close(self):
+        """ Override to add functinality. Closes application. """
+        self.root.destroy()
+
+    def start_gui(self): self._main()
+    def _main(self): self.root.mainloop()
+
+    @property
+    def DEBUG(self) -> bool: return __debug__
+
+    def Handle_Press(self, event: TkinterEvent): pass
+    def Handle_KeyPress(self, event: TkinterEvent): pass
+
+    def _OnPress(self, event: TkinterEvent): pass
+    def _OnKeyPress(self, event: TkinterEvent): pass
+
+
+class BaseWindow(Frame):
+    def __init__(self, master, app: BaseApp, **kwargs):
+        Frame.__init__(self, master, **kwargs)
+        self._app = app
+        self._logger = app.logger.getChild(str(self.__class__.__name__))
+
+    def OnPress(self, event: TkinterEvent): pass
+    def OnKeyPress(self, event: TkinterEvent): pass
+
+
+
+class BaseLabelWindow(LabelFrame):
+    def __init__(self, master, app: BaseApp, **kwargs):
+        LabelFrame.__init__(self, master, **kwargs)
+        self._app = app
+        self._logger = app.logger.getChild(str(self.__class__.__name__))
+
+    def OnPress(self, event: TkinterEvent): pass
+    def OnKeyPress(self, event: TkinterEvent): pass

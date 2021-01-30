@@ -12,8 +12,7 @@ __all__ = [
     'IsMethod', 'IsFunction',
     'IsAttributePrivate',
     'get_size', 'sizeof',
-    'AutoCounter',
-
+    'AutoCounter', 'lazy_property',
     ]
 
 
@@ -117,3 +116,21 @@ class AutoCounter(object):
 
     def __str__(self): return str(self._value)
     def __repr__(self): return f'<{self.__class__.__name__}, value: {self._value}>'
+
+
+
+
+class lazy_property(object):
+    """A @property that is only evaluated once."""
+    def __init__(self, func: callable, name: str = None, doc: str = None):
+        self.__name__ = name or func.__name__
+        self.__module__ = func.__module__
+        self.__doc__ = doc or func.__doc__
+        self._func = func
+
+    def __get__(self, obj, cls=None):
+        if obj is None:
+            return self
+        value = self._func(obj)
+        setattr(obj, self._func.__name__, value)
+        return value

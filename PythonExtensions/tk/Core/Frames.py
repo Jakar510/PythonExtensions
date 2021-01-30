@@ -1,27 +1,16 @@
-# ------------------------------------------------------------------------------
-#  Created by Tyler Stegmaier.
-#  Property of TrueLogic Company.
-#  Copyright (c) 2020.
-# ------------------------------------------------------------------------------
-#
-# ------------------------------------------------------------------------------
-
 from enum import Enum
 from typing import *
 
-from ..Widgets.BaseWidgets import *
-from ..Widgets.base import *
-
+from ..Base import *
 
 
 
 __all__ = [
     'Frame', 'LabelFrame',
     'FrameThemed', 'LabelFrameThemed',
-    'FrameTypes',
     ]
 
-class BaseFrameMixin:
+class _BaseFrameMixin:
     InstanceID: Union[str, int, Enum] = None
 
     def SetID(self, InstanceID: Union[str, int, Enum]):
@@ -42,15 +31,14 @@ class BaseFrameMixin:
         return base
 
 
-# noinspection DuplicatedCode
-class Frame(tk.Frame, BaseTkinterWidget, BaseFrameMixin):
+
+class Frame(tk.Frame, BaseTkinterWidget, _BaseFrameMixin):
     def __init__(self, master, **kwargs):
         tk.Frame.__init__(self, master, **kwargs)
 
     def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
 
-
-class LabelFrame(tk.LabelFrame, BaseTextTkinterWidget, BaseFrameMixin):
+class LabelFrame(tk.LabelFrame, BaseTextTkinterWidget, _BaseFrameMixin):
     """Construct a labelframe _widget with the master MASTER.
 
     STANDARD OPTIONS
@@ -79,15 +67,15 @@ class LabelFrame(tk.LabelFrame, BaseTextTkinterWidget, BaseFrameMixin):
 
     def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
 
-# noinspection DuplicatedCode
-class FrameThemed(ttk.Frame, BaseTkinterWidget, BaseFrameMixin):
+
+
+class FrameThemed(ttk.Frame, BaseTkinterWidget, _BaseFrameMixin):
     def __init__(self, master, **kwargs):
         ttk.Frame.__init__(self, master, **kwargs)
 
     def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
 
-
-class LabelFrameThemed(ttk.LabelFrame, BaseTextTkinterWidget, BaseFrameMixin):
+class LabelFrameThemed(ttk.LabelFrame, BaseTextTkinterWidget, _BaseFrameMixin):
     """Construct a labelframe _widget with the master MASTER.
 
     STANDARD OPTIONS
@@ -115,7 +103,3 @@ class LabelFrameThemed(ttk.LabelFrame, BaseTextTkinterWidget, BaseFrameMixin):
         self.configure(text=value)
 
     def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
-
-# ------------------------------------------------------------------------------------------
-
-FrameTypes = TypeVar('FrameTypes', Frame, LabelFrame, FrameThemed, LabelFrameThemed)

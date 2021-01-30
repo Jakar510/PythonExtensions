@@ -17,7 +17,7 @@ from ..Exceptions import ArgumentError
 from ..Files import *
 from ..Json import *
 from ..debug import PrettyPrint, print_stack_trace
-from ..tk import RotationAngle
+from ..tk.Enumerations import RotationAngle
 
 
 

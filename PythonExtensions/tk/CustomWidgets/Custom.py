@@ -7,15 +7,15 @@
 from abc import ABC
 from typing import Any, Dict
 
-from .Frames import *
-from .Widgets import *
+from ..Core import *
+from ..Widgets import *
 
 
 
 
 __all__ = [
-        'ButtonGrid',
-        ]
+    'ButtonGrid',
+    ]
 
 class ButtonGrid(Frame, ABC):
     _buttons: Dict[int, Button] = { }
@@ -83,5 +83,3 @@ class ButtonGrid(Frame, ABC):
     def ButtonTitles(self) -> Dict[int, str]: raise NotImplementedError()
     @property
     def ButtonCommands(self) -> Dict[int, callable]: raise NotImplementedError()
-
-

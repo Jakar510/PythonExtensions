@@ -4,8 +4,7 @@
 #
 # ------------------------------------------------------------------------------
 
-from .Widgets.base import tk
-from .Widgets.BaseWidgets import BaseTkinterWidget
+from ..tk.Base import *
 
 
 
@@ -18,20 +17,20 @@ def _rootLevelDataRecurive(w) -> dict:
 def _WidgetDataRecurive(w) -> dict:
     assert (isinstance(w, BaseTkinterWidget) and isinstance(w, tk.BaseWidget))
     return {
-            'Type':                     w.__class__,
-            'str(w)':                   str(w),
-            'repr(w)':                  repr(w),
-            'PI (position info)':       w.pi,
-            # 'master.children':            w.master.children,
-            'children':                 w.children,
-            'winfo_id':                 w.winfo_id(),
-            'winfo_name':               w.winfo_name(),
-            'winfo_parent':             w.winfo_parent(),
-            'winfo_manager':            w.winfo_manager(),
-            'winfo_ismapped':           w.winfo_ismapped(),
-            'winfo_pathname(winfo_id)': w.winfo_pathname(w.winfo_id()),
-            'winfo_children':           _childData(w.winfo_children()),
-            }
+        'Type':                     w.__class__,
+        'str(w)':                   str(w),
+        'repr(w)':                  repr(w),
+        'PI (position info)':       w.pi,
+        # 'master.children':            w.master.children,
+        'children':                 w.children,
+        'winfo_id':                 w.winfo_id(),
+        'winfo_name':               w.winfo_name(),
+        'winfo_parent':             w.winfo_parent(),
+        'winfo_manager':            w.winfo_manager(),
+        'winfo_ismapped':           w.winfo_ismapped(),
+        'winfo_pathname(winfo_id)': w.winfo_pathname(w.winfo_id()),
+        'winfo_children':           _childData(w.winfo_children()),
+        }
 
 def _childData(obj):
     if isinstance(obj, dict):
@@ -63,27 +62,27 @@ def DebugWidgetRecursively(w, *, Message: str):
 def _rootLevelData(w, root: tk.Tk or tk.Toplevel) -> dict:
     assert (isinstance(w, BaseTkinterWidget) and isinstance(w, tk.BaseWidget))
     return {
-            'root.children': root.children,
-            # f'Widget: {w.__class__.__name__}':        _WidgetData(w)
-            'Widget':        _WidgetData(w)
-            }
+        'root.children': root.children,
+        # f'Widget: {w.__class__.__name__}':        _WidgetData(w)
+        'Widget':        _WidgetData(w)
+        }
 def _WidgetData(w) -> dict:
     assert (isinstance(w, BaseTkinterWidget) and isinstance(w, tk.BaseWidget))
     return {
-            'Type':                     w.__class__,
-            'str(w)':                   str(w),
-            'repr(w)':                  repr(w),
-            'PI (position info)':       w.pi,
-            'master.children':          w.root.children,
-            'children':                 w.children,
-            'winfo_id':                 w.winfo_id(),
-            'winfo_name':               w.winfo_name(),
-            'winfo_parent':             w.winfo_parent(),
-            'winfo_manager':            w.winfo_manager(),
-            'winfo_ismapped':           w.winfo_ismapped(),
-            'winfo_pathname(winfo_id)': w.winfo_pathname(w.winfo_id()),
-            'winfo_children':           w.winfo_children(),
-            }
+        'Type':                     w.__class__,
+        'str(w)':                   str(w),
+        'repr(w)':                  repr(w),
+        'PI (position info)':       w.pi,
+        'master.children':          w.root.children,
+        'children':                 w.children,
+        'winfo_id':                 w.winfo_id(),
+        'winfo_name':               w.winfo_name(),
+        'winfo_parent':             w.winfo_parent(),
+        'winfo_manager':            w.winfo_manager(),
+        'winfo_ismapped':           w.winfo_ismapped(),
+        'winfo_pathname(winfo_id)': w.winfo_pathname(w.winfo_id()),
+        'winfo_children':           w.winfo_children(),
+        }
 def DebugWidget(w, *, root: tk.Tk or tk.Toplevel, Message: str):
     assert (isinstance(w, BaseTkinterWidget) and isinstance(w, tk.BaseWidget))
     from pprint import PrettyPrinter

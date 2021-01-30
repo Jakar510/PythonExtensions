@@ -14,7 +14,8 @@ from tkinter.constants import *
 
 
 __all__ = [
-    'ActiveStyle', 'AnchorAndSticky', 'Fill', 'Side', 'Relief', 'Orient', 'Wrap', 'BorderMode', 'Tags', 'ViewState', 'MenuItemTypes', 'SelectionMode', 'CanvasStyles', 'Layout',
+    'ActiveStyle', 'AnchorAndSticky', 'Fill', 'Side', 'Relief', 'Orient', 'Wrap', 'BorderMode',
+    'Tags', 'ViewState', 'MenuItemTypes', 'SelectionMode', 'CanvasStyles', 'Layout',
     'ViewArguments', 'ShowScrollBars', 'Bools', 'RotationAngle', 'Orientation', 'EventType'
     ]
 
