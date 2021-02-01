@@ -1,10 +1,10 @@
 MIT License
 
-Copyright (c) 2018 Pete Mojeiko for [Keyboard](src/TkinterExtensions/Widgets/KeyBoard.py)
+Copyright (c) 2018 Pete Mojeiko for [Keyboard](PythonExtensions/tk/CustomWidgets/KeyBoard.py)
 
-Copyright (c) 2017 Ole Jakob Skjelten for [AnimatedGIF](src/TkinterExtensions/Widgets/Custom.py)
+Copyright (c) 2017 Ole Jakob Skjelten for [AnimatedGIF](PythonExtensions/tk/CustomWidgets/Custom.py)
 
-Copyright (c) 2018 paolo-gurisatti for [Html Widgets](src/TkinterExtensions/Widgets/HTML.py)
+Copyright (c) 2018 paolo-gurisatti for [Html Widgets](PythonExtensions/tk/CustomWidgets/HTML.py)
 
 Copyright (c) 2020 Tyler Stegmaier
 
