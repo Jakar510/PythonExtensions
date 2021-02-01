@@ -6,7 +6,7 @@ Strongly typed widgets and event with multiple built-in helper functions to spee
 
 ## Tktiner Bindings
 
-This project all known bindings, but more are added as they are discovered. 
+This project uses all known bindings, but more are added as they are discovered. 
 
 ## Contributing
 

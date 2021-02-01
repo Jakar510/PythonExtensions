@@ -6,7 +6,7 @@ Strongly typed classes with multiple built-in helper functions to speed up devel
 
 ## Tktiner Bindings
 
-This project only uses the most common bindings. For the full list, see [All Tkinter bindings](PythonExtensions/tk/Events/Bindings.py).
+This project uses all known bindings, but more are added as they are discovered. 
 
 ## Contributing
 
