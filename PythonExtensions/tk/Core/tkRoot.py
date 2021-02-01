@@ -35,6 +35,8 @@ class _rootMixin:
 
     update: callable
     update_idletasks: callable
+    tk_focusNext: callable
+    tk_focusPrev: callable
     attributes: callable
     resizable: callable
     def SetDimmensions(self, Screen_Width: int = None, Screen_Height: int = None, x: int = 0, y: int = 0):
@@ -98,7 +100,8 @@ class _rootMixin:
         assert (0.0 <= v <= 1.0)
         return self.attributes('-alpha', v)
 
-
+    def FocusNext(self): self.tk_focusNext().focus_set()
+    def FocusPrevious(self): self.tk_focusPrev().focus_set()
 
 class tkRoot(tk.Tk, _rootMixin):
     def __init__(self, width: Optional[int], height: Optional[int], fullscreen: Optional[bool] = None, x: int = 0, y: int = 0, **kwargs):

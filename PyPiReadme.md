@@ -1,14 +1,16 @@
-# TkinterExtensions
+# PythonExtensions
 
-Strongly typed widgets and event with multiple built in helper functions to speed up development.
+Versions follow [Semantic Versioning](https://semver.org/) ( major.minor.patch )
+
+Strongly typed widgets and event with multiple built-in helper functions to speed up development.
 
 ## Tktiner Bindings
 
-This project only uses the most common bindings. For the full list, see [All Tkinter bindings](https://github.com/Jakar510/TkinterExtensions/blob/master/src/TkinterExtensions/Bindings/Enumerations.py).
+This project all known bindings, but more are added as they are discovered. 
 
 ## Contributing
 
-Please read [CONTRIBUTING.md](https://github.com/Jakar510/TkinterExtensions/blob/master/.github/CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
+Please read [CONTRIBUTING.md](https://github.com/Jakar510/PythonExtensions/blob/master/.github/CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
 
 ## Authors
 
@@ -19,11 +21,11 @@ Please read [CONTRIBUTING.md](https://github.com/Jakar510/TkinterExtensions/blob
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](https://github.com/Jakar510/TkinterExtensions/blob/master/LICENSE.md) file for details
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/Jakar510/PythonExtensions/blob/master/LICENSE.md) file for details
 
 ## Acknowledgments
 
 * Tkinter library authors
-* [olesk75/AnimatedGIF](https://github.com/olesk75/AnimatedGIF) for [AnimatedGIF](https://github.com/Jakar510/TkinterExtensions/blob/master/src/TkinterExtensions/Widgets/AnimatedGIF.py)
-* [paolo-gurisatti/tk_html_widgets](https://github.com/paolo-gurisatti/tk_html_widgets) for [Html Widgets](https://github.com/Jakar510/TkinterExtensions/blob/master/src/TkinterExtensions/Widgets/HTML.py)
-* [petemojeiko/tkinter-keyboard](https://github.com/petemojeiko/tkinter-keyboard) for [Keyboard](https://github.com/Jakar510/TkinterExtensions/blob/master/src/TkinterExtensions/Widgets/KeyBoard.py)
+* [olesk75/AnimatedGIF](https://github.com/olesk75/AnimatedGIF) for [AnimatedGIF](https://github.com/Jakar510/PythonExtensions/blob/master/PythonExtensions/tk/CustomWidgets/AnimatedGIF.py)
+* [paolo-gurisatti/tk_html_widgets](https://github.com/paolo-gurisatti/tk_html_widgets) for [Html Widgets](https://github.com/Jakar510/PythonExtensions/blob/master/PythonExtensions/tk/CustomWidgets/HTML.py)
+* [petemojeiko/tkinter-keyboard](https://github.com/petemojeiko/tkinter-keyboard) for [Keyboard](https://github.com/Jakar510/PythonExtensions/blob/master/PythonExtensions/tk/CustomWidgets/KeyBoard.py)
