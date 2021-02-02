@@ -4,18 +4,19 @@
 #  Copyright (c) 2020.
 # ------------------------------------------------------------------------------
 import base64
-import os
 import tkinter as tk
 from abc import ABC
 from enum import Enum
 from io import BytesIO
+from os.path import isfile
 from tkinter import Event as tkEvent, ttk
 from types import FunctionType, MethodType
 from typing import *
+from typing import BinaryIO
 from urllib.request import urlopen
 
-from PIL import ImageTk
 from PIL.Image import Image, open as img_open
+from PIL.ImageTk import PhotoImage
 
 from ..Enumerations import *
 from ..Events import Bindings
@@ -32,7 +33,7 @@ __all__ = [
     'Image', 'ImageTk',
     'CommandMixin', 'ImageMixin',
     'CurrentValue', 'CallWrapper',
-    'tk', 'ttk', 'tkEvent'
+    'tk', 'ttk', 'tkEvent', 'URL',
     ]
 
 class BindingCollection(dict, Dict[Bindings, Set[str]]):
@@ -497,6 +498,13 @@ class CurrentValue(CallWrapper):
 
 # ------------------------------------------------------------------------------------------
 
+class URL(str):
+    """ Any HTTP link """
+    def __init__(self, url: str):
+        if not isinstance(url, str): url = str(url)
+        if not url.lower().strip().startswith('http'): raise ValueError(f'passed url is not a link: "{url}"')
+        super().__init__(url)
+
 class CommandMixin:
     _cmd: CallWrapper
     configure: callable
@@ -526,35 +534,63 @@ class CommandMixin:
     def _setCommand(self, add: bool):
         self.configure(command=self._cmd)
         return self
+
 class ImageMixin:
     width: int
     height: int
     configure: callable
     update_idletasks: callable
     update: callable
-    _IMG: Union[ImageTk.PhotoImage, tk.PhotoImage] = None
-    def SetImage(self, path: Union[str, FilePath] = None, *, WidthMax: int = None, HeightMax: int = None):
-        if not os.path.isfile(path): raise FileNotFoundError(path)
-        with open(path, 'rb') as f:
-            return self._open(f, WidthMax, HeightMax)
-    def SetPhoto(self, data: Union[str, bytes], *, WidthMax: int = None, HeightMax: int = None):
+    _IMG: PhotoImage = None
+
+    @overload
+    def SetImage(self, image: PhotoImage): ...
+
+    @overload
+    def SetImage(self, url: URL): ...
+    @overload
+    def SetImage(self, url: URL, WidthMax: int, HeightMax: int): ...
+
+    @overload
+    def SetImage(self, path: Union[str, bytes, FilePath]): ...
+    @overload
+    def SetImage(self, path: Union[str, bytes, FilePath], WidthMax: int, HeightMax: int): ...
+
+    @overload
+    def SetImage(self, base64data: Union[str, bytes]): ...
+    @overload
+    def SetImage(self, base64data: Union[str, bytes], WidthMax: int, HeightMax: int): ...
+
+
+    def SetImage(self, data: Union[str, bytes, FilePath, URL, PhotoImage], WidthMax: int = None, HeightMax: int = None):
+        if isinstance(data, PhotoImage):
+            return self._setImage(data)
+
+        if isinstance(data, URL):
+            with BytesIO(urlopen(data).read()) as buf:
+                return self._open(buf, WidthMax, HeightMax)
+
+        if isfile(data):
+            with open(data, 'rb') as f:
+                return self._open(f, WidthMax, HeightMax)
+
         with BytesIO(base64.b64decode(data)) as buf:
             return self._open(buf, WidthMax, HeightMax)
-    def DownloadImage(self, url: str, *, WidthMax: int = None, HeightMax: int = None):
-        with BytesIO(urlopen(url).read()) as buf:
-            return self._open(buf, WidthMax, HeightMax)
 
-    def _open(self, f, WidthMax: int, HeightMax: int):
+    def _open(self, f: BinaryIO, WidthMax: Optional[int], HeightMax: Optional[int]):
         self.update_idletasks()
         if WidthMax is None: WidthMax = self.width
         if HeightMax is None: HeightMax = self.height
 
         if WidthMax <= 0: raise ValueError(f'WidthMax must be positive. Value: {WidthMax}')
         if HeightMax <= 0: raise ValueError(f'HeightMax must be positive. Value: {HeightMax}')
+
         with img_open(f) as img:
             img = ImageObject(img, WidthMax, HeightMax)
-            img.Resize(check_metadata=False)
-            self._IMG = img.ToPhotoImage(master=self)
-            self.configure(image=self._IMG)
+            img.Resize()
+            return self._setImage(img.ToPhotoImage(master=self))
 
+    def _setImage(self, img: PhotoImage):
+        self._IMG = img
+        self.configure(image=self._IMG)
         return self

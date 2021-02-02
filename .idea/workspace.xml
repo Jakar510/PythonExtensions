@@ -2,8 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7a6e45bf-6aac-404f-8876-27fa1a8fc2c2" name="Default Changelist" comment="bug fixes / updates">
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LICENSE.md" beforeDir="false" afterPath="$PROJECT_DIR$/LICENSE.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PythonExtensions/tk/Base/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/tk/Base/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PythonExtensions/tk/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/tk/__init__.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -51,7 +53,7 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../SmartPhotoFrame" />
     <property name="restartRequiresConfirmation" value="false" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
-    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyIntegratedToolsModulesConfigurable" />
+    <property name="settings.editor.selected.configurable" value="Errors" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -197,11 +199,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.setup" />
         <item itemvalue="Python.TestTkApp" />
         <item itemvalue="Python.TestLogging" />
         <item itemvalue="Python.FilePath" />
         <item itemvalue="Python.FileIO" />
-        <item itemvalue="Python.setup" />
       </list>
     </recent_temporary>
   </component>
@@ -232,14 +234,9 @@
       <workItem from="1611855672451" duration="6609000" />
       <workItem from="1611939351229" duration="6681000" />
       <workItem from="1611947713957" duration="12275000" />
-      <workItem from="1612193258540" duration="1945000" />
-    </task>
-    <task id="LOCAL-00026" summary="bug fixes / updates">
-      <created>1611083492082</created>
-      <option name="number" value="00026" />
-      <option name="presentableId" value="LOCAL-00026" />
-      <option name="project" value="LOCAL" />
-      <updated>1611083492082</updated>
+      <workItem from="1612193258540" duration="4780000" />
+      <workItem from="1612277648111" duration="1220000" />
+      <workItem from="1612279763064" duration="863000" />
     </task>
     <task id="LOCAL-00027" summary="bug fixes / updates">
       <created>1611083623568</created>
@@ -577,7 +574,14 @@
       <option name="project" value="LOCAL" />
       <updated>1612207042362</updated>
     </task>
-    <option name="localTasksCounter" value="75" />
+    <task id="LOCAL-00075" summary="bug fixes / updates">
+      <created>1612207169460</created>
+      <option name="number" value="00075" />
+      <option name="presentableId" value="LOCAL-00075" />
+      <option name="project" value="LOCAL" />
+      <updated>1612207169460</updated>
+    </task>
+    <option name="localTasksCounter" value="76" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

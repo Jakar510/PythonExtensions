@@ -6,7 +6,8 @@
 #
 # ------------------------------------------------------------------------------
 
-from .Base import CurrentValue, tk, ttk
+# noinspection PyUnresolvedReferences
+from .Base import CurrentValue, tk, ttk, URL
 from .Core import *
 from .CustomWidgets import *
 from .Enumerations import *
