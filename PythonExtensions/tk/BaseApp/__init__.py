@@ -20,7 +20,8 @@ class BaseApp(object):
     logger: Logger
     _logging_manager: LoggingManager
     def __init__(self, *types: Type, app_name: str, root_path: Union[str, FilePath],
-                 Screen_Width: Optional[int], Screen_Height: Optional[int], fullscreen: Optional[bool] = None, x: int = 0, y: int = 0, **kwargs):
+                 Screen_Width: Optional[int] = None, Screen_Height: Optional[int] = None,
+                 fullscreen: Optional[bool] = None, x: int = 0, y: int = 0, **kwargs):
         self._logging_manager = LoggingManager.FromTypes(self.__class__, *types, app_name=app_name, root_path=root_path)
         self.logger = self._logging_manager.CreateLogger(self, debug=self.DEBUG)
 
@@ -36,7 +37,9 @@ class BaseApp(object):
         """ Override to add functinality. Closes application. """
         self.root.destroy()
 
-    def start_gui(self): self._main()
+    # noinspection PyUnusedLocal
+    def start_gui(self, *args, **kwargs): self._main()
+
     def _main(self): self.root.mainloop()
 
     @property
@@ -49,22 +52,21 @@ class BaseApp(object):
     def _OnKeyPress(self, event: TkinterEvent): pass
 
 
-class BaseWindow(Frame):
+
+class WindowMixin:
+    def __init__(self, app: BaseApp):
+        self._app = app
+        self._logger = app.logger.getChild(str(self.__class__.__name__))
+
+    def OnPress(self, event: TkinterEvent): pass
+    def OnKeyPress(self, event: TkinterEvent): pass
+
+class BaseWindow(Frame, WindowMixin):
     def __init__(self, master, app: BaseApp, **kwargs):
         Frame.__init__(self, master, **kwargs)
-        self._app = app
-        self._logger = app.logger.getChild(str(self.__class__.__name__))
+        WindowMixin.__init__(self, app)
 
-    def OnPress(self, event: TkinterEvent): pass
-    def OnKeyPress(self, event: TkinterEvent): pass
-
-
-
-class BaseLabelWindow(LabelFrame):
+class BaseLabelWindow(LabelFrame, WindowMixin):
     def __init__(self, master, app: BaseApp, **kwargs):
         LabelFrame.__init__(self, master, **kwargs)
-        self._app = app
-        self._logger = app.logger.getChild(str(self.__class__.__name__))
-
-    def OnPress(self, event: TkinterEvent): pass
-    def OnKeyPress(self, event: TkinterEvent): pass
+        WindowMixin.__init__(self, app)
