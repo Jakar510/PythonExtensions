@@ -563,7 +563,7 @@ class ImageMixin:
 
 
     def SetImage(self, data: Union[str, bytes, Enum, FilePath, URL, PhotoImage], WidthMax: int = None, HeightMax: int = None):
-        if data is None: return self.configure(image=None)
+        if data is None: return self._setImage(None)
 
         if isinstance(data, Enum): data = data.value
 
@@ -593,7 +593,7 @@ class ImageMixin:
             img.Resize()
             return self._setImage(img.ToPhotoImage(master=self))
 
-    def _setImage(self, img: PhotoImage):
+    def _setImage(self, img: Optional[PhotoImage]):
         self.update_idletasks()
         self._IMG = img
         self.configure(image=self._IMG)
