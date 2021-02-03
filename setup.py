@@ -15,7 +15,7 @@ from PythonExtensions.debug import *
 
 long_description = ReadFromFile(os.path.abspath("./PyPiReadme.md"))
 
-install_requires = GetRequirements(os.path.abspath('./requirements.txt'))
+install_requires = GetRequirements(os.path.abspath('./requirements.txt'), pillow='PIL')
 
 _packages, _package_data = Get_Packages_Data(os.path.abspath('PythonExtensions'), __name__, includes=MatchFileTypes('py', 'png'))
 

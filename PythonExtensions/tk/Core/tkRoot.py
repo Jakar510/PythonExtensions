@@ -15,7 +15,7 @@ __all__ = [
     ]
 
 class _rootMixin:
-    Style: Style = None
+    style: Style = None
     Screen_Width: int = None
     Screen_Height: int = None
 
