@@ -1,3 +1,5 @@
 pillow
+
 tk_html_widgets
+
 psutil

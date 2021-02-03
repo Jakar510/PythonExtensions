@@ -15,12 +15,13 @@ from PythonExtensions.debug import *
 
 long_description = ReadFromFile(os.path.abspath("./PyPiReadme.md"))
 
-install_requires = GetRequirements(os.path.abspath('./requirements.txt'), pillow='PIL')
+install_requires = GetRequirements(os.path.abspath('./requirements.txt'))
 
 _packages, _package_data = Get_Packages_Data(os.path.abspath('PythonExtensions'), __name__, includes=MatchFileTypes('py', 'png'))
 
 PrettyPrint('_packages', _packages)
 PrettyPrint('_package_data', _package_data)
+PrettyPrint('install_requires', install_requires)
 
 setup(name=__name__,
       version=__version__,
