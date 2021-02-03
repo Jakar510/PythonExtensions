@@ -578,7 +578,6 @@ class ImageMixin:
             return self._open(buf, WidthMax, HeightMax)
 
     def _open(self, f: BinaryIO, WidthMax: Optional[int], HeightMax: Optional[int]):
-        self.update_idletasks()
         if WidthMax is None: WidthMax = self.width
         if HeightMax is None: HeightMax = self.height
 
@@ -591,6 +590,7 @@ class ImageMixin:
             return self._setImage(img.ToPhotoImage(master=self))
 
     def _setImage(self, img: PhotoImage):
+        self.update_idletasks()
         self._IMG = img
         self.configure(image=self._IMG)
         return self

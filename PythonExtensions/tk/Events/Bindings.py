@@ -301,8 +301,9 @@ class Bindings(Enum):
         :return: resulting Binding match
         :rtype: Bindings
         """
+        from . import TkinterEvent
         assert (isinstance(event, TkinterEvent))
-        if Bindings.IsUnknown(event.keysym) and event.num != Bindings.UNKNOWN.value:
+        if not Bindings.IsUnknown(event.keysym) and not Bindings.IsUnknown(event.num):
             return Bindings.FromKeysym(f'{event.EventType.name}{event.num}')
 
         return Bindings.FromKeysym(event.keysym)
