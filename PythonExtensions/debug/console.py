@@ -192,10 +192,12 @@ class Printer(object):
         """
         if self.can_print:
             if self._active:
-                return traceback.print_stack(f, limit, file)
+                traceback.print_stack(f, limit, file)
+                return print()
 
             with self._lock:
-                return traceback.print_stack(f, limit, file)
+                traceback.print_stack(f, limit, file)
+                return print()
 
 
     def get_func_details(self, func: callable, tag: str, result: Any, args, kwargs) -> Tuple[Any, str, str, str, str]:

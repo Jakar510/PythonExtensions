@@ -1,6 +1,9 @@
 
 from Tests import *
 
+
+
+
 def TestApps():
     from PythonExtensions.tk import BaseApp, BaseWindow, BaseLabelWindow, Button
 

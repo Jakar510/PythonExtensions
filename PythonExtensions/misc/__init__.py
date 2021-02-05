@@ -11,7 +11,7 @@ __all__ = [
     'CalculateOffset', 'RoundFloat',
     'IsMethod', 'IsFunction',
     'IsAttributePrivate',
-    'get_size', 'sizeof',
+    'get_size', 'sizeof', 'nameof',
     'AutoCounter', 'lazy_property',
     ]
 
@@ -95,7 +95,6 @@ def sizeof(obj):
     if isinstance(obj, dict): return size + sum(map(sizeof, obj.keys())) + sum(map(sizeof, obj.values()))
     if isinstance(obj, (list, tuple, set, frozenset)): return size + sum(map(sizeof, obj))
     return size
-
 
 
 
