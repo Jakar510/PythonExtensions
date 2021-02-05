@@ -11,7 +11,8 @@ from ...Logging import LoggingManager
 
 __all__ = [
     'BaseApp',
-    'BaseWindow', 'BaseLabelWindow',
+    'BaseWindow',
+    'BaseLabelWindow',
     ]
 
 class BaseApp(object):
@@ -37,6 +38,7 @@ class BaseApp(object):
         """ Override to add functinality. Closes application. """
         self.root.destroy()
 
+
     # noinspection PyUnusedLocal
     def start_gui(self, *args, **kwargs): self._main()
 
@@ -53,20 +55,30 @@ class BaseApp(object):
 
 
 
-class WindowMixin:
-    def __init__(self, app: BaseApp):
+_TBaseApp = TypeVar('_TBaseApp', bound=BaseApp)
+class _WindowMixin(Generic[_TBaseApp]):
+    _app: _TBaseApp
+    def __init__(self, app: _TBaseApp):
+        assert (isinstance(app, BaseApp))
         self._app = app
         self._logger = app.logger.getChild(str(self.__class__.__name__))
 
     def OnPress(self, event: TkinterEvent): pass
     def OnKeyPress(self, event: TkinterEvent): pass
 
-class BaseWindow(Frame, WindowMixin):
-    def __init__(self, master, app: BaseApp, **kwargs):
+class BaseWindow(Frame, _WindowMixin[_TBaseApp]):
+    def __init__(self, master, app: _TBaseApp, **kwargs):
         Frame.__init__(self, master, **kwargs)
-        WindowMixin.__init__(self, app)
+        _WindowMixin.__init__(self, app)
 
-class BaseLabelWindow(LabelFrame, WindowMixin):
-    def __init__(self, master, app: BaseApp, **kwargs):
+    @classmethod
+    def Root(cls, app: _TBaseApp, **kwargs):
+        return cls(app.root, app, **kwargs)
+class BaseLabelWindow(LabelFrame, _WindowMixin[_TBaseApp]):
+    def __init__(self, master, app: _TBaseApp, **kwargs):
         LabelFrame.__init__(self, master, **kwargs)
-        WindowMixin.__init__(self, app)
+        _WindowMixin.__init__(self, app)
+
+    @classmethod
+    def Root(cls, app: _TBaseApp, **kwargs):
+        return cls(app.root, app, **kwargs)

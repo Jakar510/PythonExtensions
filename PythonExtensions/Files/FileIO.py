@@ -1,11 +1,11 @@
 import json
 import os
 import pickle
-import tempfile
 from os.path import *
 
 from .FilePath import *
 from ..Json import *
+from ..Models import URL
 
 
 
@@ -20,7 +20,10 @@ class ReadWriteData(Protocol[AnyStr]):
     def dump(self, data: AnyStr, f: BinaryIO) -> Any: ...
 
 class FileIO(object):
-    def __init__(self, path: FilePath):
+    def __init__(self, path: Union[str, FilePath]):
+        if not isinstance(path, FilePath):
+            path = FilePath(path)
+
         self._path = path
 
     @property
@@ -66,7 +69,7 @@ class FileIO(object):
             return pickle.load(f, **kwargs)
 
 
-    def Write(self, content: Union[str, bytes] = None, *, newline: str = '\n', **kwargs) -> int:
+    def Write(self, content: Union[str, bytes], *, newline: str = '\n', **kwargs) -> int:
         if isinstance(content, str):
             with open(self._path, 'w', newline=newline, **kwargs) as f:
                 return f.write(content)

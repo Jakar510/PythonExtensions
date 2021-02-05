@@ -23,6 +23,7 @@ from ..Events import Bindings
 from ...Files import FilePath
 from ...Images import *
 from ...Json import Size
+from ...Models import URL
 from ...debug import pp
 
 
@@ -498,12 +499,6 @@ class CurrentValue(CallWrapper):
 
 # ------------------------------------------------------------------------------------------
 
-class URL(str):
-    """ Any HTTP link """
-    def __init__(self, url: str):
-        if not isinstance(url, str): url = str(url)
-        if not url.lower().strip().startswith('http'): raise ValueError(f'passed url is not a link: "{url}"')
-        super().__init__(url)
 
 class CommandMixin:
     _cmd: CallWrapper

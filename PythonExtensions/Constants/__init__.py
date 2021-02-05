@@ -32,3 +32,7 @@ RAM = str(round(psutil.virtual_memory().total / (1024.0 ** 3), 2)) + " GB"
 HOSTNAME = socket.gethostname()
 IP_ADDRESS = socket.gethostbyname(socket.gethostname())
 MAC_ADDRESS = ':'.join(re.findall('..', '%012x' % uuid.getnode()))
+
+
+
+# IsRaspberryPi = FilePath.FromString('/boot/config.txt').Exists

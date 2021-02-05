@@ -1,7 +1,9 @@
 import base64
 import hashlib
-import os
 import tempfile
+from builtins import open
+from os import *
+from os import PathLike
 from os.path import *
 from pathlib import Path
 from shutil import rmtree
@@ -15,7 +17,7 @@ __all__ = [
     'FilePath',
     ]
 
-class FilePath(dict, BaseModel, os.PathLike):
+class FilePath(dict, BaseModel, PathLike):
     _hash: str
     _temporary: bool = False
     def __init__(self, obj: Union[str, Dict, Path, 'FilePath']):
@@ -37,6 +39,7 @@ class FilePath(dict, BaseModel, os.PathLike):
 
         dict.__init__(self, d)
 
+    def __hash__(self) -> int: return hash(self.Value)
     def __call__(self) -> str: return self.Value
     @property
     def Value(self) -> str: return self[Keys.Path]
@@ -53,13 +56,13 @@ class FilePath(dict, BaseModel, os.PathLike):
     @property
     def IsLink(self) -> bool: return islink(self.Value)
 
-    def rename(self, new: str): return os.rename(self.Value, join(self.BaseName, new))
+    def Rename(self, new: str): return rename(self.Value, join(self.BaseName, new))
     def Remove(self):
         if self.Exists:
-            if self.IsFile: return os.remove(self)
+            if self.IsFile: return remove(self)
             elif self.IsDirectory: return rmtree(self)
 
-    def chmod(self, mode: int, dir_fd=None, follow_symlinks: bool = False) -> None:
+    def Chmod(self, mode: int, dir_fd=None, follow_symlinks: bool = False) -> None:
         """
         Change the access permissions of a file.
 
@@ -83,30 +86,30 @@ class FilePath(dict, BaseModel, os.PathLike):
         dir_fd and follow_symlinks may not be implemented on your platform.
           If they are unavailable, using them will raise a NotImplementedError.
         """
-        return os.chmod(self.Value, mode, dir_fd=dir_fd, follow_symlinks=follow_symlinks)
+        return chmod(self.Value, mode, dir_fd=dir_fd, follow_symlinks=follow_symlinks)
     def Create(self, data: Union[str, bytes] = None, mode: int = 0o777, exist_ok: bool = True):
-        os.makedirs(self.BaseName, mode, exist_ok)
-        if self.Exists: return self
-        if isinstance(data, str):
-            with open(self, 'w') as f:
-                f.write(data)
+        from .FileIO import FileIO
+        makedirs(self.BaseName, mode, exist_ok)
+        file = FileIO(self)
+        if self.Exists or not data: return file
+        file.Write(data)
+        return file
 
-            return self
+        # if isinstance(data, str):
+        #     with open(self, 'w') as f:
+        #         f.write(data)
+        #
+        #     return self
+        #
+        # if isinstance(data, bytes):
+        #     with open(self, 'wb') as f:
+        #         f.write(data)
+        #
+        # else:
+        #     with open(self, 'ab'): pass
+        #
+        # return self
 
-        if isinstance(data, bytes):
-            with open(self, 'wb') as f:
-                f.write(data)
-
-        else:
-            with open(self, 'wb'): pass
-
-        return self
-
-    # def Clear(self):
-    #     for root, folders, files in os.walk(self):
-    #         for f in files: os.remove(join(root, f))
-    #
-    #         for f in folders: os.remove(join(root, f))
 
 
     @property
@@ -132,9 +135,9 @@ class FilePath(dict, BaseModel, os.PathLike):
     def Extension(self, replacements: Dict[str, str], upper: Any) -> Optional[str]: ...
 
     def Extension(self, replacements: Dict[str, str] = { }, **kwargs) -> Optional[str]:
-        name = self.FileName
-        if not name: return None
-        ext = name.split('.')[-1]
+        _name = self.FileName
+        if not _name: return None
+        ext = _name.split('.')[-1]
         if not kwargs or 'raw' in kwargs: return ext
 
         if kwargs.pop('lower', None):
@@ -184,7 +187,7 @@ class FilePath(dict, BaseModel, os.PathLike):
     def __fspath__(self): return self.Value
     def __bytes__(self):
         """ Return the bytes representation of the path. This is only recommended to use under Unix. """
-        return os.fsencode(self.Value)
+        return fsencode(self.Value)
     def __setitem__(self, key, value):
         if hasattr(self, '_hash'): del self._hash
         super(FilePath, self).__setitem__(key, value)
@@ -224,6 +227,8 @@ class FilePath(dict, BaseModel, os.PathLike):
 
 
 
+    @classmethod
+    def CurrentFile(cls, file=__file__): return cls(file)
 
     @classmethod
     def FromString(cls, _path: Union[str, 'FilePath']) -> 'FilePath': return cls(_path)
@@ -234,21 +239,21 @@ class FilePath(dict, BaseModel, os.PathLike):
     def Join(cls, *args: Union[str, 'FilePath']) -> 'FilePath': return cls(join(*args))
 
     @classmethod
-    def ListDir(cls, path: Union[str, 'FilePath']) -> List['FilePath']:
-        if not isinstance(path, FilePath):
-            path = cls(path)
+    def ListDir(cls, _path: Union[str, 'FilePath']) -> List['FilePath']:
+        if not isinstance(_path, FilePath):
+            _path = cls(_path)
 
-        if path.IsFile: return [cls.FromString(path)]
+        if _path.IsFile: return [cls.FromString(_path)]
 
-        if not path.IsDirectory: raise FileNotFoundError(f'path "{path}" is not a valid directory.')
-        def _join(file): return cls.Join(path, file)
-        return sorted(map(_join, os.listdir(path)))
+        if not _path.IsDirectory: raise FileNotFoundError(f'path "{path}" is not a valid directory.')
+        def _join(file): return cls.Join(_path, file)
+        return sorted(map(_join, listdir(_path)))
 
     @classmethod
     def Temporary(cls, *args: str, root_dir: str = None):
-        path = cls.Join(root_dir or tempfile.gettempdir(), *args)
-        path._temporary = True
-        return path.Create()
+        _path = cls.Join(root_dir or tempfile.gettempdir(), *args)
+        _path._temporary = True
+        return _path.Create()
 
     @classmethod
     def Parse(cls, d) -> 'FilePath':
@@ -256,40 +261,3 @@ class FilePath(dict, BaseModel, os.PathLike):
             return cls(d)
 
         throw(d, dict)
-
-
-
-    # @classmethod
-    # @overload
-    # def MakeDirectories(cls, path: str): ...
-    # @classmethod
-    # @overload
-    # def MakeDirectories(cls, path: 'FilePath'): ...
-    # @classmethod
-    # @overload
-    # def MakeDirectories(cls, path: Path): ...
-    # @classmethod
-    # @overload
-    # def MakeDirectories(cls, *path: str): ...
-    # @classmethod
-    # @overload
-    # def MakeDirectories(cls, *path: 'FilePath'): ...
-    #
-    #
-    # @classmethod
-    # def MakeDirectories(cls, *args):
-    #     if len(args) == 1:
-    #         args = args[0]
-    #         if isinstance(args, str):
-    #             path = cls.FromString(args)
-    #
-    #         elif isinstance(args, Path):
-    #             path = cls.FromPath(args)
-    #
-    #         else:
-    #             path = args
-    #     else:
-    #         path = cls.Join(*args)
-    #
-    #     os.makedirs(path)
-    #     return path
