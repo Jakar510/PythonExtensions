@@ -53,7 +53,7 @@ def _print_chain_signature(func: callable, tag: str, level: Union[int, AutoCount
         _tag = tag.format(f'{level} --> {name}')
         signature = pp.getPPrintStr({ 'args': args, 'kwargs': kwargs })
         Print(_tag, f'{name}(\n      {signature}\n   )', name, f'returned: \n{pp.getPPrintStr(result)}')
-def sub(level: int = None, *, tag: str = '-------------- level: {0}', signature: bool = False):
+def sub(level: int = _counter(), *, tag: str = '-------------- level: {0}', signature: bool = False):
     """
         Print the function signature [Optional] and return value.
 
@@ -73,7 +73,7 @@ def sub(level: int = None, *, tag: str = '-------------- level: {0}', signature:
         @functools.wraps(func)
         def wrapper_debug(*args, **kwargs):
             result = func(*args, **kwargs)
-            _print_chain_signature(func, tag, level or _counter(), signature, result, args, kwargs)
+            _print_chain_signature(func, tag, level, signature, result, args, kwargs)
             return result
         return wrapper_debug
     return wrapped

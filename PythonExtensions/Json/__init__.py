@@ -7,7 +7,7 @@ from typing import BinaryIO
 from PIL.Image import Image as _Image
 
 from .Keys import Keys
-from .MixIns import *
+from ..nameof import nameof
 
 
 
@@ -57,13 +57,11 @@ def RaiseKeyError(key, d: Dict): raise KeyError(f'{key} not in {d.keys()}')
 
 class BaseModel(object):
     def Clone(self): return _copy.deepcopy(self)
-    def ToString(self) -> str:
-        # try: return f'<{self.__class__.__qualname__} Object. State: {self.__dict__}>'
-        # except AttributeError: return f'<{self.__class__.__name__} Object. State: {self.__dict__}>'
-        try:
-            return f'<{self.__class__.__qualname__} Object() [ {self.ToJsonString()} ]'
-        except AttributeError:
-            return f'<{self.__class__.__name__} Object() [ {self.ToJsonString()} ]'
+    def ToString(self) -> str: return f'<{nameof(self)} Object() {self.ToJsonString()}>'
+    @property
+    def __class_name__(self) -> str: return nameof(self)
+
+
 
     @classmethod
     def Parse(cls, d): raise NotImplementedError()
@@ -215,6 +213,7 @@ class BaseDictModel(dict, BaseObjectModel, Dict[_KT, _VT]):
         else: super().__init__(**kwargs)
     def __str__(self): return self.ToString()
 
+    # def __deepcopy__(self): return super(BaseDictModel, self).__deepcopy__()
     def __delitem__(self, item: Union[_KT, _VT]): return super().__delitem__(item)
     def __contains__(self, item: Union[_KT, _VT]): return super().__contains__(item)
     def __setitem__(self, key: _KT, value: _VT): return super().__setitem__(key, value)

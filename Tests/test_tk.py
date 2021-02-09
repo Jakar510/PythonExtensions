@@ -225,7 +225,7 @@ class HomeWindow(Frame):
     def Add(self, cls: Union[Frame, LabelFrame]):
         assert (callable(cls))
         w = cls(master=self.root).PlaceFull()
-        b = Widgets.Button(master=self, text=f'{w.__class__.__name__} [ {len(self.root.w)} ]')
+        b = Widgets.Button(master=self, text=f'{nameof(w)} [ {len(self.root.w)} ]')
         b.SetCommand(lambda: self.closeWindow(w))
         i = len(self.root.w)
         self.Grid_RowConfigure(i, weight=1)
@@ -251,7 +251,7 @@ class BaseWindow(Frame):
         self.master.home.show()
 
     def OnAppearing(self):
-        self.button.SetPhoto(PhotoData['exit'])
+        self.button.SetImage(PhotoData['exit'])
 
 class Window1(BaseWindow):
     def CreateWidgets(self):
@@ -272,7 +272,7 @@ class LabelWindow(LabelFrame):
     CreateWidgets: callable
     def __init__(self, master: Root or BaseWindow):
         self.master = master
-        super().__init__(master, text=str(self.__class__.__name__))
+        super().__init__(master, text=nameof(self))
         self.button = Widgets.Button(master=self, text="button 4").SetCommand(self.exit).Place(relx=0.0, rely=0.0, relheight=1.0, relwidth=0.5)
 
     def exit(self):

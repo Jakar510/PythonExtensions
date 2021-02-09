@@ -5,6 +5,7 @@ from ..Core import *
 from ..Events import Bindings, TkinterEvent
 from ...Files import FilePath
 from ...Logging import LoggingManager
+from ...nameof import class_name
 
 
 
@@ -61,7 +62,7 @@ class _WindowMixin(Generic[_TBaseApp]):
     def __init__(self, app: _TBaseApp):
         assert (isinstance(app, BaseApp))
         self._app = app
-        self._logger = app.logger.getChild(str(self.__class__.__name__))
+        self._logger = app.logger.getChild(str(class_name(self)))
 
     def OnPress(self, event: TkinterEvent): pass
     def OnKeyPress(self, event: TkinterEvent): pass

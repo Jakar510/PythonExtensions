@@ -79,7 +79,7 @@ class HID_BUFFER(TimeKeeperMixin):
         :return: float
         """
         self.UpdateTime()
-        if not self._text: raise ValueError(f'{self.__class__.__name__}.Value is empty')
+        if not self._text: raise ValueError(f'{nameof(self)}.Value is empty')
         return float(self._text)
     def MultiplyByFactor(self, factor: Union[int, float] = -1) -> float:
         """
@@ -99,7 +99,7 @@ class HID_BUFFER(TimeKeeperMixin):
     def format(self, *args, **kwargs) -> str: return self._text.format(*args, **kwargs)
     def __format__(self, format_spec) -> str: return self._text.__format__(format_spec)
     def __contains__(self, item: str) -> bool: return item in self._text
-    def __repr__(self) -> str: return f'<{self.__class__.__name__} Object: "{self._text}">'
+    def __repr__(self) -> str: return f'<{nameof(self)} Object: "{self._text}">'
     def __str__(self) -> str: return self._text
 
 

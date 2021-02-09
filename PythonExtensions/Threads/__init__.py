@@ -3,18 +3,19 @@ import time
 from abc import ABC
 from typing import Union
 
+from ..nameof import nameof
 
 
 
 __all__ = ['AutoStartThread', 'AutoStartTargetedThread', 'Wait']
 
+
+
+
+
 class AutoStartThread(threading.Thread, ABC):
     def __init__(self, *args, Name: str = None, AutoStart: bool = True, Daemon: bool = True, **kwargs):
-        if not Name:
-            try: Name = self.__class__.__qualname__
-            except AttributeError: Name = self.__class__.__name__
-
-        super().__init__(name=Name, args=args, kwargs=kwargs, daemon=Daemon)
+        super().__init__(name=Name or nameof(self), args=args, kwargs=kwargs, daemon=Daemon)
         if AutoStart: self.start()
     def run(self): raise NotImplementedError()
 

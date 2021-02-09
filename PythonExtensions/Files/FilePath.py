@@ -1,21 +1,118 @@
 import base64
 import hashlib
+import json
+import os
+import pickle
 import tempfile
-from builtins import open
-from os import *
-from os import PathLike
+from os import PathLike, chmod, fsencode, listdir, makedirs, remove, rename
 from os.path import *
 from pathlib import Path
 from shutil import rmtree
 
 from ..Json import *
+from ..nameof import nameof
 
 
 
 
 __all__ = [
     'FilePath',
+    'FileIO',
+    'ReadWriteData'
     ]
+
+
+class ReadWriteData(Protocol[AnyStr]):
+    def load(self, f: BinaryIO) -> Any: ...
+    def dump(self, data: AnyStr, f: BinaryIO) -> Any: ...
+
+
+class FileIO(PathLike):
+    def __init__(self, _path: Union[str, 'FilePath']):
+        if not isinstance(_path, FilePath):
+            _path = FilePath(_path)
+
+        self._path = _path
+
+
+    @property
+    def path(self) -> 'FilePath': return self._path
+
+    def Remove(self): return self._path.Remove()
+    def __del__(self): return self._path.__del__()
+    def __repr__(self): return f'<{nameof(self)} Object. Location: "{self._path}">'
+    def __str__(self): return str(self._path)
+    def __fspath__(self): return self._path.__fspath__()
+    def __bytes__(self):
+        """ Return the bytes representation of the path. This is only recommended to use under Unix. """
+        return bytes(self._path)
+
+
+    def GetFileData(self, file: ReadWriteData, *, Default=None, Check: callable = None, RemoveOnError: bool = False):
+        try:
+            with open(self._path, 'rb') as f:
+                dat = file.load(f)
+                if callable(Check): Check(dat)
+                return dat
+        except FileNotFoundError: return Default
+        except (pickle.PickleError, pickle.PicklingError, json.JSONDecodeError):
+            if RemoveOnError: self._path.Remove()
+            return Default
+    def SetFileData(self, data: Any, file: ReadWriteData, *, Check: callable = None):
+        with open(self._path, 'wb') as f:
+            if callable(Check): data = Check(data)
+            return file.dump(data, f)
+
+
+    def SaveJson(self, data: Union[List, Dict], **kwargs):
+        with open(self._path, 'w') as f:
+            return json.dump(data, f, **kwargs)
+    def ReadJson(self, **kwargs) -> Union[List, Dict]:
+        with open(self._path, 'r') as f:
+            return json.load(f, **kwargs)
+
+
+    def SavePickle(self, data: Any, **kwargs):
+        with open(self._path, 'wb') as f:
+            return pickle.dump(data, f, **kwargs)
+    def ReadPickle(self, **kwargs) -> Any:
+        with open(self._path, 'rb') as f:
+            return pickle.load(f, **kwargs)
+
+
+    def Write(self, content: Union[str, bytes], *, newline: str = '\n', **kwargs) -> int:
+        if isinstance(content, str):
+            with open(self._path, 'w', newline=newline, **kwargs) as f:
+                return f.write(content)
+
+        elif isinstance(content, bytes):
+            with open(self._path, 'wb', newline=newline, **kwargs) as f:
+                return f.write(content)
+
+        else: raise TypeError(type(content), (bytes, str))
+    def Read(self, open_as_binary: bool = False):
+        with open(self._path, 'rb' if open_as_binary else 'r') as f:
+            return f.read()
+
+
+    @classmethod
+    def TemporaryFile(cls, *sub_folders: str, _name: str, root_dir: str = None): return FilePath.Temporary(*sub_folders, _name, root_dir=root_dir)
+
+    @classmethod
+    def Create(cls, _path: Union[str, 'FilePath'], content: Union[str, bytes] = None, *,
+               buffering=None, encoding: str = None, errors=None, newline: str = '\n', closefd=True):
+        os.makedirs(basename(_path), exist_ok=True)
+        _path = cls(_path)
+        _path.Write(content, buffering=buffering, encoding=encoding, errors=errors, newline=newline, closefd=closefd)
+
+        return _path
+
+    @staticmethod
+    def CopyFile(_inPath: Union[str, 'FilePath'], _outPath: Union[str, 'FilePath'], open_as_binary: bool = False):
+        with open(_outPath, 'wb' if open_as_binary else 'w') as out:
+            with open(_inPath, 'rb' if open_as_binary else 'r') as _in:
+                out.write(_in.read())
+
 
 class FilePath(dict, BaseModel, PathLike):
     _hash: str
@@ -87,8 +184,7 @@ class FilePath(dict, BaseModel, PathLike):
           If they are unavailable, using them will raise a NotImplementedError.
         """
         return chmod(self.Value, mode, dir_fd=dir_fd, follow_symlinks=follow_symlinks)
-    def Create(self, data: Union[str, bytes] = None, mode: int = 0o777, exist_ok: bool = True):
-        from .FileIO import FileIO
+    def Create(self, data: Union[str, bytes] = None, mode: int = 0o777, exist_ok: bool = True) -> FileIO:
         makedirs(self.BaseName, mode, exist_ok)
         file = FileIO(self)
         if self.Exists or not data: return file
@@ -177,11 +273,7 @@ class FilePath(dict, BaseModel, PathLike):
 
 
 
-    def ToString(self) -> str:
-        try:
-            return f'<{self.__class__.__qualname__}() "{self.Value}">'
-        except AttributeError:
-            return f'<{self.__class__.__name__}() "{self.Value}">'
+    def ToString(self) -> str: return f'<{nameof(self)}() "{self.Value}">'
     def __repr__(self): return self.ToString()
     def __str__(self): return self.Value
     def __fspath__(self): return self.Value
@@ -197,14 +289,29 @@ class FilePath(dict, BaseModel, PathLike):
         except PermissionError: pass
 
     def __eq__(self, other):
-        if not isinstance(other, self.__class__): raise TypeError(type(other), self.__class__)
+        if not isinstance(other, (str, self.__class__)):
+            raise TypeError(type(other), (str, self.__class__))
+
+        if isinstance(other, str):
+            return self.Value == other
+
         return self.Value == other.Value
     def __ne__(self, other): return not self.__eq__(other)
     def __gt__(self, other):
-        if not isinstance(other, self.__class__): raise TypeError(type(other), self.__class__)
+        if not isinstance(other, (str, self.__class__)):
+            raise TypeError(type(other), (str, self.__class__))
+
+        if isinstance(other, str):
+            return self.Value > other
+
         return self.Value > other.Value
     def __lt__(self, other):
-        if not isinstance(other, self.__class__): raise TypeError(type(other), self.__class__)
+        if not isinstance(other, (str, self.__class__)):
+            raise TypeError(type(other), (str, self.__class__))
+
+        if isinstance(other, str):
+            return self.Value < other
+
         return self.Value < other.Value
 
     def __state__(self):
@@ -226,7 +333,6 @@ class FilePath(dict, BaseModel, PathLike):
 
 
 
-
     @classmethod
     def CurrentFile(cls, file=__file__): return cls(file)
 
@@ -245,12 +351,12 @@ class FilePath(dict, BaseModel, PathLike):
 
         if _path.IsFile: return [cls.FromString(_path)]
 
-        if not _path.IsDirectory: raise FileNotFoundError(f'path "{path}" is not a valid directory.')
+        if not _path.IsDirectory: raise FileNotFoundError(f'path "{_path}" is not a valid directory.')
         def _join(file): return cls.Join(_path, file)
         return sorted(map(_join, listdir(_path)))
 
     @classmethod
-    def Temporary(cls, *args: str, root_dir: str = None):
+    def Temporary(cls, *args: str, root_dir: str = None) -> FileIO:
         _path = cls.Join(root_dir or tempfile.gettempdir(), *args)
         _path._temporary = True
         return _path.Create()

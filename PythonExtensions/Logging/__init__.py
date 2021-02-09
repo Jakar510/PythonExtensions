@@ -6,6 +6,7 @@ from logging.handlers import RotatingFileHandler
 from typing import *
 
 from ..Files import FilePath
+from ..nameof import class_name
 
 
 
@@ -192,7 +193,7 @@ class LoggingManager(object):
             # if issubclass(source, key): raise InstanceError('source is not identified')
 
             if isinstance(source, key):
-                logger = self.app_logger.getChild(source.__class__.__name__)
+                logger = self.app_logger.getChild(class_name(self))
                 logger.addHandler(Info_Handler(file=self.paths.__log_paths__[value], fmt=self.fmt))
                 logger.addHandler(Error_Handler(file=self.paths.__log_paths__[LogPaths.ErrorName(value)], fmt=self.fmt, path=self.paths))
 

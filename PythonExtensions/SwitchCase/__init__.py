@@ -2,6 +2,7 @@ import re
 from typing import *
 
 from ..Exceptions import *
+from ..nameof import *
 
 
 
@@ -13,7 +14,7 @@ __all__ = [
     'InvalidRegexObject',
     'InactiveSessionError',
 
-    'BaseSwitchCase',
+    '_BaseSwitchCase',
     'SwitchRegex',
     'SwitchVariable',
     'SwitchCallback',
@@ -21,22 +22,16 @@ __all__ = [
     'SwitchSubClass',
     ]
 
-def _to_type(obj: Type): return type(obj) if obj.__class__ != type.__class__ else obj
-def _convert_to_types(value_to_check: Union[Tuple[Type, ...], List[Type], Type]) -> Union[Tuple[Type, ...], Type]:
-    if isinstance(value_to_check, (list, tuple)):
-        return tuple(map(_to_type, value_to_check))
-
-    elif value_to_check.__class__ != type.__class__:
-        return type(value_to_check)
 
 
 
 class Equalable(Protocol):
     def __eq__(self, *args, **kwargs) -> bool: ...
 
-_TCase = TypeVar('_TCase')
 
-class BaseSwitchCase(Generic[_TCase]):
+
+_TCase = TypeVar('_TCase')
+class _BaseSwitchCase(Generic[_TCase]):
     """
      variable: the instance to check against.
      regex: the instance to check against.
@@ -48,7 +43,6 @@ class BaseSwitchCase(Generic[_TCase]):
      no_match_handler_kwargs (kwargs): _no_match_handler's kwargs
     """
     __slots__ = ['_variable', '_break', 'no_match_handler']
-    _variable: _TCase
     _active: bool = False
     _break: Optional[BreakCase]
     _no_match_handler: Optional[Union[Callable[[], None], Type[Exception]]]
@@ -61,11 +55,10 @@ class BaseSwitchCase(Generic[_TCase]):
         if not hasattr(variable, '__eq__'):
             raise AttributeError(f'variable is not a comparable type. {type(variable)}')
 
-        self._variable = variable
+        self._variable: Final[_TCase] = variable
         self._no_match_handler = no_match_handler
         self._break = None
         self._active = False
-
 
     def __enter__(self):
         self._break = None
@@ -78,21 +71,20 @@ class BaseSwitchCase(Generic[_TCase]):
         if issubclass(self._no_match_handler, Exception): raise self._no_match_handler() from exc_val
         if callable(self._no_match_handler): return self._no_match_handler()
     def _exit(self) -> True:
-        print('__EXIT__', self._break)
         if isinstance(self._break, BreakCase):
             raise self._break
+
         elif self._break is None:
             self._break = BreakCase()
+
         else:
-            raise RuntimeError(self._break)
+            raise TypeError(type(self._break), (BreakCase, type(None)))
 
         return True
 
-
-    def __setattr__(self, key, value):
-        if key not in ('_active', '_break') and self._active: self._raise_active(key, value)
-        super().__setattr__(key, value)
-    def _raise_inactive(self): raise InactiveSessionError(""" Context Manager Must be Used!
+    def _checkActive(self):
+        if not self._active:
+            raise InactiveSessionError(""" Context Manager Must be Used!
 
     For example:
 
@@ -104,43 +96,44 @@ class BaseSwitchCase(Generic[_TCase]):
             ...
         ...
 """)
-    def _raise_active(self, key, value): raise ActiveSessionError(f"""Attributes cannot be changed while the context manager is active. 
-    key: {key} 
-    value: {value} """)
+    def __setattr__(self, key, value):
+        if key not in ('_active', '_break') and self._active:
+            raise ActiveSessionError(f"Attributes cannot be changed while the context manager is active.")
+
+        super().__setattr__(key, value)
 
     def _check(self, value_to_check: _TCase): return self._variable == value_to_check
-    def __call__(self, value_to_check: _TCase, *args, **kwargs) -> bool: raise NotImplementedError()
 
 
-class SwitchRegex(BaseSwitchCase[_TCase]):
-    _variable: Callable[[str], Any]
+
+class SwitchRegex(_BaseSwitchCase[_TCase]):
     # noinspection PyMissingConstructor
     def __init__(self, regex: re.Pattern, method: str):
         """
         :param regex: the instance to check against.
         """
         if not hasattr(regex, method): raise AttributeError('method must be a callable function of the regex object.')
-        self._variable = getattr(regex, method)
-        if not callable(self._variable): raise TypeError(f'regex.{method} is not callable')
+        self._re = regex
+        self._regex: Final[Callable[[str], Any]] = getattr(regex, method)
+        if not callable(self._regex): raise TypeError(f'regex.{method} is not callable')
 
     # noinspection PyMethodOverriding
     def __call__(self, value_to_check: _TCase) -> bool:
-        if not self._active: self._raise_inactive()
-        if self.__regex__(value_to_check):
+        self._checkActive()
+        if self._check(value_to_check):
             return self._exit()
 
         return False
-    def __regex__(self, value_to_check: str) -> bool:  # TODO: implement regex parsing for the value_to_check
+    def _check(self, value_to_check: str) -> bool:  # TODO: implement regex parsing for the value_to_check
         if not isinstance(value_to_check, str): return False
 
-        return self._variable(value_to_check) is not None
+        return self._regex(value_to_check) is not None
 
 
 
-class SwitchVariable(BaseSwitchCase[_TCase]):
-    # noinspection PyMethodOverriding
-    def __call__(self, value_to_check: _TCase) -> bool:
-        if not self._active: self._raise_inactive()
+class SwitchVariable(_BaseSwitchCase[_TCase]):
+    def __call__(self, value_to_check: _TCase, *args, **kwargs) -> bool:
+        self._checkActive()
         if self._check(value_to_check):
             return self._exit()
 
@@ -148,11 +141,10 @@ class SwitchVariable(BaseSwitchCase[_TCase]):
 
 
 
-
-class SwitchCallback(BaseSwitchCase[_TCase]):
+class SwitchCallback(_BaseSwitchCase[_TCase]):
     # noinspection PyMethodOverriding
     def __call__(self, value_to_check: _TCase, callback: Callable[[_TCase], None]) -> bool:
-        if not self._active: self._raise_inactive()
+        self._checkActive()
         if self._check(value_to_check):
             callback(value_to_check)
             return self._exit()
@@ -161,28 +153,28 @@ class SwitchCallback(BaseSwitchCase[_TCase]):
 
 
 
-class SwitchInstance(BaseSwitchCase[_TCase]):
-    def __call__(self, *types: _TCase) -> bool:
-        if not self._active: self._raise_inactive()
+class SwitchInstance(_BaseSwitchCase[_TCase]):
+    def __call__(self, *types: Union[Type, Any]) -> bool:
+        self._checkActive()
         if self._check(*types):
             return self._exit()
 
         return False
 
-    def _check(self, *types): return isinstance(self._variable, _convert_to_types(types))
+    def _check(self, *types):
+
+        return isinstance(self._variable, convert_to_types(types))
 
 
 
-class SwitchSubClass(BaseSwitchCase):
+class SwitchSubClass(_BaseSwitchCase):
     def __init__(self, variable: Type):
         super().__init__(variable)
-
-        self._variable = variable
     def __call__(self, *types: Type) -> bool:
-        if not self._active: self._raise_inactive()
+        self._checkActive()
         if self._check(*types):
             return self._exit()
 
         return False
 
-    def _check(self, *types: Type): return issubclass(self._variable, _convert_to_types(types))
+    def _check(self, *types: Type): return issubclass(self._variable, convert_to_types(types))

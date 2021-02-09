@@ -1,4 +1,3 @@
-
 from Tests import *
 
 
@@ -16,11 +15,15 @@ def TestApps():
             self.main = Main.Root(self)
             return super(App, self).start_gui()
 
+
+
     class Popup(BaseLabelWindow[App]):
         def __init__(self, master, app):
             super().__init__(master, app, text='Popup')
             self.PlaceFull()
             self.rb = Button(self, text='hide').PackFull().SetCommand(self.hide)
+
+
 
     class Main(BaseWindow[App]):
         def __init__(self, master, app):
@@ -35,15 +38,15 @@ def TestApps():
 
             self.lb.SetCommand(self.l.show)
 
+
+
     _app = App(app_name='test app', root_path='.')
 
-
+    _app.root.after(2000, _app.Close)
     _app.start_gui()
 
-if __name__ == '__main__':
-    TestApps()
-    Tests.Run()
 
-    test_tk_1()
-    test_tk_2()
-    test_switch_case()
+
+if __name__ == '__main__':
+    # TestApps()
+    Run()

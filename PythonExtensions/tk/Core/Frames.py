@@ -20,7 +20,7 @@ class _BaseFrameMixin:
     @property
     def __name__(self):
         try: base = super().__name__()
-        except AttributeError: base = self.__class__.__name__
+        except AttributeError: base = nameof(self)
 
         if self.InstanceID:
             if isinstance(self.InstanceID, Enum): InstanceID = self.InstanceID.value

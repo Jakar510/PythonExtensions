@@ -244,6 +244,7 @@ class Printer(object):
         if not isinstance(_pp, Printer): raise TypeError(type(_pp), (Printer,))
         global pp
         pp = _pp
+        return pp
 
 
 

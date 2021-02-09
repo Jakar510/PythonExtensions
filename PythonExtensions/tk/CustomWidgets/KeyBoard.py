@@ -371,7 +371,7 @@ class KeyboardMixin:
                  popup_width: int = None, popup_height: int = None,
                  popup_relwidth: float = None, popup_relheight: float = None):
         if not isinstance(self, BaseTextTkinterWidget) and isinstance(self, KeyboardMixin):
-            raise TypeError(f'{self.__class__.__name__} must be used on a sub-class of {BaseTextTkinterWidget}')
+            raise TypeError(f'{nameof(self)} must be used on a sub-class of {BaseTextTkinterWidget}')
 
         self.master = master
 

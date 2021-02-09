@@ -4,6 +4,8 @@ from itertools import count
 from types import FunctionType, MethodType
 from typing import Iterator, Union
 
+from ..nameof import nameof
+
 
 
 
@@ -11,10 +13,9 @@ __all__ = [
     'CalculateOffset', 'RoundFloat',
     'IsMethod', 'IsFunction',
     'IsAttributePrivate',
-    'get_size', 'sizeof', 'nameof',
+    'get_size', 'sizeof',
     'AutoCounter', 'lazy_property',
     ]
-
 
 def RoundFloat(Float: float, Precision: int) -> str:
     """ Rounds the Float to the given Precision and returns It as string. """
@@ -114,7 +115,7 @@ class AutoCounter(object):
         self._next = self._counter.__next__
 
     def __str__(self): return str(self._value)
-    def __repr__(self): return f'<{self.__class__.__name__}, value: {self._value}>'
+    def __repr__(self): return f'<{nameof(self)}, value: {self._value}>'
 
 
 

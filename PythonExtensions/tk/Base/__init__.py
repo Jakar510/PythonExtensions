@@ -25,6 +25,7 @@ from ...Images import *
 from ...Json import Size
 from ...Models import URL
 from ...debug import pp
+from ...nameof import nameof
 
 
 
@@ -396,6 +397,8 @@ class BaseTkinterWidget(tk.Widget, ABC):
         """ this is called just before widget disappears. override to implement desired effects """
         pass
 
+    @property
+    def __class_name__(self) -> str: return nameof(self)
 
 class BaseTextTkinterWidget(BaseTkinterWidget):
     _txt: tk.StringVar

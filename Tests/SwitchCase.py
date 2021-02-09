@@ -1,90 +1,27 @@
-import logging
+import random
+import unittest
 
 from PythonExtensions.SwitchCase import *
 
 
 
 
-__all__ = ['test_switch_case']
+__all__ = [
+    'SwitchCase_TestCase',
+    ]
 
-BREAK = ' ---> you should not see this'
-def example1(test=10):
-    """
-        Tests simple integers.
-
-    :return:
-    """
-    print()
-
-    with SwitchVariable(test) as sc:
-        sc(2)
-        print('example1 sub 1')
-        sc(10)  # will break here due to match found.
-        print('example1 sub 2' + BREAK)  #
-        sc(12)
+YOU_SHOULD_NOT_SEE_THIS = 'YOU_SHOULD_NOT_SEE_THIS'
 
 
-def example2():
-    """
-        Tests simple strings with the catch_value_to_check keyword.
-        Note that on_true is a callable function.
-
-    :return:
-    """
-    print()
-    test = '10'
-    with SwitchVariable(test) as sc:
-        on_true = lambda x: print(f'testing... {x}')
-
-        sc(2)
-        print('example2 sub 1')
-        sc('1')
-        print('example2 sub 2')
-        sc('10')  # will break here due to match found.
-
-
-def example3(*args, **kwargs):
-    """
-        Tests the catch_value_to_check keyword.
-        Note that on_true is a callable function.
-
-    :param args:
-    :param kwargs:
-    :return:
-    """
-    print()
-    def run_test(*args, **kwargs):
-        print({
-            'args':   args,
-            'kwargs': kwargs
-            })
-
-    test = '10'
-    with SwitchCallback(test) as sc:
-        sc(2, run_test)
-        print('example3 sub 1')
-        sc('1', run_test)  # will break here due to match found.
-        print('example3 sub 2' + BREAK)
-        sc('10', run_test)
-
-
-def example4():
-    """
-        Tests the Check_Instance and Check_SubClass options.
-
-    :return:
-    """
-    print()
-
-
-
+class SwitchCase_TestCase(unittest.TestCase):
     class base(object):
         # id = uuid.uuid4()
-        def __init__(self, id):
-            self.id = id
+        def __init__(self, _id):
+            self.id = _id
         def __eq__(self, other):
             if isinstance(other, self.__class__):
                 return other.id == self.id
+
             return False
 
 
@@ -93,87 +30,83 @@ def example4():
 
 
 
-    target1 = Test('Target')
-    with SwitchVariable(target1) as sc:
-        sc(1)
-        print('example4.1 sub 1')
-        sc('')
-        print('example4.1 sub 2')
-        sc(None)
-        print('example4.1 sub 3')
-        sc(TypeError)
-        print('example4.1 sub 4')
-        sc(Test('Test'))  # will break here due to match found.
-        print('example4.1 sub 5' + BREAK)
-        sc(int)
-        print('example4.1 sub 6' + BREAK)
-        sc({ })
-        print('example4.1 sub 7' + BREAK)
-        sc(Test('base'))
-        print('example4.1 sub 8' + BREAK)
+    @classmethod
+    def setUpClass(cls):
+        return cls()
+    @classmethod
+    def tearDownClass(cls):
+        return cls()
 
-    print()
-    target2 = base
-    with SwitchSubClass(target2) as sc:
-        sc(int)
-        print('example4.2 sub 1')
-        sc(str)
-        print('example4.2 sub 2')
-        sc(type(None))
-        print('example4.2 sub 3')
-        sc(TypeError)
-        print('example4.2 sub 4')
-        sc(Test)  # will break here due to match found.
-        print('example4.2 sub 5' + BREAK)
-        sc(int)
-        print('example4.2 sub 6' + BREAK)
-        sc(dict)
-        print('example4.2 sub 7' + BREAK)
-        sc(base)
-        print('example4.2 sub 8' + BREAK)
-        sc(int)
-        print('example4.2 sub 8' + BREAK)
+    def setUp(self) -> None:
+        pass
+    def tearDown(self):
+        pass
 
-    print()
-    target3 = Test('Target')
-    value_switcher = SwitchInstance(target3)
+    def test_int(self):
+        self.value = random.choice(list(range(20)))
+        with SwitchVariable(self.value) as sc:
+            if sc(2): self.assertEqual(2, self.value)
+            if sc(3): self.assertEqual(3, self.value)
+            if sc(4): self.assertEqual(4, self.value)
+            if sc(5): self.assertEqual(5, self.value)
+            if sc(10): self.assertEqual(10, self.value)
+            if sc(11): self.assertEqual(11, self.value)
+            if sc(12): self.assertEqual(12, self.value)
+            if sc(13): self.assertEqual(13, self.value)
+            if sc(14): self.assertEqual(14, self.value)
+            if sc(15): self.assertEqual(15, self.value)
 
-    # sc.set_variable_to_check(1)
-    with value_switcher as sc:
-        sc(1)
-        print('example4.3 sub 1')
-        sc('')
-        print('example4.3 sub 2')
-        sc(None)
-        print('example4.3 sub 3')
-        sc(TypeError)
-        print('example4.3 sub 4')
-        sc(Test('Test'))
-        print('example4.3 sub 5')
-        sc(int)
-        print('example4.3 sub 6')
-        sc({ })
-        print('example4.3 sub 7')
-        sc(base('base'))
-        print('example4.3 sub 8')
-        # will break here due NO to match found.
-
-    try: value_switcher('')  # WILL though a InactiveSessionError here as it's not inside of a context manager.
-    except Exception as e:
-        logger = logging.getLogger('example4')
-        logger.exception(e)
-def example5():
-    pass
+    def test_str(self):
+        self.value = random.choice(list(map(str, range(20))))
+        with SwitchVariable(self.value) as sc:
+            if sc('2'): self.assertEqual('2', self.value)
+            if sc('3'): self.assertEqual('3', self.value)
+            if sc('4'): self.assertEqual('4', self.value)
+            if sc('5'): self.assertEqual('5', self.value)
+            if sc('10'): self.assertEqual('10', self.value)
+            if sc('11'): self.assertEqual('11', self.value)
+            if sc('12'): self.assertEqual('12', self.value)
+            if sc('13'): self.assertEqual('13', self.value)
+            if sc('14'): self.assertEqual('14', self.value)
+            if sc('15'): self.assertEqual('15', self.value)
 
 
+    def test_class(self):
+        with SwitchSubClass(self.base) as sc:
+            sc(int)
+            print('example4.2 sub 1')
+            sc(str)
+            print('example4.2 sub 2')
+            sc(type(None))
+            print('example4.2 sub 3')
+            sc(TypeError)
+            print('example4.2 sub 4')
+            sc(self.Test)  # will break here due to match found.
+            print('example4.2 sub 5' + YOU_SHOULD_NOT_SEE_THIS)
+            sc(int)
+            print('example4.2 sub 6' + YOU_SHOULD_NOT_SEE_THIS)
+            sc(dict)
+            print('example4.2 sub 7' + YOU_SHOULD_NOT_SEE_THIS)
+            sc(self.base)
+            print('example4.2 sub 8' + YOU_SHOULD_NOT_SEE_THIS)
+            sc(int)
+            print('example4.2 sub 8' + YOU_SHOULD_NOT_SEE_THIS)
 
-def test_switch_case():
-    example1()
-    example2()
-    example3()
-    example4()
-    example5()
+    def test_Instance(self):
+        target3 = self.Test('Target')
+        value_switcher = SwitchInstance(target3)
 
+        with value_switcher as sc:
+            if sc(1): self.assertEqual(1, target3)
+            if sc(''): self.assertEqual('', target3)
+            if sc(None): self.assertEqual(None, target3)
+            if sc(TypeError): self.assertEqual(TypeError, target3)
+            if sc(self.Test('Test')): self.assertNotEqual(self.Test('Test'), target3)
+            if sc(int): self.assertEqual(int, target3)
+            if sc({ }): self.assertEqual({ }, target3)
+            if sc(self.base('base')): self.assertEqual(self.base('base'), target3)
+            if sc(self.Test('Target')): self.assertEqual(self.Test('Target'), target3)
 
-if __name__ == '__main__':
-    test_switch_case()
+        with self.assertRaises(InactiveSessionError):
+            value_switcher('')  # WILL though a InactiveSessionError here as it's not inside of a context manager.
+

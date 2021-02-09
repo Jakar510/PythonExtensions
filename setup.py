@@ -6,22 +6,18 @@
 
 from setuptools import setup
 
-from PythonExtensions import __author__, __classifiers__, __email__, __license__, __maintainer__, __maintainer_email__, __name__, __short_description__, __url__, __version__
 from PythonExtensions.Setup import *
-from PythonExtensions.debug import *
+from PythonExtensions.__metadata__ import (__author__, __classifiers__, __email__, __license__, __maintainer__, __maintainer_email__, __name__, __short_description__, __url__,
+                                           __version__, )
 
 
 
 
-long_description = ReadFromFile(os.path.abspath("./PyPiReadme.md"))
+long_description = ReadFromFile(abspath("./PyPiReadme.md"))
 
-install_requires = GetRequirements(os.path.abspath('./requirements.txt'))
+install_requires = GetRequirements(abspath('./requirements.txt'))
 
-_packages, _package_data = Get_Packages_Data(os.path.abspath('PythonExtensions'), __name__, includes=MatchFileTypes('py', 'png'))
-
-PrettyPrint('_packages', _packages)
-PrettyPrint('_package_data', _package_data)
-PrettyPrint('install_requires', install_requires)
+_packages, _package_data = Get_Packages_Data(abspath('PythonExtensions'), __name__, includes=MatchFileTypes('py', 'png'))
 
 setup(name=__name__,
       version=__version__,

@@ -3,6 +3,7 @@
 #  Copyright (c) 2020.
 #
 # ------------------------------------------------------------------------------
+from ..nameof import nameof
 
 from ..tk.Base import *
 
@@ -53,7 +54,7 @@ def DebugWidgetRecursively(w, *, Message: str):
     assert (isinstance(w, BaseTkinterWidget) and isinstance(w, tk.BaseWidget))
     from pprint import PrettyPrinter
     pp = PrettyPrinter(indent=4)
-    print(f'---------------- {Message} < {w.__class__.__name__} > ----------------')
+    print(f'---------------- {Message} < {nameof(w)} > ----------------')
     pp.pprint(_rootLevelDataRecurive(w))
     print()
     print()

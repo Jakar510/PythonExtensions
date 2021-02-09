@@ -13,6 +13,7 @@ from typing import *
 from .Bindings import Bindings
 from ...Json import Point
 from ...misc import lazy_property
+from ...nameof import nameof
 
 
 
@@ -115,7 +116,7 @@ class TkinterEvent(tkEvent):
     def __str__(self) -> str: return self.ToString()
     # def __repr__(self) -> str: return self.ToString()
 
-    def ToString(self) -> str: return f"""<{self.__class__.__name__} ({repr(self).replace('>', '').replace('<', '')}) Object.
+    def ToString(self) -> str: return f"""<{nameof(self)} ({repr(self).replace('>', '').replace('<', '')}) Object.
 {pprint.pformat(self.ToDict(), indent=4)} >"""
     def ToDict(self) -> dict:
         """
