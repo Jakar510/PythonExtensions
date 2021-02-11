@@ -3,7 +3,8 @@ import time
 from abc import ABC
 from typing import Union
 
-from ..nameof import nameof
+from ..Names import nameof
+
 
 
 

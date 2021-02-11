@@ -7,7 +7,7 @@ from typing import BinaryIO
 from PIL.Image import Image as _Image
 
 from .Keys import Keys
-from ..nameof import nameof
+from ..Names import nameof
 
 
 

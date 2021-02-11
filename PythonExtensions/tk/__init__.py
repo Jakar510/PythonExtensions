@@ -7,11 +7,11 @@
 # ------------------------------------------------------------------------------
 
 # noinspection PyUnresolvedReferences
-from .Base import CurrentValue, tk, ttk, URL
+from .Base import CurrentValue, URL, tk, ttk
+from .BaseApp import *
 from .Core import *
 from .CustomWidgets import *
 from .Enumerations import *
 from .Events import *
 from .Themed import *
 from .Widgets import *
-from .BaseApp import *

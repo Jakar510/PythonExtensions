@@ -3,7 +3,7 @@
 #  Copyright (c) 2020.
 #
 # ------------------------------------------------------------------------------
-from ..nameof import nameof
+from ..Names import nameof
 
 from ..tk.Base import *
 

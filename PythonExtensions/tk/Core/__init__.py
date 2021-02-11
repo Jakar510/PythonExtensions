@@ -4,6 +4,6 @@
 #
 # ------------------------------------------------------------------------------
 
-from .Style import *
 from .Frames import *
+from .Style import *
 from .tkRoot import *

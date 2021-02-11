@@ -24,6 +24,8 @@ from .Logging import *
 # noinspection PyUnresolvedReferences
 from .Models import *
 # noinspection PyUnresolvedReferences
+from .Names import *
+# noinspection PyUnresolvedReferences
 from .SwitchCase import *
 # noinspection PyUnresolvedReferences
 from .Threads import *
@@ -31,7 +33,5 @@ from .Threads import *
 from .debug import *
 # noinspection PyUnresolvedReferences
 from .misc import *
-# noinspection PyUnresolvedReferences
-from .nameof import *
 # noinspection PyUnresolvedReferences
 from .tk import *

@@ -12,8 +12,8 @@ from ..Base import *
 from ..Core import *
 from ..Enumerations import EventType
 from ..Events import *
-from ...HID_BUFFER import HID_BUFFER
 from ..Widgets import *
+from ...HID_BUFFER import HID_BUFFER
 
 
 

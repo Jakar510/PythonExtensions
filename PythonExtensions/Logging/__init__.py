@@ -6,7 +6,7 @@ from logging.handlers import RotatingFileHandler
 from typing import *
 
 from ..Files import FilePath
-from ..nameof import class_name
+from ..Names import class_name
 
 
 

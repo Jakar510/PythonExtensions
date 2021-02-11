@@ -4,7 +4,7 @@ from itertools import count
 from types import FunctionType, MethodType
 from typing import Iterator, Union
 
-from ..nameof import nameof
+from ..Names import nameof
 
 
 

@@ -12,8 +12,8 @@ from typing import *
 
 from .Bindings import Bindings
 from ...Json import Point
+from ...Names import nameof
 from ...misc import lazy_property
-from ...nameof import nameof
 
 
 

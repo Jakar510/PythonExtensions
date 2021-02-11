@@ -2,7 +2,7 @@ import re
 from typing import *
 
 from ..Exceptions import *
-from ..nameof import *
+from ..Names import *
 
 
 

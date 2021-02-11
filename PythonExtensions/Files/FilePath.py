@@ -10,7 +10,7 @@ from pathlib import Path
 from shutil import rmtree
 
 from ..Json import *
-from ..nameof import nameof
+from ..Names import nameof
 
 
 

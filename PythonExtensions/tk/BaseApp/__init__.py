@@ -5,7 +5,7 @@ from ..Core import *
 from ..Events import Bindings, TkinterEvent
 from ...Files import FilePath
 from ...Logging import LoggingManager
-from ...nameof import class_name
+from ...Names import class_name
 
 
 

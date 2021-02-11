@@ -24,8 +24,8 @@ from ...Files import FilePath
 from ...Images import *
 from ...Json import Size
 from ...Models import URL
+from ...Names import nameof
 from ...debug import pp
-from ...nameof import nameof
 
 
 
