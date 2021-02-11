@@ -65,9 +65,8 @@ class BaseModel(object):
 
     @classmethod
     def Parse(cls, d): raise NotImplementedError()
-
     @classmethod
-    def FromJson(cls, string: Union[str, bytes, bytearray], **kwargs): return cls.Parse(_loads(string, **kwargs))
+    def FromJson(cls, string: Union[str, bytes, bytearray], **kwargs): raise NotImplementedError()
 
     def ToJsonString(self, indent=4, ) -> str: return _dumps(self, indent=indent, default=self._serialize)
 
@@ -112,14 +111,18 @@ class BaseModel(object):
             else: d[key] = value
         return d
 
+
 class BaseObjectModel(BaseModel):
     @classmethod
     def Parse(cls, d): raise NotImplementedError()
+    @classmethod
+    def FromJson(cls, string: Union[str, bytes, bytearray], **kwargs): raise NotImplementedError()
 
     def _Filter(self, func: callable): raise NotImplementedError()
     def enumerate(self): raise NotImplementedError()
     def Count(self) -> int: raise NotImplementedError()
     def Empty(self) -> bool: raise NotImplementedError()
+
 
 class BaseListModel(list, BaseObjectModel, List[_T]):
     def __init__(self, source: Union[List, Iterable] = None):
@@ -163,9 +166,10 @@ class BaseListModel(list, BaseObjectModel, List[_T]):
         throw(d, list)
 
     @classmethod
-    def Create(cls, *args: _T):
-        return cls(args)
+    def Create(cls, *args: _T): return cls(args)
 
+    @classmethod
+    def FromJson(cls, string: Union[str, bytes, bytearray], **kwargs): return cls.Parse(_loads(string, **kwargs))
 
 
 class BaseSetModel(set, BaseObjectModel, Set[_T]):
@@ -202,9 +206,10 @@ class BaseSetModel(set, BaseObjectModel, Set[_T]):
         throw(d, list)
 
     @classmethod
-    def Create(cls, *args: _T):
-        return cls(args)
+    def Create(cls, *args: _T): return cls(args)
 
+    @classmethod
+    def FromJson(cls, string: Union[str, bytes, bytearray], **kwargs): return cls.Parse(_loads(string, **kwargs))
 
 
 class BaseDictModel(dict, BaseObjectModel, Dict[_KT, _VT]):
@@ -244,13 +249,13 @@ class BaseDictModel(dict, BaseObjectModel, Dict[_KT, _VT]):
         throw(d, dict)
 
     @classmethod
-    def Create(cls, **kwargs: _VT):
-        return cls(kwargs)
+    def Create(cls, **kwargs: _VT): return cls(kwargs)
+
+    @classmethod
+    def FromJson(cls, string: Union[str, bytes, bytearray], **kwargs): return cls.Parse(_loads(string, **kwargs))
 
 
 
-
-# noinspection DuplicatedCode
 class Size(BaseDictModel[str, int]):
     __slots__ = []
     @property
@@ -350,7 +355,6 @@ class Ratios(Size):
 
 
 
-# noinspection DuplicatedCode
 class Point(BaseDictModel[str, int]):
     __slots__ = []
     @property
@@ -418,6 +422,7 @@ class Point(BaseDictModel[str, int]):
             return cls(d)
 
         throw(d, dict)
+
 
 class PlacePosition(Point):
     """ tkinter uses top boundary as x axis. """
