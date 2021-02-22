@@ -1,4 +1,5 @@
 from datetime import date as Date, datetime as DateTime, time as Time, tzinfo
+from time import time
 from typing import *
 
 
@@ -6,10 +7,9 @@ from typing import *
 
 __all__ = [
     'IsoFormat',
-
+    'time',
     'DateTime', 'Date', 'Time', 'tzinfo',
     ]
-
 
 class IsoFormat(object):
     _format: str
