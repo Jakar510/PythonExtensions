@@ -21,7 +21,7 @@ Please read [CONTRIBUTING.md](.github/CONTRIBUTING.md) for details on our code o
 
 ## License
 
-This project is licensed under the MIT - see the [LICENSE](LICENSE.md) file for details
+This project is licensed under MIT - see the [LICENSE](LICENSE.md) file for details
 
 ## Acknowledgments
 
