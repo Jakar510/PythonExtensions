@@ -7,6 +7,8 @@
 import base64
 import os
 from io import BytesIO
+from typing import *
+from typing import BinaryIO
 from urllib.request import urlopen
 
 from PIL import ImageFile, ImageTk

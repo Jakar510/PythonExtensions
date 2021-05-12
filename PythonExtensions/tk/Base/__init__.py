@@ -170,7 +170,7 @@ class BaseTkinterWidget(tk.Widget, ABC):
 
         if parent: parent.focus_set()
 
-        self.OnDisppearing()
+        self.OnDisappearing()
         if self._manager_ == Layout.pack:
             self.pack_forget()
             return self._hide()
@@ -215,7 +215,7 @@ class BaseTkinterWidget(tk.Widget, ABC):
         if color: self.configure(disabledforeground=color)
         return self
 
-    def UndindIDs(self, ids: Iterable[str] = None):
+    def UnbindIDs(self, ids: Iterable[str] = None):
         for item in ids: self.unbind(item or self.__bindings__)
 
     def Bind(self, sequence: Bindings = None, func: callable = None, add: bool = None) -> str:
@@ -393,7 +393,7 @@ class BaseTkinterWidget(tk.Widget, ABC):
     def OnAppearing(self):
         """ this is called just after widget appears. override to implement desired effects """
         pass
-    def OnDisppearing(self):
+    def OnDisappearing(self):
         """ this is called just before widget disappears. override to implement desired effects """
         pass
 

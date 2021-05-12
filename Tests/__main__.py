@@ -40,7 +40,7 @@ def TestApps():
 
 
 
-    _app = App(app_name='test app', root_path='.')
+    _app = App(app_name='test app', root_path='..')
 
     _app.root.after(2000, _app.Close)
     _app.start_gui()
@@ -48,5 +48,5 @@ def TestApps():
 
 
 if __name__ == '__main__':
-    # TestApps()
+    TestApps()
     Run()

@@ -8,6 +8,8 @@ from os import PathLike, chmod, fsencode, listdir, makedirs, remove, rename
 from os.path import *
 from pathlib import Path
 from shutil import rmtree
+from typing import *
+from typing import BinaryIO
 
 from ..Json import *
 from ..Names import nameof
@@ -21,18 +23,18 @@ __all__ = [
     'ReadWriteData'
     ]
 
-
 class ReadWriteData(Protocol[AnyStr]):
     def load(self, f: BinaryIO) -> Any: ...
     def dump(self, data: AnyStr, f: BinaryIO) -> Any: ...
 
 
 class FileIO(PathLike):
-    def __init__(self, _path: Union[str, 'FilePath']):
+    def __init__(self, _path: Union[str, 'FilePath'], begin: int = 0):
         if not isinstance(_path, FilePath):
             _path = FilePath(_path)
 
         self._path = _path
+        self._begin = begin
 
 
     @property
@@ -46,6 +48,17 @@ class FileIO(PathLike):
     def __bytes__(self):
         """ Return the bytes representation of the path. This is only recommended to use under Unix. """
         return bytes(self._path)
+
+    # from types import TracebackType
+    # from aiofiles import open as async_open
+    # from aiofiles.base import AiofilesContextManager
+    # def __aenter__(self) -> 'FileIO':
+    #     self.file_manager: AiofilesContextManager = async_open(self._path, mode="rb")
+    #     self.file = await self.file_manager.__aenter__()
+    #     await self.file.seek(self._begin)
+    #     return self
+    # def __aexit__(self, exc_type: Optional[Type[BaseException]], exc_val: Optional[BaseException], exc_tb: Optional[TracebackType]):
+    #     return await self.file_manager.__aexit__(exc_type, exc_val, exc_tb)
 
 
     def GetFileData(self, file: ReadWriteData, *, Default=None, Check: callable = None, RemoveOnError: bool = False):
@@ -114,7 +127,7 @@ class FileIO(PathLike):
                 out.write(_in.read())
 
 
-class FilePath(dict, BaseModel, PathLike):
+class FilePath(dict, BaseModel, PathLike[str]):
     _hash: str
     _temporary: bool = False
     def __init__(self, obj: Union[str, Dict, Path, 'FilePath']):

@@ -2,27 +2,22 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7a6e45bf-6aac-404f-8876-27fa1a8fc2c2" name="Default Changelist" comment="bug fixes / updates">
+      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PythonExtensions/Files/MultiThreadedCopier.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PythonExtensions/Json/Base.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PythonExtensions/Json/Common.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PythonExtensions/Json/Custom.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PythonExtensions/Json/MultiDictModel.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Tests/json_tests.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PythonExtensions/Files/FilePath.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/Files/FilePath.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PythonExtensions/Files/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/Files/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PythonExtensions/Images/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/Images/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PythonExtensions/Json/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/Json/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/Logging/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/Logging/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/Setup/build_classifiers.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/Setup/build_classifiers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/SwitchCase/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/SwitchCase/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/Threads/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/Threads/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PythonExtensions/__version__.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/__version__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/debug/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/debug/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/debug/debug_tk.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/debug/debug_tk.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/misc/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/misc/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/nameof.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/Names/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PythonExtensions/tk/Base/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/tk/Base/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/tk/BaseApp/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/tk/BaseApp/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/tk/Core/Frames.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/tk/Core/Frames.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/tk/Core/Style.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/tk/Core/Style.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/tk/Core/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/tk/Core/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/tk/CustomWidgets/KeyBoard.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/tk/CustomWidgets/KeyBoard.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/tk/Events/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/tk/Events/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/tk/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/tk/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/run.py" beforeDir="false" afterPath="$PROJECT_DIR$/Tests/__main__.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -51,6 +46,14 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
+  </component>
   <component name="ProjectId" id="1n7OOn1TEqy2mU9vMthZg035YlD" />
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="2" id="Add" />
@@ -70,63 +73,19 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="restartRequiresConfirmation" value="false" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
-    <property name="settings.editor.selected.configurable" value="StringManipulation" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\WorkSpace\PythonExtensions\Tests" />
       <recent name="D:\WorkSpace\PythonExtensions\PythonExtensions" />
       <recent name="D:\WorkSpace\PythonExtensions\PythonExtensions\debug" />
       <recent name="D:\WorkSpace\PythonExtensions\PythonExtensions\tk" />
       <recent name="D:\WorkSpace\PythonExtensions\PythonExtensions\tk\CustomWidgets" />
-      <recent name="D:\WorkSpace\PythonExtensions\PythonExtensions\tk\Base" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.run">
-    <configuration name="FileIO" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="PythonExtensions" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/PythonExtensions/Files" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="D:\WorkSpace\PythonExtensions\PythonExtensions\Files\FileIO.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="FilePath" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="PythonExtensions" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/PythonExtensions/Files" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="D:\WorkSpace\PythonExtensions\PythonExtensions\Files\FilePath.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="TestLogging" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Python.json_tests">
+    <configuration name="json_tests" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="PythonExtensions" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -139,7 +98,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Tests/TestLogging.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Tests/json_tests.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -148,29 +107,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="TestTkApp" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="PythonExtensions" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Tests/TestTkApp.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="run" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+    <configuration name="run tests" type="PythonConfigurationType" factoryName="Python">
       <module name="PythonExtensions" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -183,29 +120,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/run.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="setup" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="PythonExtensions" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/setup.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Tests/__main__.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -216,11 +131,7 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.setup" />
-        <item itemvalue="Python.TestTkApp" />
-        <item itemvalue="Python.TestLogging" />
-        <item itemvalue="Python.FilePath" />
-        <item itemvalue="Python.FileIO" />
+        <item itemvalue="Python.json_tests" />
       </list>
     </recent_temporary>
   </component>
@@ -265,21 +176,16 @@
       <workItem from="1612797393282" duration="1751000" />
       <workItem from="1612811894589" duration="30000" />
       <workItem from="1612889335986" duration="16932000" />
-      <workItem from="1613062731929" duration="1060000" />
-    </task>
-    <task id="LOCAL-00039" summary="bug fixes / updates">
-      <created>1611109345647</created>
-      <option name="number" value="00039" />
-      <option name="presentableId" value="LOCAL-00039" />
-      <option name="project" value="LOCAL" />
-      <updated>1611109345647</updated>
-    </task>
-    <task id="LOCAL-00040" summary="bug fixes / updates">
-      <created>1611109692909</created>
-      <option name="number" value="00040" />
-      <option name="presentableId" value="LOCAL-00040" />
-      <option name="project" value="LOCAL" />
-      <updated>1611109692909</updated>
+      <workItem from="1613062731929" duration="7154000" />
+      <workItem from="1613072505388" duration="1042000" />
+      <workItem from="1613073579943" duration="6866000" />
+      <workItem from="1614007732067" duration="1387000" />
+      <workItem from="1614017618705" duration="1097000" />
+      <workItem from="1614022288171" duration="1891000" />
+      <workItem from="1614112275152" duration="5632000" />
+      <workItem from="1614118043858" duration="1884000" />
+      <workItem from="1614131623127" duration="21000" />
+      <workItem from="1620834717193" duration="6684000" />
     </task>
     <task id="LOCAL-00041" summary="bug fixes / updates">
       <created>1611110877164</created>
@@ -610,7 +516,21 @@
       <option name="project" value="LOCAL" />
       <updated>1613063183154</updated>
     </task>
-    <option name="localTasksCounter" value="88" />
+    <task id="LOCAL-00088" summary="bug fixes / updates">
+      <created>1613063809630</created>
+      <option name="number" value="00088" />
+      <option name="presentableId" value="LOCAL-00088" />
+      <option name="project" value="LOCAL" />
+      <updated>1613063809630</updated>
+    </task>
+    <task id="LOCAL-00089" summary="bug fixes / updates">
+      <created>1614009108451</created>
+      <option name="number" value="00089" />
+      <option name="presentableId" value="LOCAL-00089" />
+      <option name="project" value="LOCAL" />
+      <updated>1614009108451</updated>
+    </task>
+    <option name="localTasksCounter" value="90" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -637,15 +557,17 @@
     <option name="LAST_COMMIT_MESSAGE" value="bug fixes / updates" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/PythonExtensions$Constants.coverage" NAME="Constants Coverage Results" MODIFIED="1610937223831" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PythonExtensions" />
-    <SUITE FILE_PATH="coverage/PythonExtensions$run.coverage" NAME="run Coverage Results" MODIFIED="1612907114630" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/PythonExtensions$setup.coverage" NAME="setup Coverage Results" MODIFIED="1610984553102" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/PythonExtensions$__init__.coverage" NAME="__init__ Coverage Results" MODIFIED="1610939731215" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PythonExtensions/Files" />
-    <SUITE FILE_PATH="coverage/PythonExtensions$TestLogging.coverage" NAME="TestLogging Coverage Results" MODIFIED="1611781819047" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Tests" />
-    <SUITE FILE_PATH="coverage/PythonExtensions$TestTkApp.coverage" NAME="TestTkApp Coverage Results" MODIFIED="1611950953829" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Tests" />
+    <SUITE FILE_PATH="coverage/PythonExtensions$Dates.coverage" NAME="Dates Coverage Results" MODIFIED="1610936189540" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PythonExtensions" />
+    <SUITE FILE_PATH="coverage/PythonExtensions$File.coverage" NAME="File Coverage Results" MODIFIED="1611006293121" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PythonExtensions/Files" />
+    <SUITE FILE_PATH="coverage/PythonExtensions$Constants.coverage" NAME="Constants Coverage Results" MODIFIED="1610937223831" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PythonExtensions" />
+    <SUITE FILE_PATH="coverage/PythonExtensions$json_tests.coverage" NAME="json_tests Coverage Results" MODIFIED="1620848633923" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Tests" />
+    <SUITE FILE_PATH="coverage/PythonExtensions$run.coverage" NAME="run Coverage Results" MODIFIED="1613082591231" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/PythonExtensions$Path.coverage" NAME="Path Coverage Results" MODIFIED="1611087891123" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PythonExtensions/Files" />
     <SUITE FILE_PATH="coverage/PythonExtensions$build.coverage" NAME="build_classifiers Coverage Results" MODIFIED="1610748410999" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PythonExtensions/Setup" />
-    <SUITE FILE_PATH="coverage/PythonExtensions$File.coverage" NAME="File Coverage Results" MODIFIED="1611006293121" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PythonExtensions/Files" />
-    <SUITE FILE_PATH="coverage/PythonExtensions$Dates.coverage" NAME="Dates Coverage Results" MODIFIED="1610936189540" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PythonExtensions" />
+    <SUITE FILE_PATH="coverage/PythonExtensions$setup.coverage" NAME="setup Coverage Results" MODIFIED="1610984553102" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/PythonExtensions$TestLogging.coverage" NAME="TestLogging Coverage Results" MODIFIED="1611781819047" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Tests" />
+    <SUITE FILE_PATH="coverage/PythonExtensions$TestTkApp.coverage" NAME="TestTkApp Coverage Results" MODIFIED="1611950953829" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Tests" />
+    <SUITE FILE_PATH="coverage/PythonExtensions$run_tests.coverage" NAME="run tests Coverage Results" MODIFIED="1614116991758" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
