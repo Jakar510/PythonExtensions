@@ -17,7 +17,6 @@ __all__ = [
     '_BaseSwitchCase',
     'SwitchRegex',
     'SwitchVariable',
-    'SwitchCallback',
     'SwitchInstance',
     'SwitchSubClass',
     ]
@@ -102,8 +101,14 @@ class _BaseSwitchCase(Generic[_TCase]):
 
         super().__setattr__(key, value)
 
-    def _check(self, value_to_check: _TCase): return self._variable == value_to_check
+    def _check(self, value_to_check: _TCase): raise NotImplemented
+    def __call__(self, value_to_check: _TCase, callback: Callable[[_TCase, ...], None], *args, **kwargs) -> bool:
+        self._checkActive()
+        if self._check(value_to_check):
+            callback(value_to_check, *args, **kwargs)
+            return self._exit()
 
+        return False
 
 
 class SwitchRegex(_BaseSwitchCase[_TCase]):
@@ -112,57 +117,35 @@ class SwitchRegex(_BaseSwitchCase[_TCase]):
         """
         :param regex: the instance to check against.
         """
-        if not hasattr(regex, method): raise AttributeError('method must be a callable function of the regex object.')
+        if not hasattr(regex, method):
+            raise AttributeError(f'The method "{method}" must be a callable function of the regex object: "{nameof(regex)}".')
+
         self._re = regex
-        self._regex: Final[Callable[[str], Any]] = getattr(regex, method)
-        if not callable(self._regex): raise TypeError(f'regex.{method} is not callable')
+        self._regex: Final[Callable[[str], Optional[re.Match]]] = getattr(regex, method)
+        if not callable(self._regex):
+            raise TypeError(f'{nameof(regex)}.{method} is not callable')
 
-    # noinspection PyMethodOverriding
-    def __call__(self, value_to_check: _TCase) -> bool:
-        self._checkActive()
-        if self._check(value_to_check):
-            return self._exit()
-
-        return False
-    def _check(self, value_to_check: str) -> bool:  # TODO: implement regex parsing for the value_to_check
-        if not isinstance(value_to_check, str): return False
+    def _check(self, value_to_check: str) -> bool:
+        if not isinstance(value_to_check, str): value_to_check = str(value_to_check)
 
         return self._regex(value_to_check) is not None
 
 
 
 class SwitchVariable(_BaseSwitchCase[_TCase]):
-    def __call__(self, value_to_check: _TCase, *args, **kwargs) -> bool:
-        self._checkActive()
-        if self._check(value_to_check):
-            return self._exit()
-
-        return False
-
-
-
-class SwitchCallback(_BaseSwitchCase[_TCase]):
-    # noinspection PyMethodOverriding
-    def __call__(self, value_to_check: _TCase, callback: Callable[[_TCase], None]) -> bool:
-        self._checkActive()
-        if self._check(value_to_check):
-            callback(value_to_check)
-            return self._exit()
-
-        return False
-
+    def _check(self, value_to_check: _TCase): return self._variable == value_to_check
 
 
 class SwitchInstance(_BaseSwitchCase[_TCase]):
-    def __call__(self, *types: Union[Type, Any]) -> bool:
+    def __call__(self, *types: Union[Type, Any], callback: Callable[[_TCase, ...], None], args: List[Any] = None, **kwargs) -> bool:
         self._checkActive()
         if self._check(*types):
+            callback(type(self._variable), *args, **kwargs)
             return self._exit()
 
         return False
 
     def _check(self, *types):
-
         return isinstance(self._variable, convert_to_types(types))
 
 
@@ -170,9 +153,10 @@ class SwitchInstance(_BaseSwitchCase[_TCase]):
 class SwitchSubClass(_BaseSwitchCase):
     def __init__(self, variable: Type):
         super().__init__(variable)
-    def __call__(self, *types: Type) -> bool:
+    def __call__(self, *types: Type, callback: Callable[[_TCase, ...], None], args: List[Any] = None, **kwargs) -> bool:
         self._checkActive()
         if self._check(*types):
+            callback(type(self._variable), *args, **kwargs)
             return self._exit()
 
         return False
