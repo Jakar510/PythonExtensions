@@ -209,7 +209,7 @@ class PlacePosition(Point):
     def Update(self, pic: 'PlacePosition', img: Size, view: Size, KeepInView: Any) -> 'PlacePosition': ...
 
 
-    def Update(self, pic: 'PlacePosition', img: Size, view: Size, **kwargs) -> 'PlacePosition':
+    def Update(self, img: Size, view: Size, **kwargs) -> 'PlacePosition':
         """
             The goal is to force the object to comply within its bounds
 
@@ -221,7 +221,7 @@ class PlacePosition(Point):
         :param img:  size of the photo, in (Width, Height) format.
         :return: PlacePosition
         """
-        def XY(_v: int, _img: int, _edit: int, args: KeysView) -> int:
+        def XY(_v: int, _img: int, _edit: int, args: KeysView) -> float:
             if 'OnlyZero' in args: return 0
 
             if 'ZeroOrMore' in args: return _v if _v >= 0 else 0
@@ -229,24 +229,18 @@ class PlacePosition(Point):
             if 'ZeroOrLess' in args: return _v if _v <= 0 else 0
 
             if 'KeepInView' in args:
-                if _v > 0:
-                    if _img >= _edit: return 0
+                if _img < _edit: return (_edit - _img) / 2
 
-                    if _v + _img < _edit: return _v
+                if _v + _img < _edit: return - abs(_edit - _img)
 
-                    if _v + _img >= _edit: return abs(_img - _edit)
+                if _v > 0: return 0
 
-                    return _v
-
-                elif _v < 0:
-                    if _v + _img <= _edit: return - abs(_img - _edit)
-
-                    return _v
+                return _v
 
             return _v
 
-        self[Keys.x] = XY(pic.x, img.width, view.width, kwargs.keys())
-        self[Keys.y] = XY(pic.y, img.height, view.height, kwargs.keys())
+        self[Keys.x] = int(XY(self.x, img.width, view.width, kwargs.keys()))
+        self[Keys.y] = int(XY(self.y, img.height, view.height, kwargs.keys()))
 
         return self
 

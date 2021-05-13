@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7a6e45bf-6aac-404f-8876-27fa1a8fc2c2" name="Default Changelist" comment="update README.md">
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PythonExtensions/Json/Custom.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/Json/Custom.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PythonExtensions/__version__.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/__version__.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,7 +57,7 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="true" />
     <property name="last.edited.regexp" value="3.22345" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../SmartPhotoFrame" />
     <property name="restartRequiresConfirmation" value="false" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
@@ -170,14 +172,10 @@
       <workItem from="1614112275152" duration="5632000" />
       <workItem from="1614118043858" duration="1884000" />
       <workItem from="1614131623127" duration="21000" />
-      <workItem from="1620834717193" duration="7089000" />
-    </task>
-    <task id="LOCAL-00043" summary="bug fixes / updates">
-      <created>1611115556162</created>
-      <option name="number" value="00043" />
-      <option name="presentableId" value="LOCAL-00043" />
-      <option name="project" value="LOCAL" />
-      <updated>1611115556162</updated>
+      <workItem from="1620834717193" duration="7218000" />
+      <workItem from="1620849887772" duration="1396000" />
+      <workItem from="1620915413521" duration="601000" />
+      <workItem from="1620916173281" duration="1489000" />
     </task>
     <task id="LOCAL-00044" summary="bug fixes / updates">
       <created>1611116705412</created>
@@ -515,7 +513,14 @@
       <option name="project" value="LOCAL" />
       <updated>1620849105678</updated>
     </task>
-    <option name="localTasksCounter" value="92" />
+    <task id="LOCAL-00092" summary="update README.md">
+      <created>1620849139500</created>
+      <option name="number" value="00092" />
+      <option name="presentableId" value="LOCAL-00092" />
+      <option name="project" value="LOCAL" />
+      <updated>1620849139500</updated>
+    </task>
+    <option name="localTasksCounter" value="93" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
