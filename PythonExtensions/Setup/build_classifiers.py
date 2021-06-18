@@ -47,9 +47,9 @@ def Replace(_line: str, kwargs: Dict[str, str]):
 
     return _line
 
-def GetData(_line: str, *, sep=' :: ') -> List[str]:
+def GetData(_line: str, *, _sep=' :: ') -> List[str]:
     results = []
-    for l in _line.split(sep):
+    for l in _line.split(_sep):
         # l = l.replace(' - ', '_').replace(' ', '_').replace('\\', '_').replace(r'/', '_')
         # l = l.replace('\n', '').replace('-', '').replace("'", '')
         l = Replace(l, {

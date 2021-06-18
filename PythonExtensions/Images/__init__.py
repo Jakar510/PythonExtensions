@@ -63,7 +63,7 @@ class ImageObject(object):
         except AttributeError:
             self._name_ = f'{hash(self)}.{extension.value}'
             return self._name_
-    def _TempFilePath(self, extension: ImageExtensions) -> FilePath: return FilePath.Temporary(self.__module__, self.__name__(extension))
+    def _TempFilePath(self, extension: ImageExtensions) -> FileIO: return FilePath.Temporary(self.__module__, self.__name__(extension))
     def __enter__(self):
         # noinspection PyTypeChecker
         self._fp = open(self._path, 'wb')

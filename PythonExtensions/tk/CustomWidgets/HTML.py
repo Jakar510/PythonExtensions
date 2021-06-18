@@ -49,7 +49,7 @@ class HTMLScrolledText(ScrolledText):
         return self
     def set_html(self, html, strip: bool = True):
         """ Set HTML widget text. If strip is enabled (default) it ignores spaces and new lines. """
-        self.UndindIDs(self._bindIDs)
+        self.UnbindIDs(self._bindIDs)
         prev_state = ViewState(self.tb['state'])
         self.tb.Enable()
         self.tb.Clear()

@@ -7,7 +7,8 @@
 import base64
 from typing import List, Union
 
-from PIL import Image
+from PIL.Image import Image, open as img_open
+from PIL.ImageTk import PhotoImage
 
 from ..Base import *
 from ..Widgets import *
@@ -34,15 +35,15 @@ class AnimatedGIF(Label, object):
     _forever: bool = False
 
     _loc: int = 0
-    _frames: List[ImageTk.PhotoImage] = []
+    _frames: List[PhotoImage] = []
     def __init__(self, master: tk.Widget, *, root: Union[tk.Tk, tk.Toplevel] = None, path: str, forever=True, defaultDelay: int = 100):
         super().__init__(master)
         self._master = master
         self._forever = forever
         self.Root = root
 
-        with Image.open(path) as img:
-            assert (isinstance(img, Image.Image))
+        with img_open(path) as img:
+            assert (isinstance(img, Image))
 
             try: self._delay = img.info['duration']
             except (AttributeError, KeyError): self._delay = defaultDelay
@@ -50,19 +51,19 @@ class AnimatedGIF(Label, object):
             i = 0
             while True:
                 try:
-                    photoframe = ImageTk.PhotoImage(image=img.copy().convert(mode='RGBA'), master=self.Root or self)
-                    self._frames.append(photoframe)
+                    frame = PhotoImage(image=img.copy().convert(mode='RGBA'), master=self.Root or self)
+                    self._frames.append(frame)
 
                     i += 1
                     img.seek(i)
                 except EOFError: break
 
         self._setFrame()
-    def start_animation(self, frame=None):
+    def start_animation(self, frame: int = None):
         if self._is_running: return
 
         if frame is not None:
-            self._loc = 0
+            self._loc = frame
             self.configure(image=self._frames[frame])
 
         self._master.after(self._delay, self._animate_GIF)
@@ -95,28 +96,28 @@ class AnimatedGIF(Label, object):
 
 
 
-    def Pack(self, start_animation=True, **kwargs):
+    def Pack(self, start_animation: bool = True, **kwargs):
         if start_animation:
             self.start_animation()
 
         super().Pack(**kwargs)
-    def Grid(self, start_animation=True, **kwargs):
+    def Grid(self, start_animation: bool = True, **kwargs):
         if start_animation:
             self.start_animation()
 
         super().Grid(**kwargs)
-    def Place(self, start_animation=True, **kwargs):
+    def Place(self, start_animation: bool = True, **kwargs):
         if start_animation:
             self.start_animation()
 
         super().Place(**kwargs)
 
-    def show(self, start_animation=True):
+    def show(self, start_animation: bool = True, **kwargs) -> bool:
         if start_animation: self.start_animation()
-        super().show()
-    def hide(self):
+        return super().show()
+    def hide(self, parent: tk.Widget = None) -> bool:
         self.stop_animation()
-        super().hide()
+        return super().hide(parent)
 
     @classmethod
     def FromBase64Data(cls, master, *, root: Union[tk.Tk, tk.Toplevel] = None, data: Union[str, bytes], path: str, forever=True, defaultDelay: int = 100):

@@ -7,11 +7,16 @@
 
 import time
 from typing import *
+from ..Names import nameof
 
 
 
 
 __all__ = ['HID_BUFFER', 'TimeKeeperMixin']
+
+
+
+
 
 class TimeKeeperMixin:
     _LastTime = time.time()
@@ -131,7 +136,7 @@ class HID_BUFFER(TimeKeeperMixin):
 
     def __setitem__(self, key: int, value: str):
         """ https://stackoverflow.com/a/41753022/9530917 """
-        l = tuple(self._text)
+        l = list(self._text)
         l[key] = value
         self._text = ''.join(l)
     def __getitem__(self, key: Union[int, slice]) -> str:

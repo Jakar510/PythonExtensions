@@ -10,6 +10,9 @@ import os
 from typing import *
 from urllib.request import urlopen
 
+from PIL.Image import Image
+from PIL.ImageTk import PhotoImage
+
 from ..Base import *
 from ..Core import *
 from ..Enumerations import *
@@ -382,21 +385,23 @@ class Canvas(tk.Canvas, BaseTkinterWidget):
         BaseTkinterWidget.__init__(self, Color)
 
     def DownloadImage(self, url: str, x: int, y: int, width: int = None, height: int = None): return self.SetImageFromBytes(urlopen(url).read(), x, y, width, height)
-    def OpenImage(self, path: str, x: int, y: int, width: int = None, height: int = None) -> Tuple[ImageTk.PhotoImage, Tuple[int, int], int]:
+    def OpenImage(self, path: str, x: int, y: int, width: int = None, height: int = None) -> Tuple[PhotoImage, Tuple[int, int], int]:
         assert (os.path.isfile(path))
         from ...Images import ImageObject
+
         img = ImageObject.FromFile(path, width=width, height=height, AsPhotoImage=self)
         return self.CreateImage(image=img, x=x, y=y)
-    def SetImageFromBytes(self, data: bytes, x: int, y: int, width: int = None, height: int = None) -> Tuple[ImageTk.PhotoImage, Tuple[int, int], int]:
+    def SetImageFromBytes(self, data: bytes, x: int, y: int, width: int = None, height: int = None) -> Tuple[PhotoImage, Tuple[int, int], int]:
         assert (isinstance(data, bytes))
         from ...Images import ImageObject
+
         img = ImageObject.FromBytes(data, width=width, height=height, AsPhotoImage=self)
         return self.CreateImage(image=img, x=x, y=y)
-    def CreateImage(self, image: Union[Image, ImageTk.PhotoImage], x: int, y: int, anchor: str or AnchorAndSticky = tk.NW) -> Tuple[ImageTk.PhotoImage, Tuple[int, int], int]:
-        if not isinstance(image, ImageTk.PhotoImage):
-            image = ImageTk.PhotoImage(image, size=image.size)
+    def CreateImage(self, image: Union[Image, PhotoImage], x: int, y: int, anchor: str or AnchorAndSticky = tk.NW) -> Tuple[PhotoImage, Tuple[int, int], int]:
+        if not isinstance(image, PhotoImage):
+            image = PhotoImage(image, size=image.size)
         return image, (image.width(), image.height()), self.create_image(x, y, anchor=anchor, image=image)
-    def GetItemPostion(self, _id) -> Optional[PlacePosition]:
+    def GetItemPosition(self, _id) -> Optional[PlacePosition]:
         try:
             return PlacePosition.FromTuple(self.coords(_id))
         except tk.TclError: return None

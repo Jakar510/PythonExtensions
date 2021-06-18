@@ -1,6 +1,8 @@
 from enum import Enum
 from typing import *
 
+from ...Names import nameof
+
 from ..Base import *
 
 

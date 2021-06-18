@@ -217,7 +217,6 @@ class PlacePosition(Point):
             : bottom right point of the box, in (x, y) format.
 
         :param view: size of the view where the photo/object is displayed
-        :param pic:  where the photo is placed, in (x, y) format. For Example: Canvas placements. This can be any integer
         :param img:  size of the photo, in (Width, Height) format.
         :return: PlacePosition
         """

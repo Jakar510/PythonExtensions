@@ -15,7 +15,7 @@ from typing import *
 from typing import BinaryIO
 from urllib.request import urlopen
 
-from PIL.Image import Image, open as img_open
+from PIL.Image import open as img_open
 from PIL.ImageTk import PhotoImage
 
 from ..Enumerations import *
@@ -32,7 +32,6 @@ from ...debug import pp
 
 __all__ = [
     'BaseTkinterWidget', 'BaseTextTkinterWidget',
-    'Image', 'ImageTk',
     'CommandMixin', 'ImageMixin',
     'CurrentValue', 'CallWrapper',
     'tk', 'ttk', 'tkEvent', 'URL',

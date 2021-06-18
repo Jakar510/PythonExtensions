@@ -127,7 +127,7 @@ class FileIO(PathLike):
                 out.write(_in.read())
 
 
-class FilePath(dict, BaseModel, PathLike[str]):
+class FilePath(dict, BaseModel, PathLike):
     _hash: str
     _temporary: bool = False
     def __init__(self, obj: Union[str, Dict, Path, 'FilePath']):

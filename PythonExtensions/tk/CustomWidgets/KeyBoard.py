@@ -8,6 +8,7 @@ import string
 from enum import IntEnum, IntFlag
 from typing import *
 
+from ...Names import nameof
 from ..Base import *
 from ..Core import *
 from ..Enumerations import EventType
@@ -66,7 +67,7 @@ class PopupKeyboard(tkTopLevel):
     _delete = 'Clr'
     _sign = '±'
 
-    _keysize: int = -1
+    _key_size: int = -1
     _is_number: bool = False
     _root_frame: Frame
     _Frames: Dict[int, Frame] = { }
@@ -95,7 +96,7 @@ class PopupKeyboard(tkTopLevel):
         self._root_frame = Frame(self).Grid(row=0, column=0).Grid_ColumnConfigure(0, weight=1).Grid_RowConfigure(0, weight=1)
 
         if self._attach.IsAutoSize:
-            self._SetDimmensions()
+            self._SetDimensions()
 
         Row0: List[str] = [self._backspace] + [str(i) for i in range(10)] + [self._delete]
         Row1: List[str] = ['|', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '/']
@@ -142,7 +143,7 @@ class PopupKeyboard(tkTopLevel):
 
         return self._resize()
     def SetSize(self, size: int):
-        self._keysize = size
+        self._key_size = size
 
         for row in self._letters.values():
             for w in row.values():
@@ -168,9 +169,9 @@ class PopupKeyboard(tkTopLevel):
         self.update_idletasks()
         self.update()
 
-        self._SetDimmensions()
+        self._SetDimensions()
         return self
-    def _SetDimmensions(self):
+    def _SetDimensions(self):
         frame_width: int = self.frame_width
         frame_height: int = self.frame_height
         y = self._get_y(y=self._y, frame_height=frame_height, entry_height=self._attach.height, placement=self._attach.placement)
@@ -281,10 +282,10 @@ class PopupKeyboard(tkTopLevel):
                     return True
 
             elif isinstance(self._attach, BaseTextTkinterWidget):
-                return self._navagate(value)
+                return self._navigate(value)
 
         return False
-    def _navagate(self, value: str) -> bool:
+    def _navigate(self, value: str) -> bool:
         if value == self._next:
             self._attach.tk_focusNext().focus_set()
             return self._handle_enter()
