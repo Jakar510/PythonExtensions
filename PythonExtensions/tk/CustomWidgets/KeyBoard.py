@@ -174,9 +174,9 @@ class PopupKeyboard(tkTopLevel):
     def _SetDimensions(self):
         frame_width: int = self.frame_width
         frame_height: int = self.frame_height
-        y = self._get_y(y=self._y, frame_height=frame_height, entry_height=self._attach.height, placement=self._attach.placement)
-        x = self._get_x(x=self._x, frame_width=frame_width, entry_width=self._attach.width, placement=self._attach.placement)
-        self.SetDimmensions(frame_width, frame_height, x, y)
+        y = self._get_y(y=self._y, frame_height=frame_height, entry_height=self._attach.Height, placement=self._attach.placement)
+        x = self._get_x(x=self._x, frame_width=frame_width, entry_width=self._attach.Width, placement=self._attach.placement)
+        self.SetDimensions(frame_width, frame_height, x, y)
     def _get_x(self, *, x: int, frame_width: int, entry_width: int, placement: PlacementSet):
         def left(): return int(x - frame_width + entry_width)
         def right(): return int(x)

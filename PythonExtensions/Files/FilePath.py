@@ -11,6 +11,9 @@ from shutil import rmtree
 from typing import *
 from typing import BinaryIO
 
+from aiofiles import open as async_open
+from attr import attrib, attrs, validators
+
 from ..Json import *
 from ..Names import nameof
 
@@ -28,149 +31,54 @@ class ReadWriteData(Protocol[AnyStr]):
     def dump(self, data: AnyStr, f: BinaryIO) -> Any: ...
 
 
-class FileIO(PathLike):
-    def __init__(self, _path: Union[str, 'FilePath'], begin: int = 0):
-        if not isinstance(_path, FilePath):
-            _path = FilePath(_path)
+@attrs(slots=True, hash=True, order=True, eq=True, auto_attribs=True, init=False)
+class FilePath(PathLike):
 
-        self._path = _path
-        self._begin = begin
+    FullPath: str = attrib(validator=validators.instance_of((dict, Path, str, PathLike)))
+    IsTemporary: bool = attrib(validator=validators.instance_of(bool), init=False)
+    Hash: Optional[str] = attrib(default=None, validator=validators.instance_of(str), init=False)
 
-
-    @property
-    def path(self) -> 'FilePath': return self._path
-
-    def Remove(self): return self._path.Remove()
-    def __del__(self): return self._path.__del__()
-    def __repr__(self): return f'<{nameof(self)} Object. Location: "{self._path}">'
-    def __str__(self): return str(self._path)
-    def __fspath__(self): return self._path.__fspath__()
-    def __bytes__(self):
-        """ Return the bytes representation of the path. This is only recommended to use under Unix. """
-        return bytes(self._path)
-
-    # from types import TracebackType
-    # from aiofiles import open as async_open
-    # from aiofiles.base import AiofilesContextManager
-    # def __aenter__(self) -> 'FileIO':
-    #     self.file_manager: AiofilesContextManager = async_open(self._path, mode="rb")
-    #     self.file = await self.file_manager.__aenter__()
-    #     await self.file.seek(self._begin)
-    #     return self
-    # def __aexit__(self, exc_type: Optional[Type[BaseException]], exc_val: Optional[BaseException], exc_tb: Optional[TracebackType]):
-    #     return await self.file_manager.__aexit__(exc_type, exc_val, exc_tb)
-
-
-    def GetFileData(self, file: ReadWriteData, *, Default=None, Check: callable = None, RemoveOnError: bool = False):
-        try:
-            with open(self._path, 'rb') as f:
-                dat = file.load(f)
-                if callable(Check): Check(dat)
-                return dat
-        except FileNotFoundError: return Default
-        except (pickle.PickleError, pickle.PicklingError, json.JSONDecodeError):
-            if RemoveOnError: self._path.Remove()
-            return Default
-    def SetFileData(self, data: Any, file: ReadWriteData, *, Check: callable = None):
-        with open(self._path, 'wb') as f:
-            if callable(Check): data = Check(data)
-            return file.dump(data, f)
-
-
-    def SaveJson(self, data: Union[List, Dict], **kwargs):
-        with open(self._path, 'w') as f:
-            return json.dump(data, f, **kwargs)
-    def ReadJson(self, **kwargs) -> Union[List, Dict]:
-        with open(self._path, 'r') as f:
-            return json.load(f, **kwargs)
-
-
-    def SavePickle(self, data: Any, **kwargs):
-        with open(self._path, 'wb') as f:
-            return pickle.dump(data, f, **kwargs)
-    def ReadPickle(self, **kwargs) -> Any:
-        with open(self._path, 'rb') as f:
-            return pickle.load(f, **kwargs)
-
-
-    def Write(self, content: Union[str, bytes], *, newline: str = '\n', **kwargs) -> int:
-        if isinstance(content, str):
-            with open(self._path, 'w', newline=newline, **kwargs) as f:
-                return f.write(content)
-
-        elif isinstance(content, bytes):
-            with open(self._path, 'wb', newline=newline, **kwargs) as f:
-                return f.write(content)
-
-        else: raise TypeError(type(content), (bytes, str))
-    def Read(self, open_as_binary: bool = False):
-        with open(self._path, 'rb' if open_as_binary else 'r') as f:
-            return f.read()
-
-
-    @classmethod
-    def TemporaryFile(cls, *sub_folders: str, _name: str, root_dir: str = None): return FilePath.Temporary(*sub_folders, _name, root_dir=root_dir)
-
-    @classmethod
-    def Create(cls, _path: Union[str, 'FilePath'], content: Union[str, bytes] = None, *,
-               buffering=None, encoding: str = None, errors=None, newline: str = '\n', closefd=True):
-        os.makedirs(basename(_path), exist_ok=True)
-        _path = cls(_path)
-        _path.Write(content, buffering=buffering, encoding=encoding, errors=errors, newline=newline, closefd=closefd)
-
-        return _path
+    def __init__(self, _path: Union[str, Dict[str, Any], Path, 'FilePath'], temporary: bool = False):
+        self.FullPath = self._convert(_path)
+        self.IsTemporary = temporary
 
     @staticmethod
-    def CopyFile(_inPath: Union[str, 'FilePath'], _outPath: Union[str, 'FilePath'], open_as_binary: bool = False):
-        with open(_outPath, 'wb' if open_as_binary else 'w') as out:
-            with open(_inPath, 'rb' if open_as_binary else 'r') as _in:
-                out.write(_in.read())
+    def _convert(_path: Union[str, Dict[str, Any], Path, 'FilePath']) -> str:
+        if isinstance(_path, dict):
+            AssertKeys(_path, 'FullPath')
+            return FilePath._convert(_path['FullPath'])
 
+        elif isinstance(_path, str): return abspath(_path)
 
-class FilePath(dict, BaseModel, PathLike):
-    _hash: str
-    _temporary: bool = False
-    def __init__(self, obj: Union[str, Dict, Path, 'FilePath']):
-        d = { }
-        if isinstance(obj, dict):
-            AssertKeys(obj, Keys.Path)
-            d = obj
+        elif isinstance(_path, Path): return _path.resolve().__fspath__()
 
-        elif isinstance(obj, str):
-            d[Keys.Path] = abspath(obj)
+        elif isinstance(_path, FilePath): return _path.FullPath
 
-        elif isinstance(obj, Path):
-            d[Keys.Path] = obj.resolve()
+        elif hasattr(_path, '__fspath__'): return abspath(_path.__fspath__())
 
-        elif isinstance(obj, FilePath):
-            d[Keys.Path] = obj.Value
+        else: throw(_path, str, Path, FilePath, dict)
 
-        else: throw(obj, str, Path, FilePath, dict)
-
-        dict.__init__(self, d)
-
-    def __hash__(self) -> int: return hash(self.Value)
-    def __call__(self) -> str: return self.Value
-    @property
-    def Value(self) -> str: return self[Keys.Path]
-    @property
-    def IsTemporary(self) -> bool: return self._temporary
 
     @property
-    def Exists(self) -> bool: return exists(self.Value)
+    def __class_name__(self) -> str: return nameof(self)
+
 
     @property
-    def IsFile(self) -> bool: return isfile(self.Value)
-    @property
-    def IsDirectory(self) -> bool: return isdir(self.Value)
-    @property
-    def IsLink(self) -> bool: return islink(self.Value)
+    def Exists(self) -> bool: return exists(self.FullPath)
 
-    def Rename(self, new: str): return rename(self.Value, join(self.BaseName, new))
+    @property
+    def IsFile(self) -> bool: return isfile(self.FullPath)
+    @property
+    def IsDirectory(self) -> bool: return isdir(self.FullPath)
+    @property
+    def IsLink(self) -> bool: return islink(self.FullPath)
+
+    def Rename(self, new: str): return rename(self.FullPath, join(self.BaseName, new))
     def Remove(self):
         if self.Exists:
             if self.IsFile: return remove(self)
             elif self.IsDirectory: return rmtree(self)
+
 
     def Chmod(self, mode: int, dir_fd=None, follow_symlinks: bool = False) -> None:
         """
@@ -196,40 +104,27 @@ class FilePath(dict, BaseModel, PathLike):
         dir_fd and follow_symlinks may not be implemented on your platform.
           If they are unavailable, using them will raise a NotImplementedError.
         """
-        return chmod(self.Value, mode, dir_fd=dir_fd, follow_symlinks=follow_symlinks)
-    def Create(self, data: Union[str, bytes] = None, mode: int = 0o777, exist_ok: bool = True) -> FileIO:
+        return chmod(self.FullPath, mode, dir_fd=dir_fd, follow_symlinks=follow_symlinks)
+
+
+    def __call__(self, mode: int = 0o777, exist_ok: bool = True) -> Optional['FileIO']:
         makedirs(self.BaseName, mode, exist_ok)
-        file = FileIO(self)
-        if self.Exists or not data: return file
-        file.Write(data)
-        return file
 
-        # if isinstance(data, str):
-        #     with open(self, 'w') as f:
-        #         f.write(data)
-        #
-        #     return self
-        #
-        # if isinstance(data, bytes):
-        #     with open(self, 'wb') as f:
-        #         f.write(data)
-        #
-        # else:
-        #     with open(self, 'ab'): pass
-        #
-        # return self
+        return None if self.IsDirectory else FileIO(self)
+
+
 
 
 
     @property
-    def BaseName(self) -> 'FilePath': return FilePath.FromString(basename(self.Value))
+    def BaseName(self) -> 'FilePath': return FilePath(basename(self.FullPath))
     @property
-    def DirectoryName(self) -> 'FilePath': return FilePath.FromString(dirname(self.Value))
+    def DirectoryName(self) -> 'FilePath': return FilePath(dirname(self.FullPath))
 
     @property
     def FileName(self) -> Optional[str]:
         if self.IsDirectory: return None
-        return Path(self.Value).name
+        return Path(self.FullPath).name
 
 
     @overload
@@ -262,8 +157,8 @@ class FilePath(dict, BaseModel, PathLike):
 
 
     @property
-    def Size(self) -> int: return getsize(self.Value)
-    def ToUri(self): return Path(self.Value).as_uri()
+    def Size(self) -> int: return getsize(self.FullPath)
+    def ToUri(self): return Path(self.FullPath).as_uri()
 
     def GetHashID(self, BlockSize: int = 65536) -> str:
         """
@@ -272,60 +167,29 @@ class FilePath(dict, BaseModel, PathLike):
         """
         if self.IsDirectory: raise IsADirectoryError('Argument cannot be a directory.')
 
-        try:
-            return self._hash
-        except AttributeError:
+        if self.Hash is None:
             _hasher = hashlib.sha1()
             with open(self, 'rb') as f:
                 buf = f.read(BlockSize)
                 while len(buf) > 0:
                     _hasher.update(buf)
                     buf = f.read(BlockSize)
-            self._hash = base64.urlsafe_b64encode(_hasher.digest()).decode()
-            return self._hash
+            self.Hash = base64.urlsafe_b64encode(_hasher.digest()).decode()
+
+        return self.Hash
 
 
 
-    def ToString(self) -> str: return f'<{nameof(self)}() "{self.Value}">'
-    def __repr__(self): return self.ToString()
-    def __str__(self): return self.Value
-    def __fspath__(self): return self.Value
+    def ToString(self) -> str: return f'<{nameof(self)}() "{self.FullPath}">'
+    def __str__(self): return self.FullPath
+    def __fspath__(self): return self.FullPath
     def __bytes__(self):
         """ Return the bytes representation of the path. This is only recommended to use under Unix. """
-        return fsencode(self.Value)
-    def __setitem__(self, key, value):
-        if hasattr(self, '_hash'): del self._hash
-        super(FilePath, self).__setitem__(key, value)
+        return fsencode(self.FullPath)
     def __del__(self):
         try:
-            if self._temporary and self.Exists: return self.Remove()
+            if self.IsTemporary and self.Exists: return self.Remove()
         except PermissionError: pass
-
-    def __eq__(self, other):
-        if not isinstance(other, (str, self.__class__)):
-            raise TypeError(type(other), (str, self.__class__))
-
-        if isinstance(other, str):
-            return self.Value == other
-
-        return self.Value == other.Value
-    def __ne__(self, other): return not self.__eq__(other)
-    def __gt__(self, other):
-        if not isinstance(other, (str, self.__class__)):
-            raise TypeError(type(other), (str, self.__class__))
-
-        if isinstance(other, str):
-            return self.Value > other
-
-        return self.Value > other.Value
-    def __lt__(self, other):
-        if not isinstance(other, (str, self.__class__)):
-            raise TypeError(type(other), (str, self.__class__))
-
-        if isinstance(other, str):
-            return self.Value < other
-
-        return self.Value < other.Value
 
     def __state__(self):
         d = { }
@@ -350,33 +214,153 @@ class FilePath(dict, BaseModel, PathLike):
     def CurrentFile(cls, file=__file__): return cls(file)
 
     @classmethod
-    def FromString(cls, _path: Union[str, 'FilePath']) -> 'FilePath': return cls(_path)
-    @classmethod
-    def FromPath(cls, _path: Path) -> 'FilePath': return cls(str(_path.resolve()))
-
-    @classmethod
     def Join(cls, *args: Union[str, 'FilePath']) -> 'FilePath': return cls(join(*args))
 
     @classmethod
-    def ListDir(cls, _path: Union[str, 'FilePath']) -> List['FilePath']:
-        if not isinstance(_path, FilePath):
-            _path = cls(_path)
+    def ListDir(cls, _path: Union[str, 'FilePath']) -> Sequence['FilePath']:
+        if not isinstance(_path, FilePath): _path = cls(_path)
 
-        if _path.IsFile: return [cls.FromString(_path)]
+        if _path.IsFile: return [cls(_path)]
 
         if not _path.IsDirectory: raise FileNotFoundError(f'path "{_path}" is not a valid directory.')
+
         def _join(file): return cls.Join(_path, file)
-        return sorted(map(_join, listdir(_path)))
+
+        return sorted(map(_join, listdir(_path)), key=lambda x: x.FullPath)
 
     @classmethod
-    def Temporary(cls, *args: str, root_dir: str = None) -> FileIO:
+    def Temporary(cls, *args: str, root_dir: str = None) -> 'FileIO':
         _path = cls.Join(root_dir or tempfile.gettempdir(), *args)
         _path._temporary = True
-        return _path.Create()
+        return _path()
 
     @classmethod
     def Parse(cls, d) -> 'FilePath':
         if isinstance(d, dict):
-            return cls(d)
+            AssertKeys(d, 'FullPath')
+            return cls(d['FullPath'])
 
         throw(d, dict)
+
+
+
+_TFileData = TypeVar('_TFileData', bound='FileIO')
+
+@attrs(slots=True, hash=True, order=True, eq=True, auto_attribs=True, frozen=True, collect_by_mro=True)
+class FileIO(PathLike, Generic[_TFileData]):
+    Path: FilePath = attrib(validator=validators.instance_of(FilePath))
+
+    def Remove(self): return self.Path.Remove()
+    def __del__(self): return self.Path.__del__()
+    def __fspath__(self): return self.Path.__fspath__()
+    def __bytes__(self):
+        """ Return the bytes representation of the path. This is only recommended to use under Unix. """
+        return bytes(self.Path)
+
+
+    def GetFileData(self, file: ReadWriteData, *, Default: _TFileData = None, Check: callable = None, RemoveOnError: bool = False) -> _TFileData:
+        try:
+            with open(self, 'rb') as f:
+                dat = file.load(f)
+                if callable(Check): Check(dat)
+                return dat
+        except FileNotFoundError: return Default
+        except (pickle.PickleError, pickle.PicklingError, json.JSONDecodeError):
+            if RemoveOnError: self.Path.Remove()
+            return Default
+    def SetFileData(self, data: _TFileData, file: ReadWriteData, *, Check: callable = None):
+        with open(self, 'wb') as f:
+            if callable(Check): data = Check(data)
+            return file.dump(data, f)
+
+
+    def SaveJson(self, data: _TFileData, **kwargs):
+        with open(self, 'w') as f:
+            return json.dump(data, f, **kwargs)
+    def ReadJson(self, **kwargs) -> _TFileData:
+        with open(self, 'r') as f:
+            return json.load(f, **kwargs)
+
+
+    def SavePickle(self, data: Any, **kwargs):
+        with open(self, 'wb') as f:
+            return pickle.dump(data, f, **kwargs)
+    def ReadPickle(self, **kwargs) -> Any:
+        with open(self, 'rb') as f:
+            return pickle.load(f, **kwargs)
+
+
+
+
+    def Write(self, content: Union[str, bytes], **kwargs) -> int:
+        if 'newline' not in kwargs: kwargs['newline'] = '\n'
+
+        if isinstance(content, str):
+            with open(self, 'w', **kwargs) as f:
+                return f.write(content)
+
+        elif isinstance(content, bytes):
+            with open(self, 'wb', **kwargs) as f:
+                return f.write(content)
+
+        else: raise TypeError(type(content), (bytes, str))
+
+    def Read(self) -> str:
+        with open(self, 'r') as f:
+            return f.read()
+    def ReadBytes(self) -> bytes:
+        with open(self, 'rb') as f:
+            return f.read()
+
+
+
+
+    async def WriteAsync(self, content: Union[str, bytes], **kwargs) -> int:
+        if 'newline' not in kwargs: kwargs['newline'] = '\n'
+
+        if isinstance(content, str):
+            async with async_open(self, 'w', **kwargs) as f:
+                return await f.write(content)
+
+        elif isinstance(content, bytes):
+            async with async_open(self, 'wb', **kwargs) as f:
+                return await f.write(content)
+
+        else: raise TypeError(type(content), (bytes, str))
+
+    async def ReadAsync(self) -> str:
+        async with async_open(self, 'r') as f:
+            return await f.read()
+
+    async def ReadBytesAsync(self) -> bytes:
+        async with async_open(self, 'rb') as f:
+            return await f.read()
+
+
+    async def CopyToAsync(self, _outPath: FilePath):
+        async with async_open(_outPath, 'wb') as out:
+            async with async_open(self, 'rb') as _in:
+                await out.write(await _in.read())
+
+
+
+    @classmethod
+    def TemporaryFile(cls, *sub_folders: str, _name: str, root_dir: str = None): return FilePath.Temporary(*sub_folders, _name, root_dir=root_dir)
+
+    @classmethod
+    def Create(cls, _path: Union[str, 'FilePath'], content: Union[str, bytes] = None, *,
+               buffering=None, encoding: str = None, errors=None, newline: str = '\n', closefd=True):
+        os.makedirs(basename(_path), exist_ok=True)
+        _path = cls(_path)
+        _path.Write(content, buffering=buffering, encoding=encoding, errors=errors, newline=newline, closefd=closefd)
+
+        return Path
+
+    @classmethod
+    async def CreateAsync(cls, _path: Union[str, 'FilePath'], content: Union[str, bytes] = None, *,
+                          buffering=None, encoding: str = None, errors=None, newline: str = '\n', closefd=True, loop=None, executor=None):
+        os.makedirs(basename(_path), exist_ok=True)
+        _path = cls(_path)
+        await _path.WriteAsync(content, buffering=buffering, encoding=encoding, errors=errors, newline=newline, closefd=closefd, loop=loop, executor=executor)
+
+        return Path

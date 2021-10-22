@@ -3,9 +3,11 @@
 #  Property of TrueLogic Company.
 #  Copyright (c) 2020.
 # ------------------------------------------------------------------------------
+import asyncio
 import base64
 import tkinter as tk
 from abc import ABC
+from asyncio import BaseEventLoop, iscoroutine
 from enum import Enum
 from io import BytesIO
 from os.path import isfile
@@ -13,17 +15,19 @@ from tkinter import Event as tkEvent, ttk
 from types import FunctionType, MethodType
 from typing import *
 from typing import BinaryIO
-from urllib.request import urlopen
 
-from PIL.Image import open as img_open
+from PIL.Image import Image, open as _img_open
 from PIL.ImageTk import PhotoImage
+from aiofiles import open as async_file_open
+from aiofiles.threadpool.binary import AsyncBufferedReader
+from aiohttp import ClientResponse, ClientSession
+from requests import get
+from yarl import URL
 
+from PythonExtensions import ArgumentError
 from ..Enumerations import *
 from ..Events import Bindings
 from ...Files import FilePath
-from ...Images import *
-from ...Json import Size
-from ...Models import URL
 from ...Names import nameof
 from ...debug import pp
 
@@ -35,6 +39,7 @@ __all__ = [
     'CommandMixin', 'ImageMixin',
     'CurrentValue', 'CallWrapper',
     'tk', 'ttk', 'tkEvent', 'URL',
+    'img_open', 'tkPhotoImage'
     ]
 
 class BindingCollection(dict, Dict[Bindings, Set[str]]):
@@ -49,10 +54,12 @@ class BindingCollection(dict, Dict[Bindings, Set[str]]):
         self.clear()
     __del__ = Clear
 
+
 class BaseTkinterWidget(tk.Widget, ABC):
     # noinspection PyMissingConstructor
-    def __init__(self, Color: Dict[str, str] = None):
+    def __init__(self, Color: Optional[Dict[str, str]], loop: Optional[asyncio.BaseEventLoop]):
         if Color: self.configure(**Color)
+        self._loop: Final[Optional[asyncio.BaseEventLoop]] = loop
 
     __bindings__: BindingCollection = BindingCollection()
     _state_: ViewState = ViewState.Hidden
@@ -105,7 +112,7 @@ class BaseTkinterWidget(tk.Widget, ABC):
 
 
     @property
-    def size(self) -> Size: return Size.Create(self.width, self.height)
+    def size(self) -> Tuple[int, int]: return self.width, self.height
     @property
     def width(self) -> int: return self.winfo_width()
     @property
@@ -235,13 +242,13 @@ class BaseTkinterWidget(tk.Widget, ABC):
     def ClearBindings(self, sequence: Bindings):
         for item in self.__bindings__[sequence]:
             self.unbind(sequence, item)
-    def UnBind(self, sequence: Bindings, funcid: str):
-        self.__bindings__[sequence].discard(funcid)
-        return self.unbind(sequence, funcid)
-    def UnBindAll(self, sequence: Bindings = None) -> str:
+    def UnBind(self, sequence: Bindings, func_id: str):
+        self.__bindings__[sequence].discard(func_id)
+        self.unbind(sequence, func_id)
+    def UnBindAll(self, sequence: Bindings = None):
         if isinstance(sequence, Enum): sequence = sequence.value
         self.__bindings__[sequence].clear()
-        return self.unbind_all(sequence)
+        self.unbind_all(sequence)
 
 
     def BindClass(self, className, sequence: Bindings = None, func: callable = None, add: bool = None) -> str:
@@ -402,12 +409,12 @@ class BaseTkinterWidget(tk.Widget, ABC):
 class BaseTextTkinterWidget(BaseTkinterWidget):
     _txt: tk.StringVar
     # noinspection PyMissingConstructor
-    def __init__(self, text: str, Override_var: Optional[tk.StringVar], Color: Optional[Dict[str, str]], configure: bool = True):
+    def __init__(self, text: str, Override_var: Optional[tk.StringVar], Color: Optional[Dict[str, str]], configure: bool = True, loop: Optional[asyncio.BaseEventLoop] = None):
         if Override_var is not None: self._txt = Override_var
         else: self._txt = tk.StringVar(master=self, value=text)
 
         if configure: self.configure(textvariable=self._txt)
-        BaseTkinterWidget.__init__(self, Color)
+        BaseTkinterWidget.__init__(self, Color, loop)
     @property
     def txt(self) -> str: return self._txt.get()
     @txt.setter
@@ -431,12 +438,11 @@ class BaseTextTkinterWidget(BaseTkinterWidget):
 class CallWrapper(tk.CallWrapper):
     """ Internal class. Stores function to call when some user defined Tcl function is called e.g. after an event occurred. """
 
-    _func: callable
     _widget: Union[BaseTextTkinterWidget, BaseTkinterWidget] = None
-    def __init__(self, func: callable, widget: BaseTkinterWidget = None):
+    def __init__(self, func: Callable, widget: BaseTkinterWidget = None):
         """Store FUNC, SUBST and WIDGET as members."""
-        self._func: callable = func
-        self._widget = widget
+        self._func: Final[Callable] = func
+        self._widget: Optional[BaseTkinterWidget] = widget
 
     def __call__(self, *args, **kwargs):
         """Apply first function SUBST to arguments, than FUNC."""
@@ -460,17 +466,77 @@ class CallWrapper(tk.CallWrapper):
         return self
 
     @classmethod
-    def Create(cls, func: callable, z: int or str = None, widget: BaseTkinterWidget = None, **kwargs):
+    def Create(cls, func: Callable, z: Union[int, float, str, Enum] = None, widget: BaseTkinterWidget = None, **kwargs):
         if z is not None and kwargs and func:
             return cls(lambda x=kwargs: func(z, **x), widget=widget)
+
         elif kwargs and func:
             return cls(lambda x=kwargs: func(**x), widget=widget)
+
         elif z is not None and func:
             return cls(lambda x=z: func(x), widget=widget)
+
         elif func:
             return cls(func, widget=widget)
 
         return None
+
+class AsyncCallWrapper(tk.CallWrapper):
+    """ Internal class. Stores function to call when some user defined Tcl function is called e.g. after an event occurred. """
+
+    _widget: Union[BaseTextTkinterWidget, BaseTkinterWidget] = None
+    # noinspection PyMissingConstructor
+    def __init__(self, func: Coroutine, loop: BaseEventLoop, widget: Union[BaseTextTkinterWidget, BaseTkinterWidget]):
+        """Store FUNC, SUBST and WIDGET as members."""
+        # noinspection PyFinal
+        self._func: Final[Coroutine] = func
+        self._loop = loop
+        self._widget = widget
+
+
+    def __call__(self, *args, **kwargs): self._loop.create_task(self._func, name=self._func.__name__)
+
+    def __repr__(self) -> str: return f'{super().__repr__().replace(">", "")} [ {dict(func=self._func, widget=self._widget)} ]>'
+    def __str__(self) -> str: return repr(self)
+
+    @classmethod
+    def Create(cls, func: Union[Awaitable, Coroutine, Generator, Callable[[...], Coroutine]],
+               loop: BaseEventLoop,
+               widget: Union['CommandMixin', BaseTkinterWidget],
+               z: Union[int, float, str, Enum] = None,
+               **kwargs):
+        if not func: return None
+
+        async def wrapper() -> Any:
+            try:
+                if iscoroutine(func):
+                    return await func
+
+                if callable(func):
+                    if z is not None and kwargs:
+                        return func(z, **kwargs)
+
+                    elif kwargs:
+                        return func(**kwargs)
+
+                    elif z is not None:
+                        return func(z)
+
+                    return await func(z, **kwargs)
+
+                return await func
+
+            except SystemExit: raise
+            except Exception:
+                if hasattr(widget, '_report_exception'):
+                    # noinspection PyProtectedMember
+                    return widget._report_exception()
+
+                raise
+
+
+        return cls(wrapper(), loop, widget)
+
 class CurrentValue(CallWrapper):
     """
         Stores function to call when some user defined Tcl function is called e.g. after an event occurred.
@@ -499,17 +565,20 @@ class CurrentValue(CallWrapper):
         self._widget = w
         return self
 
+
 # ------------------------------------------------------------------------------------------
 
 
 class CommandMixin:
-    _cmd: CallWrapper
+    _cmd: Optional[Union[CurrentValue, AsyncCallWrapper, CallWrapper]]
     configure: callable
     command_cb: str
+    _loop: Optional[BaseEventLoop]
     def __call__(self, *args, **kwargs):
         """ Execute the Command """
         if callable(self._cmd): self._cmd(*args, **kwargs)
-    def SetCommand(self, func: Union[callable, FunctionType, MethodType, CurrentValue], z: Union[int, float, str, Enum] = None, add: bool = False, **kwargs):
+
+    def SetCommand(self, func: Union[Callable, FunctionType, MethodType, CurrentValue], z: Union[int, float, str, Enum] = None, add: bool = False, **kwargs):
         """
         :param func: function or method being called.
         :type func: Union[callable, FunctionType, MethodType, CurrentValue]
@@ -521,16 +590,93 @@ class CommandMixin:
         :type kwargs: Any
         :return: returns self to enable chaining.
         """
-        if not callable(func):
-            raise ValueError(f'func is not callable. got {type(func)}')
+        if not callable(func): raise ValueError(f'func is not callable. got {type(func)}')
 
         if isinstance(func, CurrentValue): self._cmd = func.SetWidget(self)
         else: self._cmd = CallWrapper.Create(func, z, **kwargs)
 
         return self._setCommand(add)
+
+    def SetCommandAsync(self, func: Union[Awaitable, Callable[[...], Coroutine], Coroutine],
+                        z: Union[int, float, str, Enum] = None,
+                        add: bool = False,
+                        **kwargs):
+        """
+        :param func: function or method being called.
+        :type func: Union[callable, FunctionType, MethodType, CurrentValue]
+        :param z: arg passed to the function.
+        :type z: Union[int, float, str, Enum]
+        :param add: if True, replaces the current function.
+        :type add: bool
+        :param kwargs: keyword args passed to the function.
+        :type kwargs: Any
+        :return: returns self to enable chaining.
+        """
+
+        if isinstance(func, CurrentValue): raise ArgumentError(f'func cannot be a CurrentValue instance. Use "SetCommand" instead.')
+
+        self._cmd = AsyncCallWrapper.Create(func, self._loop, self, z, **kwargs)
+
+        return self._setCommand(add)
+
     def _setCommand(self, add: bool):
         self.configure(command=self._cmd)
         return self
+
+
+
+class tkPhotoImage(PhotoImage):
+    @property
+    def width(self) -> int:
+        """
+        Get the width of the img.
+
+        :return: The width, in pixels.
+        """
+        return super().width()
+
+    @property
+    def height(self) -> int:
+        """
+        Get the height of the img.
+
+        :return: The height, in pixels.
+        """
+        return super().height()
+
+
+
+def img_open(fp: BinaryIO, *formats: str, mode="r") -> Image:
+    """
+    Opens and identifies the given image file.
+
+    This is a lazy operation; this function identifies the file, but
+    the file remains open and the actual image data is not read from
+    the file until you try to process the data (or call the
+    :py:meth:`~PIL.Image.Image.load` method).  See
+    :py:func:`~PIL.Image.new`. See :ref:`file-handling`.
+
+    :param fp: A filename (string), pathlib.Path object or a file object.
+       The file object must implement ``file.read``,
+       ``file.seek``, and ``file.tell`` methods,
+       and be opened in binary mode.
+    :param mode: The mode.  If given, this argument must be "r".
+    :param formats: A list or tuple of formats to attempt to load the file in.
+       This can be used to restrict the set of formats checked.
+       Pass ``None`` to try all supported formats. You can print the set of
+       available formats by running ``python3 -m PIL`` or using
+       the :py:func:`PIL.features.pilinfo` function.
+    :returns: An :py:class:`~PIL.Image.Image` object.
+    :exception FileNotFoundError: If the file cannot be found.
+    :exception PIL.UnidentifiedImageError: If the image cannot be opened and
+       identified.
+    :exception ValueError: If the ``mode`` is not "r", or if a ``StringIO``
+       instance is used for ``fp``.
+    :exception TypeError: If ``formats`` is not ``None``, a list or a tuple.
+    """
+    return _img_open(fp, mode, formats or None)
+
+
 
 class ImageMixin:
     width: int
@@ -538,60 +684,135 @@ class ImageMixin:
     configure: callable
     update_idletasks: callable
     update: callable
-    _IMG: PhotoImage = None
+    _IMG: tkPhotoImage = None
 
     @overload
-    def SetImage(self, image: PhotoImage): ...
+    def SetImage(self, img: tkPhotoImage): ...
 
     @overload
-    def SetImage(self, url: URL): ...
+    def SetImage(self, url: URL, *formats: str, params: Union[Dict[str, str], List[str], Tuple[str, ...]] = None, **kwargs): ...
     @overload
-    def SetImage(self, url: URL, WidthMax: int, HeightMax: int): ...
+    def SetImage(self, url: URL, *formats: str, widthMax: int, heightMax: int, params: Union[Dict[str, str], List[str], Tuple[str, ...]] = None, **kwargs): ...
 
     @overload
-    def SetImage(self, path: Union[str, bytes, FilePath, Enum]): ...
+    def SetImage(self, path: Union[str, bytes, FilePath, Enum], *formats: str): ...
     @overload
-    def SetImage(self, path: Union[str, bytes, FilePath, Enum], WidthMax: int, HeightMax: int): ...
+    def SetImage(self, path: Union[str, bytes, FilePath, Enum], *formats: str, widthMax: int, heightMax: int): ...
 
     @overload
-    def SetImage(self, base64data: Union[str, bytes, Enum]): ...
+    def SetImage(self, base64data: Union[str, bytes, Enum], *formats: str): ...
     @overload
-    def SetImage(self, base64data: Union[str, bytes, Enum], WidthMax: int, HeightMax: int): ...
+    def SetImage(self, base64data: Union[str, bytes, Enum], *formats: str, widthMax: int, heightMax: int): ...
 
 
-    def SetImage(self, data: Union[str, bytes, Enum, FilePath, URL, PhotoImage], WidthMax: int = None, HeightMax: int = None):
+    def SetImage(self, data: Union[str, bytes, Enum, FilePath, URL, tkPhotoImage],
+                 *formats: str,
+                 widthMax: int = None,
+                 heightMax: int = None, **kwargs):
         if data is None: return self._setImage(None)
 
         if isinstance(data, Enum): data = data.value
 
-        if isinstance(data, PhotoImage):
+        if isinstance(data, tkPhotoImage):
             return self._setImage(data)
 
-        if isinstance(data, URL):
-            with BytesIO(urlopen(data).read()) as buf:
-                return self._open(buf, WidthMax, HeightMax)
+        if isinstance(data, URL) or isinstance(data, str) and data.lower().strip().startswith('http'):
+            reply = get(data, **kwargs)
+            with BytesIO(reply.content) as buf:
+                return self._setImage(ImageMixin.open(self, buf, widthMax, heightMax, *formats))
 
         if isfile(data):
             with open(data, 'rb') as f:
-                return self._open(f, WidthMax, HeightMax)
+                return self._setImage(ImageMixin.open(self, f, widthMax, heightMax, *formats))
 
-        with BytesIO(base64.b64decode(data)) as buf:
-            return self._open(buf, WidthMax, HeightMax)
+        return self.SetImageFromBytes(base64.b64decode(data), *formats, width=widthMax, height=heightMax)
 
-    def _open(self, f: BinaryIO, WidthMax: Optional[int], HeightMax: Optional[int]):
-        if WidthMax is None: WidthMax = self.width
-        if HeightMax is None: HeightMax = self.height
 
-        if WidthMax <= 0: raise ValueError(f'WidthMax must be positive. Value: {WidthMax}')
-        if HeightMax <= 0: raise ValueError(f'HeightMax must be positive. Value: {HeightMax}')
 
-        with img_open(f) as img:
-            img = ImageObject(img, WidthMax, HeightMax)
-            img.Resize()
-            return self._setImage(img.ToPhotoImage(master=self))
 
-    def _setImage(self, img: Optional[PhotoImage]):
+
+
+    @overload
+    async def SetImageAsync(self, img: tkPhotoImage): ...
+
+    @overload
+    async def SetImageAsync(self, url: URL, *formats: str, params: Union[Dict[str, str], List[str], Tuple[str, ...]] = None, **kwargs): ...
+    @overload
+    async def SetImageAsync(self, url: URL, *formats: str, widthMax: int, heightMax: int, params: Union[Dict[str, str], List[str], Tuple[str, ...]] = None, **kwargs): ...
+
+    @overload
+    async def SetImageAsync(self, path: Union[str, bytes, FilePath, Enum], *formats: str): ...
+    @overload
+    async def SetImageAsync(self, path: Union[str, bytes, FilePath, Enum], *formats: str, widthMax: int, heightMax: int): ...
+
+    @overload
+    async def SetImageAsync(self, base64data: Union[str, bytes, Enum], *formats: str): ...
+    @overload
+    async def SetImageAsync(self, base64data: Union[str, bytes, Enum], *formats: str, widthMax: int, heightMax: int): ...
+
+
+    async def SetImageAsync(self, data: Union[str, bytes, Enum, FilePath, URL, tkPhotoImage],
+                            *formats: str,
+                            widthMax: int = None,
+                            heightMax: int = None,
+                            **kwargs) -> 'ImageMixin':
+        if data is None: return self._setImage(None)
+
+        if isinstance(data, Enum): data = data.value
+
+        if isinstance(data, tkPhotoImage):
+            return self._setImage(data)
+
+        if isinstance(data, URL) or isinstance(data, str) and data.lower().strip().startswith('http'):
+            async with ClientSession() as session:
+                content: ClientResponse = await session.get(data, **kwargs)
+                with BytesIO(await content.read()) as buf:
+                    return self._setImage(ImageMixin.open(self, buf, widthMax, heightMax, *formats))
+
+        if isfile(data):
+            async with async_file_open(data, 'rb') as f:
+                return self._setImage(ImageMixin.open(self, f, widthMax, heightMax, *formats))
+
+        return self.SetImageFromBytes(base64.b64decode(data), *formats, width=widthMax, height=heightMax)
+
+    def SetImageFromBytes(self, data: bytes, *formats: str, width: int = None, height: int = None) -> 'ImageMixin':
+        assert (isinstance(data, bytes))
+
+        with BytesIO(data) as buf:
+            return self._setImage(ImageMixin.open(self, buf, width, height, *formats))
+
+
+    @staticmethod
+    def open(self: Union[BaseTkinterWidget, 'ImageMixin'], f: Union[BinaryIO, AsyncBufferedReader],
+             widthMax: Optional[int], heightMax: Optional[int], *formats: str) -> tkPhotoImage:
+        if widthMax is None: widthMax = self.width
+        if heightMax is None: heightMax = self.height
+
+        if widthMax <= 0: raise ValueError(f'widthMax must be positive. Value: {widthMax}')
+        if heightMax <= 0: raise ValueError(f'heightMax must be positive. Value: {heightMax}')
+
+        with img_open(f, *formats) as img:
+            img = img.resize(ImageMixin.CalculateNewSize(img, widthMax, heightMax))
+            return tkPhotoImage(img, master=self)
+
+    def _setImage(self, img: Optional[tkPhotoImage]) -> 'ImageMixin':
         self.update_idletasks()
         self._IMG = img
-        self.configure(image=self._IMG)
+        self.configure(img=self._IMG)
         return self
+
+
+    @staticmethod
+    def Maximum_ScalingFactor(*options: float) -> float: return max(options)
+    @staticmethod
+    def Minimum_ScalingFactor(*options: float) -> float: return min(options)
+
+    @staticmethod
+    def Factors(img: Image, widthMax: int, heightMax: int) -> Tuple[float, float]: return widthMax / img.width, heightMax / img.height
+    @staticmethod
+    def CalculateNewSize(img: Image, widthMax: int, heightMax: int) -> Tuple[int, int]:
+        options = ImageMixin.Factors(img, widthMax, heightMax)
+        scalingFactor = ImageMixin.Minimum_ScalingFactor(*options)
+        return ImageMixin.Scale(img, scalingFactor)
+    @staticmethod
+    def Scale(img: Image, factor: float) -> Tuple[int, int]: return int(img.width * (factor or 1)), int(img.height * (factor or 1))

@@ -6,6 +6,7 @@
 #
 # ------------------------------------------------------------------------------
 import random
+from asyncio import BaseEventLoop
 from typing import *
 
 from ..Base import *
@@ -24,13 +25,13 @@ __all__ = [
 TODO = """
 --Button
 CheckButton
---ComoboBox
+--ComboBox
 --Entry
 --Frame
 --LabelFrame
 --Label
 --Notebook
-PanedWidnow
+PanedWindow
 ProgressBar
 RadioButton
 Scale
@@ -176,9 +177,9 @@ class TreeViewThemed(ttk.Treeview, BaseTkinterWidget, CommandMixin):
     SelectedItems: List = []
     items: Union[ListItem, ItemCollection] = None
 
-    def __init__(self, master, Color: Dict[str, str] = None, selectmode: SelectionMode = SelectionMode.Extended, **kwargs):
-        ttk.Treeview.__init__(self, master, selectmode=selectmode.value, **kwargs)
-        BaseTkinterWidget.__init__(self, Color)
+    def __init__(self, master, Color: Dict[str, str] = None, select_mode: SelectionMode = SelectionMode.Extended, loop: Optional[BaseEventLoop] = None, **kwargs):
+        ttk.Treeview.__init__(self, master, selectmode=select_mode.value, **kwargs)
+        BaseTkinterWidget.__init__(self, Color, loop)
         self.SetCommand(self.OnSelectRow)
 
         self.foreground = self.CreateForegroundColorTags()
@@ -411,9 +412,9 @@ class EntryThemed(ttk.Entry, BaseTextTkinterWidget, CommandMixin):
 # ------------------------------------------------------------------------------------------
 
 class NotebookThemed(BaseTextTkinterWidget, ttk.Notebook):
-    def __init__(self, master, Color: Dict[str, str] = None, **kwargs):
+    def __init__(self, master, Color: Dict[str, str] = None, loop: Optional[BaseEventLoop] = None, **kwargs):
         ttk.Notebook.__init__(self, master, **kwargs)
-        BaseTkinterWidget.__init__(self, Color=Color)
+        BaseTkinterWidget.__init__(self, Color, loop)
 
     def Add(self, w: BaseTkinterWidget, add: dict = dict(padding=2), *, title: str, **kwargs) -> int:
         """Adds a new tab to the notebook.

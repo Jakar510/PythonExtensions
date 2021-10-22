@@ -5,8 +5,8 @@ from PythonExtensions.debug import *
 
 
 pos = PlacePosition.Zero()
-i = Size.Create(1200, 1050)
-v = Size.Create(1280, 800)
+i = Size(1200, 1050)
+v = Size(1280, 800)
 p = PlacePosition.Zero()
 
 print()

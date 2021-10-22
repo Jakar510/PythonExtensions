@@ -8,6 +8,7 @@
 #  in conjunction with Tcl version 8.6
 #    Nov 23, 2020 10:53:16 AM CST  platform: Windows NT
 import platform
+from asyncio import BaseEventLoop
 from typing import *
 
 from ..Base import *
@@ -38,8 +39,8 @@ class AutoScroll(BaseTkinterWidget):
     """
     vsb: ScrollbarThemed
     hsb: ScrollbarThemed
-    def __init__(self, master: BaseTkinterWidget, Color: Dict[str, str] = None):
-        super().__init__(Color)
+    def __init__(self, master: BaseTkinterWidget, Color: Dict[str, str] = None, loop: Optional[BaseEventLoop] = None):
+        super().__init__(Color, loop)
         self.master = master
 
         if hasattr(self, 'xview') and callable(self.xview):
@@ -84,12 +85,12 @@ class AutoScroll(BaseTkinterWidget):
         assert (isinstance(child, BaseTkinterWidget))
         if platform.system() == 'Windows' or platform.system() == 'Darwin':
             child.BindAll(Bindings.MouseWheel, lambda e: AutoScroll._on_mousewheel(e, child))
-            child.BindAll(Bindings.ShiftMouseWheel, lambda e: AutoScroll._on_shiftmouse(e, child))
+            child.BindAll(Bindings.ShiftMouseWheel, lambda e: AutoScroll._on_shift_mouse(e, child))
         else:
             child.BindAll(Bindings.Button4, lambda e: AutoScroll._on_mousewheel(e, child))
             child.BindAll(Bindings.Button5, lambda e: AutoScroll._on_mousewheel(e, child))
-            child.BindAll(Bindings.ShiftButton4, lambda e: AutoScroll._on_shiftmouse(e, child))
-            child.BindAll(Bindings.ShiftButton5, lambda e: AutoScroll._on_shiftmouse(e, child))
+            child.BindAll(Bindings.ShiftButton4, lambda e: AutoScroll._on_shift_mouse(e, child))
+            child.BindAll(Bindings.ShiftButton5, lambda e: AutoScroll._on_shift_mouse(e, child))
 
     # noinspection PyUnusedLocal
     @staticmethod
@@ -117,7 +118,7 @@ class AutoScroll(BaseTkinterWidget):
                 widget.yview_scroll(1, 'units')
 
     @staticmethod
-    def _on_shiftmouse(event, widget):
+    def _on_shift_mouse(event, widget):
         if platform.system() == 'Windows':
             widget.xview_scroll(-1 * int(event.delta / 120), 'units')
         elif platform.system() == 'Darwin':

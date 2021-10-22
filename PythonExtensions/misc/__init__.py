@@ -2,7 +2,7 @@ import re
 import sys
 from itertools import count
 from types import FunctionType, MethodType
-from typing import Iterator, Union
+from typing import Iterable, Iterator, Union
 
 from ..Names import nameof
 
@@ -16,6 +16,7 @@ __all__ = [
     'get_size', 'sizeof',
     'AutoCounter', 'lazy_property',
     ]
+
 
 def RoundFloat(Float: float, Precision: int) -> str:
     """ Rounds the Float to the given Precision and returns It as string. """
@@ -32,6 +33,7 @@ def CalculateOffset(starting: Union[int, float], *args: Union[int, float]) -> in
     for arg in args:
         if not isinstance(arg, (int, float)): arg = float(arg)
         starting *= arg
+
     return int(starting)
 
 
@@ -62,9 +64,9 @@ def IsFunction(o) -> bool:
 
 
 
-private_or_special_function_searcher = re.compile(r"(^__\w+$)|(^_\w+$)|(^__\w+__$)")
+_private_or_special_function_searcher = re.compile(r"(^__\w+$)|(^_\w+$)|(^__\w+__$)")
 
-def IsAttributePrivate(attr_name: str) -> bool: return private_or_special_function_searcher.search(attr_name) is not None
+def IsAttributePrivate(attr_name: str) -> bool: return _private_or_special_function_searcher.search(attr_name) is not None
 
 
 
@@ -108,11 +110,14 @@ class AutoCounter(object):
     def __call__(self, *args, **kwargs) -> int:
         self._value = self._next()
         return self._value
+    def __iter__(self) -> Iterable[int]: yield self()
+
     @property
     def value(self) -> int: return self._value
     def reset(self, *, start: int = 0, step: int = 1):
         self._counter = count(start=start, step=step)
         self._next = self._counter.__next__
+
 
     def __str__(self): return str(self._value)
     def __repr__(self): return f'<{nameof(self)}, value: {self._value}>'

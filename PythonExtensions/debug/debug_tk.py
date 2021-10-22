@@ -12,10 +12,10 @@ from ..tk.Base import *
 
 __all__ = ['DebugWidget', 'DebugWidgetRecursively']
 
-def _rootLevelDataRecurive(w) -> dict:
+def _rootLevelDataRecursive(w) -> dict:
     assert (isinstance(w, BaseTkinterWidget) and isinstance(w, tk.BaseWidget))
-    return _WidgetDataRecurive(w)
-def _WidgetDataRecurive(w) -> dict:
+    return _WidgetDataRecursive(w)
+def _WidgetDataRecursive(w) -> dict:
     assert (isinstance(w, BaseTkinterWidget) and isinstance(w, tk.BaseWidget))
     return {
         'Type':                     w.__class__,
@@ -39,14 +39,14 @@ def _childData(obj):
         for key, w in obj:
             print('type(w)', type(w))
             print('type(key)', type(key))
-            r[key] = _WidgetDataRecurive(w)
+            r[key] = _WidgetDataRecursive(w)
         return r
 
     if isinstance(obj, list):
         r = []
         for w in obj:
             print('type(w)', type(w))
-            r.append((w.winfo_id(), _WidgetDataRecurive(w)))
+            r.append((w.winfo_id(), _WidgetDataRecursive(w)))
         return dict(r)
 
     return obj
@@ -55,7 +55,7 @@ def DebugWidgetRecursively(w, *, Message: str):
     from pprint import PrettyPrinter
     pp = PrettyPrinter(indent=4)
     print(f'---------------- {Message} < {nameof(w)} > ----------------')
-    pp.pprint(_rootLevelDataRecurive(w))
+    pp.pprint(_rootLevelDataRecursive(w))
     print()
     print()
 

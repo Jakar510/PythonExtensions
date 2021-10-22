@@ -5,19 +5,23 @@
 # ------------------------------------------------------------------------------
 #
 # ------------------------------------------------------------------------------
-
-import os
+from asyncio import BaseEventLoop
+from io import BytesIO
+from os import PathLike
+from os.path import *
 from typing import *
-from urllib.request import urlopen
 
 from PIL.Image import Image
 from PIL.ImageTk import PhotoImage
+from aiofiles import open as async_file_open
+from aiohttp import ClientResponse, ClientSession
+from requests import get
 
+from PythonExtensions.Names import typeof
 from ..Base import *
 from ..Core import *
 from ..Enumerations import *
 from ..Events import *
-from ...Json import PlacePosition
 
 
 
@@ -43,6 +47,7 @@ Spinbox
 Scrollbar
 --text
 """
+
 
 # noinspection DuplicatedCode
 class Button(tk.Button, BaseTextTkinterWidget, ImageMixin, CommandMixin):
@@ -379,31 +384,59 @@ class Listbox(tk.Listbox, BaseTextTkinterWidget, CommandMixin):
 # ------------------------------------------------------------------------------------------
 
 class Canvas(tk.Canvas, BaseTkinterWidget):
-    def __init__(self, master, *args, Color: Dict[str, str] = None, **kwargs):
+    def __init__(self, master, *args, Color: Dict[str, str] = None, loop: Optional[BaseEventLoop] = None, **kwargs):
         tk.Canvas.__init__(self, master, *args, **kwargs)
         self._setupBindings()
-        BaseTkinterWidget.__init__(self, Color)
+        BaseTkinterWidget.__init__(self, Color, loop)
 
-    def DownloadImage(self, url: str, x: int, y: int, width: int = None, height: int = None): return self.SetImageFromBytes(urlopen(url).read(), x, y, width, height)
-    def OpenImage(self, path: str, x: int, y: int, width: int = None, height: int = None) -> Tuple[PhotoImage, Tuple[int, int], int]:
-        assert (os.path.isfile(path))
-        from ...Images import ImageObject
 
-        img = ImageObject.FromFile(path, width=width, height=height, AsPhotoImage=self)
-        return self.CreateImage(image=img, x=x, y=y)
-    def SetImageFromBytes(self, data: bytes, x: int, y: int, width: int = None, height: int = None) -> Tuple[PhotoImage, Tuple[int, int], int]:
+    def DownloadImage(self, url: URL, x: int, y: int, *formats: str, width: int = None, height: int = None, **kwargs):
+        if isinstance(url, URL) or isinstance(url, str) and url.lower().strip().startswith('http'):
+            reply = get(url, **kwargs)
+            return self.SetImageFromBytes(reply.content, x, y, *formats, width=width, height=height)
+
+        raise TypeError(typeof(url), (str, URL))
+    async def DownloadImageAsync(self, url: Union[URL, str], x: int, y: int, *formats: str, width: int = None, height: int = None, **kwargs):
+        if isinstance(url, URL) or isinstance(url, str) and url.lower().strip().startswith('http'):
+            async with ClientSession() as session:
+                reply: ClientResponse = await session.get(url, **kwargs)
+                content = await reply.read()
+                return self.SetImageFromBytes(content, x, y, *formats, width=width, height=height)
+
+        raise TypeError(typeof(url), (str, URL))
+
+
+    def OpenImage(self, path: PathLike, x: int, y: int, *formats: str, width: int = None, height: int = None) -> Tuple[PhotoImage, Tuple[int, int], int]:
+        assert (isfile(path))
+
+        with open(path, 'rb') as f:
+            img = ImageMixin.open(self, f, width, height, *formats)
+            return self.CreateImage(image=img, x=x, y=y)
+    async def OpenImageAsync(self, path: PathLike, x: int, y: int, *formats: str, width: int = None, height: int = None) -> Tuple[PhotoImage, Tuple[int, int], int]:
+        assert (isfile(path))
+
+        async with async_file_open(path, 'rb') as f:
+            img = ImageMixin.open(self, f, width, height, *formats)
+            return self.CreateImage(image=img, x=x, y=y)
+
+
+    def SetImageFromBytes(self, data: bytes, x: int, y: int, *formats: str, width: int = None, height: int = None) -> Tuple[PhotoImage, Tuple[int, int], int]:
         assert (isinstance(data, bytes))
-        from ...Images import ImageObject
 
-        img = ImageObject.FromBytes(data, width=width, height=height, AsPhotoImage=self)
-        return self.CreateImage(image=img, x=x, y=y)
-    def CreateImage(self, image: Union[Image, PhotoImage], x: int, y: int, anchor: str or AnchorAndSticky = tk.NW) -> Tuple[PhotoImage, Tuple[int, int], int]:
-        if not isinstance(image, PhotoImage):
-            image = PhotoImage(image, size=image.size)
-        return image, (image.width(), image.height()), self.create_image(x, y, anchor=anchor, image=image)
-    def GetItemPosition(self, _id) -> Optional[PlacePosition]:
+        with BytesIO(data) as buf:
+            img = ImageMixin.open(self, buf, width, height, *formats)
+            return self.CreateImage(image=img, x=x, y=y)
+
+
+    def CreateImage(self, image: Union[Image, tkPhotoImage], x: int, y: int, anchor: str or AnchorAndSticky = tk.NW) -> Tuple[tkPhotoImage, Tuple[int, int], int]:
+        if not isinstance(image, tkPhotoImage): image = PhotoImage(image, size=image.size)
+
+        return image, (image.width, image.height), self.create_image(x, y, anchor=anchor, image=image)
+
+
+    def GetItemPosition(self, _id) -> Optional[Tuple[int, int]]:
         try:
-            return PlacePosition.FromTuple(self.coords(_id))
+            return self.coords(_id)
         except tk.TclError: return None
 
 

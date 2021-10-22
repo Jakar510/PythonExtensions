@@ -1,6 +1,8 @@
+import asyncio
 from logging import Logger
 from typing import *
 
+from ..AioTkinter import AsyncTkinterEventLoopPolicy
 from ..Core import *
 from ..Events import Bindings, TkinterEvent
 from ...Files import FilePath
@@ -17,15 +19,25 @@ __all__ = [
     ]
 
 class BaseApp(object):
-    """ Override to extend functionallity. Intented to be the base class for the Application level class, which is passed to all child windows and frames. """
+    """ Override to extend functionality. Indented to be the base class for the Application level class, which is passed to all child windows and frames. """
     root: tkRoot
     logger: Logger
     _logging_manager: LoggingManager
-    def __init__(self, *types: Type, app_name: str, root_path: Union[str, FilePath],
-                 Screen_Width: Optional[int] = None, Screen_Height: Optional[int] = None,
-                 fullscreen: Optional[bool] = None, x: int = 0, y: int = 0, **kwargs):
+    _loop: Optional[asyncio.AbstractEventLoop]
+    def __init__(self, *types: Type,
+                 app_name: str,
+                 root_path: Union[str, FilePath],
+                 Screen_Width: Optional[int] = None,
+                 Screen_Height: Optional[int] = None,
+                 loop: Optional[asyncio.AbstractEventLoop] = None,
+                 fullscreen: Optional[bool] = None,
+                 x: int = 0,
+                 y: int = 0,
+                 **kwargs):
         self._logging_manager = LoggingManager.FromTypes(self.__class__, *types, app_name=app_name, root_path=root_path)
         self.logger = self._logging_manager.CreateLogger(self, debug=self.DEBUG)
+
+        self._loop = loop or asyncio.get_event_loop()
 
         if fullscreen is None: fullscreen = not self.DEBUG
         self.root = tkRoot.Create(Screen_Width, Screen_Height, fullscreen, x, y, **kwargs)
@@ -40,10 +52,15 @@ class BaseApp(object):
         self.root.destroy()
 
 
-    # noinspection PyUnusedLocal
-    def start_gui(self, *args, **kwargs): self._main()
+    @property
+    def loop(self) -> asyncio.AbstractEventLoop: return self._loop
 
-    def _main(self): self.root.mainloop()
+    # noinspection PyUnusedLocal
+    def start_gui(self, *args, **kwargs): self.root.mainloop()
+    # noinspection PyUnusedLocal
+    def start_gui_Async(self, *args, **kwargs): self.loop.run_forever()
+
+
 
     @property
     def DEBUG(self) -> bool: return __debug__
@@ -54,6 +71,8 @@ class BaseApp(object):
     def _OnPress(self, event: TkinterEvent): pass
     def _OnKeyPress(self, event: TkinterEvent): pass
 
+    @staticmethod
+    def InitAsync(): asyncio.set_event_loop_policy(AsyncTkinterEventLoopPolicy())
 
 
 _TBaseApp = TypeVar('_TBaseApp', bound=BaseApp)
@@ -67,6 +86,7 @@ class _WindowMixin(Generic[_TBaseApp]):
     def OnPress(self, event: TkinterEvent): pass
     def OnKeyPress(self, event: TkinterEvent): pass
 
+
 class BaseWindow(Frame, _WindowMixin[_TBaseApp]):
     def __init__(self, master, app: _TBaseApp, **kwargs):
         Frame.__init__(self, master, **kwargs)
@@ -75,6 +95,8 @@ class BaseWindow(Frame, _WindowMixin[_TBaseApp]):
     @classmethod
     def Root(cls, app: _TBaseApp, **kwargs):
         return cls(app.root, app, **kwargs)
+
+
 class BaseLabelWindow(LabelFrame, _WindowMixin[_TBaseApp]):
     def __init__(self, master, app: _TBaseApp, **kwargs):
         LabelFrame.__init__(self, master, **kwargs)

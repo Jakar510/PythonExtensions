@@ -9,6 +9,7 @@ from PythonExtensions.Files import *
 from PythonExtensions.Images import ImageObject
 from PythonExtensions.Json import *
 from PythonExtensions.Logging import *
+from PythonExtensions.Names import nameof
 from PythonExtensions.Threads import *
 from PythonExtensions.debug import *
 from PythonExtensions.tk import *
@@ -42,12 +43,12 @@ class FilePath_TestCase(unittest.TestCase):
 
     def test_FilePaths(self):
         temp = FilePath.Join('.', 'logs')
-        self.assertEqual(temp.Value, abspath('./logs'))
+        self.assertEqual(temp.FullPath, abspath('./logs'))
 
 
     def test_Paths(self):
         d = FilePath.Join('.', 'temp')
-        d.Create()
+        d()
 
         self.assertTrue(d.IsDirectory)
         self.assertFalse(d.IsFile)
@@ -64,6 +65,7 @@ class FilePath_TestCase(unittest.TestCase):
         d.Remove()
 
 
+# noinspection PyMethodMayBeStatic
 class FileIO_TestCase(unittest.TestCase):
     def setUp(self):
         pass
@@ -85,16 +87,15 @@ class FileIO_TestCase(unittest.TestCase):
             with ImageObject.open(f) as img:
                 print('init: ', img.size)
                 print('label: ', label.size)
-                img = ImageObject(img, label.width, label.height)
-                box = CropBox.Create(0, 0, label.width, label.height)
+                img = ImageObject(img, label.Width, label.Height)
+                box = CropBox(0, 0, label.Width, label.Height)
                 img.CropZoom(box, size=(img.width, img.height))
 
-                x = int((label.width - img.Raw.width) / 2)
-                y = int((label.height - img.Raw.height) / 2)
+                x = int((label.Width - img.Raw.width) / 2)
+                y = int((label.Height - img.Raw.height) / 2)
                 print(dict(x=x, y=y))
                 items = label.CreateImage(img.Raw, x, y)
                 print(items)
-
 
         root.after(2000, root.destroy)
         root.mainloop()
@@ -106,15 +107,15 @@ class FileIO_TestCase(unittest.TestCase):
         PrettyPrint(FilePath.ListDir('.'))
 
     def test_Boxes(self):
-        screen = Size.Create(3820, 2160)
-        window = Size.Create(1920, 1080)
+        screen = Size(3820, 2160)
+        window = Size(1920, 1080)
 
         for w in (2560,):  # 1024, 1366,  1920, 3820
             for h in (1600,):  # 768, 864, 1080, 2160
                 for x in range(-1500, 500, 50):
                     for y in range(-750, 500, 50):
-                        start = PlacePosition.Create(x, y)
-                        img_size = Size.Create(w, h)
+                        start = PlacePosition(x, y)
+                        img_size = Size(w, h)
 
                         box = CropBox.FromPointSize(start, window)
                         box.Update(start, img=img_size, view=window)
@@ -134,7 +135,7 @@ class Debug_TestCase(unittest.TestCase):
             return args, kwargs
 
         @DebugTkinterEvent()
-        def tk_run(self, event: tk.Event):
+        def tk_run(self, _event: tk.Event):
             return None
 
         @CheckTime()
@@ -234,7 +235,7 @@ class Logging_TestCase(unittest.TestCase):
 
     def setUp(self):
         self.temp = FilePath.Temporary('logs', root_dir='.')
-        self.lm = LoggingManager.FromTypes(self.Test, self.Other, app_name=nameof(self), root_path=self.temp.path)
+        self.lm = LoggingManager.FromTypes(self.Test, self.Other, app_name=nameof(self), root_path=self.temp.FullPath)
 
     def tearDown(self):
         del self.lm
@@ -255,9 +256,9 @@ class Logging_TestCase(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.lm.CreateLogger(self.Other, debug=True)
 
-        PrettyPrint(FilePath.ListDir(self.temp.path))
+        PrettyPrint(FilePath.ListDir(self.temp.FullPath))
 
-        PrettyPrint(state=self.temp.path.__state__())
+        PrettyPrint(state=self.temp.__state__())
 
 
 class TkApp_TestCase(unittest.TestCase):
@@ -283,10 +284,13 @@ class TkApp_TestCase(unittest.TestCase):
 
     def setUp(self):
         self.temp = FilePath.Temporary('logs', root_dir='.')
-        self.lm = LoggingManager.FromTypes(self.__class__, self.Test, self.Other, app_name=nameof(self), root_path=self.temp.path)
+        self.lm = LoggingManager.FromTypes(self.__class__, self.Test, self.Other, app_name=nameof(self), root_path=self.temp.FullPath)
 
     def tearDown(self):
         del self.lm
+        del self.temp
+        del self.home
+        del self.app
 
     def test_TkApp(self):
         temp = FilePath.Join('.', 'logs')
@@ -296,3 +300,44 @@ class TkApp_TestCase(unittest.TestCase):
 
         self.app.root.after(2000, self.app.Close)
         self.app.start_gui()
+
+
+class TkAppAsync_TestCase(unittest.TestCase):
+    class Root(tkRoot): pass
+
+
+
+    class App(BaseApp): pass
+
+
+
+    class Main(BaseWindow): pass
+
+
+
+    class Test(object): pass
+
+
+
+    class Other(object): pass
+
+
+
+    def setUp(self):
+        self.temp = FilePath.Temporary('logs', root_dir='.')
+        self.lm = LoggingManager.FromTypes(self.__class__, self.Test, self.Other, app_name=nameof(self), root_path=self.temp.FullPath)
+
+    def tearDown(self):
+        del self.lm
+        del self.temp
+        del self.home
+        del self.app
+
+    def test_TkApp(self):
+        temp = FilePath.Join('.', 'logs')
+
+        self.app = self.App(self.Test, self.Other, app_name='app', root_path=temp, Screen_Width=800, Screen_Height=480)
+        self.home = self.Main(self.app.root, self.app).PlaceFull()
+
+        self.app.root.after(2000, self.app.Close)
+        self.app.start_gui_Async()

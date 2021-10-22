@@ -1,5 +1,6 @@
 import sys
 import traceback
+from abc import ABC
 from pprint import PrettyPrinter
 from threading import Lock
 from types import TracebackType
@@ -16,11 +17,12 @@ __all__ = [
     'GetFunctionName', 'GetFuncModule',
     ]
 
-class NoStringWrappingPrettyPrinter(PrettyPrinter):
+class NoStringWrappingPrettyPrinter(PrettyPrinter, ABC):
     """
         https://stackoverflow.com/questions/31485402/can-i-make-pprint-in-python3-not-split-strings-like-in-python2
         https://stackoverflow.com/a/31485450/9530917
     """
+
     @classmethod
     def Create(cls): return cls(indent=4, sort_dicts=False)
 
@@ -76,7 +78,7 @@ class Printer(object):
         :type end: str
         :param file: file to write to
         :type file: file
-        :param _pp: any PrettyPrinter inpmentation. provide your own to customize the output.
+        :param _pp: any PrettyPrinter implementation. provide your own to customize the output.
         :type _pp: PrettyPrinter
         :param use_double_quotes: use double quotes (") instead of the default single quotes (')
         :type use_double_quotes: bool

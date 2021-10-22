@@ -11,7 +11,6 @@ from tkinter import Event as tkEvent, EventType as tkEventType
 from typing import *
 
 from .Bindings import Bindings
-from ...Json import Point
 from ...Names import nameof
 from ...misc import lazy_property
 
@@ -191,6 +190,6 @@ class TkinterEvent(tkEvent):
         print('Debug.TkinterEvent', event.ToString())
         print(event.KeySynonym)
 
-    def Point(self) -> Optional[Point]:
-        if isinstance(self.x, (float, int)) and isinstance(self.y, (float, int)): return Point.Create(self.x, self.y)
+    def Point(self) -> Optional[Tuple[int, int]]:
+        if isinstance(self.x, (float, int)) and isinstance(self.y, (float, int)): return self.x, self.y
         return None

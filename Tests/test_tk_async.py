@@ -12,7 +12,6 @@ from time import sleep
 from typing import List, Union
 
 from PythonExtensions.Names import nameof
-
 from PythonExtensions.debug import *
 from PythonExtensions.tk import *
 
@@ -20,8 +19,9 @@ from PythonExtensions.tk import *
 
 
 __all__ = [
-    'test_tk_2', 'test_tk_1'
+    'test_tk_async'
     ]
+
 
 def _GetPhotoByteData():
     """
@@ -101,6 +101,7 @@ class HTMLViewer(HTMLLabel):
     # def HandleFocusIn(self, event: tkEvent): TkinterEvent.Debug(event)
     # def HandleFocusOut(self, event: tkEvent): TkinterEvent.Debug(event)
 
+
 d = ItemCollection.Parse([
     {
         "ID":       "G1",
@@ -172,17 +173,18 @@ d = ItemCollection.Parse([
         },
     ])
 
-class Root(tkRoot):
+
+class App(BaseApp):
     # sets up Tkinter and creates the other windows and places them accordingly.
     def __init__(self):
-        super().__init__(width=800, height=480, x=200, y=200, fullscreen=False)
+        super().__init__(app_name="App", root_path="", Screen_Width=800, Screen_Height=480, x=200, y=200, fullscreen=False)
 
         self.w: List[tk.Widget] = []
         self.home = HomeWindow(master=self).PlaceFull()
 
-        self.nb = NotebookThemed(master=self, height=30).PlaceFull()
+        self.nb = NotebookThemed(master=self.root, height=30).PlaceFull()
 
-        self.style.Configure(ttk.Treeview, rowheight=40, font="-family {Segoe UI Black} -size 12 -slant roman -underline 0 -overstrike 0")
+        self.root.style.Configure(ttk.Treeview, rowheight=40, font="-family {Segoe UI Black} -size 12 -slant roman -underline 0 -overstrike 0")
         self.p2 = TreeViewHolderThemed(master=self.nb, backgroundColor='white').PlaceFull()
         self.nb.Add(self.p2, title='page 1')
         self.TreeView = self.p2.TreeView
@@ -195,19 +197,17 @@ class Root(tkRoot):
         self.p1 = Label(master=self.nb, text='page 1').PlaceFull()
         self.nb.Add(self.p1, title='page 2')
 
-        self.Instructions = HTMLScrolledText(master=self, html='Test').PlaceFull()
+        self.Instructions = HTMLScrolledText(master=self.root, html='Test').PlaceFull()
         PrettyPrint(self.Instructions.__bindings__)
         # AutoStartTargetedThread(target=self.__run__)
 
 
     # noinspection PyUnusedLocal
-    def OnClick(self, event: tk.Event = None):
-        self.TreeView.OnSelectRow(event)
+    def OnClick(self, event: tk.Event = None): self.TreeView.OnSelectRow(event)
 
     @staticmethod
     def HandlePress(event: tkEvent): TkinterEvent.Debug(event)
 
-    def Run(self): self.mainloop()
 
     def __run__(self):
         while True:
@@ -218,10 +218,11 @@ class Root(tkRoot):
             sleep(2)
             # self.after(1000, self.__run__)
 
+
 class HomeWindow(Frame):
-    def __init__(self, master: Root):
+    def __init__(self, master: App):
         self.root = master
-        super().__init__(master)
+        super().__init__(master.root)
         self.w: List[Widgets.Button] = []
 
     def Add(self, cls: Union[Frame, LabelFrame]):
@@ -243,89 +244,55 @@ class HomeWindow(Frame):
 class BaseWindow(Frame):
     button: Widgets.Button
     CreateWidgets: callable
-    def __init__(self, master: Root):
-        self.master = master
-        super().__init__(master)
+    def __init__(self, master: App):
+        self.app = master
+        super().__init__(master.root)
         self.CreateWidgets()
 
     def exit(self):
         self.hide()
-        self.master.home.show()
+        self.app.home.show()
 
     def OnAppearing(self):
         self.button.SetImage(PhotoData['exit'])
+
 
 class Window1(BaseWindow):
     def CreateWidgets(self):
         self.button = Widgets.Button(master=self, text="button 1").SetCommand(self.exit).Place(relx=0.0, rely=0.0, relheight=1.0, relwidth=1.0)
 
+
 class Window2(BaseWindow):
     def CreateWidgets(self):
         self.button = Widgets.Button(master=self, text="button 2").SetCommand(self.exit).Place(relx=0.0, rely=0.0, relheight=1.0, relwidth=1.0)
+
 
 class Window3(BaseWindow):
     nested: Window2
     def CreateWidgets(self):
         self.button = Widgets.Button(master=self, text="button 3").SetCommand(self.exit).Place(relx=0.0, rely=0.0, relheight=1.0, relwidth=0.5)
-        self.nested = LabelWindow(master=self).Place(relx=0.5, rely=0.0, relheight=1.0, relwidth=0.5)
+        self.nested = LabelWindow(master=self, app=self.app).Place(relx=0.5, rely=0.0, relheight=1.0, relwidth=0.5)
+
 
 class LabelWindow(LabelFrame):
     button: Widgets.Button
     CreateWidgets: callable
-    def __init__(self, master: Root or BaseWindow):
-        self.master = master
+    def __init__(self, master: BaseWindow, app: App):
+        self.app = app
         super().__init__(master, text=nameof(self))
         self.button = Widgets.Button(master=self, text="button 4").SetCommand(self.exit).Place(relx=0.0, rely=0.0, relheight=1.0, relwidth=0.5)
 
     def exit(self):
         self.hide()
-        self.master.home.show()
+        self.app.home.show()
 
 
 
-def test_tk_1():
-    """ https://stackoverflow.com/questions/7878730/ttk-treeview-alternate-row-colors """
-    from random import choice
+def test_tk_async():
+    App().start_gui_Async()
+
+    tkRoot.MainAsync()
 
 
-
-
-    colors = ["red", "green", "black", "blue", "white", "yellow", "orange", "pink", "grey", "purple", "brown"]
-    def recolor():
-        for child in tree.TreeView.get_children():
-            picked = choice(colors)
-            tree.TreeView.item(child, tags=(picked,), values=(picked,))
-        for color in colors:
-            tree.TreeView.tag_configure(color, background=color)
-        tree.TreeView.tag_configure("red", background="red")
-
-
-    root = tkRoot(800, 480, False, 200, 200)
-    print('tkinter.info.patchlevel', root.tk.call('info', 'patchlevel'))
-
-    style = Style(root)
-    style.configure("Treeview", foreground="yellow", background="black", fieldbackground="green")
-
-    frame = Frame(root).PlaceFull().SetID(1234)
-    print(frame.__name__)
-    print(str(frame))
-    print(repr(frame))
-    tree = TreeViewHolderThemed(frame, backgroundColor='white')
-
-    tree.TreeView["columns"] = ("one", "two", "three")
-    tree.TreeView.column("#0", width=100, minwidth=30, stretch=Bools.NO)
-    tree.TreeView.column("one", width=120, minwidth=30, stretch=Bools.NO)
-
-    tree.TreeView.heading("#0", text="0", anchor=AnchorAndSticky.West)
-    tree.TreeView.heading("one", text="1", anchor=AnchorAndSticky.West)
-
-    for i in range(30): tree.TreeView.insert("", i, text=f"Elem {i} ", values="none")
-
-    tree.Pack(side=Side.top, fill=Fill.both, expand=True)
-
-    Button(frame, text="Change").SetCommand(recolor).Pack(fill=tk.X)
-
-    root.mainloop()
-
-def test_tk_2():
-    Root().Run()
+if __name__ == '__main__':
+    test_tk_async()

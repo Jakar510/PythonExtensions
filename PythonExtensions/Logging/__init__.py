@@ -188,6 +188,7 @@ class LoggingManager(object):
 
         logging.getLogger("PIL.PngImagePlugin").disabled = True
 
+
     def CreateLogger(self, source, *, debug: bool = __debug__) -> logging.Logger:
         for key, value in self._mapper.items():
             # if issubclass(source, key): raise InstanceError('source is not identified')
@@ -202,10 +203,12 @@ class LoggingManager(object):
                 logger.addHandler(Console_Info(fmt=self.fmt))
                 logger.addFilter(PngImagePlugin_Filter())
                 logger.setLevel(logging.DEBUG if debug else logging.ERROR)
+
                 return logger
 
         else:
             raise ValueError(f'source is not identified: [ {source} ]  Expected one of {tuple(self._mapper.keys())}')
+
 
     @classmethod
     def FromTypes(cls, *types: Type, app_name: str, root_path: Union[str, FilePath], logs: Type[LogPaths] = LogPaths, fmt: Formats = Formats()):

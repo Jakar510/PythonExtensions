@@ -1,3 +1,4 @@
+from _tkinter import DONT_WAIT
 from enum import Enum
 from time import time
 from typing import *
@@ -39,17 +40,17 @@ class _rootMixin:
     tk_focusPrev: callable
     attributes: callable
     resizable: callable
-    def SetDimmensions(self, Screen_Width: int = None, Screen_Height: int = None, x: int = 0, y: int = 0):
+    def SetDimensions(self, Screen_Width: int = None, Screen_Height: int = None, x: int = 0, y: int = 0):
         self.Screen_Width = Screen_Width or int(self.winfo_screenwidth())
         self.Screen_Height = Screen_Height or int(self.winfo_screenheight())
-        return self.geometry(self.Dimmensions(x, y))
-    def Dimmensions(self, x: int = 0, y: int = 0) -> str: return f"{self.Screen_Width}x{self.Screen_Height}+{x}+{y}"
+        return self.geometry(self.Dimensions(x, y))
+    def Dimensions(self, x: int = 0, y: int = 0) -> str: return f"{self.Screen_Width}x{self.Screen_Height}+{x}+{y}"
 
     def HideCursor(self):
         self.config(cursor="none")
         return self
 
-    def SetFullScreen(self, fullscreen: bool = False, ):
+    def SetFullScreen(self, fullscreen: bool = False):
         self.attributes('-fullscreen', fullscreen)
         return self
     def SetTitle(self, title: str):
@@ -103,10 +104,12 @@ class _rootMixin:
     def FocusNext(self): self.tk_focusNext().focus_set()
     def FocusPrevious(self): self.tk_focusPrev().focus_set()
 
+
+
 class tkRoot(tk.Tk, _rootMixin):
-    def __init__(self, width: Optional[int], height: Optional[int], fullscreen: Optional[bool] = None, x: int = 0, y: int = 0, **kwargs):
+    def __init__(self, width: Optional[int] = None, height: Optional[int] = None, fullscreen: Optional[bool] = None, x: int = 0, y: int = 0, **kwargs):
         super().__init__(**kwargs)
-        self.SetDimmensions(width, height, x, y)
+        self.SetDimensions(width, height, x, y)
         if fullscreen is not None: self.SetFullScreen(fullscreen)
         self.style = Style(master=self)
 
@@ -203,6 +206,8 @@ class tkRoot(tk.Tk, _rootMixin):
         self.event_generate(sequence=tag, num=num, width=width, height=height, keycode=key_code, state=state, time=current_time, x=x, y=y, char=char, keysym=keysym,
                             keysym_num=keysym_num, type=event_type, widget=widget, x_root=self.winfo_rootx(), y_root=self.winfo_rooty(), delta=delta)
 
+    def do_one_event(self): return self.tk.dooneevent(DONT_WAIT)
+
     @classmethod
     def Create(cls, width: Optional[int] = None, height: Optional[int] = None, fullscreen: Optional[bool] = None, x: int = 0, y: int = 0, **kwargs):
         return cls(width, height, fullscreen, x, y, **kwargs)
@@ -212,7 +217,7 @@ class tkRoot(tk.Tk, _rootMixin):
 class tkTopLevel(tk.Toplevel, _rootMixin):
     def __init__(self, master: tkRoot, *, width: int = None, height: int = None, x: int = 0, y: int = 0, fullscreen: bool = None, **kwargs):
         super().__init__(master, **kwargs)
-        self.SetDimmensions(width, height, x, y)
+        self.SetDimensions(width, height, x, y)
         if fullscreen is not None: self.SetFullScreen(fullscreen)
 
         self.style = master.style
