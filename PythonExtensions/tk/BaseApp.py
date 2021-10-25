@@ -2,12 +2,12 @@ import asyncio
 from logging import Logger
 from typing import *
 
-from ..AioTkinter import AsyncTkinterEventLoopPolicy
-from ..Core import *
-from ..Events import Bindings, TkinterEvent
-from ...Files import FilePath
-from ...Logging import LoggingManager
-from ...Names import class_name
+from .AioTkinter import AsyncTkinterEventLoopPolicy
+from .Core import *
+from .Events import Bindings, TkinterEvent
+from ..Files import FilePath
+from ..Logging import LoggingManager
+from ..Names import class_name
 
 
 

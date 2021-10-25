@@ -18,10 +18,10 @@ from aiohttp import ClientResponse, ClientSession
 from requests import get
 
 from PythonExtensions.Names import typeof
-from ..Base import *
-from ..Core import *
-from ..Enumerations import *
-from ..Events import *
+from .Base import *
+from .Core import *
+from .Enumerations import *
+from .Events import *
 
 
 

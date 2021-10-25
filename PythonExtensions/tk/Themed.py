@@ -9,10 +9,10 @@ import random
 from asyncio import BaseEventLoop
 from typing import *
 
-from ..Base import *
-from ..Core import *
-from ..Enumerations import *
-from ..Events import *
+from .Base import *
+from .Core import *
+from .Enumerations import *
+from .Events import *
 
 
 

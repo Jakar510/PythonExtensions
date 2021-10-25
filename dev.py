@@ -42,6 +42,7 @@ if __name__ == '__main__':
 
     _app.root.after(3000, _app.Close)
 
+    # _app.start_gui()
     _app.start_gui_Async()
 
 pass

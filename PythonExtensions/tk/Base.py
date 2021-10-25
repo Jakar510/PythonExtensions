@@ -25,11 +25,11 @@ from requests import get
 from yarl import URL
 
 from PythonExtensions import ArgumentError
-from ..Enumerations import *
-from ..Events import Bindings
-from ...Files import FilePath
-from ...Names import nameof
-from ...debug import pp
+from .Enumerations import *
+from .Events import Bindings
+from ..Files import FilePath
+from ..Names import nameof
+from ..debug import pp
 
 
 
@@ -775,16 +775,21 @@ class ImageMixin:
 
         return self.SetImageFromBytes(base64.b64decode(data), *formats, width=widthMax, height=heightMax)
 
+
+
     def SetImageFromBytes(self, data: bytes, *formats: str, width: int = None, height: int = None) -> 'ImageMixin':
         assert (isinstance(data, bytes))
 
         with BytesIO(data) as buf:
-            return self._setImage(ImageMixin.open(self, buf, width, height, *formats))
+            return self._setImage(self.open(self, buf, width, height, *formats))
 
 
     @staticmethod
-    def open(self: Union[BaseTkinterWidget, 'ImageMixin'], f: Union[BinaryIO, AsyncBufferedReader],
-             widthMax: Optional[int], heightMax: Optional[int], *formats: str) -> tkPhotoImage:
+    def open(self: Union[BaseTkinterWidget, 'ImageMixin'],
+             f: Union[BinaryIO, AsyncBufferedReader],
+             widthMax: Optional[int],
+             heightMax: Optional[int],
+             *formats: str) -> tkPhotoImage:
         if widthMax is None: widthMax = self.width
         if heightMax is None: heightMax = self.height
 
