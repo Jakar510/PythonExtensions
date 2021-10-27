@@ -63,6 +63,8 @@ class tkPhotoImage(PhotoImage):
         """
         return super().height()
 
+    @property
+    def size(self) -> Tuple[int, int]: return self.width, self.height
 
 
 class BindingCollection(dict, Dict[Bindings, Set[str]]):
@@ -80,7 +82,6 @@ class BindingCollection(dict, Dict[Bindings, Set[str]]):
 
 
 class BaseTkinterWidget(tk.Widget, ABC):
-    __slots__ = ['_state_', '__bindings__', '_pi', '_manager_', '_wrap', '_cb', '_loop']
     __bindings__: BindingCollection
     _state_: ViewState
     _pi: Optional[Dict]
@@ -439,8 +440,15 @@ class BaseTkinterWidget(tk.Widget, ABC):
     @property
     def __class_name__(self) -> str: return nameof(self)
 
+    def __updateSize__(self):
+        size = self.size
+        while any(i <= 1 for i in size):
+            self.update()
+            self.update_idletasks()
+            size = self.size
+
+
 class BaseTextTkinterWidget(BaseTkinterWidget):
-    __slots__ = ['_txt']
     _txt: tk.StringVar
     def __init__(self, text: str, Override_var: Optional[tk.StringVar], Color: Optional[Dict[str, str]], loop: Optional[BaseEventLoop], configure: bool = True):
         if Override_var is not None: self._txt = Override_var
@@ -825,16 +833,17 @@ class ImageMixin:
 
 
     @staticmethod
-    def open(self: Union[BaseTkinterWidget, 'ImageMixin'],
-             f: Union[BinaryIO, AsyncBufferedReader],
-             widthMax: Optional[int],
-             heightMax: Optional[int],
-             *formats: str) -> tkPhotoImage:
+    def open(self: Union[BaseTkinterWidget, 'ImageMixin'], f: Union[BinaryIO, AsyncBufferedReader],
+             widthMax: Optional[int], heightMax: Optional[int], *formats: str) -> tkPhotoImage:
+        self.__updateSize__()
+
         if widthMax is None: widthMax = self.Width
         if heightMax is None: heightMax = self.Height
 
-        if widthMax <= 0: raise ValueError(f'widthMax must be positive. Value: {widthMax}')
-        if heightMax <= 0: raise ValueError(f'heightMax must be positive. Value: {heightMax}')
+        if widthMax is None or widthMax <= 0: raise ValueError(f'widthMax must be positive. Value: {widthMax}')
+        if heightMax is None or heightMax <= 0: raise ValueError(f'heightMax must be positive. Value: {heightMax}')
+        print(f'{widthMax=}')
+        print(f'{heightMax=}')
 
         with img_open(f, *formats) as img:
             img = img.resize(ImageMixin.CalculateNewSize(img, widthMax, heightMax))

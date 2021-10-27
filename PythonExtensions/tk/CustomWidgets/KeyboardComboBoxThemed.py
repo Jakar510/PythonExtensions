@@ -20,6 +20,22 @@ __all__ = [
     ]
 
 class KeyboardComboBoxThemed(ComboBoxThemed, KeyboardMixin):
+    __slots__ = ['kb',
+                 'Bind',
+                 'state',
+                 'Width',
+                 'Height',
+                 'x',
+                 'y',
+                 '_popup_width',
+                 '_popup_height',
+                 '_popup_relwidth',
+                 '_popup_relheight',
+                 'master',
+                 'placement',
+                 '__root',
+                 'key_size',
+                 'key_color']
     def __init__(self, master, *, root: tkRoot, placement: PlacementSet = PlacementSet(Placement.Auto), key_size: int = None, key_color: str = None,
                  text: str = '', Override_var: tk.StringVar = None, Color: Dict = None, **kwargs):
         ComboBoxThemed.__init__(self, master, text=text, Override_var=Override_var, Color=Color, postcommand=self._OnDropDown, **kwargs)

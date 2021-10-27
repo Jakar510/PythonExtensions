@@ -1,9 +1,9 @@
+from asyncio import BaseEventLoop
 from enum import Enum
 from typing import *
 
-from ...Names import nameof
-
 from ..Base import *
+from ...Names import nameof
 
 
 
@@ -14,7 +14,8 @@ __all__ = [
     ]
 
 class _BaseFrameMixin:
-    InstanceID: Union[str, int, Enum] = None
+    InstanceID: Optional[Union[str, int, Enum]]
+    def __init__(self): self.InstanceID = None
 
     def SetID(self, InstanceID: Union[str, int, Enum]):
         self.InstanceID = InstanceID
@@ -35,14 +36,19 @@ class _BaseFrameMixin:
 
 
 
+# noinspection DuplicatedCode
 class Frame(tk.Frame, BaseTkinterWidget, _BaseFrameMixin):
-    def __init__(self, master, **kwargs):
+    __doc__ = """Frame widget which may contain other widgets and can have a 3D border."""
+    __slots__ = ['InstanceID']
+    def __init__(self, master, Color: Optional[Dict[str, str]] = None, loop: Optional[BaseEventLoop] = None, **kwargs):
         tk.Frame.__init__(self, master, **kwargs)
+        BaseTkinterWidget.__init__(self, Color, loop)
+        _BaseFrameMixin.__init__(self)
 
     def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
 
 class LabelFrame(tk.LabelFrame, BaseTextTkinterWidget, _BaseFrameMixin):
-    """Construct a labelframe _widget with the master MASTER.
+    __doc__ = """Construct a labelframe _widget with the master MASTER.
 
     STANDARD OPTIONS
 
@@ -57,9 +63,11 @@ class LabelFrame(tk.LabelFrame, BaseTextTkinterWidget, _BaseFrameMixin):
         Height, labelanchor, labelwidget,
         visual, Width
     """
-    def __init__(self, master, text: str = '', Color: Dict[str, str] = None, **kwargs):
+    __slots__ = ['InstanceID']
+    def __init__(self, master, text: str = '', Color: Optional[Dict[str, str]] = None, loop: Optional[BaseEventLoop] = None, **kwargs):
         tk.LabelFrame.__init__(self, master, text=text, **kwargs)
-        BaseTextTkinterWidget.__init__(self, text, None, Color, configure=False)
+        BaseTextTkinterWidget.__init__(self, text, None, Color, loop, configure=False)
+        _BaseFrameMixin.__init__(self)
 
     @property
     def txt(self) -> str: return self._txt.get()
@@ -72,14 +80,19 @@ class LabelFrame(tk.LabelFrame, BaseTextTkinterWidget, _BaseFrameMixin):
 
 
 
+# noinspection DuplicatedCode
 class FrameThemed(ttk.Frame, BaseTkinterWidget, _BaseFrameMixin):
-    def __init__(self, master, **kwargs):
+    __doc__ = """Ttk Frame widget is a container, used to group other widgets together."""
+    __slots__ = ['InstanceID']
+    def __init__(self, master, Color: Optional[Dict[str, str]] = None, loop: Optional[BaseEventLoop] = None, **kwargs):
         ttk.Frame.__init__(self, master, **kwargs)
+        BaseTkinterWidget.__init__(self, Color, loop)
+        _BaseFrameMixin.__init__(self)
 
     def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
 
 class LabelFrameThemed(ttk.LabelFrame, BaseTextTkinterWidget, _BaseFrameMixin):
-    """Construct a labelframe _widget with the master MASTER.
+    __doc__ = """Construct a labelframe _widget with the master MASTER.
 
     STANDARD OPTIONS
 
@@ -94,9 +107,11 @@ class LabelFrameThemed(ttk.LabelFrame, BaseTextTkinterWidget, _BaseFrameMixin):
         Height, labelanchor, labelwidget,
         visual, Width
     """
-    def __init__(self, master, text: str = '', Color: Dict[str, str] = None, **kwargs):
+    __slots__ = ['InstanceID']
+    def __init__(self, master, text: str = '', Color: Optional[Dict[str, str]] = None, loop: Optional[BaseEventLoop] = None, **kwargs):
         ttk.LabelFrame.__init__(self, master, text=text, **kwargs)
-        BaseTextTkinterWidget.__init__(self, text, None, Color, configure=False)
+        BaseTextTkinterWidget.__init__(self, text, None, Color, loop, configure=False)
+        _BaseFrameMixin.__init__(self)
 
     @property
     def txt(self) -> str: return self._txt.get()

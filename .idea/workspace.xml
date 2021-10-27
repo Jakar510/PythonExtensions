@@ -1,43 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="7a6e45bf-6aac-404f-8876-27fa1a8fc2c2" name="Default Changelist" comment="restructure">
-      <change beforePath="$PROJECT_DIR$/.idea/PythonExtensions.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/PythonExtensions.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="7a6e45bf-6aac-404f-8876-27fa1a8fc2c2" name="Default Changelist" comment="more bug fixes">
+      <change beforePath="$PROJECT_DIR$/.idea/deployment.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/deployment.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/Constants/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/Constants.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/Dates/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/Dates.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/Exceptions/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/Exceptions.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/Files/Encryptor.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/Files/Encryptor.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/Files/FilePath.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/Files/FilePath.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/Files/MultiThreadedCopier.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/Files/MultiThreadedCopier.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/HID_BUFFER/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/HID_BUFFER.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/Json/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/Json.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/Logging/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/Logging.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/Names/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/Names.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/Setup/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/Setup/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/SwitchCase/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/Threads/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/Threads.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/debug/chains.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/debug/chains.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/debug/decorators.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/debug/decorators.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/misc/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/Misc.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PythonExtensions/tk/Base.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/tk/Base.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/tk/BaseApp.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/tk/BaseApp.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PythonExtensions/tk/Core/Frames.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/tk/Core/Frames.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/tk/Core/tkRoot.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/tk/Core/tkRoot.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/tk/CustomWidgets/HTML.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/tk/CustomWidgets/HTML.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PythonExtensions/tk/CustomWidgets/KeyBoard.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/tk/CustomWidgets/KeyBoard.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PythonExtensions/tk/CustomWidgets/KeyboardComboBoxThemed.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/tk/CustomWidgets/KeyboardComboBoxThemed.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PythonExtensions/tk/CustomWidgets/KeyboardEntry.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/tk/CustomWidgets/KeyboardEntry.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/tk/CustomWidgets/tkMessageBox.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/tk/CustomWidgets/tkMessageBox.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/tk/Events/Bindings.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/tk/Events/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/tk/Events.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PythonExtensions/tk/Themed.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/tk/Themed.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PythonExtensions/tk/Widgets.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/tk/Widgets.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tests/tests.py" beforeDir="false" afterPath="$PROJECT_DIR$/Tests/tests.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PythonExtensions/tk/tkNamedColor/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/tk/tkNamedColor/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dev.py" beforeDir="false" afterPath="$PROJECT_DIR$/dev.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/TkinterExtensions.svg" beforeDir="false" afterPath="$PROJECT_DIR$/docs/TkinterExtensions.svg" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -300,14 +275,8 @@
       <workItem from="1634827201741" duration="25898000" />
       <workItem from="1634946894069" duration="223000" />
       <workItem from="1635189006046" duration="5506000" />
-      <workItem from="1635261183107" duration="13671000" />
-    </task>
-    <task id="LOCAL-00050" summary="bug fixes / updates">
-      <created>1611200488305</created>
-      <option name="number" value="00050" />
-      <option name="presentableId" value="LOCAL-00050" />
-      <option name="project" value="LOCAL" />
-      <updated>1611200488306</updated>
+      <workItem from="1635261183107" duration="14578000" />
+      <workItem from="1635344939963" duration="4755000" />
     </task>
     <task id="LOCAL-00051" summary="bug fixes / updates">
       <created>1611241275356</created>
@@ -645,7 +614,14 @@
       <option name="project" value="LOCAL" />
       <updated>1635189802361</updated>
     </task>
-    <option name="localTasksCounter" value="99" />
+    <task id="LOCAL-00099" summary="more bug fixes">
+      <created>1635294089038</created>
+      <option name="number" value="00099" />
+      <option name="presentableId" value="LOCAL-00099" />
+      <option name="project" value="LOCAL" />
+      <updated>1635294089038</updated>
+    </task>
+    <option name="localTasksCounter" value="100" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -677,7 +653,8 @@
     <MESSAGE value="1.6.1&#10;bug fixes" />
     <MESSAGE value="2.0.0-beta&#10;bug fixes" />
     <MESSAGE value="restructure" />
-    <option name="LAST_COMMIT_MESSAGE" value="restructure" />
+    <MESSAGE value="more bug fixes" />
+    <option name="LAST_COMMIT_MESSAGE" value="more bug fixes" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/PythonExtensions$__init__.coverage" NAME="__init__ Coverage Results" MODIFIED="1610939731215" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PythonExtensions/Files" />
@@ -691,7 +668,7 @@
     <SUITE FILE_PATH="coverage/PythonExtensions$json_tests.coverage" NAME="json_tests Coverage Results" MODIFIED="1620848633923" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Tests" />
     <SUITE FILE_PATH="coverage/PythonExtensions$File.coverage" NAME="File Coverage Results" MODIFIED="1611006293121" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PythonExtensions/Files" />
     <SUITE FILE_PATH="coverage/PythonExtensions$Unittests_for_tests_TkAppAsync_TestCase.coverage" NAME="Unittests for tests.TkAppAsync_TestCase Coverage Results" MODIFIED="1625511736904" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Tests" />
-    <SUITE FILE_PATH="coverage/PythonExtensions$dev.coverage" NAME="dev Coverage Results" MODIFIED="1635293021364" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/PythonExtensions$dev.coverage" NAME="dev Coverage Results" MODIFIED="1635347944963" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/PythonExtensions$run.coverage" NAME="run Coverage Results" MODIFIED="1613082591231" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/PythonExtensions$Path.coverage" NAME="Path Coverage Results" MODIFIED="1611087891123" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PythonExtensions/Files" />
     <SUITE FILE_PATH="coverage/PythonExtensions$TestTkApp.coverage" NAME="TestTkApp Coverage Results" MODIFIED="1611950953829" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Tests" />

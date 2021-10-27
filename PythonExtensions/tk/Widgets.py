@@ -69,7 +69,7 @@ class Button(tk.Button, BaseTextTkinterWidget, ImageMixin, CommandMixin):
         command, compound, default, Height,
         overrelief, state, Width
     """
-    __slots__ = ['_cmd', 'command_cb', '_IMG']
+    __slots__ = ['_cmd', 'command_cb', '_IMG', '_state_', '__bindings__', '_pi', '_manager_', '_wrap', '_cb', '_loop', '_txt']
     def __init__(self, master,
                  text: str = '',
                  Override_var: tk.StringVar = None,
@@ -106,7 +106,7 @@ class Label(tk.Label, BaseTextTkinterWidget, ImageMixin, CommandMixin):
         Height, state, Width
 
     """
-    __slots__ = ['_cmd', 'command_cb', '_IMG']
+    __slots__ = ['_cmd', 'command_cb', '_IMG', '_state_', '__bindings__', '_pi', '_manager_', '_wrap', '_cb', '_loop', '_txt']
     def __init__(self, master,
                  text: str = '',
                  Override_var: tk.StringVar = None,
@@ -127,7 +127,7 @@ class Label(tk.Label, BaseTextTkinterWidget, ImageMixin, CommandMixin):
 # ------------------------------------------------------------------------------------------
 
 class Message(tk.Message, BaseTextTkinterWidget, CommandMixin):
-    __slots__ = ['_cmd', 'command_cb']
+    __slots__ = ['_cmd', 'command_cb', '_state_', '__bindings__', '_pi', '_manager_', '_wrap', '_cb', '_loop', '_txt']
     def __init__(self, master,
                  loop: Optional[BaseEventLoop] = None,
                  Color: Optional[Dict[str, str]] = None,
@@ -155,7 +155,7 @@ class Entry(tk.Entry, BaseTextTkinterWidget, CommandMixin):
     textvariable, validate, validatecommand, vcmd, Width,
     xscrollcommand.
     """
-    __slots__ = ['_cmd', 'command_cb']
+    __slots__ = ['_cmd', 'command_cb', '_state_', '__bindings__', '_pi', '_manager_', '_wrap', '_cb', '_loop', '_txt']
     def __init__(self, master,
                  text: str = '',
                  Override_var: tk.StringVar = None,
@@ -238,7 +238,7 @@ class CheckButton(tk.Checkbutton, BaseTextTkinterWidget, ImageMixin, CommandMixi
                 wraplength
 
     """
-    __slots__ = ['_value', '_cmd', 'command_cb', '_IMG']
+    __slots__ = ['_value', '_cmd', 'command_cb', '_IMG', '_state_', '__bindings__', '_pi', '_manager_', '_wrap', '_cb', '_loop', '_txt']
     _value: tk.BooleanVar
     def __init__(self, master,
                  text: str = '',
@@ -278,7 +278,7 @@ class Listbox(tk.Listbox, BaseTextTkinterWidget, CommandMixin):
 
     Allowed WordWrap modes are ('word', 'none', 'char')
     """
-    __slots__ = ['_Current_ListBox_Index', '_cmd', 'command_cb']
+    __slots__ = ['_Current_ListBox_Index', '_cmd', 'command_cb', '_state_', '__bindings__', '_pi', '_manager_', '_wrap', '_cb', '_loop', '_txt']
     _Current_ListBox_Index: Optional[int]
     def __init__(self, master,
                  *,
@@ -311,7 +311,7 @@ class Listbox(tk.Listbox, BaseTextTkinterWidget, CommandMixin):
                     self.activate(index)
                     self.selection_set(index)
                     self._Current_ListBox_Index = index
-    def Current_Index(self, event: TkinterEvent = None) -> int or None:
+    def Current_Index(self, event: TkinterEvent = None) -> Optional[int]:
         """ :return: int or None """
         try:
             selections = self.curselection()
@@ -362,16 +362,16 @@ class Listbox(tk.Listbox, BaseTextTkinterWidget, CommandMixin):
 
         self.Index = i
 
-    def SetList(self, temp_list: list or tuple):
+    def SetList(self, temp_list: Iterable):
         """        clear the listbox and set the new items.        """
         self.Clear()
         for item in temp_list:
             self.insert(Tags.End.value, item)
-    def AddList(self, temp_list: list or tuple):
+    def AddList(self, temp_list: Iterable):
         """        Append items from the list into the listbox.        """
         for item in temp_list:
             self.Append(item)
-    def SortList(self, key: callable = str.lower):
+    def SortList(self, key: Callable = str.lower):
         """        function to sort listbox items case insensitive by default.        """
         temp_list = self.Items
         temp_list.sort(key=key)
@@ -424,7 +424,7 @@ class Listbox(tk.Listbox, BaseTextTkinterWidget, CommandMixin):
 # ------------------------------------------------------------------------------------------
 
 class Canvas(tk.Canvas, BaseTkinterWidget):
-    __slots__ = []
+    __slots__ = ['_state_', '__bindings__', '_pi', '_manager_', '_wrap', '_cb', '_loop', '_txt']
     def __init__(self, master,
                  Color: Dict[str, str] = None,
                  loop: Optional[BaseEventLoop] = None,
@@ -434,7 +434,7 @@ class Canvas(tk.Canvas, BaseTkinterWidget):
         self._setupBindings()
 
 
-    def DownloadImage(self, url: URL, x: int, y: int, *formats: str, width: int = None, height: int = None, **kwargs):
+    def DownloadImage(self, url: Union[URL, str], x: int, y: int, *formats: str, width: int = None, height: int = None, **kwargs):
         if isinstance(url, URL) or isinstance(url, str) and url.lower().strip().startswith('http'):
             reply = get(url, **kwargs)
             return self.SetImageFromBytes(reply.content, x, y, *formats, width=width, height=height)
@@ -450,13 +450,13 @@ class Canvas(tk.Canvas, BaseTkinterWidget):
         raise TypeError(typeof(url), (str, URL))
 
 
-    def OpenImage(self, path: PathLike, x: int, y: int, *formats: str, width: int = None, height: int = None) -> Tuple[PhotoImage, Tuple[int, int], int]:
+    def OpenImage(self, path: PathLike, x: int, y: int, *formats: str, width: int = None, height: int = None) -> Tuple[PhotoImage, int]:
         assert (isfile(path))
 
         with open(path, 'rb') as f:
             img = ImageMixin.open(self, f, width, height, *formats)
             return self.CreateImage(image=img, x=x, y=y)
-    async def OpenImageAsync(self, path: PathLike, x: int, y: int, *formats: str, width: int = None, height: int = None) -> Tuple[PhotoImage, Tuple[int, int], int]:
+    async def OpenImageAsync(self, path: PathLike, x: int, y: int, *formats: str, width: int = None, height: int = None) -> Tuple[PhotoImage, int]:
         assert (isfile(path))
 
         async with async_file_open(path, 'rb') as f:
@@ -464,7 +464,7 @@ class Canvas(tk.Canvas, BaseTkinterWidget):
             return self.CreateImage(image=img, x=x, y=y)
 
 
-    def SetImageFromBytes(self, data: bytes, x: int, y: int, *formats: str, width: int = None, height: int = None) -> Tuple[PhotoImage, Tuple[int, int], int]:
+    def SetImageFromBytes(self, data: bytes, x: int, y: int, *formats: str, width: int = None, height: int = None) -> Tuple[PhotoImage, int]:
         assert (isinstance(data, bytes))
 
         with BytesIO(data) as buf:
@@ -472,10 +472,10 @@ class Canvas(tk.Canvas, BaseTkinterWidget):
             return self.CreateImage(image=img, x=x, y=y)
 
 
-    def CreateImage(self, image: Union[Image, tkPhotoImage], x: int, y: int, anchor: str or AnchorAndSticky = tk.NW) -> Tuple[tkPhotoImage, Tuple[int, int], int]:
-        if not isinstance(image, tkPhotoImage): image = PhotoImage(image, size=image.size)
+    def CreateImage(self, image: Union[Image, tkPhotoImage], x: int, y: int, anchor: str or AnchorAndSticky = tk.NW) -> Tuple[tkPhotoImage, int]:
+        if not isinstance(image, tkPhotoImage): image = tkPhotoImage(image, size=image.size)
 
-        return image, (image.width, image.height), self.create_image(x, y, anchor=anchor, image=image)
+        return image, self.create_image(x, y, anchor=anchor, image=image)
 
 
     def GetItemPosition(self, _id) -> Optional[Tuple[int, int]]:
@@ -566,7 +566,7 @@ class Scrollbar(tk.Scrollbar, BaseTkinterWidget, CommandMixin):
     highlightcolor, highlightthickness, jump, orient,
     relief, repeatdelay, repeatinterval, takefocus,
     troughcolor, Width."""
-    __slots__ = ['_cmd', 'command_cb']
+    __slots__ = ['_cmd', 'command_cb', '_state_', '__bindings__', '_pi', '_manager_', '_wrap', '_cb', '_loop', '_txt']
     def __init__(self, master,
                  orientation: Orient,
                  Color: Optional[Dict[str, str]] = None,
@@ -610,16 +610,17 @@ class Text(tk.Text, BaseTextTkinterWidget, CommandMixin):
         state, tabs, undo, Width, wrap,
 
     """
-    __slots__ = ['_cmd', 'command_cb']
+    __slots__ = ['_cmd', 'command_cb', '_state_', '__bindings__', '_pi', '_manager_', '_wrap', '_cb', '_loop', '_txt']
 
     def __init__(self, master,
                  text: str = '',
-                 Override_var: Optional[tk.StringVar] = None,
                  Color: Optional[Dict[str, str]] = None,
                  loop: Optional[BaseEventLoop] = None,
                  **kwargs):
         tk.Text.__init__(self, master, **kwargs)
-        BaseTextTkinterWidget.__init__(self, text, Override_var, Color, loop)
+        BaseTkinterWidget.__init__(self, Color, loop)
+        self.txt = text
+
 
     def Clear(self): self.delete(self.Index.Create(1, 0), self.Index.End())
     def ClearTags(self): return self.tag_delete(*self.Tags())
@@ -646,8 +647,8 @@ class ScrolledText(Frame, BaseTextTkinterWidget, CommandMixin):
     tb: Text
     vbar: Scrollbar
     hbar: Scrollbar
-    __slots__ = ['tb', 'vbar', 'hbar', '_cmd', 'command_cb']
-    def __init__(self, master, *, text: str = '', Color: Optional[Dict[str, str]] = None, loop: Optional[BaseEventLoop] = None, **frame_kwargs):
+    __slots__ = ['tb', 'vbar', 'hbar', '_cmd', 'command_cb', '_state_', '__bindings__', '_pi', '_manager_', '_wrap', '_cb', '_loop', '_txt']
+    def __init__(self, master, text: str = '', Color: Optional[Dict[str, str]] = None, loop: Optional[BaseEventLoop] = None, **frame_kwargs):
         Frame.__init__(self, master, **frame_kwargs)
         BaseTkinterWidget.__init__(self, Color, loop)
         self.Grid_RowConfigure(0, weight=10)
@@ -684,7 +685,7 @@ class ScrolledText(Frame, BaseTextTkinterWidget, CommandMixin):
 # ------------------------------------------------------------------------------------------
 
 class Scale(tk.Scale, BaseTkinterWidget):
-    __slots__ = []
+    __slots__ = ['_state_', '__bindings__', '_pi', '_manager_', '_wrap', '_cb', '_loop', '_txt']
     def __init__(self, master, Color: Optional[Dict[str, str]] = None, loop: Optional[BaseEventLoop] = None, **kwargs):
         tk.Scale.__init__(self, master, **kwargs)
         BaseTkinterWidget.__init__(self, Color, loop)

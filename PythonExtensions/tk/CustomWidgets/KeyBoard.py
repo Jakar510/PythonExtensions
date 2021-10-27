@@ -356,22 +356,6 @@ class KeyboardMixin:
                                        key_color=key_color)
 
     """
-    __slots__ = ['kb',
-                 'Bind',
-                 'state',
-                 'Width',
-                 'Height',
-                 'x',
-                 'y',
-                 '_popup_width',
-                 '_popup_height',
-                 '_popup_relwidth',
-                 '_popup_relheight',
-                 'master',
-                 'placement',
-                 '__root',
-                 'key_size',
-                 'key_color']
     kb: Optional[PopupKeyboard]
     Bind: callable
     tk_focusNext: callable
