@@ -37,11 +37,12 @@ class AutoScroll(BaseTkinterWidget):
                 ...
             ...
     """
+    __slots__ = ['vsb', 'hsb']
     vsb: ScrollbarThemed
     hsb: ScrollbarThemed
     def __init__(self, master: BaseTkinterWidget, Color: Dict[str, str] = None, loop: Optional[BaseEventLoop] = None):
-        super().__init__(Color, loop)
         self.master = master
+        BaseTkinterWidget.__init__(self, Color, loop)
 
         if hasattr(self, 'xview') and callable(self.xview):
             self.hsb = ScrollbarThemed(master, orientation=Orient.Horizonal, command=self.xview).Grid(column=0, row=1, sticky=AnchorAndSticky.EastWest)
@@ -57,13 +58,13 @@ class AutoScroll(BaseTkinterWidget):
         master.Grid_ColumnConfigure(0, weight=1)
 
     @staticmethod
-    def _autoscroll(sbar):
+    def _autoscroll(bar: ScrollbarThemed):
         """   Hide and show scrollbar as needed.   """
         def wrapped(first, last):
             first, last = float(first), float(last)
-            if first <= 0 and last >= 1: sbar.hide()
-            else: sbar.show()
-            sbar.set(first, last)
+            if first <= 0 and last >= 1: bar.hide()
+            else: bar.show()
+            bar.set(first, last)
         return wrapped
 
     def __str__(self): return str(self.master)

@@ -3,7 +3,7 @@ import time
 from tkinter import Event
 
 from .console import *
-from ..misc import RoundFloat
+from ..Misc import RoundFloat
 
 
 

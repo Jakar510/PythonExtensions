@@ -8,13 +8,13 @@ import string
 from enum import IntEnum, IntFlag
 from typing import *
 
-from ...Names import nameof
 from ..Base import *
 from ..Core import *
 from ..Enumerations import EventType
 from ..Events import *
 from ..Widgets import *
 from ...HID_BUFFER import HID_BUFFER
+from ...Names import nameof
 
 
 
@@ -58,6 +58,7 @@ class PopupKeyboard(tkTopLevel):
     Only the Entry widget has a subclass in this version.
     https://www.alt-codes.net/arrow_alt_codes.php
     """
+    __slots__ = ['_attach', '_key_color', '_root_frame', '_x', '_y', '__root']
     _space = '[ space ]'
     _shift = 'Aa'
     _next = '>>>' or '→'  # &#x2192
@@ -74,29 +75,32 @@ class PopupKeyboard(tkTopLevel):
     _letters: Dict[int, Dict[int, Button]] = { }
     _numbers: Dict[int, Dict[int, Button]] = { }
     _hid = HID_BUFFER()
+    _attach: Union['KeyboardMixin', BaseTextTkinterWidget]
     def __init__(self, root: tkRoot, *, attach,
                  x: int, y: int,
-                 keysize: int = -1, keycolor: str = 'white', transparency: float = 0.85, takefocus: bool = False, font: str = '-family {Segoe UI Black} -size 13'):
+                 key_size: int = -1,
+                 key_color: str = 'white',
+                 transparency: float = 0.85,
+                 take_focus: bool = False,
+                 font: str = '-family {Segoe UI Black} -size 13'):
         assert (isinstance(root, tkRoot))
         self.__root = root
-        tkTopLevel.__init__(self, master=root, fullscreen=False, takefocus=takefocus,
-                            Screen_Width=1, Screen_Height=1)
-        # Screen_Width=root.Screen_Width, Screen_Height=root.Screen_Height)
+        tkTopLevel.__init__(self, master=root, fullscreen=False, takefocus=take_focus, Screen_Width=1, Screen_Height=1)
+
         self.overrideredirect(True)
         self.SetTransparency(transparency)
 
         if not isinstance(attach, KeyboardMixin) and isinstance(attach, BaseTextTkinterWidget): raise TypeError(type(attach), (KeyboardMixin, BaseTextTkinterWidget))
         self._attach = attach
 
-        self._keycolor = keycolor
+        self._key_color = key_color
 
         self._x = x
         self._y = y
 
         self._root_frame = Frame(self).Grid(row=0, column=0).Grid_ColumnConfigure(0, weight=1).Grid_RowConfigure(0, weight=1)
 
-        if self._attach.IsAutoSize:
-            self._SetDimensions()
+        if self._attach.IsAutoSize: self._SetDimensions()
 
         Row0: List[str] = [self._backspace] + [str(i) for i in range(10)] + [self._delete]
         Row1: List[str] = ['|', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '/']
@@ -112,7 +116,7 @@ class PopupKeyboard(tkTopLevel):
                 self._root_frame.Grid_ColumnConfigure(c, weight=1)
 
                 if text == '': continue
-                w = Button(master=self._root_frame, text=text, bg=self._keycolor, takefocus=takefocus).SetCommand(CurrentValue(self._handle_key_press))
+                w = Button(master=self._root_frame, text=text, bg=self._key_color, takefocus=take_focus).SetCommand(CurrentValue(self._handle_key_press))
 
                 if self._shift == text: w.Grid(row=r, column=c, rowspan=2)
 
@@ -125,7 +129,8 @@ class PopupKeyboard(tkTopLevel):
                 else: w.Grid(row=r, column=c + offset)
 
                 self._letters[r][c] = w
-        if keysize > 0: self.SetSize(keysize)
+
+        if key_size > 0: self.SetSize(key_size)
         if font: self.SetFont(font)
 
         self.Bind(Bindings.Key, lambda e: self._attach.destroy_popup())  # destroy _PopupKeyboard on keyboard interrupt
@@ -142,6 +147,7 @@ class PopupKeyboard(tkTopLevel):
                     w.txt = w.txt.upper()
 
         return self._resize()
+    # noinspection DuplicatedCode
     def SetSize(self, size: int):
         self._key_size = size
 
@@ -154,6 +160,7 @@ class PopupKeyboard(tkTopLevel):
                 w.configure(width=size)
 
         return self._resize()
+    # noinspection DuplicatedCode
     def SetFont(self, font: str):
         for row in self._letters.values():
             for w in row.values(): w.configure(font=font)
@@ -223,12 +230,12 @@ class PopupKeyboard(tkTopLevel):
     def frame_width(self) -> int:
         if self._attach.IsFixedSize: return self._attach.popup_width
         if self._attach.IsRelativeSize: return self._attach.popup_relwidth
-        return self._root_frame.width
+        return self._root_frame.Width
     @property
     def frame_height(self) -> int:
         if self._attach.IsFixedSize: return self._attach.popup_height
         if self._attach.IsRelativeSize: return self._attach.popup_relheight
-        return self._root_frame.height
+        return self._root_frame.Height
 
 
 
@@ -308,12 +315,12 @@ class KeyboardMixin:
 
 
     An extension/subclass of the Tkinter Entry widget, capable
-    of accepting all existing args, plus a _keysize and _keycolor option.
+    of accepting all existing args, plus a _keysize and _key_color option.
     Will pop up an instance of _PopupKeyboard when focus moves into
     the widget
 
     Usage:
-    KeyboardEntry(master, keysize=6, keycolor='white').pack()
+    KeyboardEntry(master, key_size=6, key_color='white').pack()
 
     Example Class:
 
@@ -321,8 +328,8 @@ class KeyboardMixin:
             def __init__(self, master, *,
                          root: tkRoot,
                          placement: PlacementSet = PlacementSet(PlacePosition.Auto),
-                         keysize: int = None,
-                         keycolor: str = None,
+                         key_size: int = None,
+                         key_color: str = None,
                          insertbackground: str = 'red',
                          insertborderwidth: int = 3,
                          insertofftime: int = 1,
@@ -345,11 +352,27 @@ class KeyboardMixin:
                                        master,
                                        root=root,
                                        placement=placement,
-                                       keysize=keysize,
-                                       keycolor=keycolor)
+                                       key_size=key_size,
+                                       key_color=key_color)
 
     """
-    kb: Optional[PopupKeyboard] = None
+    __slots__ = ['kb',
+                 'Bind',
+                 'state',
+                 'Width',
+                 'Height',
+                 'x',
+                 'y',
+                 '_popup_width',
+                 '_popup_height',
+                 '_popup_relwidth',
+                 '_popup_relheight',
+                 'master',
+                 'placement',
+                 '__root',
+                 'key_size',
+                 'key_color']
+    kb: Optional[PopupKeyboard]
     Bind: callable
     tk_focusNext: callable
     tk_focusPrev: callable
@@ -363,10 +386,11 @@ class KeyboardMixin:
     x: int
     y: int
 
-    _popup_width: Optional[int] = None
-    _popup_height: Optional[int] = None
-    _popup_relwidth: Optional[float] = None
-    _popup_relheight: Optional[float] = None
+    _popup_width: Optional[int]
+    _popup_height: Optional[int]
+    _popup_relwidth: Optional[float]
+    _popup_relheight: Optional[float]
+    # noinspection SpellCheckingInspection
     def __init__(self, master, *, root: tkRoot, keysize: int = None, keycolor: str = None,
                  placement: PlacementSet = PlacementSet(Placement.Auto),
                  popup_width: int = None, popup_height: int = None,
@@ -381,8 +405,8 @@ class KeyboardMixin:
 
         self.placement = placement
 
-        self.keysize = keysize or -1
-        self.keycolor = keycolor
+        self.key_size = keysize or -1
+        self.key_color = keycolor
 
         self._popup_width = popup_width
         self._popup_relwidth = popup_relwidth
@@ -427,14 +451,14 @@ class KeyboardMixin:
     # noinspection PyUnreachableCode,PyUnusedLocal
     def _debug_event_(self, tag: EventType, event: tkEvent):
         print('__KeyboardMixin__state__', self.state)
-        print(f'__KeyboardMixin__Event__{tag.name}__', TkinterEvent(event).ToString())
+        print(f'__KeyboardMixin__Event__{tag.name}__', str(TkinterEvent(event)))
         print()
 
 
 
     def _call_popup(self):
         self.destroy_popup()
-        self.kb = PopupKeyboard(self.__root, attach=self, keycolor=self.keycolor, keysize=self.keysize, x=self.x, y=self.y)
+        self.kb = PopupKeyboard(self.__root, attach=self, x=self.x, y=self.y, key_size=self.key_size, key_color=self.key_color)
 
     def destroy_popup(self):
         if self.kb:

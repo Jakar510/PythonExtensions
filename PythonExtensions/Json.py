@@ -3,13 +3,12 @@ from enum import Enum
 from json import dumps as _dumps, loads as _loads
 from typing import *
 
-from ..Names import nameof
+from .Names import nameof
 
 
 
 
 __all__ = ['BaseObjectModel', 'BaseDictModel', 'BaseSetModel', 'BaseListModel', 'Assert', 'throw', 'AssertKeys', 'ConvertBool', 'RaiseKeyError']
-
 
 @overload
 def Assert(d: Any, t: Type): ...

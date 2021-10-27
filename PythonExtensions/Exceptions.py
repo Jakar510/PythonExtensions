@@ -6,6 +6,7 @@
 
 class ArgumentError(Exception): pass
 class InstanceError(Exception): pass
+class DelimiterError(Exception): pass
 
 
 class BreakCase(Exception): pass

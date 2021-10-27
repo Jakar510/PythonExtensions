@@ -41,6 +41,7 @@ class _TkinterSelector(SelectSelector):
     Based off of _TkinterSelector from https://github.com/montag451/aiotkinter/blob/master/aiotkinter.py
     See also: https://gist.github.com/damonjw/35aac361ca5d313ee9bf79e00261f4ea
     """
+    __slots__ = []
     def __init__(self, root=None):
         super().__init__()
 
@@ -146,6 +147,7 @@ class AsyncTkinterEventLoopPolicy(asyncio.DefaultEventLoopPolicy):
     Based off of TkinterEventLoopPolicy from https://github.com/montag451/aiotkinter/blob/master/aiotkinter.py
     See also: https://gist.github.com/damonjw/35aac361ca5d313ee9bf79e00261f4ea
     """
+    __slots__ = []
     def new_event_loop(self):
         try:
             # from ...Names import nameof

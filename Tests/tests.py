@@ -89,10 +89,10 @@ class FileIO_TestCase(unittest.TestCase):
                 print('label: ', label.size)
                 img = ImageObject(img, label.Width, label.Height)
                 box = CropBox(0, 0, label.Width, label.Height)
-                img.CropZoom(box, size=(img.width, img.height))
+                img.CropZoom(box, size=(img.Width, img.Height))
 
-                x = int((label.Width - img.Raw.width) / 2)
-                y = int((label.Height - img.Raw.height) / 2)
+                x = int((label.Width - img.Raw.Width) / 2)
+                y = int((label.Height - img.Raw.Height) / 2)
                 print(dict(x=x, y=y))
                 items = label.CreateImage(img.Raw, x, y)
                 print(items)

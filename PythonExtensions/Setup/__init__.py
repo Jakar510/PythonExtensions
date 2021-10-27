@@ -32,24 +32,14 @@ def GetVersion(o) -> str:
     raise AttributeError(f"can't get version from {o}")
 
 
-# def GetRequirements(path: str, **AlterateNames: str) -> List[str]:
-#     install_requires: List[str] = []
-#     for line in ReadLinesFromFile(path):
-#         line = line.strip('\n').strip()
-#         if line in AlterateNames: package = importlib.import_module(AlterateNames[line])
-#         else: package = importlib.import_module(line)
-#         VERSION = GetVersion(package)
-#         if VERSION.__class__.__name__ == 'module': VERSION = GetVersion(VERSION)
-#
-#         install_requires.append(f'{line}>={VERSION}')
-#     return install_requires
-def GetRequirements(path: str, *, seperator: str = '>=') -> List[str]:
+
+def GetRequirements(path: str, *, separator: str = '>=') -> List[str]:
     install_requires: List[str] = []
     for line in ReadLinesFromFile(path):
         line = line.strip()
         if not line: continue
         try:
-            install_requires.append(f'{line}{seperator}{version(line)}')
+            install_requires.append(f'{line}{separator}{version(line)}')
         except PackageNotFoundError as e:
             raise PackageNotFoundError(f'package "{line}" not found') from e
 

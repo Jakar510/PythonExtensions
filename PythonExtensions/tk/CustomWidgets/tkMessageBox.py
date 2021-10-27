@@ -16,7 +16,7 @@ __all__ = ['tkMessageBox']
 
 class tkMessageBox(tkTopLevel, BaseTkinterWidget):
     """
-    Not Impletemented Yet.
+    Not Implemented Yet.
 
     https://www.tutorialspoint.com/python3/tk_messagebox.htm
     """

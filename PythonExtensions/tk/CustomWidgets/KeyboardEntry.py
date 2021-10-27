@@ -19,6 +19,7 @@ __all__ = [
     ]
 
 class KeyboardEntry(Entry, KeyboardMixin):
+    # noinspection SpellCheckingInspection
     def __init__(self, master, *, root: tkRoot, placement: PlacementSet = PlacementSet(Placement.Auto), keysize: int = None, keycolor: str = None,
                  insertbackground: str = 'red', insertborderwidth: int = 3, insertofftime: int = 500, insertontime: int = 500, insertwidth: int = 3,
                  text: str = '', Override_var: tk.StringVar = None, Color: Dict = None, **kwargs):

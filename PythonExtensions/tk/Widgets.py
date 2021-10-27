@@ -66,16 +66,23 @@ class Button(tk.Button, BaseTextTkinterWidget, ImageMixin, CommandMixin):
 
         WIDGET-SPECIFIC OPTIONS
 
-        command, compound, default, height,
-        overrelief, state, width
+        command, compound, default, Height,
+        overrelief, state, Width
     """
-    def __init__(self, master, text: str = '', Override_var: tk.StringVar = None, Color: Dict[str, str] = None, Command: callable = None, **kwargs):
+    __slots__ = ['_cmd', 'command_cb', '_IMG']
+    def __init__(self, master,
+                 text: str = '',
+                 Override_var: tk.StringVar = None,
+                 Color: Dict[str, str] = None,
+                 Command: callable = None,
+                 loop: Optional[BaseEventLoop] = None,
+                 **kwargs):
         tk.Button.__init__(self, master, **kwargs)
+        BaseTextTkinterWidget.__init__(self, text, Override_var, Color, loop)
         cmd = kwargs.pop('command', None)
         if cmd: self.SetCommand(cmd)
 
         if Command: self.SetCommand(Command)
-        BaseTextTkinterWidget.__init__(self, text, Override_var, Color)
 
     def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
 
@@ -96,12 +103,18 @@ class Label(tk.Label, BaseTextTkinterWidget, ImageMixin, CommandMixin):
 
     WIDGET-SPECIFIC OPTIONS
 
-        height, state, width
+        Height, state, Width
 
     """
-    def __init__(self, master, text: str = '', Override_var: tk.StringVar = None, Color: Dict[str, str] = None, **kwargs):
+    __slots__ = ['_cmd', 'command_cb', '_IMG']
+    def __init__(self, master,
+                 text: str = '',
+                 Override_var: tk.StringVar = None,
+                 Color: Dict[str, str] = None,
+                 loop: Optional[BaseEventLoop] = None,
+                 **kwargs):
         tk.Label.__init__(self, master, **kwargs)
-        BaseTextTkinterWidget.__init__(self, text, Override_var, Color)
+        BaseTextTkinterWidget.__init__(self, text, Override_var, Color, loop)
 
 
 
@@ -114,8 +127,13 @@ class Label(tk.Label, BaseTextTkinterWidget, ImageMixin, CommandMixin):
 # ------------------------------------------------------------------------------------------
 
 class Message(tk.Message, BaseTextTkinterWidget, CommandMixin):
-    def __init__(self, master, **kwargs):
+    __slots__ = ['_cmd', 'command_cb']
+    def __init__(self, master,
+                 loop: Optional[BaseEventLoop] = None,
+                 Color: Optional[Dict[str, str]] = None,
+                 **kwargs):
         tk.Message.__init__(self, master, **kwargs)
+        BaseTkinterWidget.__init__(self, Color, loop)
 
     def _setCommand(self, add: bool):
         self.command_cb = self.Bind(Bindings.ButtonPress, func=self._cmd, add=add)
@@ -134,12 +152,18 @@ class Entry(tk.Entry, BaseTextTkinterWidget, CommandMixin):
     insertborderwidth, insertofftime, insertontime, insertwidth,
     invalidcommand, invcmd, justify, relief, selectbackground,
     selectborderwidth, selectforeground, show, state, takefocus,
-    textvariable, validate, validatecommand, vcmd, width,
+    textvariable, validate, validatecommand, vcmd, Width,
     xscrollcommand.
     """
-    def __init__(self, master, text: str = '', Override_var: tk.StringVar = None, Color: Dict[str, str] = None, **kwargs):
+    __slots__ = ['_cmd', 'command_cb']
+    def __init__(self, master,
+                 text: str = '',
+                 Override_var: tk.StringVar = None,
+                 Color: Dict[str, str] = None,
+                 loop: Optional[BaseEventLoop] = None,
+                 **kwargs):
         tk.Entry.__init__(self, master, **kwargs)
-        BaseTextTkinterWidget.__init__(self, text, Override_var, Color)
+        BaseTextTkinterWidget.__init__(self, text, Override_var, Color, loop)
 
     def Clear(self):
         self.delete(0, Tags.End.value)
@@ -169,8 +193,8 @@ class CheckButton(tk.Checkbutton, BaseTextTkinterWidget, ImageMixin, CommandMixi
 
         Valid resource names:
 
-                width
-                height
+                Width
+                Height
 
                 fg
                 foreground
@@ -214,10 +238,17 @@ class CheckButton(tk.Checkbutton, BaseTextTkinterWidget, ImageMixin, CommandMixi
                 wraplength
 
     """
+    __slots__ = ['_value', '_cmd', 'command_cb', '_IMG']
     _value: tk.BooleanVar
-    def __init__(self, master, text: str = '', Override_var: tk.StringVar = None, Color: Dict[str, str] = None, **kwargs):
+    def __init__(self, master,
+                 text: str = '',
+                 Override_var: tk.StringVar = None,
+                 Color: Dict[str, str] = None,
+                 loop: Optional[BaseEventLoop] = None,
+                 **kwargs):
         tk.Checkbutton.__init__(self, master, **kwargs)
-        BaseTextTkinterWidget.__init__(self, text, Override_var, Color)
+        BaseTextTkinterWidget.__init__(self, text, Override_var, Color, loop)
+        ImageMixin.__init__(self)
         self._value = tk.BooleanVar(master=self, value=False)
         self.configure(variable=self._value)
 
@@ -240,19 +271,28 @@ class Listbox(tk.Listbox, BaseTextTkinterWidget, CommandMixin):
     """Construct a listbox _widget with the master MASTER.
 
     Valid resource names: background, bd, bg, borderwidth, cursor,
-    exportselection, fg, font, foreground, height, highlightbackground,
+    exportselection, fg, font, foreground, Height, highlightbackground,
     highlightcolor, highlightthickness, relief, selectbackground,
     selectborderwidth, selectforeground, selectmode, setgrid, takefocus,
-    width, xscrollcommand, yscrollcommand, listvariable.
+    Width, xscrollcommand, yscrollcommand, listvariable.
 
     Allowed WordWrap modes are ('word', 'none', 'char')
     """
-    _Current_ListBox_Index: int = None
-    def __init__(self, master, *, Command: callable = None, z=None, selectMode: Union[str, SelectionMode] = tk.SINGLE, Color: Dict[str, str] = None, **kwargs):
+    __slots__ = ['_Current_ListBox_Index', '_cmd', 'command_cb']
+    _Current_ListBox_Index: Optional[int]
+    def __init__(self, master,
+                 *,
+                 Command: callable = None,
+                 z=None,
+                 selectMode: Union[str, SelectionMode] = tk.SINGLE,
+                 Color: Dict[str, str] = None,
+                 loop: Optional[BaseEventLoop] = None,
+                 **kwargs):
         tk.Listbox.__init__(self, master, **kwargs)
-        BaseTextTkinterWidget.__init__(self, '', None, Color, configure=False)
+        BaseTkinterWidget.__init__(self, Color, loop)
         self.SetSelectMode(selectMode)
         if Command is not None: self.SetCommand(Command, z=z)
+        self._Current_ListBox_Index = None
     def SetSelectMode(self, mode: Union[str, SelectionMode] = tk.SINGLE):
         if isinstance(mode, SelectionMode): mode = mode.value
         self.configure(selectmode=mode)
@@ -384,10 +424,14 @@ class Listbox(tk.Listbox, BaseTextTkinterWidget, CommandMixin):
 # ------------------------------------------------------------------------------------------
 
 class Canvas(tk.Canvas, BaseTkinterWidget):
-    def __init__(self, master, *args, Color: Dict[str, str] = None, loop: Optional[BaseEventLoop] = None, **kwargs):
-        tk.Canvas.__init__(self, master, *args, **kwargs)
-        self._setupBindings()
+    __slots__ = []
+    def __init__(self, master,
+                 Color: Dict[str, str] = None,
+                 loop: Optional[BaseEventLoop] = None,
+                 **kwargs):
+        tk.Canvas.__init__(self, master, **kwargs)
         BaseTkinterWidget.__init__(self, Color, loop)
+        self._setupBindings()
 
 
     def DownloadImage(self, url: URL, x: int, y: int, *formats: str, width: int = None, height: int = None, **kwargs):
@@ -521,16 +565,30 @@ class Scrollbar(tk.Scrollbar, BaseTkinterWidget, CommandMixin):
     elementborderwidth, highlightbackground,
     highlightcolor, highlightthickness, jump, orient,
     relief, repeatdelay, repeatinterval, takefocus,
-    troughcolor, width."""
-    def __init__(self, master, orientation: Orient, **kwargs):
+    troughcolor, Width."""
+    __slots__ = ['_cmd', 'command_cb']
+    def __init__(self, master,
+                 orientation: Orient,
+                 Color: Optional[Dict[str, str]] = None,
+                 loop: Optional[BaseEventLoop] = None,
+                 **kwargs):
         tk.Scrollbar.__init__(self, master, orient=orientation.value, **kwargs)
+        BaseTkinterWidget.__init__(self, Color, loop)
 
     def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
 
 # ------------------------------------------------------------------------------------------
 
 class Text(tk.Text, BaseTextTkinterWidget, CommandMixin):
-    """Construct a text widget with the parent MASTER.
+    class Index(str):
+        @classmethod
+        def Create(cls, line: int, char: int): return cls(f'{line}.{char}')
+        @classmethod
+        def End(cls): return cls(tk.END)
+
+
+
+    __doc__ = """Construct a text widget with the parent MASTER.
 
     STANDARD OPTIONS
 
@@ -547,24 +605,21 @@ class Text(tk.Text, BaseTextTkinterWidget, CommandMixin):
 
     WIDGET-SPECIFIC OPTIONS
 
-        autoseparators, height, maxundo,
+        autoseparators, Height, maxundo,
         spacing1, spacing2, spacing3,
-        state, tabs, undo, width, wrap,
+        state, tabs, undo, Width, wrap,
 
     """
+    __slots__ = ['_cmd', 'command_cb']
 
-
-
-    class Index(str):
-        @classmethod
-        def Create(cls, line: int, char: int): return cls(f'{line}.{char}')
-        @classmethod
-        def End(cls): return cls(tk.END)
-
-
-
-    def __init__(self, master, **kwargs):
+    def __init__(self, master,
+                 text: str = '',
+                 Override_var: Optional[tk.StringVar] = None,
+                 Color: Optional[Dict[str, str]] = None,
+                 loop: Optional[BaseEventLoop] = None,
+                 **kwargs):
         tk.Text.__init__(self, master, **kwargs)
+        BaseTextTkinterWidget.__init__(self, text, Override_var, Color, loop)
 
     def Clear(self): self.delete(self.Index.Create(1, 0), self.Index.End())
     def ClearTags(self): return self.tag_delete(*self.Tags())
@@ -591,8 +646,10 @@ class ScrolledText(Frame, BaseTextTkinterWidget, CommandMixin):
     tb: Text
     vbar: Scrollbar
     hbar: Scrollbar
-    def __init__(self, master, *, text: str = '', **frame_kwargs):
-        super().__init__(master, **frame_kwargs)
+    __slots__ = ['tb', 'vbar', 'hbar', '_cmd', 'command_cb']
+    def __init__(self, master, *, text: str = '', Color: Optional[Dict[str, str]] = None, loop: Optional[BaseEventLoop] = None, **frame_kwargs):
+        Frame.__init__(self, master, **frame_kwargs)
+        BaseTkinterWidget.__init__(self, Color, loop)
         self.Grid_RowConfigure(0, weight=10)
         self.Grid_RowConfigure(1, weight=1)
         self.Grid_ColumnConfigure(0, weight=10)
@@ -627,7 +684,9 @@ class ScrolledText(Frame, BaseTextTkinterWidget, CommandMixin):
 # ------------------------------------------------------------------------------------------
 
 class Scale(tk.Scale, BaseTkinterWidget):
-    def __init__(self, master, **kwargs):
+    __slots__ = []
+    def __init__(self, master, Color: Optional[Dict[str, str]] = None, loop: Optional[BaseEventLoop] = None, **kwargs):
         tk.Scale.__init__(self, master, **kwargs)
+        BaseTkinterWidget.__init__(self, Color, loop)
 
     def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))

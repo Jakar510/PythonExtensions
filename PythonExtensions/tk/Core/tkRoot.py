@@ -123,7 +123,7 @@ class tkRoot(tk.Tk, _rootMixin):
                 <TkinterEvent Object. Configuration:
                 {   'char': 'a',
                     'delta': 0,
-                    'height': '??',
+                    'Height': '??',
                     'keycode': 65,
                     'keysym': 'a',
                     'keysym_num': 97,
@@ -132,7 +132,7 @@ class tkRoot(tk.Tk, _rootMixin):
                     'time': 329453312,
                     'type': <EventType.KeyPress: '2'>,
                     'widget': <spf.Workers.Views.Carousel.CarouselView object .!carouselview>,
-                    'width': '??',
+                    'Width': '??',
                     'x': 936,
                     'x_root': 1045,
                     'y': 670,
@@ -158,8 +158,8 @@ class tkRoot(tk.Tk, _rootMixin):
                     serial - serial number of event
                 num - mouse button pressed (ButtonPress, ButtonRelease)
                 focus - whether the window has the focus (Enter, Leave)
-                height - height of the exposed window (Configure, Expose)
-                width - width of the exposed window (Configure, Expose)
+                Height - Height of the exposed window (Configure, Expose)
+                Width - Width of the exposed window (Configure, Expose)
                 keycode - keycode of the pressed key (KeyPress, KeyRelease)
                 state - state of the event as a number (ButtonPress, ButtonRelease,
                                         Enter, KeyPress, KeyRelease,
@@ -188,8 +188,8 @@ class tkRoot(tk.Tk, _rootMixin):
                                         Enter, KeyPress, KeyRelease,
                                         Leave, Motion)
         :param current_time:
-        :param height: height of the exposed window (Configure, Expose)
-        :param width: width of the exposed window (Configure, Expose)
+        :param height: Height of the exposed window (Configure, Expose)
+        :param width: Width of the exposed window (Configure, Expose)
         :param x: x-position of the mouse
         :param y: y-position of the mouse
         :param char: pressed character (KeyPress, KeyRelease)

@@ -33,7 +33,6 @@ class ReadWriteData(Protocol[AnyStr]):
 
 @attrs(slots=True, hash=True, order=True, eq=True, auto_attribs=True, init=False)
 class FilePath(PathLike):
-
     FullPath: str = attrib(validator=validators.instance_of((dict, Path, str, PathLike)))
     IsTemporary: bool = attrib(validator=validators.instance_of(bool), init=False)
     Hash: Optional[str] = attrib(default=None, validator=validators.instance_of(str), init=False)
@@ -108,6 +107,13 @@ class FilePath(PathLike):
 
 
     def __call__(self, mode: int = 0o777, exist_ok: bool = True) -> Optional['FileIO']:
+        """
+        Creates the base directories then opens the file for reading / writing via FileIO
+
+        :param mode:
+        :param exist_ok:
+        :return: FileIO
+        """
         makedirs(self.BaseName, mode, exist_ok)
 
         return None if self.IsDirectory else FileIO(self)
@@ -349,18 +355,18 @@ class FileIO(PathLike, Generic[_TFileData]):
 
     @classmethod
     def Create(cls, _path: Union[str, 'FilePath'], content: Union[str, bytes] = None, *,
-               buffering=None, encoding: str = None, errors=None, newline: str = '\n', closefd=True):
+               buffering=None, encoding: str = None, errors=None, newline: str = '\n', close_fd=True):
         os.makedirs(basename(_path), exist_ok=True)
         _path = cls(_path)
-        _path.Write(content, buffering=buffering, encoding=encoding, errors=errors, newline=newline, closefd=closefd)
+        _path.Write(content, buffering=buffering, encoding=encoding, errors=errors, newline=newline, closefd=close_fd)
 
         return Path
 
     @classmethod
     async def CreateAsync(cls, _path: Union[str, 'FilePath'], content: Union[str, bytes] = None, *,
-                          buffering=None, encoding: str = None, errors=None, newline: str = '\n', closefd=True, loop=None, executor=None):
+                          buffering=None, encoding: str = None, errors=None, newline: str = '\n', close_fd=True, loop=None, executor=None):
         os.makedirs(basename(_path), exist_ok=True)
         _path = cls(_path)
-        await _path.WriteAsync(content, buffering=buffering, encoding=encoding, errors=errors, newline=newline, closefd=closefd, loop=loop, executor=executor)
+        await _path.WriteAsync(content, buffering=buffering, encoding=encoding, errors=errors, newline=newline, closefd=close_fd, loop=loop, executor=executor)
 
         return Path

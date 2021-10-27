@@ -54,8 +54,8 @@ class LabelFrame(tk.LabelFrame, BaseTextTkinterWidget, _BaseFrameMixin):
     WIDGET-SPECIFIC OPTIONS
 
         background, class, colormap, container,
-        height, labelanchor, labelwidget,
-        visual, width
+        Height, labelanchor, labelwidget,
+        visual, Width
     """
     def __init__(self, master, text: str = '', Color: Dict[str, str] = None, **kwargs):
         tk.LabelFrame.__init__(self, master, text=text, **kwargs)
@@ -91,8 +91,8 @@ class LabelFrameThemed(ttk.LabelFrame, BaseTextTkinterWidget, _BaseFrameMixin):
     WIDGET-SPECIFIC OPTIONS
 
         background, class, colormap, container,
-        height, labelanchor, labelwidget,
-        visual, width
+        Height, labelanchor, labelwidget,
+        visual, Width
     """
     def __init__(self, master, text: str = '', Color: Dict[str, str] = None, **kwargs):
         ttk.LabelFrame.__init__(self, master, text=text, **kwargs)

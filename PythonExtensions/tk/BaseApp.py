@@ -48,7 +48,7 @@ class BaseApp(object):
 
 
     def Close(self):
-        """ Override to add functinality. Closes application. """
+        """ Override to add functionality. Closes application. """
         self.root.destroy()
 
 
@@ -77,6 +77,7 @@ class BaseApp(object):
 
 _TBaseApp = TypeVar('_TBaseApp', bound=BaseApp)
 class _WindowMixin(Generic[_TBaseApp]):
+    __log_name__: str
     _app: _TBaseApp
     def __init__(self, app: _TBaseApp):
         assert (isinstance(app, BaseApp))

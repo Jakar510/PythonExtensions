@@ -3,7 +3,6 @@
 #  Property of TrueLogic Company.
 #  Copyright (c) 2020.
 # ------------------------------------------------------------------------------
-import asyncio
 import base64
 import tkinter as tk
 from abc import ABC
@@ -28,7 +27,7 @@ from PythonExtensions import ArgumentError
 from .Enumerations import *
 from .Events import Bindings
 from ..Files import FilePath
-from ..Names import nameof
+from ..Names import nameof, typeof
 from ..debug import pp
 
 
@@ -42,7 +41,32 @@ __all__ = [
     'img_open', 'tkPhotoImage'
     ]
 
+
+
+class tkPhotoImage(PhotoImage):
+    __slots__ = []
+    @property
+    def width(self) -> int:
+        """
+        Get the Width of the img.
+
+        :return: The Width, in pixels.
+        """
+        return super().width()
+
+    @property
+    def height(self) -> int:
+        """
+        Get the Height of the img.
+
+        :return: The Height, in pixels.
+        """
+        return super().height()
+
+
+
 class BindingCollection(dict, Dict[Bindings, Set[str]]):
+    __slots__ = []
     def __getitem__(self, item: Bindings):
         try:
             return super(BindingCollection, self).__getitem__(item)
@@ -56,19 +80,28 @@ class BindingCollection(dict, Dict[Bindings, Set[str]]):
 
 
 class BaseTkinterWidget(tk.Widget, ABC):
-    # noinspection PyMissingConstructor
-    def __init__(self, Color: Optional[Dict[str, str]], loop: Optional[asyncio.BaseEventLoop]):
-        if Color: self.configure(**Color)
-        self._loop: Final[Optional[asyncio.BaseEventLoop]] = loop
+    __slots__ = ['_state_', '__bindings__', '_pi', '_manager_', '_wrap', '_cb', '_loop']
+    __bindings__: BindingCollection
+    _state_: ViewState
+    _pi: Optional[Dict]
+    _manager_: Optional[Layout]
+    _wrap: Optional[int]
+    _cb: Union[str, None]
+    _loop: Final[Optional[BaseEventLoop]]
 
-    __bindings__: BindingCollection = BindingCollection()
-    _state_: ViewState = ViewState.Hidden
-    _pi: Dict = { }
-    _manager_: Layout = None
-    _wrap: int = None
-    _cb: str or None = None
+    # noinspection PyMissingConstructor
+    def __init__(self, Color: Optional[Dict[str, str]], loop: Optional[BaseEventLoop]):
+        if Color: self.configure(**Color)
+        self._loop = loop
+        self._state_ = ViewState.Hidden
+        self.__bindings__ = BindingCollection()
+        self._pi = None
+        self._manager_ = None
+        self._wrap = None
+        self._cb = None
+
     @property
-    def pi(self) -> dict: return self._pi.copy()
+    def pi(self) -> Dict: return self._pi.copy()
 
     @property
     def IsVisible(self) -> bool: return self._state_ != ViewState.Hidden
@@ -83,9 +116,9 @@ class BaseTkinterWidget(tk.Widget, ABC):
 
         return f'<{start}>'
     @property
-    def Details(self) -> dict: return dict(IsVisible=self.IsVisible)
+    def Details(self) -> Dict[str, Any]: return dict(IsVisible=self.IsVisible)
     @property
-    def FullDetails(self) -> dict:
+    def FullDetails(self) -> Dict[str, Any]:
         d = self.Details
         d.update({
             'Type':               type(self),
@@ -112,11 +145,11 @@ class BaseTkinterWidget(tk.Widget, ABC):
 
 
     @property
-    def size(self) -> Tuple[int, int]: return self.width, self.height
+    def size(self) -> Tuple[int, int]: return self.Width, self.Height
     @property
-    def width(self) -> int: return self.winfo_width()
+    def Width(self) -> int: return self.winfo_width()
     @property
-    def height(self) -> int: return self.winfo_height()
+    def Height(self) -> int: return self.winfo_height()
 
     @property
     def x(self) -> int: return self.winfo_rootx()
@@ -299,19 +332,19 @@ class BaseTkinterWidget(tk.Widget, ABC):
         _x=amount - locate anchor of this widget at position _x of master
         _y=amount - locate anchor of this widget at position _y of master
         relx=amount - locate anchor of this widget between 0.0 and 1.0
-                      relative to width of master (1.0 is right edge)
+                      relative to Width of master (1.0 is right edge)
         rely=amount - locate anchor of this widget between 0.0 and 1.0
-                      relative to height of master (1.0 is bottom edge)
+                      relative to Height of master (1.0 is bottom edge)
         anchor=NSEW (or subset) - position anchor according to given direction
-        width=amount - width of this widget in pixel
-        height=amount - height of this widget in pixel
-        relwidth=amount - width of this widget between 0.0 and 1.0
-                          relative to width of master (1.0 is the same width
+        Width=amount - Width of this widget in pixel
+        Height=amount - Height of this widget in pixel
+        relwidth=amount - Width of this widget between 0.0 and 1.0
+                          relative to Width of master (1.0 is the same Width
                           as the master)
-        relheight=amount - height of this widget between 0.0 and 1.0
-                           relative to height of master (1.0 is the same
-                           height as the master)
-        bordermode="inside" or "outside" - whether to take border width of
+        relheight=amount - Height of this widget between 0.0 and 1.0
+                           relative to Height of master (1.0 is the same
+                           Height as the master)
+        bordermode="inside" or "outside" - whether to take border Width of
                                            master widget into account
         """
         self.place(cnf, **kwargs)
@@ -407,14 +440,16 @@ class BaseTkinterWidget(tk.Widget, ABC):
     def __class_name__(self) -> str: return nameof(self)
 
 class BaseTextTkinterWidget(BaseTkinterWidget):
+    __slots__ = ['_txt']
     _txt: tk.StringVar
-    # noinspection PyMissingConstructor
-    def __init__(self, text: str, Override_var: Optional[tk.StringVar], Color: Optional[Dict[str, str]], configure: bool = True, loop: Optional[asyncio.BaseEventLoop] = None):
+    def __init__(self, text: str, Override_var: Optional[tk.StringVar], Color: Optional[Dict[str, str]], loop: Optional[BaseEventLoop], configure: bool = True):
         if Override_var is not None: self._txt = Override_var
         else: self._txt = tk.StringVar(master=self, value=text)
 
         if configure: self.configure(textvariable=self._txt)
         BaseTkinterWidget.__init__(self, Color, loop)
+
+
     @property
     def txt(self) -> str: return self._txt.get()
     @txt.setter
@@ -435,26 +470,25 @@ class BaseTextTkinterWidget(BaseTkinterWidget):
 
 # ------------------------------------------------------------------------------------------
 
-class CallWrapper(tk.CallWrapper):
+class CallWrapper(object):
     """ Internal class. Stores function to call when some user defined Tcl function is called e.g. after an event occurred. """
-
-    _widget: Union[BaseTextTkinterWidget, BaseTkinterWidget] = None
-    def __init__(self, func: Callable, widget: BaseTkinterWidget = None):
-        """Store FUNC, SUBST and WIDGET as members."""
-        self._func: Final[Callable] = func
-        self._widget: Optional[BaseTkinterWidget] = widget
+    __slots__ = ['_func', '_widget']
+    _widget: Union[BaseTextTkinterWidget, BaseTkinterWidget, 'CommandMixin']
+    _func: Final[Callable]
+    def __init__(self, func: Callable, widget: Union[BaseTextTkinterWidget, BaseTkinterWidget]):
+        assert (isinstance(widget, BaseTkinterWidget) and isinstance(widget, CommandMixin))
+        self._func = func
+        self._widget = widget
 
     def __call__(self, *args, **kwargs):
-        """Apply first function SUBST to arguments, than FUNC."""
         try:
             return self._func(*args, **kwargs)
         except SystemExit: raise
-        except Exception:
-            if hasattr(self._widget, '_report_exception'):
-                # noinspection PyProtectedMember
-                return self._widget._report_exception()
+        except Exception as e:
+            # noinspection PyProtectedMember
+            root = self._widget._root()
+            root.report_callback_exception(typeof(e), e, e.__traceback__)
 
-            raise
 
     def __repr__(self) -> str: return f'{super().__repr__().replace(">", "")} [ {dict(func=self._func, widget=self._widget)} ]>'
     def __str__(self) -> str: return repr(self)
@@ -466,7 +500,10 @@ class CallWrapper(tk.CallWrapper):
         return self
 
     @classmethod
-    def Create(cls, func: Callable, z: Union[int, float, str, Enum] = None, widget: BaseTkinterWidget = None, **kwargs):
+    def Create(cls, func: Callable,
+               widget: Union[BaseTextTkinterWidget, BaseTkinterWidget, 'CommandMixin'],
+               z: Union[int, float, str, Enum] = None,
+               **kwargs):
         if z is not None and kwargs and func:
             return cls(lambda x=kwargs: func(z, **x), widget=widget)
 
@@ -481,28 +518,36 @@ class CallWrapper(tk.CallWrapper):
 
         return None
 
-class AsyncCallWrapper(tk.CallWrapper):
-    """ Internal class. Stores function to call when some user defined Tcl function is called e.g. after an event occurred. """
 
-    _widget: Union[BaseTextTkinterWidget, BaseTkinterWidget] = None
-    # noinspection PyMissingConstructor
-    def __init__(self, func: Coroutine, loop: BaseEventLoop, widget: Union[BaseTextTkinterWidget, BaseTkinterWidget]):
-        """Store FUNC, SUBST and WIDGET as members."""
-        # noinspection PyFinal
-        self._func: Final[Coroutine] = func
+class AsyncCallWrapper(object):
+    """ Internal class. Stores function to call when some user defined Tcl function is called e.g. after an event occurred. """
+    __slots__ = ['_func', '_widget', '_loop']
+    _widget: Union[BaseTextTkinterWidget, BaseTkinterWidget, None]
+    _func: Final[Union[Coroutine, Awaitable, AsyncGenerator]]
+    _loop: Final[BaseEventLoop]
+    def __init__(self, func: Union[Coroutine, Awaitable, AsyncGenerator], loop: BaseEventLoop, widget: Union[BaseTextTkinterWidget, BaseTkinterWidget, 'CommandMixin']):
+        assert (isinstance(widget, BaseTkinterWidget) and isinstance(widget, CommandMixin))
+        self._func = func
         self._loop = loop
         self._widget = widget
 
 
-    def __call__(self, *args, **kwargs): self._loop.create_task(self._func, name=self._func.__name__)
+    def __call__(self, *args, **kwargs):
+        try:
+            return self._loop.create_task(self._func, name=self._func.__name__)
+        except SystemExit: raise
+        except Exception as e:
+            # noinspection PyProtectedMember
+            root = self._widget._root()
+            root.report_callback_exception(typeof(e), e, e.__traceback__)
 
     def __repr__(self) -> str: return f'{super().__repr__().replace(">", "")} [ {dict(func=self._func, widget=self._widget)} ]>'
     def __str__(self) -> str: return repr(self)
 
     @classmethod
-    def Create(cls, func: Union[Awaitable, Coroutine, Generator, Callable[[...], Coroutine]],
+    def Create(cls, func: Union[Awaitable, Coroutine, Generator],
                loop: BaseEventLoop,
-               widget: Union['CommandMixin', BaseTkinterWidget],
+               widget: Union['CommandMixin', BaseTextTkinterWidget, BaseTkinterWidget],
                z: Union[int, float, str, Enum] = None,
                **kwargs):
         if not func: return None
@@ -537,21 +582,25 @@ class AsyncCallWrapper(tk.CallWrapper):
 
         return cls(wrapper(), loop, widget)
 
-class CurrentValue(CallWrapper):
-    """
+
+class CurrentValue(object):
+    __doc__ = """
         Stores function to call when some user defined Tcl function is called e.g. after an event occurred.
-        Passes the current value of the widget to the funciton.
+        Passes the current value of the widget to the function.
 
         example:
             widget.SetCommand(CurrentValue(passed_function))
     """
-    def __init__(self, func: callable, *args, widget: BaseTkinterWidget = None, **kwargs):
-        """ Store FUNC, SUBST and WIDGET as members. """
+    __slots__ = ['_func', '_widget', '_args', '_kwargs']
+    _widget: Union[BaseTextTkinterWidget, BaseTkinterWidget, None]
+    _args: Final[Union[List[Any], Tuple[Any]]]
+    _kwargs: Final[Dict[str, Any]]
+    _func: Final[Union[Callable[[str, ...], Any], Callable[[str], Any]]]
+    def __init__(self, func: Union[Callable[[str, ...], Any], Callable[[str], Any]], *args, **kwargs):
         self._args = args
         self._kwargs = kwargs
-        super(CurrentValue, self).__init__(func, widget)
-
-    def __call__(self, *args, **kwargs): return self._func(self._widget.txt, *(self._args or args), **(self._kwargs or kwargs))
+        self._widget = None
+        self._func = func
     def SetWidget(self, w):
         """
             Internal Method
@@ -565,6 +614,15 @@ class CurrentValue(CallWrapper):
         self._widget = w
         return self
 
+    def __call__(self, *args, **kwargs):
+        try:
+            return self._func(self._widget.txt, *self._args, *args, **self._kwargs, **kwargs)
+        except SystemExit: raise
+        except Exception as e:
+            # noinspection PyProtectedMember
+            root = self._widget._root()
+            root.report_callback_exception(typeof(e), e, e.__traceback__)
+
 
 # ------------------------------------------------------------------------------------------
 
@@ -574,6 +632,8 @@ class CommandMixin:
     configure: callable
     command_cb: str
     _loop: Optional[BaseEventLoop]
+
+
     def __call__(self, *args, **kwargs):
         """ Execute the Command """
         if callable(self._cmd): self._cmd(*args, **kwargs)
@@ -593,11 +653,11 @@ class CommandMixin:
         if not callable(func): raise ValueError(f'func is not callable. got {type(func)}')
 
         if isinstance(func, CurrentValue): self._cmd = func.SetWidget(self)
-        else: self._cmd = CallWrapper.Create(func, z, **kwargs)
+        else: self._cmd = CallWrapper.Create(func, self, z, **kwargs)
 
         return self._setCommand(add)
 
-    def SetCommandAsync(self, func: Union[Awaitable, Callable[[...], Coroutine], Coroutine],
+    def SetCommandAsync(self, func: Union[Awaitable, Coroutine, Generator],
                         z: Union[int, float, str, Enum] = None,
                         add: bool = False,
                         **kwargs):
@@ -622,27 +682,6 @@ class CommandMixin:
     def _setCommand(self, add: bool):
         self.configure(command=self._cmd)
         return self
-
-
-
-class tkPhotoImage(PhotoImage):
-    @property
-    def width(self) -> int:
-        """
-        Get the width of the img.
-
-        :return: The width, in pixels.
-        """
-        return super().width()
-
-    @property
-    def height(self) -> int:
-        """
-        Get the height of the img.
-
-        :return: The height, in pixels.
-        """
-        return super().height()
 
 
 
@@ -684,7 +723,9 @@ class ImageMixin:
     configure: callable
     update_idletasks: callable
     update: callable
-    _IMG: tkPhotoImage = None
+    _IMG: Optional[tkPhotoImage]
+    def __init__(self): self._IMG = None
+
 
     @overload
     def SetImage(self, img: tkPhotoImage): ...
@@ -726,7 +767,6 @@ class ImageMixin:
                 return self._setImage(ImageMixin.open(self, f, widthMax, heightMax, *formats))
 
         return self.SetImageFromBytes(base64.b64decode(data), *formats, width=widthMax, height=heightMax)
-
 
 
 
@@ -790,8 +830,8 @@ class ImageMixin:
              widthMax: Optional[int],
              heightMax: Optional[int],
              *formats: str) -> tkPhotoImage:
-        if widthMax is None: widthMax = self.width
-        if heightMax is None: heightMax = self.height
+        if widthMax is None: widthMax = self.Width
+        if heightMax is None: heightMax = self.Height
 
         if widthMax <= 0: raise ValueError(f'widthMax must be positive. Value: {widthMax}')
         if heightMax <= 0: raise ValueError(f'heightMax must be positive. Value: {heightMax}')

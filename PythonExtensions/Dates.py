@@ -8,11 +8,7 @@ from attr import attrib, attrs, validators
 
 
 
-__all__ = [
-    'IsoFormat',
-    'time',
-    'DateTime', 'Date', 'Time', 'tzinfo',
-    ]
+__all__ = ['IsoFormat', 'time', 'DateTime', 'Date', 'Time', 'tzinfo', ]
 
 
 @attrs(slots=True, hash=True, order=True, eq=True, auto_attribs=True)

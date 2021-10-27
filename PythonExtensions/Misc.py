@@ -4,7 +4,7 @@ from itertools import count
 from types import FunctionType, MethodType
 from typing import Iterable, Iterator, Union
 
-from ..Names import nameof
+from .Names import nameof
 
 
 
@@ -26,7 +26,7 @@ def CalculateOffset(starting: Union[int, float], *args: Union[int, float]) -> in
     """
         Example: WrapLength = ScreenWidth * Widget.Parent.relwidth * Widget.relwidth * offset
 
-    :param starting: starting value (such as width or height)
+    :param starting: starting value (such as Width or Height)
     :param args: a list of float or integers to be cumulatively multiplied together.
     :return:
     """
@@ -102,6 +102,7 @@ def sizeof(obj):
 
 
 class AutoCounter(object):
+    __slots__ = ['_counter', '_next', '_value']
     _counter: Iterator[int]
     _next: callable
     def __init__(self, *, start: int = 0, step: int = 1):
@@ -127,15 +128,15 @@ class AutoCounter(object):
 
 class lazy_property(object):
     """A @property that is only evaluated once."""
-    def __init__(self, func: callable, name: str = None, doc: str = None):
+    def __init__(self, func: callable, *, name: str = None, doc: str = None):
         self.__name__ = name or func.__name__
         self.__module__ = func.__module__
         self.__doc__ = doc or func.__doc__
         self._func = func
 
     def __get__(self, obj, cls=None):
-        if obj is None:
-            return self
+        if obj is None: return self
+
         value = self._func(obj)
         setattr(obj, self._func.__name__, value)
         return value
