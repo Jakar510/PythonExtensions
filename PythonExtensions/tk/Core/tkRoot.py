@@ -16,7 +16,7 @@ __all__ = [
     ]
 
 class _rootMixin:
-    style: Style = None
+    style: Style
     Screen_Width: int = None
     Screen_Height: int = None
 
@@ -44,7 +44,8 @@ class _rootMixin:
         self.Screen_Width = Screen_Width or int(self.winfo_screenwidth())
         self.Screen_Height = Screen_Height or int(self.winfo_screenheight())
         return self.geometry(self.Dimensions(x, y))
-    def Dimensions(self, x: int = 0, y: int = 0) -> str: return f"{self.Screen_Width}x{self.Screen_Height}+{x}+{y}"
+    def Dimensions(self, x: int = 0, y: int = 0) -> str:
+        return f"{self.Screen_Width}x{self.Screen_Height}+{x}+{y}"
 
     def HideCursor(self):
         self.config(cursor="none")
@@ -84,36 +85,44 @@ class _rootMixin:
         return self.bind_all(sequence, func, add)
 
     @property
-    def width(self) -> int: return self.winfo_width()
+    def width(self) -> int:
+        return self.winfo_width()
     @property
-    def height(self) -> int: return self.winfo_height()
+    def height(self) -> int:
+        return self.winfo_height()
 
     @property
-    def x(self) -> int: return self.winfo_x()
+    def x(self) -> int:
+        return self.winfo_x()
     @property
-    def y(self) -> int: return self.winfo_y()
+    def y(self) -> int:
+        return self.winfo_y()
 
 
     @property
-    def Orientation(self) -> Orientation: return Orientation.Landscape if self.Screen_Width > self.Screen_Height else Orientation.Portrait
+    def Orientation(self) -> Orientation:
+        return Orientation.Landscape if self.Screen_Width > self.Screen_Height else Orientation.Portrait
 
     def SetTransparency(self, v: float):
         assert (0.0 <= v <= 1.0)
         return self.attributes('-alpha', v)
 
-    def FocusNext(self): self.tk_focusNext().focus_set()
-    def FocusPrevious(self): self.tk_focusPrev().focus_set()
-
+    def FocusNext(self):
+        self.tk_focusNext().focus_set()
+    def FocusPrevious(self):
+        self.tk_focusPrev().focus_set()
 
 
 class tkRoot(tk.Tk, _rootMixin):
+    __slots__ = ['style']
     def __init__(self, width: Optional[int] = None, height: Optional[int] = None, fullscreen: Optional[bool] = None, x: int = 0, y: int = 0, **kwargs):
         super().__init__(**kwargs)
         self.SetDimensions(width, height, x, y)
         if fullscreen is not None: self.SetFullScreen(fullscreen)
         self.style = Style(master=self)
 
-    def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
+    def _options(self, cnf, kwargs=None) -> Dict: return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
+
 
     def Create_Event(self, tag: Union[str, Bindings], *, num: int = '??', height: int = '??', width: int = '??', key_code: int = '??', state: int = '??',
                      x: int = '??', y: int = '??', char: str = '??', keysym: Union[str, Bindings] = '??', keysym_num: int = '??', delta: int = '??',
@@ -208,13 +217,9 @@ class tkRoot(tk.Tk, _rootMixin):
 
     def do_one_event(self): return self.tk.dooneevent(DONT_WAIT)
 
-    @classmethod
-    def Create(cls, width: Optional[int] = None, height: Optional[int] = None, fullscreen: Optional[bool] = None, x: int = 0, y: int = 0, **kwargs):
-        return cls(width, height, fullscreen, x, y, **kwargs)
-
-
 
 class tkTopLevel(tk.Toplevel, _rootMixin):
+    __slots__ = ['style']
     def __init__(self, master: tkRoot, *, width: int = None, height: int = None, x: int = 0, y: int = 0, fullscreen: bool = None, **kwargs):
         super().__init__(master, **kwargs)
         self.SetDimensions(width, height, x, y)

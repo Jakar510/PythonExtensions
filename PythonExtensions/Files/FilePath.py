@@ -38,14 +38,14 @@ class FilePath(PathLike):
     Hash: Optional[str] = attrib(default=None, validator=validators.instance_of(str), init=False)
 
     def __init__(self, _path: Union[str, Dict[str, Any], Path, 'FilePath'], temporary: bool = False):
-        self.FullPath = self._convert(_path)
+        self.FullPath = self.convert(_path)
         self.IsTemporary = temporary
 
     @staticmethod
-    def _convert(_path: Union[str, Dict[str, Any], Path, 'FilePath']) -> str:
+    def convert(_path: Union[str, Dict[str, Any], Path, 'FilePath']) -> str:
         if isinstance(_path, dict):
             AssertKeys(_path, 'FullPath')
-            return FilePath._convert(_path['FullPath'])
+            return FilePath.convert(_path['FullPath'])
 
         elif isinstance(_path, str): return abspath(_path)
 

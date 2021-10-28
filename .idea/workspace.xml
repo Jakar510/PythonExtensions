@@ -2,16 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7a6e45bf-6aac-404f-8876-27fa1a8fc2c2" name="Default Changelist" comment="more bug fixes">
-      <change beforePath="$PROJECT_DIR$/.idea/deployment.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/deployment.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PythonExtensions/Files/FilePath.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/Files/FilePath.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PythonExtensions/Logging.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/Logging.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PythonExtensions/Threads.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/Threads.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PythonExtensions/tk/Base.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/tk/Base.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/tk/Core/Frames.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/tk/Core/Frames.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/tk/CustomWidgets/KeyBoard.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/tk/CustomWidgets/KeyBoard.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/tk/CustomWidgets/KeyboardComboBoxThemed.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/tk/CustomWidgets/KeyboardComboBoxThemed.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/tk/CustomWidgets/KeyboardEntry.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/tk/CustomWidgets/KeyboardEntry.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/tk/Themed.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/tk/Themed.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/tk/Widgets.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/tk/Widgets.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/tk/tkNamedColor/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/tk/tkNamedColor/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PythonExtensions/tk/BaseApp.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/tk/BaseApp.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PythonExtensions/tk/Core/tkRoot.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/tk/Core/tkRoot.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PythonExtensions/tk/Events.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/tk/Events.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dev.py" beforeDir="false" afterPath="$PROJECT_DIR$/dev.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -76,7 +74,7 @@
     <property name="WebServerToolWindowFactoryState" value="true" />
     <property name="credentialsType com.jetbrains.python.remote.PyCreateRemoteInterpreterDialog$PyCreateRemoteSdkForm" value="Web Deployment" />
     <property name="last.edited.regexp" value="3.22345" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../TrueLogicPython" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
@@ -93,7 +91,7 @@
     </key>
   </component>
   <component name="RunManager" selected="Python.dev">
-    <configuration name="dev" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="dev" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="PythonExtensions" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -207,7 +205,6 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.dev" />
         <item itemvalue="Python tests.Unittests for tests.TkAppAsync_TestCase" />
       </list>
     </recent_temporary>
@@ -276,14 +273,9 @@
       <workItem from="1634946894069" duration="223000" />
       <workItem from="1635189006046" duration="5506000" />
       <workItem from="1635261183107" duration="14578000" />
-      <workItem from="1635344939963" duration="4755000" />
-    </task>
-    <task id="LOCAL-00051" summary="bug fixes / updates">
-      <created>1611241275356</created>
-      <option name="number" value="00051" />
-      <option name="presentableId" value="LOCAL-00051" />
-      <option name="project" value="LOCAL" />
-      <updated>1611241275356</updated>
+      <workItem from="1635344939963" duration="4771000" />
+      <workItem from="1635446981216" duration="2975000" />
+      <workItem from="1635449988679" duration="2067000" />
     </task>
     <task id="LOCAL-00052" summary="bug fixes / updates">
       <created>1611261399404</created>
@@ -621,7 +613,14 @@
       <option name="project" value="LOCAL" />
       <updated>1635294089038</updated>
     </task>
-    <option name="localTasksCounter" value="100" />
+    <task id="LOCAL-00100" summary="more bug fixes">
+      <created>1635353164172</created>
+      <option name="number" value="00100" />
+      <option name="presentableId" value="LOCAL-00100" />
+      <option name="project" value="LOCAL" />
+      <updated>1635353164173</updated>
+    </task>
+    <option name="localTasksCounter" value="101" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -668,7 +667,7 @@
     <SUITE FILE_PATH="coverage/PythonExtensions$json_tests.coverage" NAME="json_tests Coverage Results" MODIFIED="1620848633923" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Tests" />
     <SUITE FILE_PATH="coverage/PythonExtensions$File.coverage" NAME="File Coverage Results" MODIFIED="1611006293121" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PythonExtensions/Files" />
     <SUITE FILE_PATH="coverage/PythonExtensions$Unittests_for_tests_TkAppAsync_TestCase.coverage" NAME="Unittests for tests.TkAppAsync_TestCase Coverage Results" MODIFIED="1625511736904" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Tests" />
-    <SUITE FILE_PATH="coverage/PythonExtensions$dev.coverage" NAME="dev Coverage Results" MODIFIED="1635347944963" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/PythonExtensions$dev.coverage" NAME="dev Coverage Results" MODIFIED="1635451302317" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/PythonExtensions$run.coverage" NAME="run Coverage Results" MODIFIED="1613082591231" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/PythonExtensions$Path.coverage" NAME="Path Coverage Results" MODIFIED="1611087891123" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PythonExtensions/Files" />
     <SUITE FILE_PATH="coverage/PythonExtensions$TestTkApp.coverage" NAME="TestTkApp Coverage Results" MODIFIED="1611950953829" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Tests" />

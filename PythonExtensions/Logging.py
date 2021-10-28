@@ -3,6 +3,8 @@ import sys
 import tarfile
 from logging import CRITICAL, DEBUG, ERROR, FATAL, FileHandler, Filter, Formatter, INFO, LogRecord, Logger, StreamHandler, WARNING, basicConfig, getLogger
 from logging.handlers import RotatingFileHandler
+from os.path import *
+from pathlib import Path
 from typing import *
 
 from .Files import FilePath
@@ -88,18 +90,23 @@ class LogPaths(object):
         for file in self.logs: file.Remove()
 
     @staticmethod
-    def FileName(base: str): return f'{base}.log'
+    def FileName(base: str):
+        return f'{base}.log'
 
     @staticmethod
-    def ErrorName(base: str): return f'{base}_errors'
+    def ErrorName(base: str):
+        return f'{base}_errors'
 
-    def GetErrorFileName(self, base: str): return f'{self.ErrorName(base)}.log'
+    def GetErrorFileName(self, base: str):
+        return f'{self.ErrorName(base)}.log'
 
     @classmethod
-    def Create(cls, app_name: str, root_path: Union[str, FilePath], *processes: str, max_logs: int = 5, max_log_size: int = 10240) -> 'LogPaths':
+    def Create(cls, app_name: str, root_path: Union[str, Path, FilePath], *processes: str, max_logs: int = 5, max_log_size: int = 10240) -> 'LogPaths':
+        if isfile(root_path): root_path = dirname(root_path)
+
         return cls(app_name, root_path, max_logs, max_log_size)._init(root_path, processes)
 
-    def _init(self, root_path: Union[str, FilePath], processes: Iterable[str]):
+    def _init(self, root_path: Union[str, Path, FilePath], processes: Iterable[str]):
         for proc in set(processes):
             self.__log_paths__[proc] = FilePath.Join(root_path, self.FileName(proc))
             self.__log_paths__[self.ErrorName(proc)] = FilePath.Join(root_path, self.GetErrorFileName(proc))
@@ -230,7 +237,7 @@ class LoggingManager(object):
 
 
     @classmethod
-    def FromTypes(cls, *types: Type, app_name: str, root_path: Union[str, FilePath], logs: Type[LogPaths] = LogPaths, fmt: Formats = Formats()):
+    def FromTypes(cls, *types: Type, app_name: str, root_path: Union[str, Path, FilePath], logs: Type[LogPaths] = LogPaths, fmt: Formats = Formats()):
         """
         For each Type passed, the logger's name is the class's __log_name__ field or __name__ is used if it doesn't exist.
         If you wish to change the field name, override LoggingManager._getName

@@ -229,13 +229,13 @@ class BaseTkinterWidget(tk.Widget, ABC):
         return True
 
     @staticmethod
-    def convert_kwargs(kwargs: dict, lower: bool = True) -> dict:
+    def convert_kwargs(kwargs: Dict[str, Any], lower: bool = True) -> dict:
         d = { }
         if isinstance(kwargs, dict):
             for k, v in kwargs.items():
                 if isinstance(v, Enum): v = v.value
-                if lower: d[k] = v
-                else: d[str(k).lower()] = v
+                if lower: d[str(k).lower()] = v
+                else: d[k] = v
 
         return d
 

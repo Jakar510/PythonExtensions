@@ -1,17 +1,23 @@
+from typing import Optional
+
 from PythonExtensions.tk import *
 
 
 
 
-class App(BaseApp):
+class App(BaseAsyncApp):
     main: 'Main'
+
     def test(self): print(self)
     def random(self): print('random', self)
 
-    def start_gui(self):
-        self.main = Main.Root(self)
-        return super(App, self).start_gui()
 
+    def _setup(self):
+        self.main = Main.Root(self)
+
+
+    def Handle_KeyPress(self, event: TkinterEvent) -> Optional[bool]: pass
+    def Handle_Press(self, event: TkinterEvent) -> Optional[bool]: pass
 
 
 class Popup(BaseLabelWindow[App]):
@@ -46,17 +52,15 @@ class Main(BaseWindow[App]):
 
 
 if __name__ == '__main__':
-    # App.InitAsync()
-    _app = App(app_name='test app', root_path='..')
+    _app = App(app_name='test app', root_path='.')
 
     # _app.root.after(3000, _app.Close)
 
     _app.start_gui()
-    # _app.start_gui_Async()
 
 pass
 
-
+#
 # import asyncio
 # from timeit import timeit
 #

@@ -13,8 +13,8 @@ __all__ = ['AutoStartThread', 'AutoStartTargetedThread', 'Wait', 'WaitAsync']
 
 class AutoStartThread(threading.Thread, ABC):
     __slots__ = []
-    def __init__(self, *args, Name: str = None, AutoStart: bool = True, Daemon: bool = True, **kwargs):
-        super().__init__(name=Name or nameof(self), args=args, kwargs=kwargs, daemon=Daemon)
+    def __init__(self, Name: str = None, *, AutoStart: bool = True, Daemon: bool = True):
+        super().__init__(name=Name or nameof(self), daemon=Daemon)
         if AutoStart: self.start()
     def run(self): raise NotImplementedError()
 

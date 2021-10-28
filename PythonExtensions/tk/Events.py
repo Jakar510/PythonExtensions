@@ -138,7 +138,7 @@ class TkinterEvent(tkEvent):
     widget: Widget
     delta: Optional[float]
 
-    def __init__(self, source: tkEvent = None):
+    def __init__(self, source: Optional[tkEvent]):
         super().__init__()
         if source is not None:
             assert (isinstance(source, tkEvent))
