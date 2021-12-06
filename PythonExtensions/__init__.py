@@ -16,8 +16,6 @@ from .Files import *
 # noinspection PyUnresolvedReferences
 from .HID_BUFFER import *
 # noinspection PyUnresolvedReferences
-from .Images import *
-# noinspection PyUnresolvedReferences
 from .Json import *
 # noinspection PyUnresolvedReferences
 from .Logging import *
@@ -26,12 +24,10 @@ from .Models import *
 # noinspection PyUnresolvedReferences
 from .Names import *
 # noinspection PyUnresolvedReferences
-from .SwitchCase import *
-# noinspection PyUnresolvedReferences
 from .Threads import *
 # noinspection PyUnresolvedReferences
-from .debug import *
+from .Debug import *
 # noinspection PyUnresolvedReferences
-from .misc import *
+from .Misc import *
 # noinspection PyUnresolvedReferences
 from .tk import *

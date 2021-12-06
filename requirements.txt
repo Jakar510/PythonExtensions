@@ -4,3 +4,9 @@ requests
 psutil
 multidict
 cryptography
+attr
+cattrs
+aiofiles
+prettyprinter
+aiohttp
+yarl

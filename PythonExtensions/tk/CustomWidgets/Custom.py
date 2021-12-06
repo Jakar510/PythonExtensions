@@ -7,7 +7,7 @@
 from abc import ABC
 from typing import Any, Dict
 
-from ..Core import *
+from ..Base import *
 from ..Widgets import *
 
 
@@ -18,7 +18,8 @@ __all__ = [
     ]
 
 class ButtonGrid(Frame, ABC):
-    _buttons: Dict[int, Button] = { }
+    __slots__ = ['_buttons']
+    _buttons: Dict[int, Button]
     def __init__(self, *, master, rows: int = None, cols: int = None, padx: int = 0, pady: int = 0, **Button_kwargs):
         """
         :param master: parent of this grid
@@ -35,6 +36,7 @@ class ButtonGrid(Frame, ABC):
         :type pady: int
         """
         Frame.__init__(self, master)
+        self._buttons = { }
         self._rows = rows or len(self.ButtonTitles)
         self._cols = cols or 1
 

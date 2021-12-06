@@ -1,6 +1,6 @@
 from typing import *
 
-from ..Base import *
+from .Base import *
 
 
 

@@ -6,31 +6,31 @@
 #
 # ------------------------------------------------------------------------------
 import random
+from asyncio import AbstractEventLoop
 from typing import *
 
-from ..Base import *
-from ..Core import *
-from ..Enumerations import *
-from ..Events import *
+from .Base import *
+from .Enumerations import *
+from .Events import *
 
 
 
 
 __all__ = [
-    'TreeViewThemed', 'TreeViewHolderThemed', 'ListItem', 'ItemCollection', 'DelimiterError',
+    'TreeViewThemed', 'TreeViewHolderThemed', 'ListItem', 'ItemCollection',
     'ComboBoxThemed', 'ButtonThemed', 'EntryThemed', 'LabelThemed', 'NotebookThemed', 'SeparatorThemed', 'ScrollbarThemed',
     ]
 
 TODO = """
 --Button
 CheckButton
---ComoboBox
+--ComboBox
 --Entry
 --Frame
 --LabelFrame
 --Label
 --Notebook
-PanedWidnow
+PanedWindow
 ProgressBar
 RadioButton
 Scale
@@ -58,12 +58,13 @@ class ComboBoxThemed(ttk.Combobox, BaseTextTkinterWidget, CommandMixin):
 
         justify
         state
-        height
-        width
+        Height
+        Width
     """
-    def __init__(self, master, text: str = '', Override_var: tk.StringVar = None, Color: Dict[str, str] = None, **kwargs):
+    __slots__ = ['_cmd', 'command_cb', '_state_', '__bindings__', '_pi', '_manager_', '_wrap', '_cb', '_loop', '_txt']
+    def __init__(self, master, text: str = '', Override_var: tk.StringVar = None, Color: Dict[str, str] = None, loop: Optional[AbstractEventLoop] = None, **kwargs):
         ttk.Combobox.__init__(self, master, **kwargs)
-        BaseTextTkinterWidget.__init__(self, text, Override_var, Color)
+        BaseTextTkinterWidget.__init__(self, text, Override_var, Color, loop)
 
 
     @property
@@ -83,6 +84,7 @@ class ComboBoxThemed(ttk.Combobox, BaseTextTkinterWidget, CommandMixin):
 # ------------------------------------------------------------------------------------------
 
 class ScrollbarThemed(ttk.Scrollbar, BaseTkinterWidget):
+    __slots__ = ['_state_', '__bindings__', '_pi', '_manager_', '_wrap', '_cb', '_loop', '_txt']
     def __init__(self, master, orientation: Orient, **kwargs):
         ttk.Scrollbar.__init__(self, master, orient=orientation.value, **kwargs)
 
@@ -90,8 +92,8 @@ class ScrollbarThemed(ttk.Scrollbar, BaseTkinterWidget):
 
 # ------------------------------------------------------------------------------------------
 
-class DelimiterError(Exception): pass
 class ListItem(dict):
+    __slots__ = ['_state_', '__bindings__', '_pi', '_manager_', '_wrap', '_cb', '_updater', '_txt']
     @property
     def ID(self) -> str: return self.get("ID", None)
     @property
@@ -129,6 +131,7 @@ class ListItem(dict):
         """
         return ListItem.Parse(dict(ID=ID, Name=Name, Children=Children))
 class ItemCollection(list):
+    __slots__ = ['_state_', '__bindings__', '_pi', '_manager_', '_wrap', '_cb', '_updater', '_txt']
     def __init__(self, d: Union[List[ListItem], Iterable[ListItem]]):
         list.__init__(self, d)
 
@@ -161,7 +164,7 @@ class TreeViewThemed(ttk.Treeview, BaseTkinterWidget, CommandMixin):
 
     WIDGET-SPECIFIC OPTIONS
 
-        columns, displaycolumns, height, padding, selectmode, show
+        columns, displaycolumns, Height, padding, selectmode, show
 
     ITEM OPTIONS
 
@@ -171,14 +174,19 @@ class TreeViewThemed(ttk.Treeview, BaseTkinterWidget, CommandMixin):
 
         foreground, background, font, image
     """
-    last_focus: int or str
-    focus_tags: List[str] = []
-    SelectedItems: List = []
-    items: Union[ListItem, ItemCollection] = None
+    __slots__ = ['last_focus', 'focus_tags', 'SelectedItems', 'items', '_cmd', 'command_cb', '_state_', '__bindings__', '_pi', '_manager_', '_wrap', '_cb', '_loop', '_txt']
+    last_focus: Union[int, str, None]
+    focus_tags: List[str]
+    SelectedItems: List[Any]
+    items: Union[ListItem, ItemCollection, None]
 
-    def __init__(self, master, Color: Dict[str, str] = None, selectmode: SelectionMode = SelectionMode.Extended, **kwargs):
-        ttk.Treeview.__init__(self, master, selectmode=selectmode.value, **kwargs)
-        BaseTkinterWidget.__init__(self, Color)
+    def __init__(self, master, Color: Dict[str, str] = None, select_mode: SelectionMode = SelectionMode.Extended, loop: Optional[AbstractEventLoop] = None, **kwargs):
+        ttk.Treeview.__init__(self, master, selectmode=select_mode.value, **kwargs)
+        BaseTkinterWidget.__init__(self, Color, loop)
+        self.items = None
+        self.last_focus = None
+        self.focus_tags = []
+        self.SelectedItems = []
         self.SetCommand(self.OnSelectRow)
 
         self.foreground = self.CreateForegroundColorTags()
@@ -275,7 +283,7 @@ class TreeViewHolderThemed(Frame):
         yscrollcommand
 
     WIDGET-SPECIFIC OPTIONS
-        columns, displaycolumns, height, padding, selectmode, show
+        columns, displaycolumns, Height, padding, selectmode, show
 
     ITEM OPTIONS
         text, image, values, open, tags
@@ -287,6 +295,7 @@ class TreeViewHolderThemed(Frame):
     Also creates ttk.scrollbar and the _root_frame that conatins
     both ThemedTreeView and ScrollBar objects
     """
+    __slots__ = ['TreeView', 'vsb', 'hsb', '_state_', '__bindings__', '_pi', '_manager_', '_wrap', '_cb', '_loop', '_txt']
     TreeView: TreeViewThemed
     vsb: ScrollbarThemed
     hsb: ScrollbarThemed
@@ -332,16 +341,20 @@ class ButtonThemed(ttk.Button, BaseTextTkinterWidget, ImageMixin, CommandMixin):
 
         WIDGET-SPECIFIC OPTIONS
 
-        command, compound, default, height,
-        overrelief, state, width
+        command, compound, default, Height,
+        overrelief, state, Width
     """
-    def __init__(self, master, text: str = '', Override_var: tk.StringVar = None, Color: Dict[str, str] = None, Command: callable = None, **kwargs):
+    __slots__ = ['_state_', '__bindings__', '_pi', '_manager_', '_wrap', '_cb', '_loop', '_txt']
+    def __init__(self, master,
+                 text: str = '',
+                 Override_var: tk.StringVar = None,
+                 Color: Dict[str, str] = None,
+                 loop: Optional[AbstractEventLoop] = None,
+                 **kwargs):
+        cmd = kwargs.pop('Command', None) or kwargs.pop('command', None)
         ttk.Button.__init__(self, master, **kwargs)
-        cmd = kwargs.pop('command', None)
+        BaseTextTkinterWidget.__init__(self, text, Override_var, Color, loop)
         if cmd: self.SetCommand(cmd)
-
-        if Command: self.SetCommand(Command)
-        BaseTextTkinterWidget.__init__(self, text, Override_var, Color)
 
 
     def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
@@ -363,12 +376,14 @@ class LabelThemed(ttk.Label, BaseTextTkinterWidget, ImageMixin):
 
     WIDGET-SPECIFIC OPTIONS
 
-        height, state, width
+        Height, state, Width
 
     """
-    def __init__(self, master, text: str = '', Override_var: tk.StringVar = None, Color: Dict[str, str] = None, **kwargs):
+    __slots__ = ['_IMG', '_state_', '__bindings__', '_pi', '_manager_', '_wrap', '_cb', '_loop', '_txt']
+    def __init__(self, master, text: str = '', Override_var: tk.StringVar = None, Color: Dict[str, str] = None, loop: Optional[AbstractEventLoop] = None, **kwargs):
         ttk.Label.__init__(self, master, **kwargs)
-        BaseTextTkinterWidget.__init__(self, text, Override_var, Color)
+        BaseTextTkinterWidget.__init__(self, text, Override_var, Color, loop)
+        ImageMixin.__init__(self)
 
     def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
 
@@ -383,12 +398,13 @@ class EntryThemed(ttk.Entry, BaseTextTkinterWidget, CommandMixin):
     insertborderwidth, insertofftime, insertontime, insertwidth,
     invalidcommand, invcmd, justify, relief, selectbackground,
     selectborderwidth, selectforeground, show, state, takefocus,
-    textvariable, validate, validatecommand, vcmd, width,
+    textvariable, validate, validatecommand, vcmd, Width,
     xscrollcommand.
     """
-    def __init__(self, master, text: str = '', Override_var: tk.StringVar = None, Color: Dict[str, str] = None, **kwargs):
+    __slots__ = ['_cmd', 'command_cb', '_state_', '__bindings__', '_pi', '_manager_', '_wrap', '_cb', '_loop', '_txt']
+    def __init__(self, master, text: str = '', Override_var: tk.StringVar = None, Color: Dict[str, str] = None, loop: Optional[AbstractEventLoop] = None, **kwargs):
         ttk.Entry.__init__(self, master, **kwargs)
-        BaseTextTkinterWidget.__init__(self, text, Override_var, Color)
+        BaseTextTkinterWidget.__init__(self, text, Override_var, Color, loop)
 
     def Clear(self): self.delete(0, Tags.End.value)
 
@@ -411,9 +427,10 @@ class EntryThemed(ttk.Entry, BaseTextTkinterWidget, CommandMixin):
 # ------------------------------------------------------------------------------------------
 
 class NotebookThemed(BaseTextTkinterWidget, ttk.Notebook):
-    def __init__(self, master, Color: Dict[str, str] = None, **kwargs):
+    __slots__ = ['_cmd', 'command_cb', '_IMG', '_state_', '__bindings__', '_pi', '_manager_', '_wrap', '_cb', '_loop', '_txt']
+    def __init__(self, master, Color: Dict[str, str] = None, loop: Optional[AbstractEventLoop] = None, **kwargs):
         ttk.Notebook.__init__(self, master, **kwargs)
-        BaseTkinterWidget.__init__(self, Color=Color)
+        BaseTkinterWidget.__init__(self, Color, loop)
 
     def Add(self, w: BaseTkinterWidget, add: dict = dict(padding=2), *, title: str, **kwargs) -> int:
         """Adds a new tab to the notebook.
@@ -529,6 +546,7 @@ class NotebookThemed(BaseTextTkinterWidget, ttk.Notebook):
 # ------------------------------------------------------------------------------------------
 
 class SeparatorThemed(ttk.Separator, BaseTkinterWidget):
+    __slots__ = ['_state_', '__bindings__', '_pi', '_manager_', '_wrap', '_cb', '_loop', '_txt']
     def __init__(self, master, orientation: Orient = Orient.Horizonal):
         ttk.Separator.__init__(self, master, orient=orientation.value)
 
@@ -544,16 +562,23 @@ class CheckButtonThemed(ttk.Checkbutton, BaseTextTkinterWidget, ImageMixin, Comm
     STANDARD OPTIONS
 
         class, compound, cursor, image, state, style, takefocus,
-        text, textvariable, underline, width
+        text, textvariable, underline, Width
 
     WIDGET-SPECIFIC OPTIONS
 
         command, offvalue, onvalue, variable
     """
+    __slots__ = ['_value', '_cmd', 'command_cb', '_IMG', '_state_', '__bindings__', '_pi', '_manager_', '_wrap', '_cb', '_loop', '_txt']
     _value: tk.BooleanVar
-    def __init__(self, master, text: str = '', Override_var: tk.StringVar = None, Color: Dict[str, str] = None, **kwargs):
+    def __init__(self, master,
+                 text: str = '',
+                 Override_var: tk.StringVar = None,
+                 Color: Dict[str, str] = None,
+                 loop: Optional[AbstractEventLoop] = None,
+                 **kwargs):
         ttk.Checkbutton.__init__(self, master, **kwargs)
-        BaseTextTkinterWidget.__init__(self, text, Override_var, Color)
+        BaseTextTkinterWidget.__init__(self, text, Override_var, Color, loop)
+        ImageMixin.__init__(self)
         self._value = tk.BooleanVar(master=self, value=False)
         self.configure(variable=self._value)
 

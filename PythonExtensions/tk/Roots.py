@@ -1,11 +1,12 @@
+from _tkinter import DONT_WAIT
 from enum import Enum
 from time import time
 from typing import *
 
 from .Style import *
-from ..Base import *
-from ..Enumerations import Orientation
-from ..Events import Bindings
+from .Base import *
+from .Enumerations import Orientation
+from .Events import Bindings
 
 
 
@@ -15,7 +16,7 @@ __all__ = [
     ]
 
 class _rootMixin:
-    style: Style = None
+    style: Style
     Screen_Width: int = None
     Screen_Height: int = None
 
@@ -39,17 +40,18 @@ class _rootMixin:
     tk_focusPrev: callable
     attributes: callable
     resizable: callable
-    def SetDimmensions(self, Screen_Width: int = None, Screen_Height: int = None, x: int = 0, y: int = 0):
+    def SetDimensions(self, Screen_Width: int = None, Screen_Height: int = None, x: int = 0, y: int = 0):
         self.Screen_Width = Screen_Width or int(self.winfo_screenwidth())
         self.Screen_Height = Screen_Height or int(self.winfo_screenheight())
-        return self.geometry(self.Dimmensions(x, y))
-    def Dimmensions(self, x: int = 0, y: int = 0) -> str: return f"{self.Screen_Width}x{self.Screen_Height}+{x}+{y}"
+        return self.geometry(self.Dimensions(x, y))
+    def Dimensions(self, x: int = 0, y: int = 0) -> str:
+        return f"{self.Screen_Width}x{self.Screen_Height}+{x}+{y}"
 
     def HideCursor(self):
         self.config(cursor="none")
         return self
 
-    def SetFullScreen(self, fullscreen: bool = False, ):
+    def SetFullScreen(self, fullscreen: bool = False):
         self.attributes('-fullscreen', fullscreen)
         return self
     def SetTitle(self, title: str):
@@ -83,34 +85,44 @@ class _rootMixin:
         return self.bind_all(sequence, func, add)
 
     @property
-    def width(self) -> int: return self.winfo_width()
+    def width(self) -> int:
+        return self.winfo_width()
     @property
-    def height(self) -> int: return self.winfo_height()
+    def height(self) -> int:
+        return self.winfo_height()
 
     @property
-    def x(self) -> int: return self.winfo_x()
+    def x(self) -> int:
+        return self.winfo_x()
     @property
-    def y(self) -> int: return self.winfo_y()
+    def y(self) -> int:
+        return self.winfo_y()
 
 
     @property
-    def Orientation(self) -> Orientation: return Orientation.Landscape if self.Screen_Width > self.Screen_Height else Orientation.Portrait
+    def Orientation(self) -> Orientation:
+        return Orientation.Landscape if self.Screen_Width > self.Screen_Height else Orientation.Portrait
 
     def SetTransparency(self, v: float):
         assert (0.0 <= v <= 1.0)
         return self.attributes('-alpha', v)
 
-    def FocusNext(self): self.tk_focusNext().focus_set()
-    def FocusPrevious(self): self.tk_focusPrev().focus_set()
+    def FocusNext(self):
+        self.tk_focusNext().focus_set()
+    def FocusPrevious(self):
+        self.tk_focusPrev().focus_set()
+
 
 class tkRoot(tk.Tk, _rootMixin):
-    def __init__(self, width: Optional[int], height: Optional[int], fullscreen: Optional[bool] = None, x: int = 0, y: int = 0, **kwargs):
+    __slots__ = ['style']
+    def __init__(self, width: Optional[int] = None, height: Optional[int] = None, fullscreen: Optional[bool] = None, x: int = 0, y: int = 0, **kwargs):
         super().__init__(**kwargs)
-        self.SetDimmensions(width, height, x, y)
+        self.SetDimensions(width, height, x, y)
         if fullscreen is not None: self.SetFullScreen(fullscreen)
         self.style = Style(master=self)
 
-    def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
+    def _options(self, cnf, kwargs=None) -> Dict: return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
+
 
     def Create_Event(self, tag: Union[str, Bindings], *, num: int = '??', height: int = '??', width: int = '??', key_code: int = '??', state: int = '??',
                      x: int = '??', y: int = '??', char: str = '??', keysym: Union[str, Bindings] = '??', keysym_num: int = '??', delta: int = '??',
@@ -120,7 +132,7 @@ class tkRoot(tk.Tk, _rootMixin):
                 <TkinterEvent Object. Configuration:
                 {   'char': 'a',
                     'delta': 0,
-                    'height': '??',
+                    'Height': '??',
                     'keycode': 65,
                     'keysym': 'a',
                     'keysym_num': 97,
@@ -129,7 +141,7 @@ class tkRoot(tk.Tk, _rootMixin):
                     'time': 329453312,
                     'type': <EventType.KeyPress: '2'>,
                     'widget': <spf.Workers.Views.Carousel.CarouselView object .!carouselview>,
-                    'width': '??',
+                    'Width': '??',
                     'x': 936,
                     'x_root': 1045,
                     'y': 670,
@@ -155,8 +167,8 @@ class tkRoot(tk.Tk, _rootMixin):
                     serial - serial number of event
                 num - mouse button pressed (ButtonPress, ButtonRelease)
                 focus - whether the window has the focus (Enter, Leave)
-                height - height of the exposed window (Configure, Expose)
-                width - width of the exposed window (Configure, Expose)
+                Height - Height of the exposed window (Configure, Expose)
+                Width - Width of the exposed window (Configure, Expose)
                 keycode - keycode of the pressed key (KeyPress, KeyRelease)
                 state - state of the event as a number (ButtonPress, ButtonRelease,
                                         Enter, KeyPress, KeyRelease,
@@ -185,8 +197,8 @@ class tkRoot(tk.Tk, _rootMixin):
                                         Enter, KeyPress, KeyRelease,
                                         Leave, Motion)
         :param current_time:
-        :param height: height of the exposed window (Configure, Expose)
-        :param width: width of the exposed window (Configure, Expose)
+        :param height: Height of the exposed window (Configure, Expose)
+        :param width: Width of the exposed window (Configure, Expose)
         :param x: x-position of the mouse
         :param y: y-position of the mouse
         :param char: pressed character (KeyPress, KeyRelease)
@@ -203,16 +215,14 @@ class tkRoot(tk.Tk, _rootMixin):
         self.event_generate(sequence=tag, num=num, width=width, height=height, keycode=key_code, state=state, time=current_time, x=x, y=y, char=char, keysym=keysym,
                             keysym_num=keysym_num, type=event_type, widget=widget, x_root=self.winfo_rootx(), y_root=self.winfo_rooty(), delta=delta)
 
-    @classmethod
-    def Create(cls, width: Optional[int] = None, height: Optional[int] = None, fullscreen: Optional[bool] = None, x: int = 0, y: int = 0, **kwargs):
-        return cls(width, height, fullscreen, x, y, **kwargs)
-
+    def do_one_event(self): return self.tk.dooneevent(DONT_WAIT)
 
 
 class tkTopLevel(tk.Toplevel, _rootMixin):
+    __slots__ = ['style']
     def __init__(self, master: tkRoot, *, width: int = None, height: int = None, x: int = 0, y: int = 0, fullscreen: bool = None, **kwargs):
         super().__init__(master, **kwargs)
-        self.SetDimmensions(width, height, x, y)
+        self.SetDimensions(width, height, x, y)
         if fullscreen is not None: self.SetFullScreen(fullscreen)
 
         self.style = master.style

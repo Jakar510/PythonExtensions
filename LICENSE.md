@@ -6,7 +6,10 @@ Copyright (c) 2017 Ole Jakob Skjelten for [AnimatedGIF](PythonExtensions/tk/Cust
 
 Copyright (c) 2018 paolo-gurisatti for [Html Widgets](PythonExtensions/tk/CustomWidgets/HTML.py)
 
+Copyright (c) 2011, montag451 for [AioTkinter](PythonExtensions/tk/AioTkinter.py)
+
 Copyright (c) 2020 Tyler Stegmaier
+
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

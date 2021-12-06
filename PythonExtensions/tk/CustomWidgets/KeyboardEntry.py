@@ -8,7 +8,7 @@ from typing import *
 
 from .KeyBoard import *
 from ..Base import *
-from ..Core import *
+from ..Roots import *
 from ..Widgets import *
 
 
@@ -19,6 +19,23 @@ __all__ = [
     ]
 
 class KeyboardEntry(Entry, KeyboardMixin):
+    __slots__ = ['kb',
+                 'Bind',
+                 'state',
+                 'Width',
+                 'Height',
+                 'x',
+                 'y',
+                 '_popup_width',
+                 '_popup_height',
+                 '_popup_relwidth',
+                 '_popup_relheight',
+                 'master',
+                 'placement',
+                 '__root',
+                 'key_size',
+                 'key_color']
+    # noinspection SpellCheckingInspection
     def __init__(self, master, *, root: tkRoot, placement: PlacementSet = PlacementSet(Placement.Auto), keysize: int = None, keycolor: str = None,
                  insertbackground: str = 'red', insertborderwidth: int = 3, insertofftime: int = 500, insertontime: int = 500, insertwidth: int = 3,
                  text: str = '', Override_var: tk.StringVar = None, Color: Dict = None, **kwargs):

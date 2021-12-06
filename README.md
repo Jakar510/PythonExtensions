@@ -1,16 +1,19 @@
-# TkinterExtensions
+# PythonExtensions
 
 Versions follow [Semantic Versioning](https://semver.org/) ( major.minor.patch )
 
 Strongly typed classes with multiple built-in helper functions to speed up development.
 
+
 ## Tktiner Bindings
 
 This project uses all known bindings, but more are added as they are discovered. 
 
+
 ## Contributing
 
 Please read [CONTRIBUTING.md](.github/CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
+
 
 ## Authors
 
@@ -18,10 +21,13 @@ Please read [CONTRIBUTING.md](.github/CONTRIBUTING.md) for details on our code o
 * **Paolo Gurisatti** - *tk_html_widgets* - [paolo-gurisatti](https://github.com/paolo-gurisatti)
 * **Ole Jakob Skjelten** - *AnimatedGIF* - [olesk75](https://github.com/olesk75)
 * **Pete Mojeiko** - *tkinter-keyboard* - [petemojeiko](https://github.com/petemojeiko)
+* **montag451** - *AioTkinter* - [montag451](https://github.com/montag451)
+
 
 ## License
 
 This project is licensed under MIT - see the [LICENSE](LICENSE.md) file for details
+
 
 ## Acknowledgments
 

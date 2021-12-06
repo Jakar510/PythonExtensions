@@ -2,9 +2,9 @@ import re
 import sys
 from itertools import count
 from types import FunctionType, MethodType
-from typing import Iterator, Union
+from typing import Iterable, Iterator, Union
 
-from ..Names import nameof
+from .Names import nameof
 
 
 
@@ -17,6 +17,7 @@ __all__ = [
     'AutoCounter', 'lazy_property',
     ]
 
+
 def RoundFloat(Float: float, Precision: int) -> str:
     """ Rounds the Float to the given Precision and returns It as string. """
     return f"{Float:.{Precision}f}"
@@ -25,13 +26,14 @@ def CalculateOffset(starting: Union[int, float], *args: Union[int, float]) -> in
     """
         Example: WrapLength = ScreenWidth * Widget.Parent.relwidth * Widget.relwidth * offset
 
-    :param starting: starting value (such as width or height)
+    :param starting: starting value (such as Width or Height)
     :param args: a list of float or integers to be cumulatively multiplied together.
     :return:
     """
     for arg in args:
         if not isinstance(arg, (int, float)): arg = float(arg)
         starting *= arg
+
     return int(starting)
 
 
@@ -62,9 +64,9 @@ def IsFunction(o) -> bool:
 
 
 
-private_or_special_function_searcher = re.compile(r"(^__\w+$)|(^_\w+$)|(^__\w+__$)")
+_private_or_special_function_searcher = re.compile(r"(^__\w+$)|(^_\w+$)|(^__\w+__$)")
 
-def IsAttributePrivate(attr_name: str) -> bool: return private_or_special_function_searcher.search(attr_name) is not None
+def IsAttributePrivate(attr_name: str) -> bool: return _private_or_special_function_searcher.search(attr_name) is not None
 
 
 
@@ -100,6 +102,7 @@ def sizeof(obj):
 
 
 class AutoCounter(object):
+    __slots__ = ['_counter', '_next', '_value']
     _counter: Iterator[int]
     _next: callable
     def __init__(self, *, start: int = 0, step: int = 1):
@@ -108,11 +111,14 @@ class AutoCounter(object):
     def __call__(self, *args, **kwargs) -> int:
         self._value = self._next()
         return self._value
+    def __iter__(self) -> Iterable[int]: yield self()
+
     @property
     def value(self) -> int: return self._value
     def reset(self, *, start: int = 0, step: int = 1):
         self._counter = count(start=start, step=step)
         self._next = self._counter.__next__
+
 
     def __str__(self): return str(self._value)
     def __repr__(self): return f'<{nameof(self)}, value: {self._value}>'
@@ -122,15 +128,15 @@ class AutoCounter(object):
 
 class lazy_property(object):
     """A @property that is only evaluated once."""
-    def __init__(self, func: callable, name: str = None, doc: str = None):
+    def __init__(self, func: callable, *, name: str = None, doc: str = None):
         self.__name__ = name or func.__name__
         self.__module__ = func.__module__
         self.__doc__ = doc or func.__doc__
         self._func = func
 
     def __get__(self, obj, cls=None):
-        if obj is None:
-            return self
+        if obj is None: return self
+
         value = self._func(obj)
         setattr(obj, self._func.__name__, value)
         return value

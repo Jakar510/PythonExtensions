@@ -1,5 +1,6 @@
 import sys
 import traceback
+from abc import ABC
 from pprint import PrettyPrinter
 from threading import Lock
 from types import TracebackType
@@ -16,11 +17,12 @@ __all__ = [
     'GetFunctionName', 'GetFuncModule',
     ]
 
-class NoStringWrappingPrettyPrinter(PrettyPrinter):
+class NoStringWrappingPrettyPrinter(PrettyPrinter, ABC):
     """
         https://stackoverflow.com/questions/31485402/can-i-make-pprint-in-python3-not-split-strings-like-in-python2
         https://stackoverflow.com/a/31485450/9530917
     """
+
     @classmethod
     def Create(cls): return cls(indent=4, sort_dicts=False)
 
@@ -76,7 +78,7 @@ class Printer(object):
         :type end: str
         :param file: file to write to
         :type file: file
-        :param _pp: any PrettyPrinter inpmentation. provide your own to customize the output.
+        :param _pp: any PrettyPrinter implementation. provide your own to customize the output.
         :type _pp: PrettyPrinter
         :param use_double_quotes: use double quotes (") instead of the default single quotes (')
         :type use_double_quotes: bool
@@ -97,14 +99,6 @@ class Printer(object):
         self._active = False
         return self._lock.__exit__(exc_type, exc_val, exc_tb)
 
-
-    def Print(self, *args):
-        if self.can_print:
-            if self._active:
-                return self.print(*args)
-
-            with self as p:
-                return p.print(*args)
 
     def print(self, *args):
         if self.can_print:
@@ -129,7 +123,7 @@ class Printer(object):
         if kwargs:
             if args and isinstance(args[0], str):
                 title = args[0]
-                obj.Print(title)
+                obj.print(title)
                 obj._pp.pprint(kwargs)
 
             else: obj._pp.pprint(kwargs)
@@ -138,7 +132,7 @@ class Printer(object):
             if isinstance(args[0], str):
                 title = args[0]
                 args = args[1:]
-                obj.Print(title)
+                obj.print(title)
                 obj._pp.pprint(args)
 
             else: obj._pp.pprint(args)
@@ -228,7 +222,7 @@ class Printer(object):
 
             result = func(*args, **kwargs)
             result, _tag, name, signature, pp_result = self.get_func_details(func, tag, result, args, kwargs)
-            self.Print(tag, f'{name}(\n      {signature}\n   )', name, f'returned: \n{self.getPPrintStr(result)}')
+            self.print(tag, f'{name}(\n      {signature}\n   )', name, f'returned: \n{self.getPPrintStr(result)}')
 
             return result
 
@@ -267,14 +261,14 @@ def PRINT(title: str, *args, tag: str = pp.TITLE_TAG, **kwargs):
     :type title: str
     """
     with pp as p:
-        p.Print(tag.format(title))
+        p.print(tag.format(title))
         return p.PrettyPrint(dict(args=args, kwargs=kwargs))
 
 
 
 def Print(*args):
     with pp as p:
-        return p.Print(*args)
+        return p.print(*args)
 
 
 def print_exception(e: Exception, limit=None, file=None, chain=True):

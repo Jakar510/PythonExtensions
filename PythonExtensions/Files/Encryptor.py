@@ -18,6 +18,7 @@ __all__ = ['Encryptor']
 # key = Fernet.generate_key()
 
 class Encryptor(object):
+    __slots__ = ['_path', '_encoding', '_private_key', '_encrypter']
     # _KEY_FILE_ = paths.PASS_KEY_FILE_NAME
     def __init__(self, path: str, *, private_key: bytes, encoding: str = "utf-8"):
         self._path = path

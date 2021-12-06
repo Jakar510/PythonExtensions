@@ -8,10 +8,10 @@
 #  in conjunction with Tcl version 8.6
 #    Nov 23, 2020 10:53:16 AM CST  platform: Windows NT
 import platform
+from asyncio import AbstractEventLoop
 from typing import *
 
 from ..Base import *
-from ..Core import *
 from ..Enumerations import *
 from ..Events import *
 from ..Themed import ScrollbarThemed
@@ -36,11 +36,12 @@ class AutoScroll(BaseTkinterWidget):
                 ...
             ...
     """
+    __slots__ = ['vsb', 'hsb']
     vsb: ScrollbarThemed
     hsb: ScrollbarThemed
-    def __init__(self, master: BaseTkinterWidget, Color: Dict[str, str] = None):
-        super().__init__(Color)
+    def __init__(self, master: BaseTkinterWidget, Color: Dict[str, str] = None, loop: Optional[AbstractEventLoop] = None):
         self.master = master
+        BaseTkinterWidget.__init__(self, Color, loop)
 
         if hasattr(self, 'xview') and callable(self.xview):
             self.hsb = ScrollbarThemed(master, orientation=Orient.Horizonal, command=self.xview).Grid(column=0, row=1, sticky=AnchorAndSticky.EastWest)
@@ -56,13 +57,13 @@ class AutoScroll(BaseTkinterWidget):
         master.Grid_ColumnConfigure(0, weight=1)
 
     @staticmethod
-    def _autoscroll(sbar):
+    def _autoscroll(bar: ScrollbarThemed):
         """   Hide and show scrollbar as needed.   """
         def wrapped(first, last):
             first, last = float(first), float(last)
-            if first <= 0 and last >= 1: sbar.hide()
-            else: sbar.show()
-            sbar.set(first, last)
+            if first <= 0 and last >= 1: bar.hide()
+            else: bar.show()
+            bar.set(first, last)
         return wrapped
 
     def __str__(self): return str(self.master)
@@ -84,12 +85,12 @@ class AutoScroll(BaseTkinterWidget):
         assert (isinstance(child, BaseTkinterWidget))
         if platform.system() == 'Windows' or platform.system() == 'Darwin':
             child.BindAll(Bindings.MouseWheel, lambda e: AutoScroll._on_mousewheel(e, child))
-            child.BindAll(Bindings.ShiftMouseWheel, lambda e: AutoScroll._on_shiftmouse(e, child))
+            child.BindAll(Bindings.ShiftMouseWheel, lambda e: AutoScroll._on_shift_mouse(e, child))
         else:
             child.BindAll(Bindings.Button4, lambda e: AutoScroll._on_mousewheel(e, child))
             child.BindAll(Bindings.Button5, lambda e: AutoScroll._on_mousewheel(e, child))
-            child.BindAll(Bindings.ShiftButton4, lambda e: AutoScroll._on_shiftmouse(e, child))
-            child.BindAll(Bindings.ShiftButton5, lambda e: AutoScroll._on_shiftmouse(e, child))
+            child.BindAll(Bindings.ShiftButton4, lambda e: AutoScroll._on_shift_mouse(e, child))
+            child.BindAll(Bindings.ShiftButton5, lambda e: AutoScroll._on_shift_mouse(e, child))
 
     # noinspection PyUnusedLocal
     @staticmethod
@@ -117,7 +118,7 @@ class AutoScroll(BaseTkinterWidget):
                 widget.yview_scroll(1, 'units')
 
     @staticmethod
-    def _on_shiftmouse(event, widget):
+    def _on_shift_mouse(event, widget):
         if platform.system() == 'Windows':
             widget.xview_scroll(-1 * int(event.delta / 120), 'units')
         elif platform.system() == 'Darwin':

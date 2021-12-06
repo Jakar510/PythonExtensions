@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="e5ad8bdf-44cf-4ea6-815d-ce52858c92a4" name="WorkSpace/PythonExtensions" url="http://192.168.1.162">
+        <fileTransfer rootFolder="/home/pi/WorkSpace/PythonExtensions" accessType="SFTP" host="192.168.1.162" port="22" sshConfigId="4a38f18a-7a7d-435c-be62-b5125bca1f78" sshConfig="pi@192.168.1.162:22 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

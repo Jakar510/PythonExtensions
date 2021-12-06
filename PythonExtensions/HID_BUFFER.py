@@ -7,19 +7,20 @@
 
 import time
 from typing import *
-from ..Names import nameof
+
+from .Names import nameof
 
 
 
 
 __all__ = ['HID_BUFFER', 'TimeKeeperMixin']
 
-
-
-
-
 class TimeKeeperMixin:
-    _LastTime = time.time()
+    __slots__ = ['_LastTime']
+    _LastTime: float
+    def __init__(self):
+        self._LastTime = time.time()
+
     def UpdateTime(self): self._LastTime = time.time()
 
     @property
@@ -31,8 +32,13 @@ class TimeKeeperMixin:
 
 
 class HID_BUFFER(TimeKeeperMixin):
-    __all__ = []
-    _text: str = ''
+    __slots__ = ['_text']
+    _text: str
+    def __init__(self, text: str = ''):
+        self._text = text
+        super().__init__()
+
+
     def Clear(self, s: str = '') -> str:
         if not isinstance(s, str): s = str(s)
         self._text = s
@@ -141,6 +147,3 @@ class HID_BUFFER(TimeKeeperMixin):
         self._text = ''.join(l)
     def __getitem__(self, key: Union[int, slice]) -> str:
         return self._text.__getitem__(key)
-
-
-

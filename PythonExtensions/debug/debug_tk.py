@@ -3,19 +3,21 @@
 #  Copyright (c) 2020.
 #
 # ------------------------------------------------------------------------------
-from ..Names import nameof
+import tkinter as tk
+from typing import *
 
-from ..tk.Base import *
+from ..Names import nameof
 
 
 
 
 __all__ = ['DebugWidget', 'DebugWidgetRecursively']
 
-def _rootLevelDataRecurive(w) -> dict:
-    assert (isinstance(w, BaseTkinterWidget) and isinstance(w, tk.BaseWidget))
-    return _WidgetDataRecurive(w)
-def _WidgetDataRecurive(w) -> dict:
+def _rootLevelDataRecursive(w) -> Dict[str, Any]:
+    return _WidgetDataRecursive(w)
+def _WidgetDataRecursive(w) -> Dict[str, Any]:
+    from ..tk.Base import BaseTkinterWidget
+
     assert (isinstance(w, BaseTkinterWidget) and isinstance(w, tk.BaseWidget))
     return {
         'Type':                     w.__class__,
@@ -33,41 +35,46 @@ def _WidgetDataRecurive(w) -> dict:
         'winfo_children':           _childData(w.winfo_children()),
         }
 
-def _childData(obj):
+
+def _childData(obj: Union[List, Dict]):
     if isinstance(obj, dict):
         r = { }
         for key, w in obj:
             print('type(w)', type(w))
             print('type(key)', type(key))
-            r[key] = _WidgetDataRecurive(w)
+            r[key] = _WidgetDataRecursive(w)
         return r
 
     if isinstance(obj, list):
         r = []
         for w in obj:
             print('type(w)', type(w))
-            r.append((w.winfo_id(), _WidgetDataRecurive(w)))
+            r.append((w.winfo_id(), _WidgetDataRecursive(w)))
         return dict(r)
 
     return obj
 def DebugWidgetRecursively(w, *, Message: str):
+    from ..tk.Base import BaseTkinterWidget
+
     assert (isinstance(w, BaseTkinterWidget) and isinstance(w, tk.BaseWidget))
     from pprint import PrettyPrinter
+
     pp = PrettyPrinter(indent=4)
     print(f'---------------- {Message} < {nameof(w)} > ----------------')
-    pp.pprint(_rootLevelDataRecurive(w))
+    pp.pprint(_rootLevelDataRecursive(w))
     print()
     print()
 
 
-def _rootLevelData(w, root: tk.Tk or tk.Toplevel) -> dict:
-    assert (isinstance(w, BaseTkinterWidget) and isinstance(w, tk.BaseWidget))
+def _rootLevelData(w, root: Union[tk.Tk, tk.Toplevel]) -> Dict[str, Any]:
     return {
         'root.children': root.children,
         # f'Widget: {w.__class__.__name__}':        _WidgetData(w)
         'Widget':        _WidgetData(w)
         }
-def _WidgetData(w) -> dict:
+def _WidgetData(w) -> Dict[str, Any]:
+    from ..tk.Base import BaseTkinterWidget
+
     assert (isinstance(w, BaseTkinterWidget) and isinstance(w, tk.BaseWidget))
     return {
         'Type':                     w.__class__,
@@ -84,9 +91,12 @@ def _WidgetData(w) -> dict:
         'winfo_pathname(winfo_id)': w.winfo_pathname(w.winfo_id()),
         'winfo_children':           w.winfo_children(),
         }
-def DebugWidget(w, *, root: tk.Tk or tk.Toplevel, Message: str):
+def DebugWidget(w, *, root: Union[tk.Tk, tk.Toplevel], Message: str):
+    from ..tk.Base import BaseTkinterWidget
+
     assert (isinstance(w, BaseTkinterWidget) and isinstance(w, tk.BaseWidget))
     from pprint import PrettyPrinter
+
     pp = PrettyPrinter(indent=4)
     print(f'---------------- {Message} < {w.__class__.__name__} > ----------------')
     pp.pprint(_rootLevelData(w, root))

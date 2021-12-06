@@ -7,7 +7,7 @@
 from tkinter.messagebox import *
 
 from ..Base import *
-from ..Core import *
+from ..Roots import *
 
 
 
@@ -16,7 +16,7 @@ __all__ = ['tkMessageBox']
 
 class tkMessageBox(tkTopLevel, BaseTkinterWidget):
     """
-    Not Impletemented Yet.
+    Not Implemented Yet.
 
     https://www.tutorialspoint.com/python3/tk_messagebox.htm
     """

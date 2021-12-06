@@ -19,14 +19,15 @@ __all__ = [
     ]
 
 class HTMLScrolledText(ScrolledText):
-    _bindIDs: Set[str] = set()
     __doc__ = tk_html.HTMLScrolledText.__doc__
+    _bindIDs: Set[str]
+    __slots__ = ['_bindIDs', '_html_parser']
     def __init__(self, html: str = None, **frame_kwargs):
         super().__init__(**frame_kwargs)
         self._w_init(frame_kwargs)
-        self.html_parser = tk_html.html_parser.HTMLTextParser()
-        if isinstance(html, str):
-            self.set_html(html)
+        self._html_parser = tk_html.html_parser.HTMLTextParser()
+        self._bindIDs = set()
+        if isinstance(html, str): self.set_html(html)
 
     def _w_init(self, kwargs: Dict[str, Any]):
         if not 'wrap' in kwargs:
@@ -37,7 +38,7 @@ class HTMLScrolledText(ScrolledText):
             else:
                 self.tb.configure(background='white')
     def fit_height(self):
-        """ Fit widget height to wrapped lines """
+        """ Fit widget Height to wrapped lines """
         for h in range(1, 4):
             self.tb.configure(height=h)
             self.update()
@@ -54,7 +55,7 @@ class HTMLScrolledText(ScrolledText):
         self.tb.Enable()
         self.tb.Clear()
         self.tb.ClearTags()
-        self.html_parser.w_set_html(self.tb, html, strip=strip)
+        self._html_parser.w_set_html(self.tb, html, strip=strip)
 
         self._bindIDs.clear()
         self._setupBindings()
