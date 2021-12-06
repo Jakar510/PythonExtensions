@@ -46,7 +46,7 @@ class _TkinterSelector(SelectSelector):
         super().__init__()
 
         # from ..Core.tkRoot import tkRoot
-        self._tk = root or tk.Tk(useTk=0)
+        self._tk = root or tk.Tk(useTk=False)
         assert (isinstance(self._tk, tk.Tk))
 
         self._ready: List[Tuple[SelectorKey, int]] = []
