@@ -2,7 +2,7 @@ import functools
 from typing import *
 
 from .console import *
-from ..Misc import AutoCounter
+from ..Core.Misc import AutoCounter
 
 
 

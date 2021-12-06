@@ -61,12 +61,15 @@ class AutoScroll(BaseTkinterWidget):
         """   Hide and show scrollbar as needed.   """
         def wrapped(first, last):
             first, last = float(first), float(last)
-            if first <= 0 and last >= 1: bar.hide()
-            else: bar.show()
+            if first <= 0 and last >= 1:
+                bar.hide()
+            else:
+                bar.show()
             bar.set(first, last)
         return wrapped
 
-    def __str__(self): return str(self.master)
+    def __str__(self):
+        return str(self.master)
 
     @staticmethod
     def create_container(func):

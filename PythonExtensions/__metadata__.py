@@ -11,6 +11,18 @@ from .__version__ import *
 
 
 
+__all__ = ('__author__',
+           '__classifiers__',
+           '__email__',
+           '__license__',
+           '__maintainer__',
+           '__maintainer_email__',
+           '__name__',
+           '__short_description__',
+           '__url__',
+           '__version__',
+           )
+
 __name__ = 'PythonExtensions'
 __author__ = "Tyler Stegmaier"
 __email__ = "tyler.stegmaier.510@gmail.com"

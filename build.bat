@@ -6,9 +6,7 @@ mkdir dist
 
 python setup.py build sdist bdist_wheel
 
-pause
 
-python -m twine upload dist/*
 
 
 

@@ -6,9 +6,9 @@
 
 from setuptools import setup
 
+from PythonExtensions.Debug import PrettyPrint
 from PythonExtensions.Setup import *
-from PythonExtensions.__metadata__ import (__author__, __classifiers__, __email__, __license__, __maintainer__, __maintainer_email__, __name__, __short_description__, __url__,
-                                           __version__, )
+from PythonExtensions.__metadata__ import *
 
 
 
@@ -17,7 +17,15 @@ long_description = ReadFromFile(abspath("./PyPiReadme.md"))
 
 install_requires = GetRequirements(abspath('./requirements.txt'))
 
-_packages, _package_data = Get_Packages_Data(abspath('PythonExtensions'), __name__, includes=MatchFileTypes('py', 'png'))
+_packages, _package_data = Get_Packages_Data(abspath('PythonExtensions'), __name__, includes=MatchFileTypes('py', 'png', 'txt', 'json'))
+
+
+print()
+print()
+PrettyPrint(_package_data=_package_data, _packages=_packages)
+print()
+print()
+
 
 setup(name=__name__,
       version=__version__,
@@ -33,7 +41,8 @@ setup(name=__name__,
       long_description_content_type="text/markdown",
       install_requires=install_requires,
       classifiers=__classifiers__,
-      keywords=f'{__name__} Json Setup SwitchCase Switch Case Tkinter Extensions tk ttk tkinter',
+      keywords=f'{__name__} Debug Files async Setup Tkinter Extensions tk ttk tkinter',
       package_dir={ __name__: __name__ },
       package_data=_package_data,
       )
+

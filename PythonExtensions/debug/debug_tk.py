@@ -6,7 +6,7 @@
 import tkinter as tk
 from typing import *
 
-from ..Names import nameof
+from ..Core.Names import nameof
 
 
 

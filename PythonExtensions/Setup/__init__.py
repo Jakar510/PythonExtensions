@@ -14,6 +14,8 @@ from .Classifiers import *
 
 
 
+pycache = '__pycache__'
+
 def ReadLinesFromFile(path: str) -> List[str]:
     with open(path, "r") as f:
         return f.readlines()
@@ -21,7 +23,6 @@ def ReadLinesFromFile(path: str) -> List[str]:
 def ReadFromFile(path: str) -> str:
     with open(path, "r") as f:
         return f.read()
-
 
 def GetVersion(o) -> str:
     if hasattr(o, '__version__'): return o.__version__
@@ -45,21 +46,34 @@ def GetRequirements(path: str, *, separator: str = '>=') -> List[str]:
 
     return install_requires
 
-pycache = '__pycache__'
 
 def GetPath(name: str, *args: str) -> str: return '.'.join([name, *args])
 def MatchExtension(name: str) -> str: return f'*.{name}'
 def MatchFileTypes(*names: str) -> List[str]: return list(map(MatchExtension, names))
 
-def Get_Packages_Data(path: str, root: str, *, includes: List[str] = [MatchExtension('py')], ignorables: List[str] = [pycache]):
+
+def GetRootFiles(root: str):
+    files: Set[str] = set()
+    for f in os.listdir(root):
+        if isfile(join(root, f)):
+            files.add(f)
+
+    return files
+
+
+def Get_Packages_Data(path: str, root: str, *, includes: List[str], ignorables: List[str] = [pycache]):
     _packages: List[str] = []
     _package_data: Dict[str, List[str]] = { root: includes }
+
 
     for top, sub_dirs, files in os.walk(path):
         sub_dirs = set(sub_dirs)
         sub_dirs.discard(pycache)
         parent = basename(top)
-        if parent in ignorables: continue
+
+        if parent in ignorables:
+            continue
+
         if parent == root:
             for d in sub_dirs:
                 _packages.append(GetPath(root, d))
@@ -69,5 +83,6 @@ def Get_Packages_Data(path: str, root: str, *, includes: List[str] = [MatchExten
 
         for item in _packages:
             _package_data[item] = includes
+
 
     return sorted(_packages), _package_data

@@ -24,7 +24,8 @@ class NoStringWrappingPrettyPrinter(PrettyPrinter, ABC):
     """
 
     @classmethod
-    def Create(cls): return cls(indent=4, sort_dicts=False)
+    def Create(cls):
+        return cls(indent=4, sort_dicts=False)
 
     # noinspection PyProtectedMember, PyUnresolvedReferences
     def _format(self, o, *args):
@@ -60,7 +61,8 @@ class CallStack(object):
     def Lines(self) -> Iterable[str]:
         if self._lines is None: self.Update()
         return self._lines
-    def __str__(self) -> str: return '\n'.join(self.Lines)
+    def __str__(self) -> str:
+        return '\n'.join(self.Lines)
     # def __repr__(self) -> str: return '\n'.join(self.Lines)
 
 
@@ -89,7 +91,8 @@ class Printer(object):
         self._pp = _pp or NoStringWrappingPrettyPrinter.Create()
 
     @property
-    def can_print(self) -> bool: return __debug__
+    def can_print(self) -> bool:
+        return __debug__
 
     def __enter__(self):
         self._active = True
@@ -109,13 +112,17 @@ class Printer(object):
                 return print(*args, sep='\n', end=self._end, file=self._file)
 
     @overload
-    def PrettyPrint(self, *args): ...
+    def PrettyPrint(self, *args):
+        ...
     @overload
-    def PrettyPrint(self, title: str, *args): ...
+    def PrettyPrint(self, title: str, *args):
+        ...
     @overload
-    def PrettyPrint(self, **kwargs): ...
+    def PrettyPrint(self, **kwargs):
+        ...
     @overload
-    def PrettyPrint(self, title: str, **kwargs): ...
+    def PrettyPrint(self, title: str, **kwargs):
+        ...
 
     @staticmethod
     def _PrettyPrint(obj, *args, **kwargs):
@@ -126,7 +133,8 @@ class Printer(object):
                 obj.print(title)
                 obj._pp.pprint(kwargs)
 
-            else: obj._pp.pprint(kwargs)
+            else:
+                obj._pp.pprint(kwargs)
 
         elif args:
             if isinstance(args[0], str):
@@ -135,7 +143,8 @@ class Printer(object):
                 obj.print(title)
                 obj._pp.pprint(args)
 
-            else: obj._pp.pprint(args)
+            else:
+                obj._pp.pprint(args)
     def PrettyPrint(self, *args, **kwargs):
         if self.can_print:
             if self._active:
@@ -227,7 +236,8 @@ class Printer(object):
             return result
 
     @classmethod
-    def Default(cls): return cls(use_double_quotes=True, end='\n\n')
+    def Default(cls):
+        return cls(use_double_quotes=True, end='\n\n')
 
     @staticmethod
     def Set(_pp):
@@ -247,9 +257,12 @@ pp: Printer = Printer.Default()
 
 def GetFuncModule(func: callable) -> str: return func.__module__
 def GetFunctionName(func: callable) -> str:
-    if hasattr(func, '__qualname__') and hasattr(func, '__module__'): return f"{func.__module__}.{func.__qualname__}"
-    elif hasattr(func, '__qualname__'): return func.__qualname__
-    else: return func.__name__
+    if hasattr(func, '__qualname__') and hasattr(func, '__module__'):
+        return f"{func.__module__}.{func.__qualname__}"
+    elif hasattr(func, '__qualname__'):
+        return func.__qualname__
+    else:
+        return func.__name__
 
 
 

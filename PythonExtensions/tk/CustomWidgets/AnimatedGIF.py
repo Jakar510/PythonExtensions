@@ -45,8 +45,10 @@ class AnimatedGIF(Label, object):
         with img_open(path) as img:
             assert (isinstance(img, Image))
 
-            try: self._delay = img.info['duration']
-            except (AttributeError, KeyError): self._delay = defaultDelay
+            try:
+                self._delay = img.info['duration']
+            except (AttributeError, KeyError):
+                self._delay = defaultDelay
 
             i = 0
             while True:
@@ -56,7 +58,8 @@ class AnimatedGIF(Label, object):
 
                     i += 1
                     img.seek(i)
-                except EOFError: break
+                except EOFError:
+                    break
 
         self._setFrame()
     def start_animation(self, frame: int = None):
@@ -76,7 +79,8 @@ class AnimatedGIF(Label, object):
             self._callback_id = None
 
         self._is_running = False
-    def _setFrame(self): self.configure(image=self._frames[self._loc])
+    def _setFrame(self):
+        self.configure(image=self._frames[self._loc])
     def _animate_GIF(self):
         self._loc += 1
         self._setFrame()
@@ -92,7 +96,8 @@ class AnimatedGIF(Label, object):
             self._callback_id = self._master.after(self._delay, self._animate_GIF)
 
     @property
-    def _last_index(self) -> int: return len(self._frames) - 1
+    def _last_index(self) -> int:
+        return len(self._frames) - 1
 
 
 

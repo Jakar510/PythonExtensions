@@ -1,7 +1,7 @@
 from json import loads as _loads
 from typing import *
 
-from Json import *
+from ..Core.Json import *
 
 
 
@@ -28,8 +28,10 @@ class KeyCollection(BaseListModel[Hashable]):
 
 class BaseMultiDictModel(dict, BaseObjectModel, Dict[KeyCollection, _VT]):
     def __init__(self, source: Dict[KeyCollection, _VT] = None, **kwargs: _VT):
-        if source is not None: super().__init__(source, **kwargs)
-        else: super().__init__(**kwargs)
+        if source is not None:
+            super().__init__(source, **kwargs)
+        else:
+            super().__init__(**kwargs)
 
     # def __deepcopy__(self): return super().__deepcopy__()
     def __delitem__(self, item: Union[Hashable, KeyCollection]):
@@ -50,23 +52,27 @@ class BaseMultiDictModel(dict, BaseObjectModel, Dict[KeyCollection, _VT]):
 
         for k, v in self.items():
             if value == v:
-
                 return
 
     def __getitem__(self, item: Hashable):
         pass
 
-    def enumerate(self) -> Iterable[Tuple[int, KeyCollection]]: return enumerate(self)
+    def enumerate(self) -> Iterable[Tuple[int, KeyCollection]]:
+        return enumerate(self)
 
 
     @property
-    def Count(self) -> int: return len(self)
+    def Count(self) -> int:
+        return len(self)
     @property
-    def Empty(self) -> bool: return self.Count == 0
-    def __bool__(self): return not self.Empty
+    def Empty(self) -> bool:
+        return self.Count == 0
+    def __bool__(self):
+        return not self.Empty
 
 
-    def Filter(self, func: callable) -> List[KeyCollection]: return list(filter(func, self.values()))
+    def Filter(self, func: callable) -> List[KeyCollection]:
+        return list(filter(func, self.values()))
 
 
     @classmethod
@@ -77,4 +83,5 @@ class BaseMultiDictModel(dict, BaseObjectModel, Dict[KeyCollection, _VT]):
         throw(d, dict)
 
     @classmethod
-    def FromJson(cls, string: Union[str, bytes, bytearray], **kwargs): return cls.Parse(_loads(string, **kwargs))
+    def FromJson(cls, string: Union[str, bytes, bytearray], **kwargs):
+        return cls.Parse(_loads(string, **kwargs))

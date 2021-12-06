@@ -23,21 +23,26 @@ class IsoFormat(object):
         if not fmt: return str(self)
 
         return self.Value.strftime(fmt)
-    def __str__(self) -> str: return self.Value.isoformat(self.Format)
+    def __str__(self) -> str:
+        return self.Value.isoformat(self.Format)
 
 
     @staticmethod
-    def ToIsoFormat(dt: Optional[Union[DateTime, Date, Time]]) -> str: return dt.isoformat() if isinstance(dt, (DateTime, Date, Time)) else None
+    def ToIsoFormat(dt: Optional[Union[DateTime, Date, Time]]) -> str:
+        return dt.isoformat() if isinstance(dt, (DateTime, Date, Time)) else None
 
 
     @staticmethod
-    def NowString() -> str: return DateTime.now().isoformat()
+    def NowString() -> str:
+        return DateTime.now().isoformat()
 
     @classmethod
-    def Now(cls, tz: tzinfo = None): return cls(DateTime.now(tz))
+    def Now(cls, tz: tzinfo = None):
+        return cls(DateTime.now(tz))
 
     @classmethod
-    def FromString(cls, _type: Type[Union[DateTime, Date, Time]], obj: str, tz: tzinfo = None): return cls(_type.fromisoformat(obj), TimeZoneData=tz)
+    def FromString(cls, _type: Type[Union[DateTime, Date, Time]], obj: str, tz: tzinfo = None):
+        return cls(_type.fromisoformat(obj), TimeZoneData=tz)
 
 
     @classmethod

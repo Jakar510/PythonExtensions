@@ -27,24 +27,30 @@ class Encryptor(object):
         self._encrypter = Fernet(self._private_key)
 
 
-    def encode(self, s: str) -> bytes: return s.encode(self._encoding)
-    def decode(self, s: bytes) -> str: return s.decode(self._encoding)
+    def encode(self, s: str) -> bytes:
+        return s.encode(self._encoding)
+    def decode(self, s: bytes) -> str:
+        return s.decode(self._encoding)
 
 
     @staticmethod
     def _from_json(s: Union[str, bytes, bytearray], **kwargs) -> Dict:
-        try: return json.loads(s, **kwargs)
+        try:
+            return json.loads(s, **kwargs)
         except Exception:
             print('_____from__json_____', type(s), s, sep='\n\n', end='\n\n\n')
             raise
     @staticmethod
-    def _to_json(s: Dict, **kwargs) -> str: return json.dumps(s, **kwargs)
+    def _to_json(s: Dict, **kwargs) -> str:
+        return json.dumps(s, **kwargs)
 
 
     @staticmethod
-    def _from_pickle(s: bytes) -> Dict: return pickle.loads(s)
+    def _from_pickle(s: bytes) -> Dict:
+        return pickle.loads(s)
     @staticmethod
-    def _to_pickle(s: Dict) -> bytes: return pickle.dumps(s, protocol=pickle.HIGHEST_PROTOCOL)
+    def _to_pickle(s: Dict) -> bytes:
+        return pickle.dumps(s, protocol=pickle.HIGHEST_PROTOCOL)
 
 
     def _ReadFile(self) -> bytes:
@@ -55,21 +61,26 @@ class Encryptor(object):
             return f.write(value)
 
 
-    def DecryptFile(self) -> bytes: return self.Decode(self._ReadFile())
-    def EncryptFile(self, value: bytes): return self._WriteFile(self.Encrypt(value))
+    def DecryptFile(self) -> bytes:
+        return self.Decode(self._ReadFile())
+    def EncryptFile(self, value: bytes):
+        return self._WriteFile(self.Encrypt(value))
 
 
-    def ReadJson(self, **kwargs) -> Dict: return self._from_json(self._ReadFile(), **kwargs)
-    def WriteJson(self, value: Dict, **kwargs): return self._WriteFile(self._to_json(value, **kwargs).encode())
+    def ReadJson(self, **kwargs) -> Dict:
+        return self._from_json(self._ReadFile(), **kwargs)
+    def WriteJson(self, value: Dict, **kwargs):
+        return self._WriteFile(self._to_json(value, **kwargs).encode())
 
 
-    def ReadPickle(self) -> Dict: return self._from_pickle(self.DecryptFile())
-    def WritePickle(self, value: Dict): return self.EncryptFile(self._to_pickle(value))
+    def ReadPickle(self) -> Dict:
+        return self._from_pickle(self.DecryptFile())
+    def WritePickle(self, value: Dict):
+        return self.EncryptFile(self._to_pickle(value))
 
 
 
-    def Encrypt(self, value: bytes) -> bytes: return self._encrypter.encrypt(value)
-    def Decode(self, value: bytes = None) -> bytes: return self._encrypter.decrypt(value)
-
-
-
+    def Encrypt(self, value: bytes) -> bytes:
+        return self._encrypter.encrypt(value)
+    def Decode(self, value: bytes = None) -> bytes:
+        return self._encrypter.decrypt(value)

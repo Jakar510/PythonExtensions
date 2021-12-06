@@ -13,13 +13,13 @@ from typing import *
 
 from PIL.Image import Image
 from PIL.ImageTk import PhotoImage
-from PythonExtensions.Names import typeof
 from aiohttp import ClientResponse, ClientSession
 from requests import get
 
 from .Base import *
 from .Enumerations import *
 from .Events import *
+from ..Core.Names import typeof
 
 
 

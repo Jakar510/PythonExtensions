@@ -113,7 +113,8 @@ class AllNamedColors(object):
                 row = 0
                 col += 1
 
-    def run(self): return self.root.mainloop()
+    def run(self):
+        return self.root.mainloop()
 
 
 def runTkColors():

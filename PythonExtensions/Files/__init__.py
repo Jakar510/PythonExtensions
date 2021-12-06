@@ -14,8 +14,8 @@ from typing import BinaryIO
 from aiofiles import open as async_open
 from attr import attrib, attrs, validators
 
-from ..Json import *
-from ..Names import nameof
+from ..Core.Json import *
+from ..Core.Names import nameof
 
 
 
@@ -47,36 +47,49 @@ class FilePath(PathLike):
             AssertKeys(_path, 'FullPath')
             return FilePath.convert(_path['FullPath'])
 
-        elif isinstance(_path, str): return abspath(_path)
+        elif isinstance(_path, str):
+            return abspath(_path)
 
-        elif isinstance(_path, Path): return _path.resolve().__fspath__()
+        elif isinstance(_path, Path):
+            return _path.resolve().__fspath__()
 
-        elif isinstance(_path, FilePath): return _path.FullPath
+        elif isinstance(_path, FilePath):
+            return _path.FullPath
 
-        elif hasattr(_path, '__fspath__'): return abspath(_path.__fspath__())
+        elif hasattr(_path, '__fspath__'):
+            return abspath(_path.__fspath__())
 
-        else: throw(_path, str, Path, FilePath, dict)
+        else:
+            throw(_path, str, Path, FilePath, dict)
+
+
+    @property
+    def __class_name__(self) -> str:
+        return nameof(self)
 
 
     @property
-    def __class_name__(self) -> str: return nameof(self)
-
-
-    @property
-    def Exists(self) -> bool: return exists(self.FullPath)
+    def Exists(self) -> bool:
+        return exists(self.FullPath)
 
     @property
-    def IsFile(self) -> bool: return isfile(self.FullPath)
+    def IsFile(self) -> bool:
+        return isfile(self.FullPath)
     @property
-    def IsDirectory(self) -> bool: return isdir(self.FullPath)
+    def IsDirectory(self) -> bool:
+        return isdir(self.FullPath)
     @property
-    def IsLink(self) -> bool: return islink(self.FullPath)
+    def IsLink(self) -> bool:
+        return islink(self.FullPath)
 
-    def Rename(self, new: str): return rename(self.FullPath, join(self.BaseName, new))
+    def Rename(self, new: str):
+        return rename(self.FullPath, join(self.BaseName, new))
     def Remove(self):
         if self.Exists:
-            if self.IsFile: return remove(self)
-            elif self.IsDirectory: return rmtree(self)
+            if self.IsFile:
+                return remove(self)
+            elif self.IsDirectory:
+                return rmtree(self)
 
 
     def Chmod(self, mode: int, dir_fd=None, follow_symlinks: bool = False) -> None:
@@ -123,9 +136,11 @@ class FilePath(PathLike):
 
 
     @property
-    def BaseName(self) -> 'FilePath': return FilePath(basename(self.FullPath))
+    def BaseName(self) -> 'FilePath':
+        return FilePath(basename(self.FullPath))
     @property
-    def DirectoryName(self) -> 'FilePath': return FilePath(dirname(self.FullPath))
+    def DirectoryName(self) -> 'FilePath':
+        return FilePath(dirname(self.FullPath))
 
     @property
     def FileName(self) -> Optional[str]:
@@ -134,15 +149,20 @@ class FilePath(PathLike):
 
 
     @overload
-    def Extension(self) -> Optional[str]: ...
+    def Extension(self) -> Optional[str]:
+        ...
     @overload
-    def Extension(self, raw: Any) -> Optional[str]: ...
+    def Extension(self, raw: Any) -> Optional[str]:
+        ...
     @overload
-    def Extension(self, replacements: Dict[str, str]) -> Optional[str]: ...
+    def Extension(self, replacements: Dict[str, str]) -> Optional[str]:
+        ...
     @overload
-    def Extension(self, replacements: Dict[str, str], lower: Any) -> Optional[str]: ...
+    def Extension(self, replacements: Dict[str, str], lower: Any) -> Optional[str]:
+        ...
     @overload
-    def Extension(self, replacements: Dict[str, str], upper: Any) -> Optional[str]: ...
+    def Extension(self, replacements: Dict[str, str], upper: Any) -> Optional[str]:
+        ...
 
     def Extension(self, replacements: Dict[str, str] = { }, **kwargs) -> Optional[str]:
         _name = self.FileName
@@ -163,8 +183,10 @@ class FilePath(PathLike):
 
 
     @property
-    def Size(self) -> int: return getsize(self.FullPath)
-    def ToUri(self): return Path(self.FullPath).as_uri()
+    def Size(self) -> int:
+        return getsize(self.FullPath)
+    def ToUri(self):
+        return Path(self.FullPath).as_uri()
 
     def GetHashID(self, BlockSize: int = 65536) -> str:
         """
@@ -186,16 +208,20 @@ class FilePath(PathLike):
 
 
 
-    def ToString(self) -> str: return f'<{nameof(self)}() "{self.FullPath}">'
-    def __str__(self): return self.FullPath
-    def __fspath__(self): return self.FullPath
+    def ToString(self) -> str:
+        return f'<{nameof(self)}() "{self.FullPath}">'
+    def __str__(self):
+        return self.FullPath
+    def __fspath__(self):
+        return self.FullPath
     def __bytes__(self):
         """ Return the bytes representation of the path. This is only recommended to use under Unix. """
         return fsencode(self.FullPath)
     def __del__(self):
         try:
             if self.IsTemporary and self.Exists: return self.Remove()
-        except PermissionError: pass
+        except PermissionError:
+            pass
 
     def __state__(self):
         d = { }
@@ -208,7 +234,8 @@ class FilePath(PathLike):
                 if isinstance(v, classmethod): continue
                 if callable(v):
                     v = v()
-            except (ValueError, TypeError, FileNotFoundError): pass
+            except (ValueError, TypeError, FileNotFoundError):
+                pass
             else:
                 d[k] = v
 
@@ -217,10 +244,12 @@ class FilePath(PathLike):
 
 
     @classmethod
-    def CurrentFile(cls, file=__file__): return cls(file)
+    def CurrentFile(cls, file=__file__):
+        return cls(file)
 
     @classmethod
-    def Join(cls, *args: Union[str, 'FilePath']) -> 'FilePath': return cls(join(*args))
+    def Join(cls, *args: Union[str, 'FilePath']) -> 'FilePath':
+        return cls(join(*args))
 
     @classmethod
     def ListDir(cls, _path: Union[str, 'FilePath']) -> Sequence['FilePath']:
@@ -230,7 +259,8 @@ class FilePath(PathLike):
 
         if not _path.IsDirectory: raise FileNotFoundError(f'path "{_path}" is not a valid directory.')
 
-        def _join(file): return cls.Join(_path, file)
+        def _join(file):
+            return cls.Join(_path, file)
 
         return sorted(map(_join, listdir(_path)), key=lambda x: x.FullPath)
 
@@ -256,9 +286,12 @@ _TFileData = TypeVar('_TFileData', bound='FileIO')
 class FileIO(PathLike, Generic[_TFileData]):
     Path: FilePath = attrib(validator=validators.instance_of(FilePath))
 
-    def Remove(self): return self.Path.Remove()
-    def __del__(self): return self.Path.__del__()
-    def __fspath__(self): return self.Path.__fspath__()
+    def Remove(self):
+        return self.Path.Remove()
+    def __del__(self):
+        return self.Path.__del__()
+    def __fspath__(self):
+        return self.Path.__fspath__()
     def __bytes__(self):
         """ Return the bytes representation of the path. This is only recommended to use under Unix. """
         return bytes(self.Path)
@@ -270,7 +303,8 @@ class FileIO(PathLike, Generic[_TFileData]):
                 dat = file.load(f)
                 if callable(Check): Check(dat)
                 return dat
-        except FileNotFoundError: return Default
+        except FileNotFoundError:
+            return Default
         except (pickle.PickleError, pickle.PicklingError, json.JSONDecodeError):
             if RemoveOnError: self.Path.Remove()
             return Default
@@ -309,7 +343,8 @@ class FileIO(PathLike, Generic[_TFileData]):
             with open(self, 'wb', **kwargs) as f:
                 return f.write(content)
 
-        else: raise TypeError(type(content), (bytes, str))
+        else:
+            raise TypeError(type(content), (bytes, str))
 
     def Read(self) -> str:
         with open(self, 'r') as f:
@@ -332,7 +367,8 @@ class FileIO(PathLike, Generic[_TFileData]):
             async with async_open(self, 'wb', **kwargs) as f:
                 return await f.write(content)
 
-        else: raise TypeError(type(content), (bytes, str))
+        else:
+            raise TypeError(type(content), (bytes, str))
 
     async def ReadAsync(self) -> str:
         async with async_open(self, 'r') as f:
@@ -351,7 +387,8 @@ class FileIO(PathLike, Generic[_TFileData]):
 
 
     @classmethod
-    def TemporaryFile(cls, *sub_folders: str, _name: str, root_dir: str = None): return FilePath.Temporary(*sub_folders, _name, root_dir=root_dir)
+    def TemporaryFile(cls, *sub_folders: str, _name: str, root_dir: str = None):
+        return FilePath.Temporary(*sub_folders, _name, root_dir=root_dir)
 
     @classmethod
     def Create(cls, _path: Union[str, 'FilePath'], content: Union[str, bytes] = None, *,
@@ -370,4 +407,3 @@ class FileIO(PathLike, Generic[_TFileData]):
         await _path.WriteAsync(content, buffering=buffering, encoding=encoding, errors=errors, newline=newline, closefd=close_fd, loop=loop, executor=executor)
 
         return Path
-

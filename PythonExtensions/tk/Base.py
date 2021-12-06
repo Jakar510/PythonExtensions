@@ -10,6 +10,7 @@ from asyncio import AbstractEventLoop, get_event_loop, iscoroutine, iscoroutinef
 from enum import Enum
 from io import BytesIO
 from logging import Logger
+from multiprocessing import Queue
 from os.path import isfile
 from tkinter import Event as tkEvent, ttk
 from types import FunctionType, MethodType
@@ -27,10 +28,11 @@ from yarl import URL
 from .Enumerations import *
 from .Events import Bindings, TkinterEvent, tkEvent
 from .Roots import tkRoot
+from ..Core.Logging import LoggingManager
+from ..Core.Names import class_name, nameof, typeof
+from ..Core.Threads import AutoStartThread
+from ..Debug import pp
 from ..Files import FilePath
-from ..Logging import LoggingManager
-from ..Names import class_name, nameof, typeof
-from ..Threads import AutoStartThread
 
 
 
@@ -138,7 +140,6 @@ class BaseTkinterWidget(tk.Widget, ABC):
         return self._state_
 
     def ToString(self, IncludeState: bool = None) -> str:
-        from SmartPhotoFrame.PythonExtensions import pp
 
         start = repr(self).replace('>', '').replace('<', '').replace('object', 'Tkinter Widget')
         if IncludeState is None:
@@ -284,24 +285,28 @@ class BaseTkinterWidget(tk.Widget, ABC):
 
         return d
 
+    # noinspection PyArgumentList
     def SetColors(self, text: str, background: str):
         if background: self.configure(background=background)
         if text: self.configure(foreground=text)
         return self
+    # noinspection PyArgumentList
     def SetActiveColors(self, text: str, background: str):
         if background: self.configure(activebackground=background)
         if text: self.configure(activeforeground=text)
         return self
+    # noinspection PyArgumentList
     def SetHighlightColors(self, text: str, background: str):
         if background:  self.configure(highlightcolor=text)
         if text: self.configure(highlightbackground=background)
         return self
+    # noinspection PyArgumentList
     def SetDisabledColor(self, color: str):
         if color: self.configure(disabledforeground=color)
         return self
 
     def UnbindIDs(self, ids: Iterable[str] = None):
-        for item in ids: self.unbind(item or self.__bindings__)
+        for item in ids: self.unbind(item)
 
     def Bind(self, sequence: Bindings, func: callable, add: bool = None) -> str:
         if isinstance(sequence, Enum): sequence = sequence.value
@@ -329,13 +334,17 @@ class BaseTkinterWidget(tk.Widget, ABC):
         self.__bindings__[sequence].clear()
         self.unbind_all(sequence)
 
+    def unbind(self, sequence: Union[Bindings, str], funcid: str = None) -> None:
+        _seq = sequence.value if isinstance(sequence, Bindings) else sequence
+        return super(BaseTkinterWidget, self).unbind(_seq)
+
 
     def BindClass(self, className, sequence: Bindings, func: callable, add: bool = None) -> str:
         if isinstance(sequence, Enum): sequence = sequence.value
         _id = self.bind_class(className, sequence, func, add)
         self.__bindings__[sequence].add(_id)
         return _id
-    def UnBindClass(self, className, sequence: Bindings) -> str:
+    def UnBindClass(self, className, sequence: Bindings) -> None:
         if isinstance(sequence, Enum): sequence = sequence.value
         self.__bindings__[sequence].clear()
         return self.unbind_class(className, sequence)
@@ -465,6 +474,7 @@ class BaseTkinterWidget(tk.Widget, ABC):
         """ Enable the widget, and optinally change its state from normal. """
         return self._SetState(state=state)
 
+    # noinspection PyArgumentList
     def _SetState(self, state: ViewState):
         assert (isinstance(state, ViewState))
         try:
@@ -506,7 +516,9 @@ class BaseTextTkinterWidget(BaseTkinterWidget):
         else:
             self._txt = tk.StringVar(master=self, value=text)
 
-        if configure: self.configure(textvariable=self._txt)
+        if configure:
+            # noinspection PyArgumentList
+            self.configure(textvariable=self._txt)
         BaseTkinterWidget.__init__(self, Color, loop)
 
 
@@ -524,6 +536,7 @@ class BaseTextTkinterWidget(BaseTkinterWidget):
     def wrap(self, value: int):
         if not isinstance(value, int): value = int(value)
         self._wrap = value
+        # noinspection PyArgumentList
         self.configure(wraplength=self._wrap)
 
     def Append(self, v: str):
@@ -593,11 +606,11 @@ class CallWrapper(object):
 
     _widget: Union[BaseTextTkinterWidget, BaseTkinterWidget, None]
     _func: Final[Union[SimpleSyncCallable, SyncCallable, AsyncCallable, SimpleAsyncCallable]]
-    _loop: Final[AbstractEventLoop]
+    _loop: Final[Optional[AbstractEventLoop]]
     _args: Final[Tuple]
     _kwargs: Final[Dict[str, Any]]
     def __init__(self, func: Union[SimpleSyncCallable, SyncCallable, AsyncCallable, SimpleAsyncCallable],
-                 loop: AbstractEventLoop,
+                 loop: Optional[AbstractEventLoop],
                  widget: Union[BaseTextTkinterWidget, BaseTkinterWidget, 'CommandMixin'],
                  args,
                  kwargs):
@@ -613,6 +626,7 @@ class CallWrapper(object):
         try:
             result = self._func(event, self._args, self._kwargs)
             if iscoroutine(result) or iscoroutinefunction(result):
+                if self._loop is None: raise ValueError('_loop is None')
                 return run_coroutine_threadsafe(result, self._loop)
 
             return result
@@ -624,9 +638,13 @@ class CallWrapper(object):
             raise
 
         except Exception as e:
-            # noinspection PyProtectedMember
-            root = self._widget._root()
-            root.report_callback_exception(typeof(e), e, e.__traceback__)
+            if hasattr(self._widget, '_root'):
+                # noinspection PyProtectedMember
+                root = self._widget._root()
+                root.report_callback_exception(typeof(e), e, e.__traceback__)
+                return
+
+            raise AttributeError('_root')
 
     def __repr__(self) -> str:
         return f'{super().__repr__().replace(">", "")} [ {dict(func=self._func, widget=self._widget)} ]>'
@@ -680,9 +698,13 @@ class CurrentValue(object):
         except SystemExit:
             raise
         except Exception as e:
-            # noinspection PyProtectedMember
-            root = self._widget._root()
-            root.report_callback_exception(typeof(e), e, e.__traceback__)
+            if hasattr(self._widget, '_root'):
+                # noinspection PyProtectedMember
+                root = self._widget._root()
+                root.report_callback_exception(typeof(e), e, e.__traceback__)
+                return
+
+            raise AttributeError('_root')
 
 
 class CommandMixin:
@@ -729,7 +751,7 @@ class CommandMixin:
         return self
 
 
-    def _current_loop(self) -> AbstractEventLoop:
+    def _current_loop(self) -> Optional[AbstractEventLoop]:
         assert (isinstance(self, BaseTkinterWidget) and isinstance(self, CommandMixin))
 
         if self._loop is not None:
@@ -740,6 +762,9 @@ class CommandMixin:
             if isinstance(master, BaseAsyncApp):
                 self._loop = master.loop
                 return self._loop
+
+            elif isinstance(master, (BaseApp, BaseSyncApp)):
+                return None
 
             elif isinstance(master, tk.Widget):
                 master = master.master
@@ -753,7 +778,7 @@ class CommandMixin:
 # ------------------------------------------------------------------------------------------
 
 
-def img_open(fp: BinaryIO, *formats: str, mode="r") -> Image:
+def img_open(fp: BinaryIO, *formats: str, mode: Literal['r'] = 'r') -> Image:
     """
     Opens and identifies the given image file.
 
@@ -1032,10 +1057,14 @@ class ImageMixin:
 
 
 class Updater(AutoStartThread, ABC):
-    __slots__ = ['_app']
-    _app: Optional['BaseApp']
-    def __init__(self, app: 'BaseApp'):
+    __slots__ = ['_app',
+                 '_queue',
+                 ]
+    _app: 'BaseApp'
+    _queue: Queue
+    def __init__(self, app: 'BaseApp', queue: Queue):
         self._app = app
+        self._queue = queue
         AutoStartThread.__init__(self)
 
     def stop(self): raise NotImplementedError()
@@ -1063,10 +1092,15 @@ class AsyncUpdater(AutoStartThread):
 _TUpdater = TypeVar('_TUpdater', Updater, AsyncUpdater)
 class BaseApp(tkRoot, Generic[_TUpdater], ABC):
     """ Override to extend functionality. Indented to be the base class for the Application level class, which is passed to all child windows and frames. """
-    __slots__ = ['logger', '_logging_manager', '_updater']
+    __slots__ = ['logger',
+                 '_logging_manager',
+                 '_updater',
+                 'NAME'
+                 ]
     logger: Logger
     _logging_manager: LoggingManager
     _updater: _TUpdater
+    NAME: Final[str]
     def __init__(self, updater: _TUpdater, app_name: str, *types: Type,
                  width: Optional[int] = None, height: Optional[int] = None, fullscreen: Optional[bool] = None, x: int = 0, y: int = 0, **kwargs):
         root_path = kwargs.pop('root_path', '.')
@@ -1075,6 +1109,8 @@ class BaseApp(tkRoot, Generic[_TUpdater], ABC):
         self._logging_manager = LoggingManager.FromTypes(self.__class__, *types, app_name=app_name, root_path=FilePath.convert(root_path))
         self.logger = self.CreateLogger(self)
         self._updater = updater
+        self.NAME = app_name
+        self.SetTitle(app_name)
 
         self.protocol('WM_DELETE_WINDOW', self.Close)
 
@@ -1096,7 +1132,7 @@ class BaseApp(tkRoot, Generic[_TUpdater], ABC):
     def Close(self):
         """ Override to add functionality. Closes updater loop then closes application. """
         self._updater.stop()
-        self.tk.destroy()
+        self.tk.quit()
     def start_gui(self, *_args, **_kwargs): raise NotImplementedError()
 
     def _setup(self):
@@ -1120,25 +1156,27 @@ class BaseApp(tkRoot, Generic[_TUpdater], ABC):
 
 class BaseAsyncApp(BaseApp[AsyncUpdater], ABC):
     """ Override to extend functionality. Indented to be the base class for the Application level class, which is passed to all child windows and frames. """
-    def __init__(self, *types: Type,
-                 app_name: str,
-                 loop: Type[AbstractEventLoop] = None,
+    __slots__ = ['_updater']
+    def __init__(self, app_name: str,
+                 *types: Type,
+                 width: Optional[int] = None,
+                 height: Optional[int] = None,
                  x: int = 0,
                  y: int = 0,
-                 Screen_Width: Optional[int] = None,
-                 Screen_Height: Optional[int] = None,
-                 updater: Type[AsyncUpdater] = None,
                  fullscreen: Optional[bool] = None,
-                 root_path: Union[str, FilePath] = None,
+                 loop: Type[AbstractEventLoop] = None,
+                 root_path: Union[str, FilePath] = '.',
+                 updater: Type[AsyncUpdater] = None,
                  **kwargs):
         if fullscreen is None: fullscreen = not self.DEBUG
         _updater = (updater or AsyncUpdater)(loop or get_event_loop())
 
-        BaseApp.__init__(self, _updater, app_name, *types, root_path=root_path, width=Screen_Width, height=Screen_Height, fullscreen=fullscreen, x=x, y=y, **kwargs)
+        BaseApp.__init__(self, _updater, app_name, *types, root_path=root_path, width=width, height=height, fullscreen=fullscreen, x=x, y=y, **kwargs)
 
     @property
     def loop(self) -> AbstractEventLoop:
         return self._updater.loop
+
 
     def start_gui(self, *_args, **_kwargs):
         try:
@@ -1150,20 +1188,24 @@ class BaseAsyncApp(BaseApp[AsyncUpdater], ABC):
 
 class BaseSyncApp(BaseApp[Updater], ABC):
     """ Override to extend functionality. Indented to be the base class for the Application level class, which is passed to all child windows and frames. """
-    def __init__(self, *types: Type,
-                 app_name: str,
+    __slots__ = ['queue']
+    queue: Queue
+    def __init__(self, app_name: str,
+                 *types: Type,
                  x: int = 0,
                  y: int = 0,
-                 Screen_Width: Optional[int] = None,
-                 Screen_Height: Optional[int] = None,
-                 updater: Type[Updater] = None,
+                 width: Optional[int] = None,
+                 height: Optional[int] = None,
                  fullscreen: Optional[bool] = None,
                  root_path: Union[str, FilePath] = None,
+                 updater: Type[Updater] = None,
+                 queue: Queue = Queue(),
                  **kwargs):
         if fullscreen is None: fullscreen = not self.DEBUG
-        _updater = (updater or Updater)(self)
+        self.queue = queue
+        _updater = (updater or Updater)(self, queue)
+        BaseApp.__init__(self, _updater, app_name, *types, root_path=root_path, width=width, height=height, fullscreen=fullscreen, x=x, y=y, **kwargs)
 
-        BaseApp.__init__(self, _updater, app_name, *types, root_path=root_path, width=Screen_Width, height=Screen_Height, fullscreen=fullscreen, x=x, y=y, **kwargs)
 
     def start_gui(self, *_args, **_kwargs):
         try:
@@ -1216,7 +1258,11 @@ class Frame(tk.Frame, BaseTkinterWidget, _BaseFrameMixin):
         BaseTkinterWidget.__init__(self, Color, loop)
         _BaseFrameMixin.__init__(self)
 
-    def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
+    # noinspection PyProtectedMember
+    def _options(self, cnf, kwargs=None) -> dict:
+        # noinspection PyUnresolvedReferences
+        return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
+
 
 class LabelFrame(tk.LabelFrame, BaseTextTkinterWidget, _BaseFrameMixin):
     __doc__ = """Construct a labelframe _widget with the master MASTER.
@@ -1247,7 +1293,10 @@ class LabelFrame(tk.LabelFrame, BaseTextTkinterWidget, _BaseFrameMixin):
         self._txt.set(value)
         self.configure(text=value)
 
-    def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
+    # noinspection PyProtectedMember
+    def _options(self, cnf, kwargs=None) -> dict:
+        # noinspection PyUnresolvedReferences
+        return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
 
 
 # noinspection DuplicatedCode
@@ -1259,7 +1308,11 @@ class FrameThemed(ttk.Frame, BaseTkinterWidget, _BaseFrameMixin):
         BaseTkinterWidget.__init__(self, Color, loop)
         _BaseFrameMixin.__init__(self)
 
-    def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
+    # noinspection PyProtectedMember
+    def _options(self, cnf, kwargs=None) -> dict:
+        # noinspection PyUnresolvedReferences
+        return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
+
 
 class LabelFrameThemed(ttk.LabelFrame, BaseTextTkinterWidget, _BaseFrameMixin):
     __doc__ = """Construct a labelframe _widget with the master MASTER.
@@ -1290,7 +1343,10 @@ class LabelFrameThemed(ttk.LabelFrame, BaseTextTkinterWidget, _BaseFrameMixin):
         self._txt.set(value)
         self.configure(text=value)
 
-    def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
+    # noinspection PyProtectedMember
+    def _options(self, cnf, kwargs=None) -> dict:
+        # noinspection PyUnresolvedReferences
+        return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
 
 
 # ------------------------------------------------------------------------------------------
@@ -1316,7 +1372,7 @@ class BaseWindow(Frame, _WindowMixin[_TBaseApp]):
 
     @classmethod
     def Root(cls, app: _TBaseApp, **kwargs):
-        return cls(app.tk, app, **kwargs)
+        return cls(app, app, **kwargs)
 
 
 class BaseLabelWindow(LabelFrame, _WindowMixin[_TBaseApp]):
@@ -1326,4 +1382,4 @@ class BaseLabelWindow(LabelFrame, _WindowMixin[_TBaseApp]):
 
     @classmethod
     def Root(cls, app: _TBaseApp, **kwargs):
-        return cls(app.tk, app, **kwargs)
+        return cls(app, app, **kwargs)

@@ -3,10 +3,10 @@ from enum import Enum
 from time import time
 from typing import *
 
-from .Style import *
 from .Base import *
 from .Enumerations import Orientation
 from .Events import Bindings
+from .Style import *
 
 
 
@@ -121,7 +121,8 @@ class tkRoot(tk.Tk, _rootMixin):
         if fullscreen is not None: self.SetFullScreen(fullscreen)
         self.style = Style(master=self)
 
-    def _options(self, cnf, kwargs=None) -> Dict: return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
+    def _options(self, cnf, kwargs=None) -> Dict:
+        return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
 
 
     def Create_Event(self, tag: Union[str, Bindings], *, num: int = '??', height: int = '??', width: int = '??', key_code: int = '??', state: int = '??',
@@ -215,7 +216,8 @@ class tkRoot(tk.Tk, _rootMixin):
         self.event_generate(sequence=tag, num=num, width=width, height=height, keycode=key_code, state=state, time=current_time, x=x, y=y, char=char, keysym=keysym,
                             keysym_num=keysym_num, type=event_type, widget=widget, x_root=self.winfo_rootx(), y_root=self.winfo_rooty(), delta=delta)
 
-    def do_one_event(self): return self.tk.dooneevent(DONT_WAIT)
+    def do_one_event(self):
+        return self.tk.dooneevent(DONT_WAIT)
 
 
 class tkTopLevel(tk.Toplevel, _rootMixin):

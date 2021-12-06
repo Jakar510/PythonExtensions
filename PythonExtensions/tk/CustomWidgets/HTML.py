@@ -68,15 +68,21 @@ class HTMLScrolledText(ScrolledText):
         self._bindIDs.add(self.tb.Bind(Bindings.FocusIn, func=self.HandleFocusIn, add=True))
         self._bindIDs.add(self.tb.Bind(Bindings.FocusOut, func=self.HandleFocusOut, add=True))
 
-    def HandlePress(self, event: tkEvent): pass
-    def HandleRelease(self, event: tkEvent): pass
-    def HandleFocusIn(self, event: tkEvent): pass
-    def HandleFocusOut(self, event: tkEvent): pass
+    def HandlePress(self, event: tkEvent):
+        pass
+    def HandleRelease(self, event: tkEvent):
+        pass
+    def HandleFocusIn(self, event: tkEvent):
+        pass
+    def HandleFocusOut(self, event: tkEvent):
+        pass
 
     @property
-    def txt(self) -> str: return self.tb.txt
+    def txt(self) -> str:
+        return self.tb.txt
     @txt.setter
-    def txt(self, value: str): self.set_html(value)
+    def txt(self, value: str):
+        self.set_html(value)
 
 # ------------------------------------------------------------------------------------------
 
@@ -111,4 +117,5 @@ class HTMLLabel(HTMLText):
         if not 'padx' in kwargs:
             self.tb.config(padx=3)
 
-    def set_html(self, *args, **kwargs): return super().set_html(*args, **kwargs).Disable()
+    def set_html(self, *args, **kwargs):
+        return super().set_html(*args, **kwargs).Disable()

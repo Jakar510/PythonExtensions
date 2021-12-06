@@ -69,9 +69,11 @@ class HID_BUFFER(TimeKeeperMixin):
 
 
     @property
-    def Value(self) -> str: return self._text
+    def Value(self) -> str:
+        return self._text
     @Value.setter
-    def Value(self, v: int or float or str): self._text = str(v)
+    def Value(self, v: int or float or str):
+        self._text = str(v)
 
 
 
@@ -81,8 +83,10 @@ class HID_BUFFER(TimeKeeperMixin):
 
         :return: Optional[float]
         """
-        try: return self.ReturnAsNumber()
-        except (ValueError, TypeError): return None
+        try:
+            return self.ReturnAsNumber()
+        except (ValueError, TypeError):
+            return None
     def ReturnAsNumber(self) -> float:
         """
             Throws ValueError if text is empty.
@@ -103,24 +107,35 @@ class HID_BUFFER(TimeKeeperMixin):
         :rtype: float
         """
         return self.ReturnAsNumber() * factor
-    def __mul__(self, other: Union[float, int]) -> float: return self.MultiplyByFactor(other)
+    def __mul__(self, other: Union[float, int]) -> float:
+        return self.MultiplyByFactor(other)
 
 
 
-    def format(self, *args, **kwargs) -> str: return self._text.format(*args, **kwargs)
-    def __format__(self, format_spec) -> str: return self._text.__format__(format_spec)
-    def __contains__(self, item: str) -> bool: return item in self._text
-    def __repr__(self) -> str: return f'<{nameof(self)} Object: "{self._text}">'
-    def __str__(self) -> str: return self._text
+    def format(self, *args, **kwargs) -> str:
+        return self._text.format(*args, **kwargs)
+    def __format__(self, format_spec) -> str:
+        return self._text.__format__(format_spec)
+    def __contains__(self, item: str) -> bool:
+        return item in self._text
+    def __repr__(self) -> str:
+        return f'<{nameof(self)} Object: "{self._text}">'
+    def __str__(self) -> str:
+        return self._text
 
 
-    def __iadd__(self, char: str): return self.Add(char)
-    def __add__(self, char: str): return self.Add(char)
+    def __iadd__(self, char: str):
+        return self.Add(char)
+    def __add__(self, char: str):
+        return self.Add(char)
 
-    def __isub__(self, char: str): return self.Sub(char)
-    def __sub__(self, char: str): return self.Sub(char)
+    def __isub__(self, char: str):
+        return self.Sub(char)
+    def __sub__(self, char: str):
+        return self.Sub(char)
 
-    def __len__(self) -> int: return len(self._text)
+    def __len__(self) -> int:
+        return len(self._text)
 
 
     def __delitem__(self, key: int):

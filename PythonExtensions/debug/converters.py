@@ -1,7 +1,9 @@
 import re
 
-__all__ = ['IsAttributePrivate', 'ObjectToDict']
 
+
+
+__all__ = ['IsAttributePrivate', 'ObjectToDict']
 
 private_or_special_function_searcher = re.compile(r"(^__\w+$)|(^_\w+$)|(^__\w+__$)")
 def IsAttributePrivate(attr_name: str) -> bool:
@@ -19,7 +21,7 @@ def ObjectToDict(Object: any, Skip: list or tuple = (), *, ShowAll: bool = False
     :param Object: the thing being inspected.
     :return:
     """
-    temp = {}
+    temp = { }
     for key in dir(Object):
         if key in Skip: continue
         if ShowAll or IsAttributePrivate(key):
@@ -27,4 +29,3 @@ def ObjectToDict(Object: any, Skip: list or tuple = (), *, ShowAll: bool = False
             if IncludeCallable and callable(temp[key]):
                 del temp[key]
     return temp
-

@@ -79,9 +79,12 @@ class ButtonGrid(Frame, ABC):
             self._buttons[i].SetCommand(Command, z=z.get(i), **kwz.get(i, { }))
 
     @property
-    def _Count(self) -> int: return self._rows * self._cols
+    def _Count(self) -> int:
+        return self._rows * self._cols
 
     @property
-    def ButtonTitles(self) -> Dict[int, str]: raise NotImplementedError()
+    def ButtonTitles(self) -> Dict[int, str]:
+        raise NotImplementedError()
     @property
-    def ButtonCommands(self) -> Dict[int, callable]: raise NotImplementedError()
+    def ButtonCommands(self) -> Dict[int, callable]:
+        raise NotImplementedError()

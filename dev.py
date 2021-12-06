@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import *
 
 from PythonExtensions.tk import *
 
@@ -52,7 +52,7 @@ class Main(BaseWindow[App]):
 
 
 if __name__ == '__main__':
-    _app = App(app_name='test app', root_path='.')
+    _app = App('test app')
 
     # _app.root.after(3000, _app.Close)
 

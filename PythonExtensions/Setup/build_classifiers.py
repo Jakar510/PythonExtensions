@@ -1,8 +1,8 @@
 import json
 import re
 
+from PythonExtensions.Debug import *
 from PythonExtensions.Setup import *
-from PythonExtensions.debug import *
 
 
 
@@ -13,16 +13,16 @@ num_start = re.compile(r'^\d+_')
 ver_finder = re.compile(r'^\d+\.\d+$')
 
 _num_words = {
-    '0': 'Zero',
-    '1': 'One',
-    '2': 'Two',
-    '3': 'Three',
-    '4': 'Four',
-    '5': 'Five',
-    '6': 'Six',
-    '7': 'Seven',
-    '8': 'Eight',
-    '9': 'Nine',
+    '0':  'Zero',
+    '1':  'One',
+    '2':  'Two',
+    '3':  'Three',
+    '4':  'Four',
+    '5':  'Five',
+    '6':  'Six',
+    '7':  'Seven',
+    '8':  'Eight',
+    '9':  'Nine',
     '10': 'Ten',
     '11': 'Eleven',
     }
@@ -54,13 +54,13 @@ def GetData(_line: str, *, _sep=' :: ') -> List[str]:
         # l = l.replace('\n', '').replace('-', '').replace("'", '')
         l = Replace(l, {
             ' - ': '_',
-            '\\': '_',
-            '/': '_',
-            ' ': '_',
-            '.': '_',
-            '+': '_plus',
-            '#': '_sharp',
-            '3D': 'ThreeDimension',
+            '\\':  '_',
+            '/':   '_',
+            ' ':   '_',
+            '.':   '_',
+            '+':   '_plus',
+            '#':   '_sharp',
+            '3D':  'ThreeDimension',
             })
         l = Remove(l, '\n', '(', ')', "'", '-', ',')
 

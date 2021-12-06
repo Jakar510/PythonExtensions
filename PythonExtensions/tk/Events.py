@@ -11,8 +11,8 @@ from enum import Enum
 from tkinter import Event as tkEvent, EventType, EventType as tkEventType, Widget
 from typing import *
 
-from ..Misc import lazy_property
-from ..Names import nameof
+from ..Core.Misc import lazy_property
+from ..Core.Names import nameof
 
 
 

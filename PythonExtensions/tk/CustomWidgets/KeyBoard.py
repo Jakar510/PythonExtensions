@@ -13,9 +13,9 @@ from ..Enumerations import EventType
 from ..Events import *
 from ..Roots import *
 from ..Widgets import *
-from ... import AssertType
-from ...HID_BUFFER import HID_BUFFER
-from ...Names import nameof
+from ...Core.HID_BUFFER import HID_BUFFER
+from ...Core.Json import AssertType
+from ...Core.Names import nameof
 
 
 

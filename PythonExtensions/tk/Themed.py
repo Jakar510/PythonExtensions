@@ -95,9 +95,11 @@ class ScrollbarThemed(ttk.Scrollbar, BaseTkinterWidget):
 class ListItem(dict):
     __slots__ = ['_state_', '__bindings__', '_pi', '_manager_', '_wrap', '_cb', '_updater', '_txt']
     @property
-    def ID(self) -> str: return self.get("ID", None)
+    def ID(self) -> str:
+        return self.get("ID", None)
     @property
-    def Name(self) -> str: return self.get("Name", None)
+    def Name(self) -> str:
+        return self.get("Name", None)
     @property
     def Children(self):
         """
@@ -195,9 +197,11 @@ class TreeViewThemed(ttk.Treeview, BaseTkinterWidget, CommandMixin):
         for color, kw in self.background.items(): self.tag_configure(color, **kw)
 
     @staticmethod
-    def CreateForegroundColorTags(*colors) -> dict: return TreeViewThemed.CreateColorTags(*colors, kw='foreground')
+    def CreateForegroundColorTags(*colors) -> dict:
+        return TreeViewThemed.CreateColorTags(*colors, kw='foreground')
     @staticmethod
-    def CreateBackgroundColorTags(*colors) -> dict: return TreeViewThemed.CreateColorTags(*colors, kw='background')
+    def CreateBackgroundColorTags(*colors) -> dict:
+        return TreeViewThemed.CreateColorTags(*colors, kw='background')
     @staticmethod
     def CreateColorTags(*colors, kw: str) -> dict:
         """
@@ -224,7 +228,8 @@ class TreeViewThemed(ttk.Treeview, BaseTkinterWidget, CommandMixin):
             for tag, kwargs in tags.items():
                 yield tag, self.tag_configure(tag, **kwargs)
 
-    def Clear(self): self.delete(*self.get_children())
+    def Clear(self):
+        self.delete(*self.get_children())
 
     def SetItems(self, items: Union[ListItem, ItemCollection], *, clear: bool = True, Open: bool = True):
         if clear: self.Clear()
@@ -244,7 +249,8 @@ class TreeViewThemed(ttk.Treeview, BaseTkinterWidget, CommandMixin):
                 self.insert(parent, index=tk.END, iid=item.ID, text=item.Name, open=Open)
                 self._json_tree(item.Children, parent=item.ID, Open=Open)
 
-        else: raise TypeError(type(d), (ListItem, ItemCollection))
+        else:
+            raise TypeError(type(d), (ListItem, ItemCollection))
 
 
     def column(self, column, option=None, **kw):
@@ -252,7 +258,8 @@ class TreeViewThemed(ttk.Treeview, BaseTkinterWidget, CommandMixin):
     def heading(self, column, option=None, **kw):
         return super(TreeViewThemed, self).heading(column, option, **self.convert_kwargs(kw))
 
-    def selection(self) -> Tuple[str]: return super(TreeViewThemed, self).selection()
+    def selection(self) -> Tuple[str]:
+        return super(TreeViewThemed, self).selection()
 
     # noinspection PyUnusedLocal
     def OnSelect(self, event: tkEvent = None):
@@ -269,12 +276,15 @@ class TreeViewThemed(ttk.Treeview, BaseTkinterWidget, CommandMixin):
         for _id in self.selection():
             fg = random.choice(tuple(self.foreground.values()))
             bg = random.choice(tuple(self.background.values()))
-            if self.tag_has('sel', _id): self.item(_id, tags=[''])
-            else: self.item(_id, tags=['sel', fg, bg])
+            if self.tag_has('sel', _id):
+                self.item(_id, tags=[''])
+            else:
+                self.item(_id, tags=['sel', fg, bg])
 
         self.SelectedItems = self.tag_has('sel')
 
-    def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
+    def _options(self, cnf, kwargs=None) -> dict:
+        return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
 class TreeViewHolderThemed(Frame):
     """Construct a Ttk Treeview with master scale.
 
@@ -321,7 +331,8 @@ class TreeViewHolderThemed(Frame):
             self.vsb.show()
             self.hsb.show()
 
-    def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
+    def _options(self, cnf, kwargs=None) -> dict:
+        return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
 
 # ------------------------------------------------------------------------------------------
 
@@ -462,8 +473,10 @@ class NotebookThemed(BaseTextTkinterWidget, ttk.Notebook):
         return ttk.Notebook.identify(self, x, y)
 
     def index_of(self, widget: Union[BaseTkinterWidget, str]) -> int:
-        if not isinstance(widget, str): _w = str(widget)
-        else: _w = widget
+        if not isinstance(widget, str):
+            _w = str(widget)
+        else:
+            _w = widget
 
         for i, w in enumerate(self.tabs()):
             if w == _w: return i
@@ -523,25 +536,31 @@ class NotebookThemed(BaseTextTkinterWidget, ttk.Notebook):
 
 
     @property
-    def ActiveTab(self) -> Union[int, str]: return self.select()
+    def ActiveTab(self) -> Union[int, str]:
+        return self.select()
     @ActiveTab.setter
-    def ActiveTab(self, tab_id: Union[int, str]): self.select(tab_id)
+    def ActiveTab(self, tab_id: Union[int, str]):
+        self.select(tab_id)
 
 
     @property
-    def txt(self) -> str: return self.tab(self.ActiveTab, option='text')
+    def txt(self) -> str:
+        return self.tab(self.ActiveTab, option='text')
     @txt.setter
-    def txt(self, value: str): self.tab(self.ActiveTab, text=value)
+    def txt(self, value: str):
+        self.tab(self.ActiveTab, text=value)
 
 
     @property
-    def wrap(self) -> int: return self.tab(self.ActiveTab, option='wraplength')
+    def wrap(self) -> int:
+        return self.tab(self.ActiveTab, option='wraplength')
     @wrap.setter
     def wrap(self, value: int):
         assert (isinstance(value, int))
         self.tab(self.ActiveTab, wraplength=self._wrap)
 
-    def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
+    def _options(self, cnf, kwargs=None) -> dict:
+        return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
 
 # ------------------------------------------------------------------------------------------
 

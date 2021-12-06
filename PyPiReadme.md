@@ -18,6 +18,7 @@ Please read [CONTRIBUTING.md](https://github.com/Jakar510/PythonExtensions/blob/
 * **Paolo Gurisatti** - *tk_html_widgets* - [paolo-gurisatti](https://github.com/paolo-gurisatti)
 * **Ole Jakob Skjelten** - *AnimatedGIF* - [olesk75](https://github.com/olesk75)
 * **Pete Mojeiko** - *tkinter-keyboard* - [petemojeiko](https://ghttps://github.com/petemojeiko)
+* **montag451** - *AioTkinter* - [montag451](https://github.com/montag451)
 
 ## License
 
