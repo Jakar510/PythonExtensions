@@ -7,8 +7,6 @@ cryptography
 attr
 cattrs
 aiofiles
-asyncio
-typeshed_client
 prettyprinter
 aiohttp
 yarl
