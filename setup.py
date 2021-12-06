@@ -6,7 +6,6 @@
 
 from setuptools import setup
 
-from PythonExtensions.Debug import PrettyPrint
 from PythonExtensions.Setup import *
 from PythonExtensions.__metadata__ import *
 
@@ -18,13 +17,6 @@ long_description = ReadFromFile(abspath("./PyPiReadme.md"))
 install_requires = GetRequirements(abspath('./requirements.txt'))
 
 _packages, _package_data = Get_Packages_Data(abspath('PythonExtensions'), __name__, includes=MatchFileTypes('py', 'png', 'txt', 'json'))
-
-
-print()
-print()
-PrettyPrint(_package_data=_package_data, _packages=_packages)
-print()
-print()
 
 
 setup(name=__name__,
