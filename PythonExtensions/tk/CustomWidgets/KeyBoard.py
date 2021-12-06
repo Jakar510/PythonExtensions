@@ -11,7 +11,6 @@ from typing import *
 from ..Base import *
 from ..Enumerations import EventType
 from ..Events import *
-from ..Roots import *
 from ..Widgets import *
 from ...Core.HID_BUFFER import HID_BUFFER
 from ...Core.Json import AssertType
@@ -77,7 +76,8 @@ class PopupKeyboard(tkTopLevel):
     _numbers: Dict[int, Dict[int, Button]] = { }
     _hid = HID_BUFFER()
     _attach: Union['KeyboardMixin', BaseTextTkinterWidget]
-    def __init__(self, root: tkRoot, *, attach,
+    def __init__(self, root: tkRoot, *,
+                 attach: 'KeyboardMixin',
                  x: int, y: int,
                  key_size: int = -1,
                  key_color: str = 'white',
@@ -86,12 +86,12 @@ class PopupKeyboard(tkTopLevel):
                  font: str = '-family {Segoe UI Black} -size 13'):
         assert (isinstance(root, tkRoot))
         self.__root = root
-        tkTopLevel.__init__(self, master=root, fullscreen=False, takefocus=take_focus, Screen_Width=1, Screen_Height=1)
+        tkTopLevel.__init__(self, master=root, fullscreen=False, takefocus=take_focus, width=1, height=1)
 
         self.overrideredirect(True)
         self.SetTransparency(transparency)
 
-        if not isinstance(attach, KeyboardMixin) and isinstance(attach, BaseTextTkinterWidget): raise TypeError(type(attach), (KeyboardMixin, BaseTextTkinterWidget))
+        if not (isinstance(attach, KeyboardMixin) and isinstance(attach, BaseTextTkinterWidget)): raise TypeError(type(attach), (KeyboardMixin, BaseTextTkinterWidget))
         self._attach = attach
 
         self._key_color = key_color
@@ -185,8 +185,8 @@ class PopupKeyboard(tkTopLevel):
     def _SetDimensions(self):
         frame_width: int = self.frame_width
         frame_height: int = self.frame_height
-        y = self._get_y(y=self._y, frame_height=frame_height, entry_height=self._attach.Height, placement=self._attach.placement)
-        x = self._get_x(x=self._x, frame_width=frame_width, entry_width=self._attach.Width, placement=self._attach.placement)
+        y = self._get_y(y=self._y, frame_height=frame_height, entry_height=self._attach.winfo_height(), placement=self._attach.placement)
+        x = self._get_x(x=self._x, frame_width=frame_width, entry_width=self._attach.winfo_width(), placement=self._attach.placement)
         self.SetDimensions(frame_width, frame_height, x, y)
     def _get_x(self, *, x: int, frame_width: int, entry_width: int, placement: PlacementSet):
         def left():
@@ -383,8 +383,10 @@ class KeyboardMixin:
     width: int
     height: int
 
-    x: int
-    y: int
+    winfo_width: Callable[[], int]
+    winfo_height: Callable[[], int]
+    winfo_x: Callable[[], int]
+    winfo_y: Callable[[], int]
 
     _popup_width: Optional[int]
     _popup_height: Optional[int]
@@ -456,7 +458,7 @@ class KeyboardMixin:
 
     def _call_popup(self):
         self.destroy_popup()
-        self.kb = PopupKeyboard(self.__root, attach=self, x=self.x, y=self.y, key_size=self.key_size, key_color=self.key_color)
+        self.kb = PopupKeyboard(self.__root, attach=self, x=self.winfo_x(), y=self.winfo_y(), key_size=self.key_size, key_color=self.key_color)
 
     def destroy_popup(self):
         if self.kb:

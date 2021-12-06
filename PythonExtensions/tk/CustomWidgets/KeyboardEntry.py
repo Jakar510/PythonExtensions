@@ -36,7 +36,7 @@ class KeyboardEntry(Entry, KeyboardMixin):
                  'key_size',
                  'key_color']
     # noinspection SpellCheckingInspection
-    def __init__(self, master, *, root: tkRoot, placement: PlacementSet = PlacementSet(Placement.Auto), keysize: int = None, keycolor: str = None,
+    def __init__(self, master, root: tkRoot, *, placement: PlacementSet = PlacementSet(Placement.Auto), keysize: int = None, keycolor: str = None,
                  insertbackground: str = 'red', insertborderwidth: int = 3, insertofftime: int = 500, insertontime: int = 500, insertwidth: int = 3,
                  text: str = '', Override_var: tk.StringVar = None, Color: Dict = None, **kwargs):
         Entry.__init__(self, master, text=text, Override_var=Override_var, Color=Color,
@@ -44,7 +44,7 @@ class KeyboardEntry(Entry, KeyboardMixin):
                        **kwargs)
         KeyboardMixin.__init__(self, master, root=root, placement=placement, keysize=keysize, keycolor=keycolor)
 
-    def _options(self, cnf, kwargs=None) -> Dict: return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
+    def _options(self, cnf, kwargs=None) -> Dict: return super()._options(cnf, convert_kwargs(kwargs))
 
 
 
@@ -56,7 +56,7 @@ class TitledEntry(BaseTitled):
         assert (issubclass(cls, Entry))
         BaseTitled.__init__(self, master, cls, RowPadding, factor, frame, title, **value_kwargs)
 class TitledKeyboardEntry(BaseTitledKeyboard):
-    def __init__(self, master, *, root: tkRoot, RowPadding: int = 1, factor: int = 3,
+    def __init__(self, master, root: tkRoot, *, RowPadding: int = 1, factor: int = 3,
                  frame: Dict[str, Any] = { }, title: Union[str, Dict[str, Any]] = { }, cls: Type[KeyboardEntry] = KeyboardEntry, **value_kwargs):
         assert (issubclass(cls, KeyboardEntry))
         BaseTitledKeyboard.__init__(self, master, cls, root, RowPadding, factor, frame, title, **value_kwargs)
@@ -70,6 +70,6 @@ class FramedEntry(BaseFramed):
         assert (issubclass(cls, Entry))
         BaseFramed.__init__(self, master, cls, value, **value_kwargs)
 class FramedKeyboardEntry(BaseFramedKeyboard):
-    def __init__(self, master, *, root: tkRoot, title: Union[str, Dict[str, Any]] = { }, cls: Type[KeyboardEntry] = KeyboardEntry, **value_kwargs):
+    def __init__(self, master, root: tkRoot, *, title: Union[str, Dict[str, Any]] = { }, cls: Type[KeyboardEntry] = KeyboardEntry, **value_kwargs):
         assert (issubclass(cls, KeyboardEntry))
         BaseFramedKeyboard.__init__(self, master, cls, root, title, **value_kwargs)

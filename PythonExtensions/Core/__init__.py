@@ -1,6 +1,7 @@
 from .Constants import *
 from .Dates import *
 from .Exceptions import *
+from .Files import *
 from .HID_BUFFER import *
 from .Json import *
 from .Logging import *

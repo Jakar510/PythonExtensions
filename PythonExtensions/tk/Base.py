@@ -5,6 +5,7 @@
 # ------------------------------------------------------------------------------
 import base64
 import tkinter as tk
+from _tkinter import DONT_WAIT
 from abc import ABC
 from asyncio import AbstractEventLoop, get_event_loop, iscoroutine, iscoroutinefunction, run_coroutine_threadsafe
 from enum import Enum
@@ -26,13 +27,11 @@ from requests import get
 from yarl import URL
 
 from .Enumerations import *
+from .Enumerations import Orientation
 from .Events import Bindings, TkinterEvent, tkEvent
-from .Roots import tkRoot
-from ..Core.Logging import LoggingManager
-from ..Core.Names import class_name, nameof, typeof
-from ..Core.Threads import AutoStartThread
+from .Style import *
+from ..Core import *
 from ..Debug import pp
-from ..Files import FilePath
 
 
 
@@ -62,7 +61,254 @@ __all__ = [
     'LabelFrame',
     'FrameThemed',
     'LabelFrameThemed',
+    'convert_kwargs',
+    'tkRoot',
+    'tkTopLevel',
     ]
+
+
+class _rootMixin:
+    style: Style
+    Screen_Width: int = None
+    Screen_Height: int = None
+
+    winfo_screenwidth: callable
+    winfo_screenheight: callable
+    geometry: callable
+    config: callable
+    bind: callable
+    unbind_all: callable
+    bind_all: callable
+    title: callable
+
+    winfo_x: callable
+    winfo_y: callable
+    winfo_height: callable
+    winfo_width: callable
+
+    update: callable
+    update_idletasks: callable
+    tk_focusNext: callable
+    tk_focusPrev: callable
+    attributes: callable
+    resizable: callable
+    def SetDimensions(self, Screen_Width: int = None, Screen_Height: int = None, x: int = 0, y: int = 0):
+        self.Screen_Width = Screen_Width or int(self.winfo_screenwidth())
+        self.Screen_Height = Screen_Height or int(self.winfo_screenheight())
+        return self.geometry(self.Dimensions(x, y))
+    def Dimensions(self, x: int = 0, y: int = 0) -> str:
+        return f"{self.Screen_Width}x{self.Screen_Height}+{x}+{y}"
+
+    def HideCursor(self):
+        self.config(cursor="none")
+        return self
+
+    def SetFullScreen(self, fullscreen: bool = False):
+        self.attributes('-fullscreen', fullscreen)
+        return self
+    def SetTitle(self, title: str):
+        self.title(title)
+        return self
+    def SetResizable(self, resizable: bool):
+        self.resizable(width=resizable, height=resizable)
+        return self
+
+    def Update(self):
+        self.update()
+        self.update_idletasks()
+
+    def Bind(self, sequence: Union[str, Enum] = None, func: callable = None, add: bool = None):
+        if isinstance(sequence, Enum): sequence = sequence.value
+        return self.bind(sequence, func, add)
+
+    def MultiUnbindAll(self, *args: Union[str, Enum]):
+        for arg in args: self.UnbindAll(arg)
+    def UnbindAll(self, sequence: Union[str, Enum] = None):
+        """Unbind for all widgets for event SEQUENCE all functions."""
+        if isinstance(sequence, Enum): sequence = sequence.value
+        return self.unbind_all(sequence)
+
+    def BindAll(self, sequence: Union[str, Enum] = None, func: callable = None, add: bool = None):
+        """Bind to all widgets at an event SEQUENCE a call to function FUNC.
+        An additional boolean parameter ADD specifies whether FUNC will
+        be called additionally to the other bound function or whether
+        it will replace the previous function. See bind for the return value."""
+        if isinstance(sequence, Enum): sequence = sequence.value
+        return self.bind_all(sequence, func, add)
+
+    @property
+    def width(self) -> int:
+        return self.winfo_width()
+    @property
+    def height(self) -> int:
+        return self.winfo_height()
+
+    @property
+    def x(self) -> int:
+        return self.winfo_x()
+    @property
+    def y(self) -> int:
+        return self.winfo_y()
+
+
+    @property
+    def Orientation(self) -> Orientation:
+        return Orientation.Landscape if self.Screen_Width > self.Screen_Height else Orientation.Portrait
+
+    def SetTransparency(self, v: float):
+        assert (0.0 <= v <= 1.0)
+        return self.attributes('-alpha', v)
+
+    def FocusNext(self):
+        self.tk_focusNext().focus_set()
+    def FocusPrevious(self):
+        self.tk_focusPrev().focus_set()
+
+
+class tkRoot(tk.Tk, _rootMixin):
+    __slots__ = ['style']
+    def __init__(self, width: Optional[int] = None, height: Optional[int] = None, fullscreen: Optional[bool] = None, x: int = 0, y: int = 0, **kwargs):
+        super().__init__(**kwargs)
+        self.SetDimensions(width, height, x, y)
+        if fullscreen is not None: self.SetFullScreen(fullscreen)
+        self.style = Style(master=self)
+
+    def _options(self, cnf, kwargs=None) -> Dict:
+        # noinspection PyUnresolvedReferences,PyProtectedMember
+        return super()._options(cnf, convert_kwargs(kwargs))
+
+
+    def Create_Event(self, tag: Union[str, Bindings], *, num: int = '??', height: int = '??', width: int = '??', key_code: int = '??', state: int = '??',
+                     x: int = '??', y: int = '??', char: str = '??', keysym: Union[str, Bindings] = '??', keysym_num: int = '??', delta: int = '??',
+                     event_type: tk.EventType, widget: tk.Widget, current_time=time()):
+        """
+            example:
+                <TkinterEvent Object. Configuration:
+                {   'char': 'a',
+                    'delta': 0,
+                    'Height': '??',
+                    'keycode': 65,
+                    'keysym': 'a',
+                    'keysym_num': 97,
+                    'num': '??',
+                    'state': 8,
+                    'time': 329453312,
+                    'type': <EventType.KeyPress: '2'>,
+                    'widget': <spf.Workers.Views.Carousel.CarouselView object .!carouselview>,
+                    'Width': '??',
+                    'x': 936,
+                    'x_root': 1045,
+                    'y': 670,
+                    'y_root': 808} >
+
+            class Event:
+                '''Container for the properties of an event.
+
+                Instances of this type are generated if one of the following events occurs:
+
+                KeyPress, KeyRelease - for keyboard events
+                ButtonPress, ButtonRelease, Motion, Enter, Leave, MouseWheel - for mouse events
+                Visibility, Unmap, Map, Expose, FocusIn, FocusOut, Circulate,
+                Colormap, Gravity, Reparent, Property, Destroy, Activate,
+                Deactivate - for window events.
+
+                If a callback function for one of these events is registered
+                using bind, bind_all, bind_class, or tag_bind, the callback is
+                called with an Event as first argument. It will have the
+                following attributes (in braces are the event types for which
+                the attribute is valid):
+
+                    serial - serial number of event
+                num - mouse button pressed (ButtonPress, ButtonRelease)
+                focus - whether the window has the focus (Enter, Leave)
+                Height - Height of the exposed window (Configure, Expose)
+                Width - Width of the exposed window (Configure, Expose)
+                keycode - keycode of the pressed key (KeyPress, KeyRelease)
+                state - state of the event as a number (ButtonPress, ButtonRelease,
+                                        Enter, KeyPress, KeyRelease,
+                                        Leave, Motion)
+                state - state as a string (Visibility)
+                time - when the event occurred
+                x - x-position of the mouse
+                y - y-position of the mouse
+                x_root - x-position of the mouse on the screen
+                         (ButtonPress, ButtonRelease, KeyPress, KeyRelease, Motion)
+                y_root - y-position of the mouse on the screen
+                         (ButtonPress, ButtonRelease, KeyPress, KeyRelease, Motion)
+                char - pressed character (KeyPress, KeyRelease)
+                send_event - see X/Windows documentation
+                keysym - keysym of the event as a string (KeyPress, KeyRelease)
+                keysym_num - keysym of the event as a number (KeyPress, KeyRelease)
+                type - type of the event as a number
+                widget - widget in which the event occurred
+                delta - delta of wheel movement (MouseWheel)
+                '''
+
+        :param tag:
+        :param num: mouse button pressed (ButtonPress, ButtonRelease)
+        :param key_code: keycode of the pressed key (KeyPress, KeyRelease)
+        :param state: state of the event as a number (ButtonPress, ButtonRelease,
+                                        Enter, KeyPress, KeyRelease,
+                                        Leave, Motion)
+        :param current_time:
+        :param height: Height of the exposed window (Configure, Expose)
+        :param width: Width of the exposed window (Configure, Expose)
+        :param x: x-position of the mouse
+        :param y: y-position of the mouse
+        :param char: pressed character (KeyPress, KeyRelease)
+        :param keysym: keysym of the event as a string (KeyPress, KeyRelease)
+        :param keysym_num: keysym of the event as a number (KeyPress, KeyRelease)
+        :param event_type: type of the event as a number
+        :param widget: widget in which the event occurred
+        :param delta: delta of wheel movement (MouseWheel)
+        :return:
+        """
+        if isinstance(tag, Bindings): tag = tag.value
+        if isinstance(keysym, Bindings): keysym = keysym.value
+
+        # noinspection PyArgumentList
+        self.event_generate(sequence=tag, num=num, width=width, height=height, keycode=key_code, state=state, time=current_time, x=x, y=y, char=char, keysym=keysym,
+                            keysym_num=keysym_num, type=event_type, widget=widget, x_root=self.winfo_rootx(), y_root=self.winfo_rooty(), delta=delta)
+
+    def do_one_event(self):
+        return self.tk.dooneevent(DONT_WAIT)
+
+
+class tkTopLevel(tk.Toplevel, _rootMixin):
+    __slots__ = ['style']
+    def __init__(self, master: tkRoot, *, width: int = None, height: int = None, x: int = 0, y: int = 0, fullscreen: bool = None, **kwargs):
+        super().__init__(master, **kwargs)
+        self.SetDimensions(width, height, x, y)
+        if fullscreen is not None: self.SetFullScreen(fullscreen)
+
+        self.style = master.style
+
+    def _options(self, cnf, kwargs=None) -> Dict:
+        # noinspection PyUnresolvedReferences,PyProtectedMember
+        return super()._options(cnf, convert_kwargs(kwargs))
+
+
+# ------------------------------------------------------------------------------------------
+
+
+def convert_kwargs(kwargs: Dict[str, Any], lower: bool = True) -> Optional[Dict[str, Any]]:
+    if kwargs is None: return None
+
+    Assert(kwargs, dict)
+
+    d = { }
+    for k, v in kwargs.items():
+        if isinstance(v, Enum): v = v.value
+        if lower:
+            d[str(k).lower()] = v
+        else:
+            d[k] = v
+
+    return d
+
+
+# ------------------------------------------------------------------------------------------
+
 
 class tkPhotoImage(PhotoImage):
     __slots__ = []
@@ -198,16 +444,16 @@ class BaseTkinterWidget(tk.Widget, ABC):
 
 
     @overload
-    def show(self) -> bool:
+    def show(self, _event: Optional[tkEvent] = None) -> bool:
         ...
     @overload
-    def show(self, TakeFocus: bool) -> bool:
+    def show(self, _event: Optional[tkEvent] = None, *, TakeFocus: bool) -> bool:
         ...
     @overload
-    def show(self, TakeFocus: bool, State: ViewState) -> bool:
+    def show(self, _event: Optional[tkEvent] = None, *, TakeFocus: bool, State: ViewState) -> bool:
         ...
 
-    def show(self, **kwargs) -> bool:
+    def show(self, _event: Optional[tkEvent] = None, **kwargs) -> bool:
         """
         Shows the current widget or _root_frame, based on the current geometry manager.
         Can be overridden to add additional functionality if needed.
@@ -239,20 +485,20 @@ class BaseTkinterWidget(tk.Widget, ABC):
         return True
 
     @overload
-    def hide(self) -> bool:
+    def hide(self, _event: Optional[tkEvent] = None) -> bool:
         ...
     @overload
-    def hide(self, parent: tk.Widget) -> bool:
+    def hide(self, _event: Optional[tkEvent] = None, *, new_focus: tk.Widget) -> bool:
         ...
 
-    def hide(self, parent: tk.Widget = None) -> bool:
+    def hide(self, _event: Optional[tkEvent] = None, *, new_focus: tk.Widget = None) -> bool:
         """
         Hides the current widget or _root_frame, based on the current geometry manager.
         Can be overridden to add additional functionality if needed.
         """
         if self._manager_ is None: return False
 
-        if parent: parent.focus_set()
+        if new_focus: new_focus.focus_set()
 
         self.OnDisappearing()
         if self._manager_ == Layout.pack:
@@ -272,18 +518,6 @@ class BaseTkinterWidget(tk.Widget, ABC):
         self._SetState(state=ViewState.Hidden)
         return True
 
-    @staticmethod
-    def convert_kwargs(kwargs: Dict[str, Any], lower: bool = True) -> dict:
-        d = { }
-        if isinstance(kwargs, dict):
-            for k, v in kwargs.items():
-                if isinstance(v, Enum): v = v.value
-                if lower:
-                    d[str(k).lower()] = v
-                else:
-                    d[k] = v
-
-        return d
 
     # noinspection PyArgumentList
     def SetColors(self, text: str, background: str):
@@ -622,9 +856,13 @@ class CallWrapper(object):
         self._kwargs = kwargs
 
 
-    def __call__(self, event: Optional[tkEvent] = None):
+    def __call__(self, _event: Optional[tkEvent] = None):
         try:
-            result = self._func(event, self._args, self._kwargs)
+            try:
+                result = self._func(_event, self._args, self._kwargs)
+            except TypeError:
+                result = self._func(_event)
+
             if iscoroutine(result) or iscoroutinefunction(result):
                 if self._loop is None: raise ValueError('_loop is None')
                 return run_coroutine_threadsafe(result, self._loop)
@@ -769,10 +1007,13 @@ class CommandMixin:
             elif isinstance(master, tk.Widget):
                 master = master.master
 
+            elif isinstance(master, tkTopLevel):
+                master = master.master
+
             else:
                 break
 
-        raise TypeError(typeof(master), (BaseAsyncApp,))
+        raise TypeError(typeof(master), (BaseAsyncApp, BaseSyncApp, BaseApp))
 
 
 # ------------------------------------------------------------------------------------------
@@ -1261,7 +1502,7 @@ class Frame(tk.Frame, BaseTkinterWidget, _BaseFrameMixin):
     # noinspection PyProtectedMember
     def _options(self, cnf, kwargs=None) -> dict:
         # noinspection PyUnresolvedReferences
-        return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
+        return super()._options(cnf, convert_kwargs(kwargs))
 
 
 class LabelFrame(tk.LabelFrame, BaseTextTkinterWidget, _BaseFrameMixin):
@@ -1296,7 +1537,7 @@ class LabelFrame(tk.LabelFrame, BaseTextTkinterWidget, _BaseFrameMixin):
     # noinspection PyProtectedMember
     def _options(self, cnf, kwargs=None) -> dict:
         # noinspection PyUnresolvedReferences
-        return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
+        return super()._options(cnf, convert_kwargs(kwargs))
 
 
 # noinspection DuplicatedCode
@@ -1311,7 +1552,7 @@ class FrameThemed(ttk.Frame, BaseTkinterWidget, _BaseFrameMixin):
     # noinspection PyProtectedMember
     def _options(self, cnf, kwargs=None) -> dict:
         # noinspection PyUnresolvedReferences
-        return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
+        return super()._options(cnf, convert_kwargs(kwargs))
 
 
 class LabelFrameThemed(ttk.LabelFrame, BaseTextTkinterWidget, _BaseFrameMixin):
@@ -1346,7 +1587,7 @@ class LabelFrameThemed(ttk.LabelFrame, BaseTextTkinterWidget, _BaseFrameMixin):
     # noinspection PyProtectedMember
     def _options(self, cnf, kwargs=None) -> dict:
         # noinspection PyUnresolvedReferences
-        return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
+        return super()._options(cnf, convert_kwargs(kwargs))
 
 
 # ------------------------------------------------------------------------------------------

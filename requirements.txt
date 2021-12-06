@@ -5,6 +5,7 @@ psutil
 multidict
 cryptography
 attr
+attrs-strict
 cattrs
 aiofiles
 prettyprinter

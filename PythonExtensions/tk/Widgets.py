@@ -86,7 +86,7 @@ class Button(tk.Button, BaseTextTkinterWidget, ImageMixin, CommandMixin):
         if Command: self.SetCommand(Command)
 
     def _options(self, cnf, kwargs=None) -> dict:
-        return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
+        return super()._options(cnf, convert_kwargs(kwargs))
 
 # ------------------------------------------------------------------------------------------
 
@@ -124,7 +124,7 @@ class Label(tk.Label, BaseTextTkinterWidget, ImageMixin, CommandMixin):
         self.command_cb = self.Bind(Bindings.ButtonPress, func=self._cmd, add=add)
         return self
 
-    def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
+    def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, convert_kwargs(kwargs))
 
 # ------------------------------------------------------------------------------------------
 
@@ -141,7 +141,7 @@ class Message(tk.Message, BaseTextTkinterWidget, CommandMixin):
         self.command_cb = self.Bind(Bindings.ButtonPress, func=self._cmd, add=add)
         return self
 
-    def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
+    def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, convert_kwargs(kwargs))
 
 # ------------------------------------------------------------------------------------------
 
@@ -186,7 +186,7 @@ class Entry(tk.Entry, BaseTextTkinterWidget, CommandMixin):
 
     def __iadd__(self, other: str): self.Append(other)
 
-    def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
+    def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, convert_kwargs(kwargs))
 
 # ------------------------------------------------------------------------------------------
 
@@ -267,7 +267,7 @@ class CheckButton(tk.Checkbutton, BaseTextTkinterWidget, ImageMixin, CommandMixi
             self.deselect()
 
     def _options(self, cnf, kwargs=None) -> dict:
-        return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
+        return super()._options(cnf, convert_kwargs(kwargs))
 
 # ------------------------------------------------------------------------------------------
 
@@ -435,7 +435,7 @@ class Listbox(tk.Listbox, BaseTextTkinterWidget, CommandMixin):
         self.ReplaceAtIndex(self._Current_ListBox_Index, value)
 
     def _options(self, cnf, kwargs=None) -> dict:
-        return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
+        return super()._options(cnf, convert_kwargs(kwargs))
 
 # ------------------------------------------------------------------------------------------
 
@@ -571,7 +571,7 @@ class Canvas(tk.Canvas, BaseTkinterWidget):
         pass
 
     def _options(self, cnf, kwargs=None) -> dict:
-        return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
+        return super()._options(cnf, convert_kwargs(kwargs))
 
 # ------------------------------------------------------------------------------------------
 
@@ -593,7 +593,7 @@ class Scrollbar(tk.Scrollbar, BaseTkinterWidget, CommandMixin):
         tk.Scrollbar.__init__(self, master, orient=orientation.value, **kwargs)
         BaseTkinterWidget.__init__(self, Color, loop)
 
-    def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
+    def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, convert_kwargs(kwargs))
 
 # ------------------------------------------------------------------------------------------
 
@@ -657,7 +657,7 @@ class Text(tk.Text, BaseTextTkinterWidget, CommandMixin):
         self.command_cb = self.Bind(Bindings.ButtonPress, func=self._cmd, add=add)
         return self
 
-    def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
+    def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, convert_kwargs(kwargs))
 
 # ------------------------------------------------------------------------------------------
 
@@ -698,7 +698,7 @@ class ScrolledText(Frame, BaseTextTkinterWidget, CommandMixin):
         self.command_cb = self.tb.Bind(Bindings.ButtonPress, func=self._cmd, add=add)
         return self
 
-    def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
+    def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, convert_kwargs(kwargs))
 
 # ------------------------------------------------------------------------------------------
 
@@ -708,4 +708,4 @@ class Scale(tk.Scale, BaseTkinterWidget):
         tk.Scale.__init__(self, master, **kwargs)
         BaseTkinterWidget.__init__(self, Color, loop)
 
-    def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
+    def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, convert_kwargs(kwargs))

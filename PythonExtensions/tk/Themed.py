@@ -79,7 +79,7 @@ class ComboBoxThemed(ttk.Combobox, BaseTextTkinterWidget, CommandMixin):
     def SetValues(self, values: list or tuple):
         self.configure(values=values)
 
-    def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
+    def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, convert_kwargs(kwargs))
 
 # ------------------------------------------------------------------------------------------
 
@@ -88,7 +88,7 @@ class ScrollbarThemed(ttk.Scrollbar, BaseTkinterWidget):
     def __init__(self, master, orientation: Orient, **kwargs):
         ttk.Scrollbar.__init__(self, master, orient=orientation.value, **kwargs)
 
-    def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
+    def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, convert_kwargs(kwargs))
 
 # ------------------------------------------------------------------------------------------
 
@@ -284,7 +284,7 @@ class TreeViewThemed(ttk.Treeview, BaseTkinterWidget, CommandMixin):
         self.SelectedItems = self.tag_has('sel')
 
     def _options(self, cnf, kwargs=None) -> dict:
-        return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
+        return super()._options(cnf, convert_kwargs(kwargs))
 class TreeViewHolderThemed(Frame):
     """Construct a Ttk Treeview with master scale.
 
@@ -332,7 +332,7 @@ class TreeViewHolderThemed(Frame):
             self.hsb.show()
 
     def _options(self, cnf, kwargs=None) -> dict:
-        return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
+        return super()._options(cnf, convert_kwargs(kwargs))
 
 # ------------------------------------------------------------------------------------------
 
@@ -368,7 +368,7 @@ class ButtonThemed(ttk.Button, BaseTextTkinterWidget, ImageMixin, CommandMixin):
         if cmd: self.SetCommand(cmd)
 
 
-    def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
+    def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, convert_kwargs(kwargs))
 
 # ------------------------------------------------------------------------------------------
 
@@ -396,7 +396,7 @@ class LabelThemed(ttk.Label, BaseTextTkinterWidget, ImageMixin):
         BaseTextTkinterWidget.__init__(self, text, Override_var, Color, loop)
         ImageMixin.__init__(self)
 
-    def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
+    def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, convert_kwargs(kwargs))
 
 # ------------------------------------------------------------------------------------------
 
@@ -433,7 +433,7 @@ class EntryThemed(ttk.Entry, BaseTextTkinterWidget, CommandMixin):
     def Append(self, value: str):
         self.insert(Tags.End.value, value)
 
-    def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
+    def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, convert_kwargs(kwargs))
 
 # ------------------------------------------------------------------------------------------
 
@@ -560,7 +560,7 @@ class NotebookThemed(BaseTextTkinterWidget, ttk.Notebook):
         self.tab(self.ActiveTab, wraplength=self._wrap)
 
     def _options(self, cnf, kwargs=None) -> dict:
-        return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
+        return super()._options(cnf, convert_kwargs(kwargs))
 
 # ------------------------------------------------------------------------------------------
 
@@ -569,7 +569,7 @@ class SeparatorThemed(ttk.Separator, BaseTkinterWidget):
     def __init__(self, master, orientation: Orient = Orient.Horizonal):
         ttk.Separator.__init__(self, master, orient=orientation.value)
 
-    def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
+    def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, convert_kwargs(kwargs))
 
 # ------------------------------------------------------------------------------------------
 
@@ -610,4 +610,4 @@ class CheckButtonThemed(ttk.Checkbutton, BaseTextTkinterWidget, ImageMixin, Comm
 
         self.invoke()
 
-    def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
+    def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, convert_kwargs(kwargs))

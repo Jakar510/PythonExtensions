@@ -8,12 +8,12 @@ from PythonExtensions.tk import *
 class App(BaseAsyncApp):
     main: 'Main'
 
-    def test(self): print(self)
-    def random(self): print('random', self)
+    def test(self, _event: Optional[tkEvent] = None): print(self)
+    def random(self, _event: Optional[tkEvent] = None): print('random', self)
 
 
     def _setup(self):
-        self.main = Main.Root(self)
+        self.main = Main(self)
 
 
     def Handle_KeyPress(self, event: TkinterEvent) -> Optional[bool]: pass
@@ -29,26 +29,29 @@ class Popup(BaseLabelWindow[App]):
 
 
 class Main(BaseWindow[App]):
-    def __init__(self, master, app):
-        super().__init__(master, app)
+    def __init__(self, app: App):
+        super().__init__(app, app)
         self.PlaceFull()
 
-        self.random = Button(self, text='self._app.random').PackHorizontal().SetCommand(self._app.random)
+        # self.random = Button(self, text='self._app.random').PackHorizontal().SetCommand(self._app.random)
+        #
+        # self.showPopup = Button(self, text='show label window').PackHorizontal()
+        # self.p = Popup(self, app).PlaceFull()
+        # self.p.hide()
+        # self.showPopup.SetCommand(self.p.show)
+        #
+        # self.label = Label(self, 'test label').PackHorizontal()
+        # self.entry = Entry(self, 'test entry').PackHorizontal()
+        # self.check = CheckButton(self, 'test check').PackHorizontal()
+        # self.lb = Listbox(self).PackHorizontal().SetList(['one', 'two', 'three'])
+        # self.text = Text(self, 'test text').PackHorizontal()
+        # self.scrolledText = ScrolledText(self, 'test scrolled text').PackHorizontal()
+        # self.scale = Scale(self).PackHorizontal()
+        # self.canvas = Canvas(self).PackHorizontal()
+        # self.canvas.DownloadImage(r'https://astronomy.com/-/media/Images/News%20and%20Observing/Sky%20this%20Week/STW%202021/June/summerevening.jpg?mw=600', 0, 0)
 
-        self.showPopup = Button(self, text='show label window').PackHorizontal()
-        self.p = Popup(self, app).PlaceFull()
-        self.p.hide()
-        self.showPopup.SetCommand(self.p.show)
-
-        self.label = Label(self, 'test label').PackHorizontal()
-        self.entry = Entry(self, 'test entry').PackHorizontal()
-        self.check = CheckButton(self, 'test check').PackHorizontal()
-        self.lb = Listbox(self).PackHorizontal().SetList(['one', 'two', 'three'])
-        self.text = Text(self, 'test text').PackHorizontal()
-        self.scrolledText = ScrolledText(self, 'test scrolled text').PackHorizontal()
-        self.scale = Scale(self).PackHorizontal()
-        self.canvas = Canvas(self).PackHorizontal()
-        self.canvas.DownloadImage(r'https://astronomy.com/-/media/Images/News%20and%20Observing/Sky%20this%20Week/STW%202021/June/summerevening.jpg?mw=600', 0, 0)
+        self.kb = KeyboardEntry(self, root=app).PackHorizontal()
+        self.kb.txt = 'popup keyboard'
 
 
 if __name__ == '__main__':

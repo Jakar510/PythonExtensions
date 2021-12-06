@@ -4,15 +4,18 @@ import json
 import os
 import pickle
 import tempfile
+from multiprocessing.pool import ThreadPool
 from os import PathLike, chmod, fsencode, listdir, makedirs, remove, rename
 from os.path import *
 from pathlib import Path
-from shutil import rmtree
+from shutil import copy2, rmtree
 from typing import *
 from typing import BinaryIO
 
 from aiofiles import open as async_open
 from attr import attrib, attrs, validators
+from attrs_strict import type_validator
+from cryptography.fernet import Fernet
 
 from ..Core.Json import *
 from ..Core.Names import nameof
@@ -23,7 +26,9 @@ from ..Core.Names import nameof
 __all__ = [
     'FilePath',
     'FileIO',
-    'ReadWriteData'
+    'ReadWriteData',
+    'Encryptor',
+    'MultiThreadedCopier'
     ]
 
 class ReadWriteData(Protocol[AnyStr]):
@@ -33,7 +38,7 @@ class ReadWriteData(Protocol[AnyStr]):
 
 @attrs(slots=True, hash=True, order=True, eq=True, auto_attribs=True, init=False)
 class FilePath(PathLike):
-    FullPath: str = attrib(validator=validators.instance_of((dict, Path, str, PathLike)))
+    FullPath: str = attrib(validator=type_validator(), type=Union[Dict, Path, str, PathLike])
     IsTemporary: bool = attrib(validator=validators.instance_of(bool), init=False)
     Hash: Optional[str] = attrib(default=None, validator=validators.instance_of(str), init=False)
 
@@ -41,11 +46,16 @@ class FilePath(PathLike):
         self.FullPath = self.convert(_path)
         self.IsTemporary = temporary
 
+
     @staticmethod
     def convert(_path: Union[str, Dict[str, Any], Path, 'FilePath']) -> str:
         if isinstance(_path, dict):
-            AssertKeys(_path, 'FullPath')
-            return FilePath.convert(_path['FullPath'])
+            options = ('path', 'Path', 'fullPath','fullpath', 'FullPath')
+            for option in options:
+                if option in _path:
+                    return FilePath.convert(_path['FullPath'])
+
+            raise KeyError(f'Not one of {options} are found in provided dict')
 
         elif isinstance(_path, str):
             return abspath(_path)
@@ -119,6 +129,29 @@ class FilePath(PathLike):
         return chmod(self.FullPath, mode, dir_fd=dir_fd, follow_symlinks=follow_symlinks)
 
 
+
+    @property
+    def _locked(self):
+        return isfile(self._lockFile)
+    @property
+    def _lockFile(self):
+        return f'{self.FullPath}.lock'
+
+    def __enter__(self):
+        while self._locked:
+            pass
+
+        with open(self._lockFile, 'w') as f:
+            f.write(self.FileName)
+
+        return self
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self._clearLcok()
+    def _clearLcok(self):
+        if self._locked:
+            remove(self._lockFile)
+
+
     def __call__(self, mode: int = 0o777, exist_ok: bool = True) -> Optional['FileIO']:
         """
         Creates the base directories then opens the file for reading / writing via FileIO
@@ -130,8 +163,6 @@ class FilePath(PathLike):
         makedirs(self.BaseName, mode, exist_ok)
 
         return None if self.IsDirectory else FileIO(self)
-
-
 
 
 
@@ -218,6 +249,7 @@ class FilePath(PathLike):
         """ Return the bytes representation of the path. This is only recommended to use under Unix. """
         return fsencode(self.FullPath)
     def __del__(self):
+        self._clearLcok()
         try:
             if self.IsTemporary and self.Exists: return self.Remove()
         except PermissionError:
@@ -281,7 +313,6 @@ class FilePath(PathLike):
 
 
 _TFileData = TypeVar('_TFileData', bound='FileIO')
-
 @attrs(slots=True, hash=True, order=True, eq=True, auto_attribs=True, frozen=True, collect_by_mro=True)
 class FileIO(PathLike, Generic[_TFileData]):
     Path: FilePath = attrib(validator=validators.instance_of(FilePath))
@@ -407,3 +438,120 @@ class FileIO(PathLike, Generic[_TFileData]):
         await _path.WriteAsync(content, buffering=buffering, encoding=encoding, errors=errors, newline=newline, closefd=close_fd, loop=loop, executor=executor)
 
         return Path
+
+
+
+# key = Fernet.generate_key()
+class Encryptor(object):
+    __slots__ = ['_path', '_encoding', '_private_key', '_encrypter']
+    # _KEY_FILE_ = paths.PASS_KEY_FILE_NAME
+    def __init__(self, path: Union[str, Path, 'FilePath'], *, private_key: bytes, encoding: str = "utf-8"):
+        self._path = FilePath.convert(path)
+        self._encoding = encoding
+        self._private_key = private_key
+        self._encrypter = Fernet(self._private_key)
+
+
+    @property
+    def _locked(self):
+        return isfile(self._lockFile)
+    @property
+    def _lockFile(self):
+        return f'{self._path}.lock'
+
+    def __enter__(self):
+        while self._locked:
+            pass
+
+        with open(self._lockFile, 'w') as f:
+            f.write(self._path)
+
+        return self
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self._clearLcok()
+    def _clearLcok(self):
+        if self._locked:
+            remove(self._lockFile)
+
+
+    def encode(self, s: str) -> bytes:
+        return s.encode(self._encoding)
+    def decode(self, s: bytes) -> str:
+        return s.decode(self._encoding)
+
+
+    @staticmethod
+    def _from_json(s: Union[str, bytes, bytearray], **kwargs) -> Dict:
+        try:
+            return json.loads(s, **kwargs)
+        except Exception:
+            print('_____from__json_____', type(s), s, sep='\n\n', end='\n\n\n')
+            raise
+    @staticmethod
+    def _to_json(s: Dict, **kwargs) -> str:
+        return json.dumps(s, **kwargs)
+
+
+    @staticmethod
+    def _from_pickle(s: bytes) -> Dict:
+        return pickle.loads(s)
+    @staticmethod
+    def _to_pickle(s: Dict) -> bytes:
+        return pickle.dumps(s, protocol=pickle.HIGHEST_PROTOCOL)
+
+
+    def _ReadFile(self) -> bytes:
+        with open(self._path, 'rb') as f:
+            return f.read()
+    def _WriteFile(self, value: bytes):
+        with open(self._path, 'wb') as f:
+            return f.write(value)
+
+
+    def DecryptFile(self) -> bytes:
+        return self.Decode(self._ReadFile())
+    def EncryptFile(self, value: bytes):
+        return self._WriteFile(self.Encrypt(value))
+
+
+    def ReadJson(self, **kwargs) -> Dict:
+        return self._from_json(self._ReadFile(), **kwargs)
+    def WriteJson(self, value: Dict, **kwargs):
+        return self._WriteFile(self._to_json(value, **kwargs).encode())
+
+
+    def ReadPickle(self) -> Dict:
+        return self._from_pickle(self.DecryptFile())
+    def WritePickle(self, value: Dict):
+        return self.EncryptFile(self._to_pickle(value))
+
+
+
+    def Encrypt(self, value: bytes) -> bytes:
+        return self._encrypter.encrypt(value)
+    def Decode(self, value: bytes = None) -> bytes:
+        return self._encrypter.decrypt(value)
+
+
+
+class MultiThreadedCopier(object):
+    """
+    Based on https://stackoverflow.com/a/64813422
+
+src_dir = /path/to/src/dir
+dest_dir = /path/to/dest/dir
+
+with MultiThreadedCopier(max_threads=16) as copier:
+    shutil.copytree(src_dir, dest_dir, copy_function=copier.copy)
+    """
+    __slots__ = ['pool', '_max_threads']
+    def __init__(self, max_threads: int = os.cpu_count()): self._max_threads = max_threads
+    def __enter__(self):
+        self.pool = ThreadPool(self._max_threads)
+        return self
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.pool.close()
+        self.pool.join()
+        del self.pool
+
+    def copy(self, source: Union[str, FilePath], dest: Union[str, FilePath]): return self.pool.apply_async(copy2, args=(source, dest))

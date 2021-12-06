@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import *
 
 from .Names import class_name
-from ..Files import FilePath
+from .Files import FilePath
 
 
 
