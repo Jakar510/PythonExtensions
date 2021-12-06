@@ -8,7 +8,7 @@ from typing import *
 
 from .KeyBoard import *
 from ..Base import *
-from ..Core import *
+from ..Roots import *
 from ..Widgets import *
 
 

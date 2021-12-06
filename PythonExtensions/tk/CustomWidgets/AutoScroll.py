@@ -8,11 +8,10 @@
 #  in conjunction with Tcl version 8.6
 #    Nov 23, 2020 10:53:16 AM CST  platform: Windows NT
 import platform
-from asyncio import BaseEventLoop
+from asyncio import AbstractEventLoop
 from typing import *
 
 from ..Base import *
-from ..Core import *
 from ..Enumerations import *
 from ..Events import *
 from ..Themed import ScrollbarThemed
@@ -40,7 +39,7 @@ class AutoScroll(BaseTkinterWidget):
     __slots__ = ['vsb', 'hsb']
     vsb: ScrollbarThemed
     hsb: ScrollbarThemed
-    def __init__(self, master: BaseTkinterWidget, Color: Dict[str, str] = None, loop: Optional[BaseEventLoop] = None):
+    def __init__(self, master: BaseTkinterWidget, Color: Dict[str, str] = None, loop: Optional[AbstractEventLoop] = None):
         self.master = master
         BaseTkinterWidget.__init__(self, Color, loop)
 

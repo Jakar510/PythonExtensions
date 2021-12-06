@@ -53,7 +53,7 @@ class _TkinterSelector(SelectSelector):
 
 
     # def get_map(self) -> Mapping[FileDescriptorLike, SelectorKey]:
-    #     """Return a mapping of file objects to selector keys."""
+    #     """Return a mapping of file objects to _selector keys."""
     #     return super().get_map()
 
     def register(self, file_obj, events, data=None) -> SelectorKey:
@@ -155,4 +155,4 @@ class AsyncTkinterEventLoopPolicy(asyncio.DefaultEventLoopPolicy):
             # asyncio.windows_events.ProactorEventLoop
             return self._loop_factory(selector=_TkinterSelector())
         except TypeError as e:
-            raise Exception('The default event loop is not a selector event loop') from e
+            raise Exception('The default event loop is not a _selector event loop') from e

@@ -7,7 +7,7 @@
 from tkinter.messagebox import *
 
 from ..Base import *
-from ..Core import *
+from ..Roots import *
 
 
 

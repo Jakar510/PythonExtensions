@@ -145,7 +145,8 @@ class TkinterEvent(tkEvent):
             for name, value in source.__dict__.items(): setattr(self, name, value)
 
 
-    def __str__(self) -> str: return f"""<{nameof(self)} ({repr(self).replace('>', '').replace('<', '')}) Object.
+    def __str__(self) -> str:
+        return f"""<{nameof(self)} ({repr(self).replace('>', '').replace('<', '')}) Object.
 {pprint.pformat(self.ToDict(), indent=4)} >"""
 
 
@@ -192,17 +193,21 @@ class TkinterEvent(tkEvent):
         return Bindings.IsDigit(keysym)
 
     @property
-    def EventType(self) -> tkEventType: return self.type
+    def EventType(self) -> tkEventType:
+        return self.type
 
 
     @lazy_property
-    def KeySynonym(self) -> 'Bindings': return Bindings.FromEvent(self)
+    def KeySynonym(self) -> 'Bindings':
+        return Bindings.FromEvent(self)
 
 
-    def IsEnter(self) -> bool: return Bindings.IsEnter(self.keysym)
+    def IsEnter(self) -> bool:
+        return Bindings.IsEnter(self.keysym)
 
 
-    def IsValid(self): return Bindings.IsKnown(self.keysym)
+    def IsValid(self):
+        return Bindings.IsKnown(self.keysym)
 
 
     @classmethod
@@ -287,7 +292,8 @@ class Bindings(Enum):
         :return: resulting Binding match
         :rtype: Bindings
         """
-        try: return Bindings(keysym)
+        try:
+            return Bindings(keysym)
         except ValueError as e:
             if hasattr(Bindings, keysym): return getattr(Bindings, keysym)
             for name in dir(Bindings):
@@ -542,3 +548,6 @@ class Bindings(Enum):
     XF86AudioMute = 'XF86AudioMute'
     XF86AudioPrev = 'XF86AudioPrev'
     XF86AudioNext = 'XF86AudioNext'
+    XF86Sleep = 'XF86Sleep'
+    XF86Search = 'XF86Search'
+    XF86TouchpadToggle = 'XF86TouchpadToggle'

@@ -8,7 +8,7 @@ from typing import *
 
 from .KeyBoard import *
 from ..Base import *
-from ..Core import *
+from ..Roots import *
 from ..Events import *
 from ..Themed import *
 
@@ -40,7 +40,7 @@ class KeyboardComboBoxThemed(ComboBoxThemed, KeyboardMixin):
                  text: str = '', Override_var: tk.StringVar = None, Color: Dict = None, **kwargs):
         ComboBoxThemed.__init__(self, master, text=text, Override_var=Override_var, Color=Color, postcommand=self._OnDropDown, **kwargs)
         KeyboardMixin.__init__(self, master, root=root, placement=placement, keysize=key_size, keycolor=key_color)
-        self.Bind(Bindings.ComboboxSelected, self._OnSelect)
+        BaseTkinterWidget.Bind(self, Bindings.ComboboxSelected, self._OnSelect)
 
     def _options(self, cnf, kwargs=None) -> Dict: return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
 

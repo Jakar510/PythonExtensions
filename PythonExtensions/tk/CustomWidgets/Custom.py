@@ -7,7 +7,7 @@
 from abc import ABC
 from typing import Any, Dict
 
-from ..Core import *
+from ..Base import *
 from ..Widgets import *
 
 

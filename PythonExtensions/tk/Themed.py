@@ -6,11 +6,10 @@
 #
 # ------------------------------------------------------------------------------
 import random
-from asyncio import BaseEventLoop
+from asyncio import AbstractEventLoop
 from typing import *
 
 from .Base import *
-from .Core import *
 from .Enumerations import *
 from .Events import *
 
@@ -63,7 +62,7 @@ class ComboBoxThemed(ttk.Combobox, BaseTextTkinterWidget, CommandMixin):
         Width
     """
     __slots__ = ['_cmd', 'command_cb', '_state_', '__bindings__', '_pi', '_manager_', '_wrap', '_cb', '_loop', '_txt']
-    def __init__(self, master, text: str = '', Override_var: tk.StringVar = None, Color: Dict[str, str] = None, loop: Optional[BaseEventLoop] = None, **kwargs):
+    def __init__(self, master, text: str = '', Override_var: tk.StringVar = None, Color: Dict[str, str] = None, loop: Optional[AbstractEventLoop] = None, **kwargs):
         ttk.Combobox.__init__(self, master, **kwargs)
         BaseTextTkinterWidget.__init__(self, text, Override_var, Color, loop)
 
@@ -94,7 +93,7 @@ class ScrollbarThemed(ttk.Scrollbar, BaseTkinterWidget):
 # ------------------------------------------------------------------------------------------
 
 class ListItem(dict):
-    __slots__ = ['_state_', '__bindings__', '_pi', '_manager_', '_wrap', '_cb', '_loop', '_txt']
+    __slots__ = ['_state_', '__bindings__', '_pi', '_manager_', '_wrap', '_cb', '_updater', '_txt']
     @property
     def ID(self) -> str: return self.get("ID", None)
     @property
@@ -132,7 +131,7 @@ class ListItem(dict):
         """
         return ListItem.Parse(dict(ID=ID, Name=Name, Children=Children))
 class ItemCollection(list):
-    __slots__ = ['_state_', '__bindings__', '_pi', '_manager_', '_wrap', '_cb', '_loop', '_txt']
+    __slots__ = ['_state_', '__bindings__', '_pi', '_manager_', '_wrap', '_cb', '_updater', '_txt']
     def __init__(self, d: Union[List[ListItem], Iterable[ListItem]]):
         list.__init__(self, d)
 
@@ -181,7 +180,7 @@ class TreeViewThemed(ttk.Treeview, BaseTkinterWidget, CommandMixin):
     SelectedItems: List[Any]
     items: Union[ListItem, ItemCollection, None]
 
-    def __init__(self, master, Color: Dict[str, str] = None, select_mode: SelectionMode = SelectionMode.Extended, loop: Optional[BaseEventLoop] = None, **kwargs):
+    def __init__(self, master, Color: Dict[str, str] = None, select_mode: SelectionMode = SelectionMode.Extended, loop: Optional[AbstractEventLoop] = None, **kwargs):
         ttk.Treeview.__init__(self, master, selectmode=select_mode.value, **kwargs)
         BaseTkinterWidget.__init__(self, Color, loop)
         self.items = None
@@ -350,7 +349,7 @@ class ButtonThemed(ttk.Button, BaseTextTkinterWidget, ImageMixin, CommandMixin):
                  text: str = '',
                  Override_var: tk.StringVar = None,
                  Color: Dict[str, str] = None,
-                 loop: Optional[BaseEventLoop] = None,
+                 loop: Optional[AbstractEventLoop] = None,
                  **kwargs):
         cmd = kwargs.pop('Command', None) or kwargs.pop('command', None)
         ttk.Button.__init__(self, master, **kwargs)
@@ -381,7 +380,7 @@ class LabelThemed(ttk.Label, BaseTextTkinterWidget, ImageMixin):
 
     """
     __slots__ = ['_IMG', '_state_', '__bindings__', '_pi', '_manager_', '_wrap', '_cb', '_loop', '_txt']
-    def __init__(self, master, text: str = '', Override_var: tk.StringVar = None, Color: Dict[str, str] = None, loop: Optional[BaseEventLoop] = None, **kwargs):
+    def __init__(self, master, text: str = '', Override_var: tk.StringVar = None, Color: Dict[str, str] = None, loop: Optional[AbstractEventLoop] = None, **kwargs):
         ttk.Label.__init__(self, master, **kwargs)
         BaseTextTkinterWidget.__init__(self, text, Override_var, Color, loop)
         ImageMixin.__init__(self)
@@ -403,7 +402,7 @@ class EntryThemed(ttk.Entry, BaseTextTkinterWidget, CommandMixin):
     xscrollcommand.
     """
     __slots__ = ['_cmd', 'command_cb', '_state_', '__bindings__', '_pi', '_manager_', '_wrap', '_cb', '_loop', '_txt']
-    def __init__(self, master, text: str = '', Override_var: tk.StringVar = None, Color: Dict[str, str] = None, loop: Optional[BaseEventLoop] = None, **kwargs):
+    def __init__(self, master, text: str = '', Override_var: tk.StringVar = None, Color: Dict[str, str] = None, loop: Optional[AbstractEventLoop] = None, **kwargs):
         ttk.Entry.__init__(self, master, **kwargs)
         BaseTextTkinterWidget.__init__(self, text, Override_var, Color, loop)
 
@@ -429,7 +428,7 @@ class EntryThemed(ttk.Entry, BaseTextTkinterWidget, CommandMixin):
 
 class NotebookThemed(BaseTextTkinterWidget, ttk.Notebook):
     __slots__ = ['_cmd', 'command_cb', '_IMG', '_state_', '__bindings__', '_pi', '_manager_', '_wrap', '_cb', '_loop', '_txt']
-    def __init__(self, master, Color: Dict[str, str] = None, loop: Optional[BaseEventLoop] = None, **kwargs):
+    def __init__(self, master, Color: Dict[str, str] = None, loop: Optional[AbstractEventLoop] = None, **kwargs):
         ttk.Notebook.__init__(self, master, **kwargs)
         BaseTkinterWidget.__init__(self, Color, loop)
 
@@ -575,7 +574,7 @@ class CheckButtonThemed(ttk.Checkbutton, BaseTextTkinterWidget, ImageMixin, Comm
                  text: str = '',
                  Override_var: tk.StringVar = None,
                  Color: Dict[str, str] = None,
-                 loop: Optional[BaseEventLoop] = None,
+                 loop: Optional[AbstractEventLoop] = None,
                  **kwargs):
         ttk.Checkbutton.__init__(self, master, **kwargs)
         BaseTextTkinterWidget.__init__(self, text, Override_var, Color, loop)

@@ -9,10 +9,11 @@ from enum import IntEnum, IntFlag
 from typing import *
 
 from ..Base import *
-from ..Core import *
 from ..Enumerations import EventType
 from ..Events import *
+from ..Roots import *
 from ..Widgets import *
+from ... import AssertType
 from ...HID_BUFFER import HID_BUFFER
 from ...Names import nameof
 
@@ -118,15 +119,18 @@ class PopupKeyboard(tkTopLevel):
                 if text == '': continue
                 w = Button(master=self._root_frame, text=text, bg=self._key_color, takefocus=take_focus).SetCommand(CurrentValue(self._handle_key_press))
 
-                if self._shift == text: w.Grid(row=r, column=c, rowspan=2)
+                if self._shift == text:
+                    w.Grid(row=r, column=c, rowspan=2)
 
                 elif 'space' in text:
                     w.Grid(row=r, column=c, columnspan=3)
                     offset = 2
 
-                elif self._enter == text: w.Grid(row=r, column=c, rowspan=2)
+                elif self._enter == text:
+                    w.Grid(row=r, column=c, rowspan=2)
 
-                else: w.Grid(row=r, column=c + offset)
+                else:
+                    w.Grid(row=r, column=c + offset)
 
                 self._letters[r][c] = w
 
@@ -185,10 +189,14 @@ class PopupKeyboard(tkTopLevel):
         x = self._get_x(x=self._x, frame_width=frame_width, entry_width=self._attach.Width, placement=self._attach.placement)
         self.SetDimensions(frame_width, frame_height, x, y)
     def _get_x(self, *, x: int, frame_width: int, entry_width: int, placement: PlacementSet):
-        def left(): return int(x - frame_width + entry_width)
-        def right(): return int(x)
-        def center(): return int((x + (entry_width / 2)) - (frame_width / 2))
-        def middle(): return int((self.__root.width - frame_width) / 2 + self.__root.x)
+        def left():
+            return int(x - frame_width + entry_width)
+        def right():
+            return int(x)
+        def center():
+            return int((x + (entry_width / 2)) - (frame_width / 2))
+        def middle():
+            return int((self.__root.width - frame_width) / 2 + self.__root.x)
 
         if Placement.Auto in placement:
             root_x = self.__root.x
@@ -212,11 +220,15 @@ class PopupKeyboard(tkTopLevel):
 
         raise ValueError(f'placement is unknown. {placement}')
     def _get_y(self, *, y: int, frame_height: int, entry_height: int, placement: PlacementSet):
-        def above(): return y - frame_height
-        def below(): return y + entry_height
+        def above():
+            return y - frame_height
+        def below():
+            return y + entry_height
 
-        if Placement.Top in placement: return above()
-        elif Placement.Bottom in placement: return below()
+        if Placement.Top in placement:
+            return above()
+        elif Placement.Bottom in placement:
+            return below()
         elif Placement.Auto in placement:
             if above() < self.__root.height: return below()
             if below() > self.__root.y: return above()
@@ -239,19 +251,24 @@ class PopupKeyboard(tkTopLevel):
 
 
 
-    def _handle_key_press(self, value: str):
-        if value == self._shift: self.SwitchCase()
+    def _handle_key_press(self, _event: Optional[tkEvent], value: str, *_args, **_kwargs):
+        if value == self._shift:
+            self.SwitchCase()
 
-        elif value == self._space: self._append_space(self._attach)
+        elif value == self._space:
+            self._append_space(self._attach)
 
-        elif value == self._enter: self._handle_enter()
+        elif value == self._enter:
+            self._handle_enter()
 
-        elif value == self._backspace: self._handle_backspace()
+        elif value == self._backspace:
+            self._handle_backspace()
 
         elif value == self._delete:
             self._hid.Value = self._attach.txt = ''
 
-        elif self._handle_navigation(value): pass
+        elif self._handle_navigation(value):
+            pass
 
         else:
             self._hid += value
@@ -357,7 +374,6 @@ class KeyboardMixin:
 
     """
     kb: Optional[PopupKeyboard]
-    Bind: callable
     tk_focusNext: callable
     tk_focusPrev: callable
     Append: callable
@@ -399,20 +415,20 @@ class KeyboardMixin:
 
         self.state = KeyBoardState.Idle
 
-        self.Bind(Bindings.FocusIn, self._handle_FocusIn)
-        self.Bind(Bindings.FocusOut, self._handle_FocusOut)
-        self.Bind(Bindings.Key, self._handle_KeyPress)
-        self.Bind(Bindings.ButtonPress, self._handle_ButtonPress)
+        assert (isinstance(self, BaseTkinterWidget) and isinstance(self, KeyboardMixin))
+
+        BaseTkinterWidget.Bind(self, Bindings.FocusIn, self._handle_FocusIn)
+        BaseTkinterWidget.Bind(self, Bindings.FocusOut, self._handle_FocusOut)
+        BaseTkinterWidget.Bind(self, Bindings.Key, self._handle_KeyPress)
+        BaseTkinterWidget.Bind(self, Bindings.ButtonPress, self._handle_ButtonPress)
 
 
-    # noinspection PyUnusedLocal
-    def _handle_FocusIn(self, e: tkEvent):
+    def _handle_FocusIn(self, _event: tkEvent):
         # self._debug_event_(EventType.FocusIn, e)
         if self.state == KeyBoardState.Idle:
             self._call_popup()
             self.state = KeyBoardState.Virtual
-    # noinspection PyUnusedLocal
-    def _handle_FocusOut(self, e: tkEvent):
+    def _handle_FocusOut(self, _event: tkEvent):
         # self._debug_event_(EventType.FocusOut, e)
         if self.state == KeyBoardState.Typing:
             self.state = KeyBoardState.Idle
@@ -420,19 +436,16 @@ class KeyboardMixin:
         elif self.state == KeyBoardState.Virtual:
             self.state = KeyBoardState.Typing
             self.destroy_popup()
-    # noinspection PyUnusedLocal
-    def _handle_KeyPress(self, e: tkEvent):
+    def _handle_KeyPress(self, _event: tkEvent):
         # self._debug_event_(EventType.KeyPress, e)
         if self.state == KeyBoardState.Virtual:
             self.destroy_popup()
             self.state = KeyBoardState.Typing
-    # noinspection PyUnusedLocal
-    def _handle_ButtonPress(self, e: tkEvent):
+    def _handle_ButtonPress(self, _event: tkEvent):
         # self._debug_event_(EventType.ButtonPress, e)
         if self.state != KeyBoardState.Virtual or self.kb is None:
             self._call_popup()
             self.state = KeyBoardState.Virtual
-    # noinspection PyUnreachableCode,PyUnusedLocal
     def _debug_event_(self, tag: EventType, event: tkEvent):
         print('__KeyboardMixin__state__', self.state)
         print(f'__KeyboardMixin__Event__{tag.name}__', str(TkinterEvent(event)))
@@ -451,21 +464,28 @@ class KeyboardMixin:
 
 
     @property
-    def IsFixedSize(self) -> bool: return isinstance(self._popup_width, int) and isinstance(self._popup_height, int)
+    def IsFixedSize(self) -> bool:
+        return isinstance(self._popup_width, int) and isinstance(self._popup_height, int)
     @property
-    def IsRelativeSize(self) -> bool: return isinstance(self._popup_relwidth, float) and isinstance(self._popup_relheight, float)
+    def IsRelativeSize(self) -> bool:
+        return isinstance(self._popup_relwidth, float) and isinstance(self._popup_relheight, float)
     @property
-    def IsAutoSize(self) -> bool: return not (self.IsFixedSize or self.IsRelativeSize)
+    def IsAutoSize(self) -> bool:
+        return not (self.IsFixedSize or self.IsRelativeSize)
 
 
     @property
-    def popup_width(self) -> Optional[int]: return self._popup_width
+    def popup_width(self) -> Optional[int]:
+        return self._popup_width
     @property
-    def popup_height(self) -> Optional[int]: return self._popup_height
+    def popup_height(self) -> Optional[int]:
+        return self._popup_height
     @property
-    def popup_relwidth(self) -> Optional[int]: return int(self.__root.width * self._popup_relwidth) if self._popup_relwidth is not None else None
+    def popup_relwidth(self) -> Optional[int]:
+        return int(self.__root.width * self._popup_relwidth) if self._popup_relwidth is not None else None
     @property
-    def popup_relheight(self) -> Optional[int]: return int(self.__root.height * self._popup_relheight) if self._popup_relheight is not None else None
+    def popup_relheight(self) -> Optional[int]:
+        return int(self.__root.height * self._popup_relheight) if self._popup_relheight is not None else None
 
 # ------------------------------------------------------------------------------------------
 
@@ -474,29 +494,32 @@ class value_title_mixin:
     Entry: BaseTextTkinterWidget
 
     @property
-    def title(self) -> str: return self.Title.txt
+    def title(self) -> str:
+        return self.Title.txt
     @title.setter
-    def title(self, value: str): self.Title.txt = value
+    def title(self, value: str):
+        self.Title.txt = value
 
     @property
-    def value(self) -> str: return self.Entry.txt
+    def value(self) -> str:
+        return self.Entry.txt
     @value.setter
-    def value(self, value: str): self.Entry.txt = value
+    def value(self, value: str):
+        self.Entry.txt = value
 
     @staticmethod
-    def IsKeyBoard(cls): return isinstance(cls, BaseTextTkinterWidget) and isinstance(cls, KeyboardMixin)
+    def IsKeyBoard(cls):
+        return isinstance(cls, BaseTextTkinterWidget) and isinstance(cls, KeyboardMixin)
     @staticmethod
-    def IsKeyBoardType(cls: Type): return issubclass(cls, BaseTextTkinterWidget) and issubclass(cls, KeyboardMixin)
+    def IsKeyBoardType(cls: Type):
+        return issubclass(cls, BaseTextTkinterWidget) and issubclass(cls, KeyboardMixin)
     @staticmethod
     def AssertKeyBoardType(cls: Type):
         if not value_title_mixin.IsKeyBoardType(cls): raise TypeError(type(cls), (BaseTextTkinterWidget, KeyboardMixin))
 
-    @staticmethod
-    def AssertType(cls):
-        if not (issubclass(cls, BaseTextTkinterWidget)): raise TypeError(type(cls), (BaseTextTkinterWidget,))
 
     @staticmethod
-    def _ConvertTitle(value: Union[str, Dict[str, Any]]):
+    def _ConvertTitle(value: Union[str, Dict[str, Any]]) -> Dict[str, Any]:
         if isinstance(value, str): return dict(text=value)
         return value
 
@@ -522,7 +545,7 @@ class BaseTitled(Frame, value_title_mixin):
 
     def __init__(self, master, cls: Type, RowPadding: int, factor: int,
                  frame: Dict[str, Any], title: Union[str, Dict[str, Any]], **value_kwargs: Union[Placement, str, int]):
-        value_title_mixin.AssertType(cls)
+        AssertType(cls, value_title_mixin, BaseTextTkinterWidget)
         Frame.__init__(self, master, **frame)
         self.Grid_RowConfigure(0, weight=1).Grid_RowConfigure(1, weight=factor).Grid_ColumnConfigure(0, weight=1)
 
@@ -594,7 +617,7 @@ class BaseFramed(LabelFrame, value_title_mixin):
     def __init__(self, master, cls: Type, title: Dict[str, Any], **value_kwargs: Union[Placement, str, int]): ...
 
     def __init__(self, master, cls: Type, title: Union[str, Dict[str, Any]], **value_kwargs: Union[Placement, str, int]):
-        value_title_mixin.AssertType(cls)
+        AssertType(cls, value_title_mixin, BaseTextTkinterWidget)
         LabelFrame.__init__(self, master, **self._ConvertTitle(title))
 
         # noinspection PyArgumentList

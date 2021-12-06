@@ -4,9 +4,9 @@ from time import time
 from typing import *
 
 from .Style import *
-from ..Base import *
-from ..Enumerations import Orientation
-from ..Events import Bindings
+from .Base import *
+from .Enumerations import Orientation
+from .Events import Bindings
 
 
 

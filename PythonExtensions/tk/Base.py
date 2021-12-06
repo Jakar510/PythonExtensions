@@ -6,9 +6,10 @@
 import base64
 import tkinter as tk
 from abc import ABC
-from asyncio import BaseEventLoop, iscoroutine
+from asyncio import AbstractEventLoop, get_event_loop, iscoroutine, iscoroutinefunction, run_coroutine_threadsafe
 from enum import Enum
 from io import BytesIO
+from logging import Logger
 from os.path import isfile
 from tkinter import Event as tkEvent, ttk
 from types import FunctionType, MethodType
@@ -23,25 +24,43 @@ from aiohttp import ClientResponse, ClientSession
 from requests import get
 from yarl import URL
 
-from PythonExtensions import ArgumentError
 from .Enumerations import *
-from .Events import Bindings
+from .Events import Bindings, TkinterEvent, tkEvent
+from .Roots import tkRoot
 from ..Files import FilePath
-from ..Names import nameof, typeof
-from ..debug import pp
+from ..Logging import LoggingManager
+from ..Names import class_name, nameof, typeof
+from ..Threads import AutoStartThread
 
 
 
 
 __all__ = [
-    'BaseTkinterWidget', 'BaseTextTkinterWidget',
-    'CommandMixin', 'ImageMixin',
-    'CurrentValue', 'CallWrapper',
-    'tk', 'ttk', 'tkEvent', 'URL',
-    'img_open', 'tkPhotoImage'
+    'BaseTkinterWidget',
+    'BaseTextTkinterWidget',
+    'CommandMixin',
+    'ImageMixin',
+    'CurrentValue',
+    'CallWrapper',
+    'tk',
+    'ttk',
+    'tkEvent',
+    'URL',
+    'img_open',
+    'async_file_open',
+    'tkPhotoImage',
+    'BaseApp',
+    'BaseAsyncApp',
+    'BaseSyncApp',
+    'BaseWindow',
+    'BaseLabelWindow',
+    'Updater',
+    'AsyncUpdater',
+    'Frame',
+    'LabelFrame',
+    'FrameThemed',
+    'LabelFrameThemed',
     ]
-
-
 
 class tkPhotoImage(PhotoImage):
     __slots__ = []
@@ -67,6 +86,9 @@ class tkPhotoImage(PhotoImage):
     def size(self) -> Tuple[int, int]: return self.width, self.height
 
 
+# ------------------------------------------------------------------------------------------
+
+
 class BindingCollection(dict, Dict[Bindings, Set[str]]):
     __slots__ = []
     def __getitem__(self, item: Bindings):
@@ -88,10 +110,10 @@ class BaseTkinterWidget(tk.Widget, ABC):
     _manager_: Optional[Layout]
     _wrap: Optional[int]
     _cb: Union[str, None]
-    _loop: Final[Optional[BaseEventLoop]]
+    _loop: Optional[AbstractEventLoop]
 
     # noinspection PyMissingConstructor
-    def __init__(self, Color: Optional[Dict[str, str]], loop: Optional[BaseEventLoop]):
+    def __init__(self, Color: Optional[Dict[str, str]], loop: Optional[AbstractEventLoop]):
         if Color: self.configure(**Color)
         self._loop = loop
         self._state_ = ViewState.Hidden
@@ -101,23 +123,34 @@ class BaseTkinterWidget(tk.Widget, ABC):
         self._wrap = None
         self._cb = None
 
-    @property
-    def pi(self) -> Dict: return self._pi.copy()
+
 
     @property
-    def IsVisible(self) -> bool: return self._state_ != ViewState.Hidden
+    def pi(self) -> Dict:
+        return self._pi.copy()
 
     @property
-    def CurrentViewState(self) -> ViewState: return self._state_
+    def IsVisible(self) -> bool:
+        return self._state_ != ViewState.Hidden
+
+    @property
+    def CurrentViewState(self) -> ViewState:
+        return self._state_
 
     def ToString(self, IncludeState: bool = None) -> str:
-        start = self.__repr__().replace('>', '').replace('<', '').replace('object', 'Tkinter Widget')
-        if IncludeState is None: return f'<{start}. State: {pp.getPPrintStr(self.Details)}>'
-        if IncludeState: return f'<{start}. State: {pp.getPPrintStr(self.FullDetails)}>'
+        from SmartPhotoFrame.PythonExtensions import pp
+
+        start = repr(self).replace('>', '').replace('<', '').replace('object', 'Tkinter Widget')
+        if IncludeState is None:
+            return f'<{start}. State: {pp.getPPrintStr(self.Details)}>'
+
+        if IncludeState:
+            return f'<{start}. State: {pp.getPPrintStr(self.FullDetails)}>'
 
         return f'<{start}>'
     @property
-    def Details(self) -> Dict[str, Any]: return dict(IsVisible=self.IsVisible)
+    def Details(self) -> Dict[str, Any]:
+        return dict(IsVisible=self.IsVisible)
     @property
     def FullDetails(self) -> Dict[str, Any]:
         d = self.Details
@@ -146,24 +179,32 @@ class BaseTkinterWidget(tk.Widget, ABC):
 
 
     @property
-    def size(self) -> Tuple[int, int]: return self.Width, self.Height
+    def size(self) -> Tuple[int, int]:
+        return self.Width, self.Height
     @property
-    def Width(self) -> int: return self.winfo_width()
+    def Width(self) -> int:
+        return self.winfo_width()
     @property
-    def Height(self) -> int: return self.winfo_height()
+    def Height(self) -> int:
+        return self.winfo_height()
 
     @property
-    def x(self) -> int: return self.winfo_rootx()
+    def x(self) -> int:
+        return self.winfo_rootx()
     @property
-    def y(self) -> int: return self.winfo_rooty()
+    def y(self) -> int:
+        return self.winfo_rooty()
 
 
     @overload
-    def show(self) -> bool: ...
+    def show(self) -> bool:
+        ...
     @overload
-    def show(self, TakeFocus: bool) -> bool: ...
+    def show(self, TakeFocus: bool) -> bool:
+        ...
     @overload
-    def show(self, TakeFocus: bool, State: ViewState) -> bool: ...
+    def show(self, TakeFocus: bool, State: ViewState) -> bool:
+        ...
 
     def show(self, **kwargs) -> bool:
         """
@@ -197,9 +238,11 @@ class BaseTkinterWidget(tk.Widget, ABC):
         return True
 
     @overload
-    def hide(self) -> bool: ...
+    def hide(self) -> bool:
+        ...
     @overload
-    def hide(self, parent: tk.Widget) -> bool: ...
+    def hide(self, parent: tk.Widget) -> bool:
+        ...
 
     def hide(self, parent: tk.Widget = None) -> bool:
         """
@@ -234,8 +277,10 @@ class BaseTkinterWidget(tk.Widget, ABC):
         if isinstance(kwargs, dict):
             for k, v in kwargs.items():
                 if isinstance(v, Enum): v = v.value
-                if lower: d[str(k).lower()] = v
-                else: d[k] = v
+                if lower:
+                    d[str(k).lower()] = v
+                else:
+                    d[k] = v
 
         return d
 
@@ -258,12 +303,12 @@ class BaseTkinterWidget(tk.Widget, ABC):
     def UnbindIDs(self, ids: Iterable[str] = None):
         for item in ids: self.unbind(item or self.__bindings__)
 
-    def Bind(self, sequence: Bindings = None, func: callable = None, add: bool = None) -> str:
+    def Bind(self, sequence: Bindings, func: callable, add: bool = None) -> str:
         if isinstance(sequence, Enum): sequence = sequence.value
         _id = self.bind(sequence, func, add)
         self.__bindings__[sequence].add(_id)
         return _id
-    def BindAll(self, sequence: Bindings = None, func: callable = None, add: bool = None) -> str:
+    def BindAll(self, sequence: Bindings, func: callable, add: bool = None) -> str:
         if isinstance(sequence, Enum): sequence = sequence.value
         _id = self.bind_all(sequence, func, add)
         self.__bindings__[sequence].add(_id)
@@ -285,12 +330,12 @@ class BaseTkinterWidget(tk.Widget, ABC):
         self.unbind_all(sequence)
 
 
-    def BindClass(self, className, sequence: Bindings = None, func: callable = None, add: bool = None) -> str:
+    def BindClass(self, className, sequence: Bindings, func: callable, add: bool = None) -> str:
         if isinstance(sequence, Enum): sequence = sequence.value
         _id = self.bind_class(className, sequence, func, add)
         self.__bindings__[sequence].add(_id)
         return _id
-    def UnBindClass(self, className, sequence: Bindings = None) -> str:
+    def UnBindClass(self, className, sequence: Bindings) -> str:
         if isinstance(sequence, Enum): sequence = sequence.value
         self.__bindings__[sequence].clear()
         return self.unbind_class(className, sequence)
@@ -322,8 +367,10 @@ class BaseTkinterWidget(tk.Widget, ABC):
         return self.Pack(expand=True, fill=Fill.both, side=Side.top)
     def PackOptions(self, *, side: Union[str, Side], fill: Union[str, Fill], expand: bool, padx: int = 0, pady: int = 0):
         return self.Pack(side=side, expand=expand, fill=fill, padx=padx, pady=pady)
-    def PackHorizontal(self, side: Union[str, Side] = Side.top): return self.PackOptions(expand=True, fill=Fill.x, side=side)
-    def PackVertical(self, side: Union[str, Side] = Side.left): return self.PackOptions(expand=True, fill=Fill.y, side=side)
+    def PackHorizontal(self, side: Union[str, Side] = Side.top):
+        return self.PackOptions(expand=True, fill=Fill.x, side=side)
+    def PackVertical(self, side: Union[str, Side] = Side.left):
+        return self.PackOptions(expand=True, fill=Fill.y, side=side)
 
 
     def Place(self, cnf={ }, **kwargs):
@@ -420,8 +467,10 @@ class BaseTkinterWidget(tk.Widget, ABC):
 
     def _SetState(self, state: ViewState):
         assert (isinstance(state, ViewState))
-        try: self.configure(state=state.value)
-        except tk.TclError: pass
+        try:
+            self.configure(state=state.value)
+        except tk.TclError:
+            pass
 
         self._state_ = state
         return self
@@ -438,33 +487,39 @@ class BaseTkinterWidget(tk.Widget, ABC):
         pass
 
     @property
-    def __class_name__(self) -> str: return nameof(self)
+    def __class_name__(self) -> str:
+        return nameof(self)
 
     def __updateSize__(self):
+        self.update()
         size = self.size
         while any(i <= 1 for i in size):
-            self.update()
             self.update_idletasks()
             size = self.size
 
 
 class BaseTextTkinterWidget(BaseTkinterWidget):
     _txt: tk.StringVar
-    def __init__(self, text: str, Override_var: Optional[tk.StringVar], Color: Optional[Dict[str, str]], loop: Optional[BaseEventLoop], configure: bool = True):
-        if Override_var is not None: self._txt = Override_var
-        else: self._txt = tk.StringVar(master=self, value=text)
+    def __init__(self, text: str, Override_var: Optional[tk.StringVar], Color: Optional[Dict[str, str]], loop: Optional[AbstractEventLoop], configure: bool = True):
+        if Override_var is not None:
+            self._txt = Override_var
+        else:
+            self._txt = tk.StringVar(master=self, value=text)
 
         if configure: self.configure(textvariable=self._txt)
         BaseTkinterWidget.__init__(self, Color, loop)
 
 
     @property
-    def txt(self) -> str: return self._txt.get()
+    def txt(self) -> str:
+        return self._txt.get()
     @txt.setter
-    def txt(self, value: str): self._txt.set(value)
+    def txt(self, value: str):
+        self._txt.set(value)
 
     @property
-    def wrap(self) -> int: return self._wrap
+    def wrap(self) -> int:
+        return self._wrap
     @wrap.setter
     def wrap(self, value: int):
         if not isinstance(value, int): value = int(value)
@@ -476,121 +531,111 @@ class BaseTextTkinterWidget(BaseTkinterWidget):
         t += v
         self.txt = t
 
+
 # ------------------------------------------------------------------------------------------
 
+
+SyncCallable = Callable[[Optional[tkEvent], Tuple, Dict[str, Any]], Any]
+SimpleSyncCallable = Callable[[Optional[tkEvent]], Any]
+# class CallWrapper(object):
+#     """ Internal class. Stores function to call when some user defined Tcl function is called e.g. after an event occurred. """
+#     __slots__ = ['_func',
+#                  '_widget',
+#                  '_args',
+#                  '_kwargs',
+#                  ]
+#     _widget: Union[BaseTextTkinterWidget, BaseTkinterWidget, 'CommandMixin']
+#     _func: Final[SyncCallable]
+#     def __init__(self, func: SyncCallable, widget: Union[BaseTextTkinterWidget, BaseTkinterWidget, 'CommandMixin'], *args, **kwargs):
+#         assert (isinstance(widget, BaseTkinterWidget) and isinstance(widget, CommandMixin))
+#         self._func = func
+#         self._widget = widget
+#         self._args = args
+#         self._kwargs = kwargs
+#
+#     def __call__(self, event: Optional[tkEvent] = None):
+#         try:
+#             return self._func(event, *self._args, **self._kwargs)
+#         except KeyboardInterrupt:
+#             return
+#
+#         except SystemExit:
+#             raise
+#
+#         except Exception as e:
+#             # noinspection PyProtectedMember
+#             root = self._widget._root()
+#             root.report_callback_exception(typeof(e), e, e.__traceback__)
+#
+#
+#     def __repr__(self) -> str:
+#         return f'{super().__repr__().replace(">", "")} [ {dict(func=self._func, widget=self._widget)} ]>'
+#     def __str__(self) -> str:
+#         return repr(self)
+#
+#     def SetWidget(self, w: BaseTkinterWidget):
+#         """ Internal Method """
+#         assert (isinstance(w, BaseTkinterWidget))
+#         self._widget = w
+#         return self
+
+
+AsyncCallable = Callable[[Optional[tkEvent], Tuple, Dict[str, Any]], Coroutine]
+SimpleAsyncCallable = Callable[[Optional[tkEvent]], Coroutine]
 class CallWrapper(object):
     """ Internal class. Stores function to call when some user defined Tcl function is called e.g. after an event occurred. """
-    __slots__ = ['_func', '_widget']
-    _widget: Union[BaseTextTkinterWidget, BaseTkinterWidget, 'CommandMixin']
-    _func: Final[Callable]
-    def __init__(self, func: Callable, widget: Union[BaseTextTkinterWidget, BaseTkinterWidget]):
-        assert (isinstance(widget, BaseTkinterWidget) and isinstance(widget, CommandMixin))
-        self._func = func
-        self._widget = widget
+    __slots__ = ['_func',
+                 '_widget',
+                 '_loop',
+                 '_args',
+                 '_kwargs',
+                 ]
 
-    def __call__(self, *args, **kwargs):
-        try:
-            return self._func(*args, **kwargs)
-        except SystemExit: raise
-        except Exception as e:
-            # noinspection PyProtectedMember
-            root = self._widget._root()
-            root.report_callback_exception(typeof(e), e, e.__traceback__)
-
-
-    def __repr__(self) -> str: return f'{super().__repr__().replace(">", "")} [ {dict(func=self._func, widget=self._widget)} ]>'
-    def __str__(self) -> str: return repr(self)
-
-    def SetWidget(self, w: BaseTkinterWidget):
-        """ Internal Method """
-        assert (isinstance(w, BaseTkinterWidget))
-        self._widget = w
-        return self
-
-    @classmethod
-    def Create(cls, func: Callable,
-               widget: Union[BaseTextTkinterWidget, BaseTkinterWidget, 'CommandMixin'],
-               z: Union[int, float, str, Enum] = None,
-               **kwargs):
-        if z is not None and kwargs and func:
-            return cls(lambda x=kwargs: func(z, **x), widget=widget)
-
-        elif kwargs and func:
-            return cls(lambda x=kwargs: func(**x), widget=widget)
-
-        elif z is not None and func:
-            return cls(lambda x=z: func(x), widget=widget)
-
-        elif func:
-            return cls(func, widget=widget)
-
-        return None
-
-
-class AsyncCallWrapper(object):
-    """ Internal class. Stores function to call when some user defined Tcl function is called e.g. after an event occurred. """
-    __slots__ = ['_func', '_widget', '_loop']
     _widget: Union[BaseTextTkinterWidget, BaseTkinterWidget, None]
-    _func: Final[Union[Coroutine, Awaitable, AsyncGenerator]]
-    _loop: Final[BaseEventLoop]
-    def __init__(self, func: Union[Coroutine, Awaitable, AsyncGenerator], loop: BaseEventLoop, widget: Union[BaseTextTkinterWidget, BaseTkinterWidget, 'CommandMixin']):
+    _func: Final[Union[SimpleSyncCallable, SyncCallable, AsyncCallable, SimpleAsyncCallable]]
+    _loop: Final[AbstractEventLoop]
+    _args: Final[Tuple]
+    _kwargs: Final[Dict[str, Any]]
+    def __init__(self, func: Union[SimpleSyncCallable, SyncCallable, AsyncCallable, SimpleAsyncCallable],
+                 loop: AbstractEventLoop,
+                 widget: Union[BaseTextTkinterWidget, BaseTkinterWidget, 'CommandMixin'],
+                 args,
+                 kwargs):
         assert (isinstance(widget, BaseTkinterWidget) and isinstance(widget, CommandMixin))
         self._func = func
         self._loop = loop
         self._widget = widget
+        self._args = args
+        self._kwargs = kwargs
 
 
-    def __call__(self, *args, **kwargs):
+    def __call__(self, event: Optional[tkEvent] = None):
         try:
-            return self._loop.create_task(self._func, name=self._func.__name__)
-        except SystemExit: raise
+            result = self._func(event, self._args, self._kwargs)
+            if iscoroutine(result) or iscoroutinefunction(result):
+                return run_coroutine_threadsafe(result, self._loop)
+
+            return result
+
+        except KeyboardInterrupt:
+            return
+
+        except SystemExit:
+            raise
+
         except Exception as e:
             # noinspection PyProtectedMember
             root = self._widget._root()
             root.report_callback_exception(typeof(e), e, e.__traceback__)
 
-    def __repr__(self) -> str: return f'{super().__repr__().replace(">", "")} [ {dict(func=self._func, widget=self._widget)} ]>'
-    def __str__(self) -> str: return repr(self)
-
-    @classmethod
-    def Create(cls, func: Union[Awaitable, Coroutine, Generator],
-               loop: BaseEventLoop,
-               widget: Union['CommandMixin', BaseTextTkinterWidget, BaseTkinterWidget],
-               z: Union[int, float, str, Enum] = None,
-               **kwargs):
-        if not func: return None
-
-        async def wrapper() -> Any:
-            try:
-                if iscoroutine(func):
-                    return await func
-
-                if callable(func):
-                    if z is not None and kwargs:
-                        return func(z, **kwargs)
-
-                    elif kwargs:
-                        return func(**kwargs)
-
-                    elif z is not None:
-                        return func(z)
-
-                    return await func(z, **kwargs)
-
-                return await func
-
-            except SystemExit: raise
-            except Exception:
-                if hasattr(widget, '_report_exception'):
-                    # noinspection PyProtectedMember
-                    return widget._report_exception()
-
-                raise
+    def __repr__(self) -> str:
+        return f'{super().__repr__().replace(">", "")} [ {dict(func=self._func, widget=self._widget)} ]>'
+    def __str__(self) -> str:
+        return repr(self)
 
 
-        return cls(wrapper(), loop, widget)
-
-
+CurrentValueCallable = Callable[[Optional[tkEvent], str, Tuple, Dict[str, Any]], Any]
+CurrentValueAsyncCallable = Callable[[Optional[tkEvent], str, Tuple, Dict[str, Any]], Coroutine]
 class CurrentValue(object):
     __doc__ = """
         Stores function to call when some user defined Tcl function is called e.g. after an event occurred.
@@ -599,98 +644,113 @@ class CurrentValue(object):
         example:
             widget.SetCommand(CurrentValue(passed_function))
     """
-    __slots__ = ['_func', '_widget', '_args', '_kwargs']
+    __slots__ = ['_func', '_widget', '_args', '_kwargs', '_loop']
     _widget: Union[BaseTextTkinterWidget, BaseTkinterWidget, None]
     _args: Final[Union[List[Any], Tuple[Any]]]
     _kwargs: Final[Dict[str, Any]]
-    _func: Final[Union[Callable[[str, ...], Any], Callable[[str], Any]]]
-    def __init__(self, func: Union[Callable[[str, ...], Any], Callable[[str], Any]], *args, **kwargs):
+    _loop: Optional[AbstractEventLoop]
+    _func: Final[Union[CurrentValueCallable, CurrentValueAsyncCallable]]
+    def __init__(self, func: Union[CurrentValueCallable, CurrentValueAsyncCallable], *args, **kwargs):
         self._args = args
         self._kwargs = kwargs
         self._widget = None
         self._func = func
-    def SetWidget(self, w):
+        self._loop = None
+    def _SetWidget(self, w: 'CommandMixin'):
         """
             Internal Method
 
         :param w: widget being assigned to this wrapper
-        :type w: BaseTextTkinterWidget, CommandMixin
         :return: CurrentValue
         :rtype: CurrentValue
         """
         assert (isinstance(w, BaseTextTkinterWidget) and isinstance(w, CommandMixin))
         self._widget = w
+        # noinspection PyProtectedMember
+        self._loop = w._current_loop()
         return self
 
-    def __call__(self, *args, **kwargs):
+    def __call__(self, event: Optional[tkEvent] = None):
         try:
-            return self._func(self._widget.txt, *self._args, *args, **self._kwargs, **kwargs)
-        except SystemExit: raise
+            result = self._func(event, self._widget.txt, *self._args, **self._kwargs)
+            if iscoroutine(result) or iscoroutinefunction(result):
+                return run_coroutine_threadsafe(result, self._loop)
+
+            return result
+        except SystemExit:
+            raise
         except Exception as e:
             # noinspection PyProtectedMember
             root = self._widget._root()
             root.report_callback_exception(typeof(e), e, e.__traceback__)
 
 
-# ------------------------------------------------------------------------------------------
-
-
 class CommandMixin:
-    _cmd: Optional[Union[CurrentValue, AsyncCallWrapper, CallWrapper]]
+    _cmd: Optional[Union[CurrentValue, CallWrapper]]
     configure: callable
     command_cb: str
-    _loop: Optional[BaseEventLoop]
-
 
     def __call__(self, *args, **kwargs):
         """ Execute the Command """
         if callable(self._cmd): self._cmd(*args, **kwargs)
 
-    def SetCommand(self, func: Union[Callable, FunctionType, MethodType, CurrentValue], z: Union[int, float, str, Enum] = None, add: bool = False, **kwargs):
+    def SetCommand(self,
+                   func: Union[SimpleSyncCallable, SyncCallable, AsyncCallable, SimpleAsyncCallable, CurrentValue],
+                   # func: Union[Callable, FunctionType, MethodType, CurrentValue, Awaitable, Coroutine, Generator],
+                   *args,
+                   add: bool = False,
+                   **kwargs):
         """
         :param func: function or method being called.
-        :type func: Union[callable, FunctionType, MethodType, CurrentValue]
-        :param z: arg passed to the fucntion.
-        :type z: Union[int, float, str, Enum]
+        :type func: Union[callable, FunctionType, MethodType, CurrentValue, Awaitable, Coroutine, Generator]
+        :param args: args passed to the fucntion.
         :param add: if True, replaces the current function.
         :type add: bool
         :param kwargs: keyword args passed to the function.
         :type kwargs: Any
         :return: returns self to enable chaining.
         """
-        if not callable(func): raise ValueError(f'func is not callable. got {type(func)}')
+        assert (isinstance(self, BaseTkinterWidget) and isinstance(self, CommandMixin))
 
-        if isinstance(func, CurrentValue): self._cmd = func.SetWidget(self)
-        else: self._cmd = CallWrapper.Create(func, self, z, **kwargs)
+        if not callable(func):
+            raise ValueError(f'func is not callable. got {typeof(func)}')
 
-        return self._setCommand(add)
-
-    def SetCommandAsync(self, func: Union[Awaitable, Coroutine, Generator],
-                        z: Union[int, float, str, Enum] = None,
-                        add: bool = False,
-                        **kwargs):
-        """
-        :param func: function or method being called.
-        :type func: Union[callable, FunctionType, MethodType, CurrentValue]
-        :param z: arg passed to the function.
-        :type z: Union[int, float, str, Enum]
-        :param add: if True, replaces the current function.
-        :type add: bool
-        :param kwargs: keyword args passed to the function.
-        :type kwargs: Any
-        :return: returns self to enable chaining.
-        """
-
-        if isinstance(func, CurrentValue): raise ArgumentError(f'func cannot be a CurrentValue instance. Use "SetCommand" instead.')
-
-        self._cmd = AsyncCallWrapper.Create(func, self._loop, self, z, **kwargs)
+        if isinstance(func, CurrentValue):
+            # noinspection PyProtectedMember
+            self._cmd = func._SetWidget(self)
+        else:
+            self._cmd = CallWrapper(func, self._current_loop(), self, args, kwargs)
 
         return self._setCommand(add)
+
 
     def _setCommand(self, add: bool):
         self.configure(command=self._cmd)
         return self
 
+
+    def _current_loop(self) -> AbstractEventLoop:
+        assert (isinstance(self, BaseTkinterWidget) and isinstance(self, CommandMixin))
+
+        if self._loop is not None:
+            return self._loop
+
+        master = self.master
+        while master is not None:
+            if isinstance(master, BaseAsyncApp):
+                self._loop = master.loop
+                return self._loop
+
+            elif isinstance(master, tk.Widget):
+                master = master.master
+
+            else:
+                break
+
+        raise TypeError(typeof(master), (BaseAsyncApp,))
+
+
+# ------------------------------------------------------------------------------------------
 
 
 def img_open(fp: BinaryIO, *formats: str, mode="r") -> Image:
@@ -724,34 +784,117 @@ def img_open(fp: BinaryIO, *formats: str, mode="r") -> Image:
     return _img_open(fp, mode, formats or None)
 
 
+# async def img_open_async(fp: AsyncBufferedReader, *formats: str, mode="r") -> Image:
+#     if mode != "r":
+#         raise ValueError(f"bad mode {repr(mode)}")
+#
+#     if formats is None:
+#         formats = ID
+#     elif not isinstance(formats, (list, tuple)):
+#         raise TypeError("formats must be a list or tuple")
+#
+#     exclusive_fp = False
+#     try:
+#         await fp.seek(0)
+#     except (AttributeError, UnsupportedOperation):
+#         fp = BytesIO(await fp.read())
+#         exclusive_fp = True
+#
+#     prefix = await fp.read(16)
+#
+#     preinit()
+#
+#     accept_warnings: List[Union[str, bytes]] = []
+#
+#     async def _open_core(_fp: AsyncBufferedReader, _prefix: bytes, _formats: Iterable[str]) -> Optional[Image]:
+#         for fmt in _formats:
+#             fmt = fmt.upper()
+#             if fmt not in OPEN:
+#                 init()
+#
+#             try:
+#                 factory: Callable[[AsyncBufferedReader, Optional[str]], Image]
+#                 accept: Callable[[bytes], Union[str, bytes, None]]
+#
+#                 factory, accept = OPEN[fmt]
+#
+#                 result = not accept or accept(_prefix)
+#                 if type(result) in [str, bytes]:
+#                     accept_warnings.append(result)
+#
+#                 elif result:
+#                     await _fp.seek(0)
+#                     _im: Image = factory(_fp, None)
+#                     _decompression_bomb_check(_im.size)
+#                     return _im
+#
+#             except (SyntaxError, IndexError, TypeError, struct.error):
+#                 # Leave disabled by default, spams the logs with image
+#                 # opening failures that are entirely expected.
+#                 # logger.debug("", exc_info=True)
+#                 continue
+#             except BaseException:
+#                 if exclusive_fp:
+#                     await _fp.close()
+#
+#                 raise
+#
+#         return None
+#
+#     im = await _open_core(fp, prefix, formats)
+#
+#     if im is None:
+#         if init():
+#             im = await _open_core(fp, prefix, formats)
+#
+#     if im:
+#         im._exclusive_fp = exclusive_fp
+#         return im
+#
+#     if exclusive_fp:
+#         await fp.close()
+#
+#     for message in accept_warnings:
+#         warnings.warn(message)
+#
+#     raise UnidentifiedImageError()
+
 
 class ImageMixin:
-    width: int
-    height: int
+    Width: int
+    Height: int
     configure: callable
     update_idletasks: callable
     update: callable
     _IMG: Optional[tkPhotoImage]
-    def __init__(self): self._IMG = None
+    def __init__(self):
+        self._IMG = None
 
 
     @overload
-    def SetImage(self, img: tkPhotoImage): ...
+    def SetImage(self, img: tkPhotoImage):
+        ...
 
     @overload
-    def SetImage(self, url: URL, *formats: str, params: Union[Dict[str, str], List[str], Tuple[str, ...]] = None, **kwargs): ...
+    def SetImage(self, url: URL, *formats: str, params: Union[Dict[str, str], List[str], Tuple[str, ...]] = None, **kwargs):
+        ...
     @overload
-    def SetImage(self, url: URL, *formats: str, widthMax: int, heightMax: int, params: Union[Dict[str, str], List[str], Tuple[str, ...]] = None, **kwargs): ...
+    def SetImage(self, url: URL, *formats: str, widthMax: int, heightMax: int, params: Union[Dict[str, str], List[str], Tuple[str, ...]] = None, **kwargs):
+        ...
 
     @overload
-    def SetImage(self, path: Union[str, bytes, FilePath, Enum], *formats: str): ...
+    def SetImage(self, path: Union[str, bytes, FilePath, Enum], *formats: str):
+        ...
     @overload
-    def SetImage(self, path: Union[str, bytes, FilePath, Enum], *formats: str, widthMax: int, heightMax: int): ...
+    def SetImage(self, path: Union[str, bytes, FilePath, Enum], *formats: str, widthMax: int, heightMax: int):
+        ...
 
     @overload
-    def SetImage(self, base64data: Union[str, bytes, Enum], *formats: str): ...
+    def SetImage(self, base64data: Union[str, bytes, Enum], *formats: str):
+        ...
     @overload
-    def SetImage(self, base64data: Union[str, bytes, Enum], *formats: str, widthMax: int, heightMax: int): ...
+    def SetImage(self, base64data: Union[str, bytes, Enum], *formats: str, widthMax: int, heightMax: int):
+        ...
 
 
     def SetImage(self, data: Union[str, bytes, Enum, FilePath, URL, tkPhotoImage],
@@ -781,22 +924,29 @@ class ImageMixin:
 
 
     @overload
-    async def SetImageAsync(self, img: tkPhotoImage): ...
+    async def SetImageAsync(self, img: tkPhotoImage):
+        ...
 
     @overload
-    async def SetImageAsync(self, url: URL, *formats: str, params: Union[Dict[str, str], List[str], Tuple[str, ...]] = None, **kwargs): ...
+    async def SetImageAsync(self, url: URL, *formats: str, params: Union[Dict[str, str], List[str], Tuple[str, ...]] = None, **kwargs):
+        ...
     @overload
-    async def SetImageAsync(self, url: URL, *formats: str, widthMax: int, heightMax: int, params: Union[Dict[str, str], List[str], Tuple[str, ...]] = None, **kwargs): ...
+    async def SetImageAsync(self, url: URL, *formats: str, widthMax: int, heightMax: int, params: Union[Dict[str, str], List[str], Tuple[str, ...]] = None, **kwargs):
+        ...
 
     @overload
-    async def SetImageAsync(self, path: Union[str, bytes, FilePath, Enum], *formats: str): ...
+    async def SetImageAsync(self, path: Union[str, bytes, FilePath, Enum], *formats: str):
+        ...
     @overload
-    async def SetImageAsync(self, path: Union[str, bytes, FilePath, Enum], *formats: str, widthMax: int, heightMax: int): ...
+    async def SetImageAsync(self, path: Union[str, bytes, FilePath, Enum], *formats: str, widthMax: int, heightMax: int):
+        ...
 
     @overload
-    async def SetImageAsync(self, base64data: Union[str, bytes, Enum], *formats: str): ...
+    async def SetImageAsync(self, base64data: Union[str, bytes, Enum], *formats: str):
+        ...
     @overload
-    async def SetImageAsync(self, base64data: Union[str, bytes, Enum], *formats: str, widthMax: int, heightMax: int): ...
+    async def SetImageAsync(self, base64data: Union[str, bytes, Enum], *formats: str, widthMax: int, heightMax: int):
+        ...
 
 
     async def SetImageAsync(self, data: Union[str, bytes, Enum, FilePath, URL, tkPhotoImage],
@@ -818,8 +968,11 @@ class ImageMixin:
                     return self._setImage(ImageMixin.open(self, buf, widthMax, heightMax, *formats))
 
         if isfile(data):
+            f: AsyncBufferedReader
             async with async_file_open(data, 'rb') as f:
-                return self._setImage(ImageMixin.open(self, f, widthMax, heightMax, *formats))
+                raw = await f.read()
+
+            return self.SetImageFromBytes(raw, *formats, width=widthMax, height=heightMax)
 
         return self.SetImageFromBytes(base64.b64decode(data), *formats, width=widthMax, height=heightMax)
 
@@ -833,7 +986,7 @@ class ImageMixin:
 
 
     @staticmethod
-    def open(self: Union[BaseTkinterWidget, 'ImageMixin'], f: Union[BinaryIO, AsyncBufferedReader],
+    def open(self: Union[BaseTkinterWidget, 'ImageMixin'], f: BinaryIO,
              widthMax: Optional[int], heightMax: Optional[int], *formats: str) -> tkPhotoImage:
         self.__updateSize__()
 
@@ -842,8 +995,6 @@ class ImageMixin:
 
         if widthMax is None or widthMax <= 0: raise ValueError(f'widthMax must be positive. Value: {widthMax}')
         if heightMax is None or heightMax <= 0: raise ValueError(f'heightMax must be positive. Value: {heightMax}')
-        print(f'{widthMax=}')
-        print(f'{heightMax=}')
 
         with img_open(f, *formats) as img:
             img = img.resize(ImageMixin.CalculateNewSize(img, widthMax, heightMax))
@@ -852,21 +1003,327 @@ class ImageMixin:
     def _setImage(self, img: Optional[tkPhotoImage]) -> 'ImageMixin':
         self.update_idletasks()
         self._IMG = img
-        self.configure(img=self._IMG)
+        self.configure(image=self._IMG)
         return self
 
 
     @staticmethod
-    def Maximum_ScalingFactor(*options: float) -> float: return max(options)
+    def Maximum_ScalingFactor(*options: float) -> float:
+        return max(options)
     @staticmethod
-    def Minimum_ScalingFactor(*options: float) -> float: return min(options)
+    def Minimum_ScalingFactor(*options: float) -> float:
+        return min(options)
 
     @staticmethod
-    def Factors(img: Image, widthMax: int, heightMax: int) -> Tuple[float, float]: return widthMax / img.width, heightMax / img.height
+    def Factors(img: Image, widthMax: int, heightMax: int) -> Tuple[float, float]:
+        return widthMax / img.width, heightMax / img.height
     @staticmethod
     def CalculateNewSize(img: Image, widthMax: int, heightMax: int) -> Tuple[int, int]:
         options = ImageMixin.Factors(img, widthMax, heightMax)
         scalingFactor = ImageMixin.Minimum_ScalingFactor(*options)
         return ImageMixin.Scale(img, scalingFactor)
     @staticmethod
-    def Scale(img: Image, factor: float) -> Tuple[int, int]: return int(img.width * (factor or 1)), int(img.height * (factor or 1))
+    def Scale(img: Image, factor: float) -> Tuple[int, int]:
+        return int(img.width * (factor or 1)), int(img.height * (factor or 1))
+
+
+
+# ------------------------------------------------------------------------------------------
+
+
+class Updater(AutoStartThread, ABC):
+    __slots__ = ['_app']
+    _app: Optional['BaseApp']
+    def __init__(self, app: 'BaseApp'):
+        self._app = app
+        AutoStartThread.__init__(self)
+
+    def stop(self): raise NotImplementedError()
+
+
+
+class AsyncUpdater(AutoStartThread):
+    __slots__ = ['_loop']
+    _loop: Optional[AbstractEventLoop]
+    def __init__(self, loop: AbstractEventLoop):
+        self._loop = loop
+        AutoStartThread.__init__(self)
+
+    def run(self):
+        self._loop.run_forever()
+
+    def stop(self):
+        self._loop.stop()
+
+    @property
+    def loop(self) -> AbstractEventLoop: return self._loop
+
+
+
+_TUpdater = TypeVar('_TUpdater', Updater, AsyncUpdater)
+class BaseApp(tkRoot, Generic[_TUpdater], ABC):
+    """ Override to extend functionality. Indented to be the base class for the Application level class, which is passed to all child windows and frames. """
+    __slots__ = ['logger', '_logging_manager', '_updater']
+    logger: Logger
+    _logging_manager: LoggingManager
+    _updater: _TUpdater
+    def __init__(self, updater: _TUpdater, app_name: str, *types: Type,
+                 width: Optional[int] = None, height: Optional[int] = None, fullscreen: Optional[bool] = None, x: int = 0, y: int = 0, **kwargs):
+        root_path = kwargs.pop('root_path', '.')
+        tkRoot.__init__(self, width, height, fullscreen, x, y, **kwargs)
+
+        self._logging_manager = LoggingManager.FromTypes(self.__class__, *types, app_name=app_name, root_path=FilePath.convert(root_path))
+        self.logger = self.CreateLogger(self)
+        self._updater = updater
+
+        self.protocol('WM_DELETE_WINDOW', self.Close)
+
+        self.Bind(Bindings.ButtonPress, self._OnPress)
+        self.Bind(Bindings.Key, self._OnKeyPress)
+        self._setup()
+
+    @property
+    def DEBUG(self) -> bool:
+        return __debug__
+
+    def CreateLogger(self, source, *, debug: bool = __debug__) -> Logger:
+        return self._logging_manager.CreateLogger(source, debug=debug)
+
+    def GetLogger(self, source: Union[Type, Any]) -> Logger:
+        return self.logger.getChild(typeof(source).__name__)
+
+
+    def Close(self):
+        """ Override to add functionality. Closes updater loop then closes application. """
+        self._updater.stop()
+        self.tk.destroy()
+    def start_gui(self, *_args, **_kwargs): raise NotImplementedError()
+
+    def _setup(self):
+        """Called on class creation. use this to create any required attributes, views, threads, processes, etc for the app to run."""
+        raise NotImplementedError()
+
+
+    def _OnPress(self, event: tkEvent) -> Optional[bool]:
+        return self.Handle_Press(TkinterEvent(event))
+    def Handle_Press(self, event: TkinterEvent) -> Optional[bool]:
+        raise NotImplementedError()
+
+
+
+    def _OnKeyPress(self, event: tkEvent) -> Optional[bool]:
+        return self.Handle_KeyPress(TkinterEvent(event))
+    def Handle_KeyPress(self, event: TkinterEvent) -> Optional[bool]:
+        raise NotImplementedError()
+
+
+
+class BaseAsyncApp(BaseApp[AsyncUpdater], ABC):
+    """ Override to extend functionality. Indented to be the base class for the Application level class, which is passed to all child windows and frames. """
+    def __init__(self, *types: Type,
+                 app_name: str,
+                 loop: Type[AbstractEventLoop] = None,
+                 x: int = 0,
+                 y: int = 0,
+                 Screen_Width: Optional[int] = None,
+                 Screen_Height: Optional[int] = None,
+                 updater: Type[AsyncUpdater] = None,
+                 fullscreen: Optional[bool] = None,
+                 root_path: Union[str, FilePath] = None,
+                 **kwargs):
+        if fullscreen is None: fullscreen = not self.DEBUG
+        _updater = (updater or AsyncUpdater)(loop or get_event_loop())
+
+        BaseApp.__init__(self, _updater, app_name, *types, root_path=root_path, width=Screen_Width, height=Screen_Height, fullscreen=fullscreen, x=x, y=y, **kwargs)
+
+    @property
+    def loop(self) -> AbstractEventLoop:
+        return self._updater.loop
+
+    def start_gui(self, *_args, **_kwargs):
+        try:
+            self.tk.mainloop()
+        except KeyboardInterrupt:
+            self._updater.stop()
+            return
+
+
+class BaseSyncApp(BaseApp[Updater], ABC):
+    """ Override to extend functionality. Indented to be the base class for the Application level class, which is passed to all child windows and frames. """
+    def __init__(self, *types: Type,
+                 app_name: str,
+                 x: int = 0,
+                 y: int = 0,
+                 Screen_Width: Optional[int] = None,
+                 Screen_Height: Optional[int] = None,
+                 updater: Type[Updater] = None,
+                 fullscreen: Optional[bool] = None,
+                 root_path: Union[str, FilePath] = None,
+                 **kwargs):
+        if fullscreen is None: fullscreen = not self.DEBUG
+        _updater = (updater or Updater)(self)
+
+        BaseApp.__init__(self, _updater, app_name, *types, root_path=root_path, width=Screen_Width, height=Screen_Height, fullscreen=fullscreen, x=x, y=y, **kwargs)
+
+    def start_gui(self, *_args, **_kwargs):
+        try:
+            self.tk.mainloop()
+        except KeyboardInterrupt:
+            return
+
+
+    # @staticmethod
+    # def InitAsync():
+    #     set_event_loop_policy(AsyncTkinterEventLoopPolicy())
+
+
+# ------------------------------------------------------------------------------------------
+
+
+class _BaseFrameMixin:
+    InstanceID: Optional[Union[str, int, Enum]]
+    def __init__(self):
+        self.InstanceID = None
+
+    def SetID(self, InstanceID: Union[str, int, Enum]):
+        self.InstanceID = InstanceID
+        return self
+
+    @property
+    def __name__(self):
+        try:
+            base = super().__name__()
+        except AttributeError:
+            base = nameof(self)
+
+        if self.InstanceID:
+            if isinstance(self.InstanceID, Enum):
+                InstanceID = self.InstanceID.value
+            else:
+                InstanceID = self.InstanceID
+
+            return f'{base}_{InstanceID}'.lower()
+
+        return base
+
+
+# noinspection DuplicatedCode
+class Frame(tk.Frame, BaseTkinterWidget, _BaseFrameMixin):
+    __doc__ = """Frame widget which may contain other widgets and can have a 3D border."""
+    __slots__ = ['InstanceID']
+    def __init__(self, master, Color: Optional[Dict[str, str]] = None, loop: Optional[AbstractEventLoop] = None, **kwargs):
+        tk.Frame.__init__(self, master, **kwargs)
+        BaseTkinterWidget.__init__(self, Color, loop)
+        _BaseFrameMixin.__init__(self)
+
+    def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
+
+class LabelFrame(tk.LabelFrame, BaseTextTkinterWidget, _BaseFrameMixin):
+    __doc__ = """Construct a labelframe _widget with the master MASTER.
+
+    STANDARD OPTIONS
+
+        borderwidth, cursor, font, foreground,
+        highlightbackground, highlightcolor,
+        highlightthickness, padx, pady, relief,
+        takefocus, text
+
+    WIDGET-SPECIFIC OPTIONS
+
+        background, class, colormap, container,
+        Height, labelanchor, labelwidget,
+        visual, Width
+    """
+    __slots__ = ['InstanceID']
+    def __init__(self, master, text: str = '', Color: Optional[Dict[str, str]] = None, loop: Optional[AbstractEventLoop] = None, **kwargs):
+        tk.LabelFrame.__init__(self, master, text=text, **kwargs)
+        BaseTextTkinterWidget.__init__(self, text, None, Color, loop, configure=False)
+        _BaseFrameMixin.__init__(self)
+
+    @property
+    def txt(self) -> str: return self._txt.get()
+    @txt.setter
+    def txt(self, value: str):
+        self._txt.set(value)
+        self.configure(text=value)
+
+    def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
+
+
+# noinspection DuplicatedCode
+class FrameThemed(ttk.Frame, BaseTkinterWidget, _BaseFrameMixin):
+    __doc__ = """Ttk Frame widget is a container, used to group other widgets together."""
+    __slots__ = ['InstanceID']
+    def __init__(self, master, Color: Optional[Dict[str, str]] = None, loop: Optional[AbstractEventLoop] = None, **kwargs):
+        ttk.Frame.__init__(self, master, **kwargs)
+        BaseTkinterWidget.__init__(self, Color, loop)
+        _BaseFrameMixin.__init__(self)
+
+    def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
+
+class LabelFrameThemed(ttk.LabelFrame, BaseTextTkinterWidget, _BaseFrameMixin):
+    __doc__ = """Construct a labelframe _widget with the master MASTER.
+
+    STANDARD OPTIONS
+
+        borderwidth, cursor, font, foreground,
+        highlightbackground, highlightcolor,
+        highlightthickness, padx, pady, relief,
+        takefocus, text
+
+    WIDGET-SPECIFIC OPTIONS
+
+        background, class, colormap, container,
+        Height, labelanchor, labelwidget,
+        visual, Width
+    """
+    __slots__ = ['InstanceID']
+    def __init__(self, master, text: str = '', Color: Optional[Dict[str, str]] = None, loop: Optional[AbstractEventLoop] = None, **kwargs):
+        ttk.LabelFrame.__init__(self, master, text=text, **kwargs)
+        BaseTextTkinterWidget.__init__(self, text, None, Color, loop, configure=False)
+        _BaseFrameMixin.__init__(self)
+
+    @property
+    def txt(self) -> str: return self._txt.get()
+    @txt.setter
+    def txt(self, value: str):
+        self._txt.set(value)
+        self.configure(text=value)
+
+    def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, BaseTkinterWidget.convert_kwargs(kwargs))
+
+
+# ------------------------------------------------------------------------------------------
+
+
+_TBaseApp = TypeVar('_TBaseApp', bound=BaseApp)
+class _WindowMixin(Generic[_TBaseApp]):
+    __log_name__: str
+    _app: _TBaseApp
+    def __init__(self, app: _TBaseApp):
+        assert (isinstance(app, BaseApp))
+        self._app = app
+        self._logger = app.logger.getChild(str(class_name(self)))
+
+    def OnPress(self, event: TkinterEvent): pass
+    def OnKeyPress(self, event: TkinterEvent): pass
+
+
+class BaseWindow(Frame, _WindowMixin[_TBaseApp]):
+    def __init__(self, master, app: _TBaseApp, **kwargs):
+        Frame.__init__(self, master, **kwargs)
+        _WindowMixin.__init__(self, app)
+
+    @classmethod
+    def Root(cls, app: _TBaseApp, **kwargs):
+        return cls(app.tk, app, **kwargs)
+
+
+class BaseLabelWindow(LabelFrame, _WindowMixin[_TBaseApp]):
+    def __init__(self, master, app: _TBaseApp, **kwargs):
+        LabelFrame.__init__(self, master, **kwargs)
+        _WindowMixin.__init__(self, app)
+
+    @classmethod
+    def Root(cls, app: _TBaseApp, **kwargs):
+        return cls(app.tk, app, **kwargs)
