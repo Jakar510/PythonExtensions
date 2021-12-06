@@ -413,6 +413,7 @@ class KeyboardMixin:
         self._popup_height = popup_height
         self._popup_relheight = popup_relheight
 
+        self.kb = None
         self.state = KeyBoardState.Idle
 
         assert (isinstance(self, BaseTkinterWidget) and isinstance(self, KeyboardMixin))
