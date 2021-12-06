@@ -1197,7 +1197,7 @@ class BaseSyncApp(BaseApp[Updater], ABC):
                  width: Optional[int] = None,
                  height: Optional[int] = None,
                  fullscreen: Optional[bool] = None,
-                 root_path: Union[str, FilePath] = None,
+                 root_path: Union[str, FilePath] = '.',
                  updater: Type[Updater] = None,
                  queue: Queue = Queue(),
                  **kwargs):
