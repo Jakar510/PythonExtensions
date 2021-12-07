@@ -14,7 +14,6 @@ from ..Events import *
 from ..Widgets import *
 from ...Core.HID_BUFFER import HID_BUFFER
 from ...Core.Json import AssertType
-from ...Core.Names import nameof
 
 
 
@@ -31,26 +30,28 @@ class KeyBoardState(IntEnum):
     Typing = 2
 
 class Placement(IntFlag):
-    Auto = 0x100000
-
-    Top = 0x010000
-    Bottom = 0x001000
-
-    Left = 0x000001
-    Right = 0x000010
-    Center = 0x000100
+    Auto = 1
+    Top = 2
+    Bottom = 4
+    Left = 8
+    Right = 16
+    Center = 32
 
 class PlacementSet(object):
     """ https://blog.magnussen.casa/post/using-enum-as-bitmasks-in-python/ """
     def __init__(self, *flags: Placement):
-        self._state = Placement(0)  # Initiate no permissions
+        self._state = Placement(0)  # start with nothing
         for _flag in flags: self._state |= _flag
 
-    def __contains__(self, o: Placement) -> bool: return (self._state & o) == o
+    def __contains__(self, o: Placement) -> bool:
+        return (self._state & o) == o
 
-    def __repr__(self): return repr(self._state)
+    def __repr__(self):
+        return repr(self._state)
+
 
 # ------------------------------------------------------------------------------------------
+
 
 class PopupKeyboard(tkTopLevel):
     """
@@ -58,32 +59,44 @@ class PopupKeyboard(tkTopLevel):
     Only the Entry widget has a subclass in this version.
     https://www.alt-codes.net/arrow_alt_codes.php
     """
-    __slots__ = ['_attach', '_key_color', '_root_frame', '_x', '_y', '__root']
-    _space = '[ space ]'
-    _shift = 'Aa'
-    _next = '>>>' or '→'  # &#x2192
-    _previous = '<<<' or '←'  # &#x2190
-    _enter = '↲'  # &#x21B2
-    _backspace = '<-'
-    _delete = 'Clr'
-    _sign = '±'
+    __slots__ = ['_attach',
+                 '_root_frame',
+                 '_key_color',
+                 '__root',
+                 '_space',
+                 '_shift',
+                 '_next',
+                 '_previous',
+                 '_enter',
+                 '_backspace',
+                 '_delete',
+                 '_sign',
+                 '_hid',
+                 '_numbers',
+                 '_letters',
+                 '_Frames',
+                 '_key_size',
+                 ]
 
-    _key_size: int = -1
-    _is_number: bool = False
+    _key_size: int
     _root_frame: Frame
-    _Frames: Dict[int, Frame] = { }
-    _letters: Dict[int, Dict[int, Button]] = { }
-    _numbers: Dict[int, Dict[int, Button]] = { }
-    _hid = HID_BUFFER()
     _attach: Union['KeyboardMixin', BaseTextTkinterWidget]
     def __init__(self, root: tkRoot, *,
                  attach: 'KeyboardMixin',
-                 x: int, y: int,
                  key_size: int = -1,
                  key_color: str = 'white',
                  transparency: float = 0.85,
                  take_focus: bool = False,
-                 font: str = '-family {Segoe UI Black} -size 13'):
+                 font: str = '-family {Segoe UI Black} -size 13',
+                 _space: str = '[ space ]',
+                 _shift: str = 'Aa',
+                 _next: str = '→',  # &#x2192
+                 _previous: str = '←',  # &#x2190
+                 _enter: str = '↲',  # &#x21B2
+                 _backspace: str = '<-',
+                 _delete: str = 'Clr',
+                 _sign: str = '±',
+                 ):
         assert (isinstance(root, tkRoot))
         self.__root = root
         tkTopLevel.__init__(self, master=root, fullscreen=False, takefocus=take_focus, width=1, height=1)
@@ -93,15 +106,23 @@ class PopupKeyboard(tkTopLevel):
 
         if not (isinstance(attach, KeyboardMixin) and isinstance(attach, BaseTextTkinterWidget)): raise TypeError(type(attach), (KeyboardMixin, BaseTextTkinterWidget))
         self._attach = attach
-
         self._key_color = key_color
-
-        self._x = x
-        self._y = y
+        self._Frames: Dict[int, Frame] = { }
+        self._letters: Dict[int, Dict[int, Button]] = { }
+        self._numbers: Dict[int, Dict[int, Button]] = { }
+        self._hid = HID_BUFFER()
+        self._space: Final[str] = _space
+        self._shift: Final[str] = _shift
+        self._next: Final[str] = _next
+        self._previous: Final[str] = _previous
+        self._enter: Final[str] = _enter
+        self._backspace: Final[str] = _backspace
+        self._delete: Final[str] = _delete
+        self._sign: Final[str] = _sign
 
         self._root_frame = Frame(self).Grid(row=0, column=0).Grid_ColumnConfigure(0, weight=1).Grid_RowConfigure(0, weight=1)
 
-        if self._attach.IsAutoSize: self._SetDimensions()
+        # if self._attach.IsAutoSize: self._SetDimensions()
 
         Row0: List[str] = [self._backspace] + [str(i) for i in range(10)] + [self._delete]
         Row1: List[str] = ['|', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '/']
@@ -182,27 +203,39 @@ class PopupKeyboard(tkTopLevel):
 
         self._SetDimensions()
         return self
+
     def _SetDimensions(self):
+        attach_bounds = self._attach.Dimensions()
+        attach_top = attach_bounds[0]
+        attach_left = attach_bounds[1]
+        attach_right = attach_bounds[0] + attach_bounds[2]
+        attach_bottom = attach_bounds[1] + attach_bounds[3]
+
+
         frame_width: int = self.frame_width
         frame_height: int = self.frame_height
-        y = self._get_y(y=self._y, frame_height=frame_height, entry_height=self._attach.winfo_height(), placement=self._attach.placement)
-        x = self._get_x(x=self._x, frame_width=frame_width, entry_width=self._attach.winfo_width(), placement=self._attach.placement)
+        x = self._get_x(self._attach.winfo_x(), popup_width=frame_width, entry_width=self._attach.winfo_width(), placement=self._attach.placement)
+        y = self._get_y(popup_height=frame_height, entry_height=self._attach.winfo_height(), placement=self._attach.placement, attach_bottom=attach_bottom,
+                        attach_top=attach_top)
+
         self.SetDimensions(frame_width, frame_height, x, y)
-    def _get_x(self, *, x: int, frame_width: int, entry_width: int, placement: PlacementSet):
+
+    def _get_x(self, x: int, popup_width: int, entry_width: int, placement: PlacementSet):
         def left():
-            return int(x - frame_width + entry_width)
+            return int(x - popup_width + entry_width)
         def right():
             return int(x)
         def center():
-            return int((x + (entry_width / 2)) - (frame_width / 2))
+            return int((x + (entry_width / 2)) - (popup_width / 2))
         def middle():
-            return int((self.__root.width - frame_width) / 2 + self.__root.x)
+            return int((self.__root.width - popup_width) / 2 + self.__root.x)
+
 
         if Placement.Auto in placement:
             root_x = self.__root.x
             root_width = self.__root.width
-            x_plus_frame_width = x + frame_width
-            x_minus_frame_width = x - frame_width
+            x_plus_frame_width = x + popup_width
+            x_minus_frame_width = x - popup_width
             if x_minus_frame_width < root_x:
                 return middle()
 
@@ -215,24 +248,44 @@ class PopupKeyboard(tkTopLevel):
             return center()
 
         if Placement.Center in placement: return center()
+
         if Placement.Left in placement: return left()
+
         if Placement.Right in placement: return right()
 
         raise ValueError(f'placement is unknown. {placement}')
-    def _get_y(self, *, y: int, frame_height: int, entry_height: int, placement: PlacementSet):
+
+    def _get_y(self, popup_height: int, entry_height: int, placement: PlacementSet, attach_bottom: int, attach_top: int):
+        root_height = self.__root.height
+        print()
+        print(f'{popup_height=}')
+        print(f'{entry_height=}')
+        print(f'{attach_bottom=}')
+        print(f'{attach_top=}')
+        print(f'{root_height=}')
+
         def above():
-            return y - frame_height
+            return attach_top - popup_height
         def below():
-            return y + entry_height
+            return attach_bottom
+
 
         if Placement.Top in placement:
             return above()
+
         elif Placement.Bottom in placement:
             return below()
-        elif Placement.Auto in placement:
-            if above() < self.__root.height: return below()
-            if below() > self.__root.y: return above()
 
+        elif Placement.Auto in placement:
+            if below() + popup_height < root_height:
+                print('below')
+                return below()
+
+            if above() > self.__root.y:
+                print('above')
+                return above()
+
+            print('below-last')
             return below()
 
         raise ValueError(f'self.entry.position is unknown. {placement}')
@@ -324,6 +377,7 @@ class PopupKeyboard(tkTopLevel):
 
         raise AttributeError('self.attach.destroy_popup() not found')
 
+
 class KeyboardMixin:
     """
     Popup Keyboard is a module to be used with Python's Tkinter library
@@ -397,28 +451,19 @@ class KeyboardMixin:
                  placement: PlacementSet = PlacementSet(Placement.Auto),
                  popup_width: int = None, popup_height: int = None,
                  popup_relwidth: float = None, popup_relheight: float = None):
-        if not isinstance(self, BaseTextTkinterWidget) and isinstance(self, KeyboardMixin):
-            raise TypeError(f'{nameof(self)} must be used on a sub-class of {BaseTextTkinterWidget}')
-
-        self.master = master
-
+        assert (isinstance(self, BaseTextTkinterWidget) and isinstance(self, KeyboardMixin))
         assert (isinstance(root, tkRoot))
         self.__root = root
-
-        self.placement = placement
-
+        self.master = master
+        self.placement: Final[PlacementSet] = placement
         self.key_size = keysize or -1
         self.key_color = keycolor
-
         self._popup_width = popup_width
         self._popup_relwidth = popup_relwidth
         self._popup_height = popup_height
         self._popup_relheight = popup_relheight
-
-        self.kb = None
+        self.kb: Optional[PopupKeyboard] = None
         self.state = KeyBoardState.Idle
-
-        assert (isinstance(self, BaseTkinterWidget) and isinstance(self, KeyboardMixin))
 
         BaseTkinterWidget.Bind(self, Bindings.FocusIn, self._handle_FocusIn)
         BaseTkinterWidget.Bind(self, Bindings.FocusOut, self._handle_FocusOut)
@@ -458,7 +503,7 @@ class KeyboardMixin:
 
     def _call_popup(self):
         self.destroy_popup()
-        self.kb = PopupKeyboard(self.__root, attach=self, x=self.winfo_x(), y=self.winfo_y(), key_size=self.key_size, key_color=self.key_color)
+        self.kb = PopupKeyboard(self.__root, attach=self, key_size=self.key_size, key_color=self.key_color)
 
     def destroy_popup(self):
         if self.kb:
@@ -490,7 +535,9 @@ class KeyboardMixin:
     def popup_relheight(self) -> Optional[int]:
         return int(self.__root.height * self._popup_relheight) if self._popup_relheight is not None else None
 
+
 # ------------------------------------------------------------------------------------------
+
 
 class value_title_mixin:
     Title: Label
@@ -526,7 +573,9 @@ class value_title_mixin:
         if isinstance(value, str): return dict(text=value)
         return value
 
+
 # ------------------------------------------------------------------------------------------
+
 
 class BaseTitled(Frame, value_title_mixin):
     """
@@ -600,6 +649,7 @@ class BaseTitledKeyboard(Frame, value_title_mixin):
     #         setattr(frame, key, w)
     #
     #     return frame
+
 
 # ------------------------------------------------------------------------------------------
 

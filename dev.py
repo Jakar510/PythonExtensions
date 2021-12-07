@@ -50,8 +50,8 @@ class Main(BaseWindow[App]):
         # self.canvas = Canvas(self).PackHorizontal()
         # self.canvas.DownloadImage(r'https://astronomy.com/-/media/Images/News%20and%20Observing/Sky%20this%20Week/STW%202021/June/summerevening.jpg?mw=600', 0, 0)
 
-        self.kb = KeyboardEntry(self, root=app).PackHorizontal()
-        self.kb.txt = 'popup keyboard'
+        self.kb = KeyboardEntry(self, text='popup keyboard - popup keyboard - popup keyboard', font='-family {Segoe UI Black} -size 20', root=app)
+        self.kb.PlaceRelative(.3, .6, .3, .3)
 
 
 if __name__ == '__main__':

@@ -424,6 +424,30 @@ class BaseTkinterWidget(tk.Widget, ABC):
         return d
 
 
+    def Dimensions(self) -> Tuple[int, int, int, int]:
+        """
+        :return: x, y, width, height
+        """
+        s = self.winfo_geometry()
+        wh, x, y = s.split('+')
+        w, h = wh.split('x')
+        return int(x), int(y), int(w), int(h)
+
+
+    def Left(self) -> int:
+        d = self.Dimensions()
+        return d[0]
+    def Right(self) -> int:
+        d = self.Dimensions()
+        return d[0] + d[2]
+    def Top(self) -> int:
+        d = self.Dimensions()
+        return d[1]
+    def Bottom(self) -> int:
+        d = self.Dimensions()
+        return d[1] + d[3]
+
+
 
     @property
     def size(self) -> Tuple[int, int]:

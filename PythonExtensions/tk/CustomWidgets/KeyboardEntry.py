@@ -39,8 +39,15 @@ class KeyboardEntry(Entry, KeyboardMixin):
     def __init__(self, master, root: tkRoot, *, placement: PlacementSet = PlacementSet(Placement.Auto), keysize: int = None, keycolor: str = None,
                  insertbackground: str = 'red', insertborderwidth: int = 3, insertofftime: int = 500, insertontime: int = 500, insertwidth: int = 3,
                  text: str = '', Override_var: tk.StringVar = None, Color: Dict = None, **kwargs):
-        Entry.__init__(self, master, text=text, Override_var=Override_var, Color=Color,
-                       insertbackground=insertbackground, insertborderwidth=insertborderwidth, insertofftime=insertofftime, insertontime=insertontime, insertwidth=insertwidth,
+        Entry.__init__(self, master,
+                       text=text,
+                       Override_var=Override_var,
+                       Color=Color,
+                       insertbackground=insertbackground,
+                       insertborderwidth=insertborderwidth,
+                       insertofftime=insertofftime,
+                       insertontime=insertontime,
+                       insertwidth=insertwidth,
                        **kwargs)
         KeyboardMixin.__init__(self, master, root=root, placement=placement, keysize=keysize, keycolor=keycolor)
 

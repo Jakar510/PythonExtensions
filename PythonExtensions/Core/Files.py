@@ -14,7 +14,6 @@ from typing import BinaryIO
 
 from aiofiles import open as async_open
 from attr import attrib, attrs, validators
-from attrs_strict import type_validator
 from cryptography.fernet import Fernet
 
 from ..Core.Json import *
@@ -38,7 +37,7 @@ class ReadWriteData(Protocol[AnyStr]):
 
 @attrs(slots=True, hash=True, order=True, eq=True, auto_attribs=True, init=False)
 class FilePath(PathLike):
-    FullPath: str = attrib(validator=type_validator(), type=Union[Dict, Path, str, PathLike])
+    FullPath: str = attrib(validator=validators.instance_of((dict, Path, str, PathLike)))
     IsTemporary: bool = attrib(validator=validators.instance_of(bool), init=False)
     Hash: Optional[str] = attrib(default=None, validator=validators.instance_of(str), init=False)
 
@@ -50,7 +49,7 @@ class FilePath(PathLike):
     @staticmethod
     def convert(_path: Union[str, Dict[str, Any], Path, 'FilePath']) -> str:
         if isinstance(_path, dict):
-            options = ('path', 'Path', 'fullPath','fullpath', 'FullPath')
+            options = ('path', 'Path', 'fullPath', 'fullpath', 'FullPath')
             for option in options:
                 if option in _path:
                     return FilePath.convert(_path['FullPath'])
