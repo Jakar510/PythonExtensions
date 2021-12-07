@@ -543,14 +543,19 @@ dest_dir = /path/to/dest/dir
 with MultiThreadedCopier(max_threads=16) as copier:
     shutil.copytree(src_dir, dest_dir, copy_function=copier.copy)
     """
-    __slots__ = ['pool', '_max_threads']
+    __slots__ = ['_pool', '_max_threads']
     def __init__(self, max_threads: int = os.cpu_count()): self._max_threads = max_threads
+
     def __enter__(self):
-        self.pool = ThreadPool(self._max_threads)
+        self._pool = ThreadPool(self._max_threads)
         return self
     def __exit__(self, exc_type, exc_val, exc_tb):
-        self.pool.close()
-        self.pool.join()
-        del self.pool
+        self._pool.close()
+        self._pool.join()
+        del self._pool
 
-    def copy(self, source: Union[str, FilePath], dest: Union[str, FilePath]): return self.pool.apply_async(copy2, args=(source, dest))
+    def copy(self, source: Union[str, FilePath], dest: Union[str, FilePath]):
+        if hasattr(self, '_pool'):
+            return self._pool.apply_async(copy2, args=(source, dest))
+
+        raise RuntimeError("Must use context manager with this class")

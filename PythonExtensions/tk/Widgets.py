@@ -85,8 +85,8 @@ class Button(tk.Button, BaseTextTkinterWidget, ImageMixin, CommandMixin):
 
         if Command: self.SetCommand(Command)
 
-    def _options(self, cnf, kwargs=None) -> dict:
-        return super()._options(cnf, convert_kwargs(kwargs))
+    def _options(self, cnf, kwargs=None) -> Tuple[str, ...]:
+        return self.merge_options(cnf, convert_kwargs(kwargs))
 
 # ------------------------------------------------------------------------------------------
 
@@ -124,7 +124,7 @@ class Label(tk.Label, BaseTextTkinterWidget, ImageMixin, CommandMixin):
         self.command_cb = self.Bind(Bindings.ButtonPress, func=self._cmd, add=add)
         return self
 
-    def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, convert_kwargs(kwargs))
+    def _options(self, cnf, kwargs=None) -> Tuple[str, ...]: return self.merge_options(cnf, convert_kwargs(kwargs))
 
 # ------------------------------------------------------------------------------------------
 
@@ -141,7 +141,7 @@ class Message(tk.Message, BaseTextTkinterWidget, CommandMixin):
         self.command_cb = self.Bind(Bindings.ButtonPress, func=self._cmd, add=add)
         return self
 
-    def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, convert_kwargs(kwargs))
+    def _options(self, cnf, kwargs=None) -> Tuple[str, ...]: return self.merge_options(cnf, convert_kwargs(kwargs))
 
 # ------------------------------------------------------------------------------------------
 
@@ -186,7 +186,7 @@ class Entry(tk.Entry, BaseTextTkinterWidget, CommandMixin):
 
     def __iadd__(self, other: str): self.Append(other)
 
-    def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, convert_kwargs(kwargs))
+    def _options(self, cnf, kwargs=None) -> Tuple[str, ...]: return self.merge_options(cnf, convert_kwargs(kwargs))
 
 # ------------------------------------------------------------------------------------------
 
@@ -266,8 +266,8 @@ class CheckButton(tk.Checkbutton, BaseTextTkinterWidget, ImageMixin, CommandMixi
         else:
             self.deselect()
 
-    def _options(self, cnf, kwargs=None) -> dict:
-        return super()._options(cnf, convert_kwargs(kwargs))
+    def _options(self, cnf, kwargs=None) -> Tuple[str, ...]:
+        return self.merge_options(cnf, convert_kwargs(kwargs))
 
 # ------------------------------------------------------------------------------------------
 
@@ -434,8 +434,8 @@ class Listbox(tk.Listbox, BaseTextTkinterWidget, CommandMixin):
     def txt(self, value: str):
         self.ReplaceAtIndex(self._Current_ListBox_Index, value)
 
-    def _options(self, cnf, kwargs=None) -> dict:
-        return super()._options(cnf, convert_kwargs(kwargs))
+    def _options(self, cnf, kwargs=None) -> Tuple[str, ...]:
+        return self.merge_options(cnf, convert_kwargs(kwargs))
 
 # ------------------------------------------------------------------------------------------
 
@@ -476,7 +476,10 @@ class Canvas(tk.Canvas, BaseTkinterWidget):
         assert (isfile(path))
 
         async with async_file_open(path, 'rb') as f:
-            img = ImageMixin.open(self, f, width, height, *formats)
+            _bytes = await f.read()
+
+        with BytesIO(_bytes) as buf:
+            img = ImageMixin.open(self, buf, width, height, *formats)
             return self.CreateImage(image=img, x=x, y=y)
 
 
@@ -570,8 +573,8 @@ class Canvas(tk.Canvas, BaseTkinterWidget):
         """
         pass
 
-    def _options(self, cnf, kwargs=None) -> dict:
-        return super()._options(cnf, convert_kwargs(kwargs))
+    def _options(self, cnf, kwargs=None) -> Tuple[str, ...]:
+        return self.merge_options(cnf, convert_kwargs(kwargs))
 
 # ------------------------------------------------------------------------------------------
 
@@ -593,7 +596,7 @@ class Scrollbar(tk.Scrollbar, BaseTkinterWidget, CommandMixin):
         tk.Scrollbar.__init__(self, master, orient=orientation.value, **kwargs)
         BaseTkinterWidget.__init__(self, Color, loop)
 
-    def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, convert_kwargs(kwargs))
+    def _options(self, cnf, kwargs=None) -> Tuple[str, ...]: return self.merge_options(cnf, convert_kwargs(kwargs))
 
 # ------------------------------------------------------------------------------------------
 
@@ -642,7 +645,7 @@ class Text(tk.Text, BaseTextTkinterWidget, CommandMixin):
 
     def Clear(self): self.delete(self.Index.Create(1, 0), self.Index.End())
     def ClearTags(self): return self.tag_delete(*self.Tags())
-    def Tags(self, index: int = None) -> List[str]: return self.tag_names(index)
+    def Tags(self, index: int = None) -> Tuple[str, ...]: return self.tag_names(index)
 
     def Replace(self, new_text: str, start: Index, end: Index):
         self.delete(start, end)
@@ -657,7 +660,7 @@ class Text(tk.Text, BaseTextTkinterWidget, CommandMixin):
         self.command_cb = self.Bind(Bindings.ButtonPress, func=self._cmd, add=add)
         return self
 
-    def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, convert_kwargs(kwargs))
+    def _options(self, cnf, kwargs=None) -> Tuple[str, ...]: return self.merge_options(cnf, convert_kwargs(kwargs))
 
 # ------------------------------------------------------------------------------------------
 
@@ -698,7 +701,7 @@ class ScrolledText(Frame, BaseTextTkinterWidget, CommandMixin):
         self.command_cb = self.tb.Bind(Bindings.ButtonPress, func=self._cmd, add=add)
         return self
 
-    def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, convert_kwargs(kwargs))
+    def _options(self, cnf, kwargs=None) -> Tuple[str, ...]: return self.merge_options(cnf, convert_kwargs(kwargs))
 
 # ------------------------------------------------------------------------------------------
 
@@ -708,4 +711,4 @@ class Scale(tk.Scale, BaseTkinterWidget):
         tk.Scale.__init__(self, master, **kwargs)
         BaseTkinterWidget.__init__(self, Color, loop)
 
-    def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, convert_kwargs(kwargs))
+    def _options(self, cnf, kwargs=None) -> Tuple[str, ...]: return self.merge_options(cnf, convert_kwargs(kwargs))

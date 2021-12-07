@@ -4,6 +4,7 @@
 #  Copyright (c) 2020.
 # ------------------------------------------------------------------------------
 import base64
+import re
 import tkinter as tk
 from _tkinter import DONT_WAIT
 from abc import ABC
@@ -31,7 +32,6 @@ from .Enumerations import Orientation
 from .Events import Bindings, TkinterEvent, tkEvent
 from .Style import *
 from ..Core import *
-from ..Debug import pp
 
 
 
@@ -65,7 +65,6 @@ __all__ = [
     'tkRoot',
     'tkTopLevel',
     ]
-
 
 class _rootMixin:
     style: Style
@@ -291,7 +290,71 @@ class tkTopLevel(tk.Toplevel, _rootMixin):
 # ------------------------------------------------------------------------------------------
 
 
+_magic_re = re.compile(r'([\\{}])')
+_space_re = re.compile(r'([\s])', re.ASCII)
+
+def _join(value):
+    """Internal function."""
+    return ' '.join(map(_stringify, value))
+
+def _stringify(value):
+    """Internal function."""
+    if isinstance(value, (list, tuple)):
+        if len(value) == 1:
+            value = _stringify(value[0])
+            if _magic_re.search(value):
+                value = '{%s}' % value
+        else:
+            value = '{%s}' % _join(value)
+    else:
+        value = str(value)
+        if not value:
+            value = '{}'
+        elif _magic_re.search(value):
+            # add '\' before special characters and spaces
+            value = _magic_re.sub(r'\\\1', value)
+            value = value.replace('\n', r'\n')
+            value = _space_re.sub(r'\\\1', value)
+            if value[0] == '"':
+                value = '\\' + value
+        elif value[0] == '"' or _space_re.search(value):
+            value = '{%s}' % value
+    return value
+
+def _flatten(seq: Iterable):
+    """Internal function."""
+    res = ()
+    for item in seq:
+        if isinstance(item, (tuple, list)):
+            res = res + _flatten(item)
+        elif item is not None:
+            res = res + (item,)
+    return res
+
+def _cnfmerge(cnfs):
+    """Internal function."""
+    if isinstance(cnfs, dict):
+        return cnfs
+    elif isinstance(cnfs, (type(None), str)):
+        return cnfs
+    else:
+        cnf = { }
+        for c in _flatten(cnfs):
+            try:
+                cnf.update(c)
+            except (AttributeError, TypeError) as msg:
+                print("_cnfmerge: fallback due to:", msg)
+                for k, v in c.items():
+                    cnf[k] = v
+        return cnf
+
 def convert_kwargs(kwargs: Dict[str, Any], lower: bool = True) -> Optional[Dict[str, Any]]:
+    """
+        Converts all keys to lowercase strings, for tkinter
+    :param kwargs:
+    :param lower:
+    :return:
+    """
     if kwargs is None: return None
 
     Assert(kwargs, dict)
@@ -359,7 +422,6 @@ class BaseTkinterWidget(tk.Widget, ABC):
     _wrap: Optional[int]
     _cb: Union[str, None]
     _loop: Optional[AbstractEventLoop]
-
     # noinspection PyMissingConstructor
     def __init__(self, Color: Optional[Dict[str, str]], loop: Optional[AbstractEventLoop]):
         if Color: self.configure(**Color)
@@ -372,6 +434,36 @@ class BaseTkinterWidget(tk.Widget, ABC):
         self._cb = None
 
 
+    def merge_options(self, cnf: Dict[str, Any], kwargs: Dict[str, Any] = None) -> Tuple[str, ...]:
+        """Internal function."""
+        kw = convert_kwargs(kwargs)
+
+        if kw:
+            cnf = _cnfmerge((cnf, kw))
+        else:
+            cnf = _cnfmerge(cnf)
+
+        res = []
+        for k, v in cnf.items():
+            if v is not None:
+                if k[-1] == '_': k = k[:-1]
+                if callable(v):
+                    v = self.register(v)
+                elif isinstance(v, (tuple, list)):
+                    nv = []
+                    for item in v:
+                        if isinstance(item, int):
+                            nv.append(str(item))
+                        elif isinstance(item, str):
+                            nv.append(_stringify(item))
+                        else:
+                            break
+                    else:
+                        v = ' '.join(nv)
+
+                res.append('-' + k)
+                res.append(v)
+        return tuple(res)
 
     @property
     def pi(self) -> Dict:
@@ -395,6 +487,8 @@ class BaseTkinterWidget(tk.Widget, ABC):
             return f'<{start}. State: {pp.getPPrintStr(self.FullDetails)}>'
 
         return f'<{start}>'
+
+
     @property
     def Details(self) -> Dict[str, Any]:
         return dict(IsVisible=self.IsVisible)
@@ -424,34 +518,12 @@ class BaseTkinterWidget(tk.Widget, ABC):
         return d
 
 
-    def Dimensions(self) -> Tuple[int, int, int, int]:
-        """
-        :return: x, y, width, height
-        """
-        s = self.winfo_geometry()
-        wh, x, y = s.split('+')
-        w, h = wh.split('x')
-        return int(x), int(y), int(w), int(h)
-
-
-    def Left(self) -> int:
-        d = self.Dimensions()
-        return d[0]
-    def Right(self) -> int:
-        d = self.Dimensions()
-        return d[0] + d[2]
-    def Top(self) -> int:
-        d = self.Dimensions()
-        return d[1]
-    def Bottom(self) -> int:
-        d = self.Dimensions()
-        return d[1] + d[3]
-
-
 
     @property
     def size(self) -> Tuple[int, int]:
+        """ :return: width, height """
         return self.Width, self.Height
+
     @property
     def Width(self) -> int:
         return self.winfo_width()
@@ -460,11 +532,42 @@ class BaseTkinterWidget(tk.Widget, ABC):
         return self.winfo_height()
 
     @property
-    def x(self) -> int:
-        return self.winfo_rootx()
+    def X(self) -> int:
+        return self.winfo_x()
     @property
-    def y(self) -> int:
-        return self.winfo_rooty()
+    def Y(self) -> int:
+        return self.winfo_y()
+
+    def Dimensions(self) -> Tuple[int, int, int, int]:
+        """ :return: x, y, width, height """
+        return self.X, self.Y, self.Width, self.Height
+
+    def Left(self) -> int:
+        """ :return: Left Plane """
+        return self.X
+    def Right(self) -> int:
+        """ :return: Right Plane """
+        return self.X + self.Width
+    def Top(self) -> int:
+        """ :return: Top Plane """
+        return self.Y
+    def Bottom(self) -> int:
+        """ :return: Bottom Plane """
+        return self.Y + self.Height
+
+    def TopLeft(self) -> Tuple[int, int]:
+        """ :return: (X, Y) """
+        return self.X, self.Y
+    def TopRight(self) -> Tuple[int, int]:
+        """ :return: (X, Y) """
+        return self.X + self.Width, self.Y
+    def BottomLeft(self) -> Tuple[int, int]:
+        """ :return: (X, Y) """
+        return self.X, self.Y + self.Height
+    def BottomRight(self) -> Tuple[int, int]:
+        """ :return: (X, Y) """
+        return self.X + self.Width, self.Y + self.Height
+
 
 
     @overload
@@ -572,6 +675,11 @@ class BaseTkinterWidget(tk.Widget, ABC):
         self.__bindings__[sequence].add(_id)
         return _id
     def BindAll(self, sequence: Bindings, func: callable, add: bool = None) -> str:
+        """
+        Bind to all widgets at an event SEQUENCE a call to function FUNC.
+        An additional boolean parameter ADD specifies whether FUNC will be called additionally to the other bound function or whether it will replace the previous function.
+        See bind for the return value.
+        """
         if isinstance(sequence, Enum): sequence = sequence.value
         _id = self.bind_all(sequence, func, add)
         self.__bindings__[sequence].add(_id)
