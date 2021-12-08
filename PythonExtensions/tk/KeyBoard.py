@@ -155,7 +155,8 @@ class PopupKeyboard(tkTopLevel):
         self._delete: Final[str] = options.delete
         self._sign: Final[str] = options.sign
 
-        self._root_frame = Frame(self).Grid(row=0, column=0).Grid_ColumnConfigure(0, weight=1).Grid_RowConfigure(0, weight=1)
+        # self._root_frame = Frame(self).Grid(row=0, column=0).Grid_ColumnConfigure(0, weight=1).Grid_RowConfigure(0, weight=1)
+        self._root_frame = Frame(self).PlaceFull()
 
         # if self._attach.IsAutoSize: self._SetDimensions()
 
@@ -168,6 +169,7 @@ class PopupKeyboard(tkTopLevel):
         offset = 0
         for r, row in enumerate([Row0, Row1, Row2, Row3, Row4]):
             if r not in self._letters: self._letters[r] = { }
+
             self._root_frame.Grid_RowConfigure(r, weight=1)
             for c, text in enumerate(row):
                 self._root_frame.Grid_ColumnConfigure(c, weight=1)
@@ -194,7 +196,6 @@ class PopupKeyboard(tkTopLevel):
         if options.font: self.SetFont(options.font)
 
         self.Bind(Bindings.Key, lambda e: self._attach.destroy_popup())  # destroy _PopupKeyboard on keyboard interrupt
-
 
 
     def SwitchCase(self):
@@ -237,13 +238,16 @@ class PopupKeyboard(tkTopLevel):
         self.update()
         return self
 
+
+
     @classmethod
     def Create(cls, master: tkRoot, attach: 'KeyboardMixin', options: PopupOptions) -> 'PopupKeyboard':
-        if 'relx' in options:
-            x = options['relx'] * master.width
-            y = options['rely'] * master.height
-            frame_width = options['relwidth'] * master.width
-            frame_height = options['relheight'] * master.height
+        if 'relwidth' in options:
+            x = options['relx'] * master.Width
+            y = options['rely'] * master.Height
+            frame_width = options['relwidth'] * master.Width
+            frame_height = options['relheight'] * master.Height
+
         else:
             x = options['x']
             y = options['y']

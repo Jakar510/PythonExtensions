@@ -5,29 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7a6e45bf-6aac-404f-8876-27fa1a8fc2c2" name="Default Changelist" comment="2.1.1 - progress on bugfixes">
-      <change afterPath="$PROJECT_DIR$/PythonExtensions/Core/Debug.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PythonExtensions/tk/Custom.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/Core/Files.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/Core/Files.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/Core/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/Core/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/debug/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/debug/chains.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/debug/console.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/debug/converters.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/debug/debug_tk.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/debug/decorators.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PythonExtensions/Core/HID_BUFFER.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/Core/HID_BUFFER.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PythonExtensions/tk/Base.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/tk/Base.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/tk/CustomWidgets/AnimatedGIF.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/tk/CustomWidgets/AutoScroll.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/tk/CustomWidgets/Custom.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/tk/CustomWidgets/HTML.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/tk/CustomWidgets/KeyBoard.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/tk/KeyBoard.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/tk/CustomWidgets/KeyboardComboBoxThemed.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/tk/CustomWidgets/KeyboardEntry.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/tk/CustomWidgets/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/tk/CustomWidgets/tkMessageBox.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/tk/Widgets.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/tk/Widgets.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/tk/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/tk/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PythonExtensions/tk/KeyBoard.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/tk/KeyBoard.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dev.py" beforeDir="false" afterPath="$PROJECT_DIR$/dev.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -307,14 +288,8 @@
       <workItem from="1635862824246" duration="30000" />
       <workItem from="1638805846648" duration="1205000" />
       <workItem from="1638807083774" duration="22168000" />
-      <workItem from="1638890309717" duration="22838000" />
-    </task>
-    <task id="LOCAL-00065" summary="bug fixes / updates">
-      <created>1611299282734</created>
-      <option name="number" value="00065" />
-      <option name="presentableId" value="LOCAL-00065" />
-      <option name="project" value="LOCAL" />
-      <updated>1611299282734</updated>
+      <workItem from="1638890309717" duration="22960000" />
+      <workItem from="1638976586802" duration="1749000" />
     </task>
     <task id="LOCAL-00066" summary="bug fixes / updates">
       <created>1611301306649</created>
@@ -652,7 +627,14 @@
       <option name="project" value="LOCAL" />
       <updated>1638835322878</updated>
     </task>
-    <option name="localTasksCounter" value="114" />
+    <task id="LOCAL-00114" summary="2.1.1 - progress on bugfixes">
+      <created>1638914493725</created>
+      <option name="number" value="00114" />
+      <option name="presentableId" value="LOCAL-00114" />
+      <option name="project" value="LOCAL" />
+      <updated>1638914493725</updated>
+    </task>
+    <option name="localTasksCounter" value="115" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -707,7 +689,7 @@
     <SUITE FILE_PATH="coverage/PythonExtensions$TestTkApp.coverage" NAME="TestTkApp Coverage Results" MODIFIED="1611950953829" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Tests" />
     <SUITE FILE_PATH="coverage/PythonExtensions$Constants.coverage" NAME="Constants Coverage Results" MODIFIED="1610937223831" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PythonExtensions" />
     <SUITE FILE_PATH="coverage/PythonExtensions$File.coverage" NAME="File Coverage Results" MODIFIED="1611006293121" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PythonExtensions/Files" />
-    <SUITE FILE_PATH="coverage/PythonExtensions$dev.coverage" NAME="dev Coverage Results" MODIFIED="1638914406254" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/PythonExtensions$dev.coverage" NAME="dev Coverage Results" MODIFIED="1638978002447" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/PythonExtensions$run.coverage" NAME="run Coverage Results" MODIFIED="1613082591231" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/PythonExtensions$test_tk_async.coverage" NAME="test_tk_async Coverage Results" MODIFIED="1625517948390" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="/home/pi/WorkSpace/PythonExtensions" />
     <SUITE FILE_PATH="coverage/PythonExtensions$build.coverage" NAME="build_classifiers Coverage Results" MODIFIED="1610748410999" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PythonExtensions/Setup" />

@@ -135,18 +135,19 @@ class _rootMixin:
         if isinstance(sequence, Enum): sequence = sequence.value
         return self.bind_all(sequence, func, add)
 
+
     @property
-    def width(self) -> int:
+    def Width(self) -> int:
         return self.winfo_width()
     @property
-    def height(self) -> int:
+    def Height(self) -> int:
         return self.winfo_height()
 
     @property
-    def x(self) -> int:
+    def X(self) -> int:
         return self.winfo_x()
     @property
-    def y(self) -> int:
+    def Y(self) -> int:
         return self.winfo_y()
 
 

@@ -16,42 +16,38 @@ from .Names import nameof
 __all__ = ['HID_BUFFER', 'TimeKeeperMixin']
 
 class TimeKeeperMixin:
-    __slots__ = ['_LastTime']
-    _LastTime: float
+    _lastTime: float
     def __init__(self):
-        self._LastTime = time.time()
+        self._lastTime = time.time()
 
-    def UpdateTime(self): self._LastTime = time.time()
+    def UpdateTime(self): self._lastTime = time.time()
 
     @property
-    def ElapsedTime(self) -> float: return abs(self.CurrentTime - self._LastTime)
+    def ElapsedTime(self) -> float: return abs(self.CurrentTime - self._lastTime)
 
     @property
     def CurrentTime(self) -> float: return time.time()
 
 
 
-class HID_BUFFER(TimeKeeperMixin):
-    __slots__ = ['_text']
+class HID_BUFFER(object, TimeKeeperMixin):
+    __slots__ = ['_text', '_lastTime']
     _text: str
     def __init__(self, text: str = ''):
+        TimeKeeperMixin.__init__(self)
         self._text = text
-        super().__init__()
 
 
     def Clear(self, s: str = '') -> str:
-        if not isinstance(s, str): s = str(s)
-        self._text = s
+        self._text = str(s)
         self.UpdateTime()
         return self._text
     def Add(self, s: str):
-        if not isinstance(s, str): s = str(s)
-        self._text += s
+        self._text += str(s)
         self.UpdateTime()
         return self
     def Sub(self, s: str):
-        if not isinstance(s, str): s = str(s)
-        self._text -= s
+        self._text -= str(s)
         self.UpdateTime()
         return self
     def Backspace(self):
@@ -61,7 +57,9 @@ class HID_BUFFER(TimeKeeperMixin):
     def Backspace_Number(self):
         self.UpdateTime()
         self._text = self._text[:-1]
-        if len(self._text) == 0: return self
+        if len(self._text) == 0:
+            return self
+
         if self._text[-1] == '.' or self._text[-1] == ',':
             self._text = self._text[:-2]
 
@@ -72,7 +70,7 @@ class HID_BUFFER(TimeKeeperMixin):
     def Value(self) -> str:
         return self._text
     @Value.setter
-    def Value(self, v: int or float or str):
+    def Value(self, v: Union[str, int, float]):
         self._text = str(v)
 
 
@@ -134,20 +132,14 @@ class HID_BUFFER(TimeKeeperMixin):
     def __sub__(self, char: str):
         return self.Sub(char)
 
+    def __bool__(self) -> bool:
+        return len(self._text) > 0
     def __len__(self) -> int:
         return len(self._text)
 
 
     def __delitem__(self, key: int):
         """ https://www.geeksforgeeks.org/ways-to-remove-ith-character-from-string-in-python/ """
-        # if key != len(self):
-        #     print('before __delitem__', self)
-        #     b = self._text[:key]
-        #     a = self._text[key + 1:]
-        #     self._text = b + a
-        #     PRINT('__delitem__', b=b, a=a, index=key, length=len(self))
-        #     print('after __delitem__', self)
-        #     return
 
         try:
             _ = float(self._text)

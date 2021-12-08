@@ -50,12 +50,12 @@ class Main(BaseWindow[App]):
         # self.canvas = Canvas(self).PackHorizontal()
         # self.canvas.DownloadImage(r'https://astronomy.com/-/media/Images/News%20and%20Observing/Sky%20this%20Week/STW%202021/June/summerevening.jpg?mw=600', 0, 0)
 
-        self.kb = KeyboardEntry(self, app, PopupOptions(relx=0.3, rely=0.5, relwidth=0.3, relheight=0.2),
+        self.kb = KeyboardEntry(self, app, PopupOptions(relx=0.3025, rely=0.5, relwidth=0.2995, relheight=0.2),
                                 font='-family {Segoe UI Black} -size 20',
                                 text='popup keyboard - popup keyboard - popup keyboard')
         self.kb.PlaceRelative(.3, .2, .3, .3)
 
-        self.tkb = TitledKeyboardEntry(self, app, PopupOptions(relx=0.3, rely=0.5, relwidth=0.3, relheight=0.2))
+        self.tkb = TitledKeyboardEntry(self, app, PopupOptions(relx=0.3, rely=0.4, relwidth=0.3, relheight=0.2))
         self.tkb.Title.configure(font='-family {Segoe UI Black} -size 20')
         # noinspection PyArgumentList
         self.tkb.Value.configure(text='popup keyboard - popup keyboard - popup keyboard')
