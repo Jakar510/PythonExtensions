@@ -5,14 +5,15 @@
 # ------------------------------------------------------------------------------
 
 import string
+import traceback
 from enum import IntEnum
 from typing import *
 
 from .Base import *
-from .Enumerations import EventType
 from .Events import *
 from .Themed import *
 from .Widgets import *
+from ..Core.Debug import PrettyPrint
 from ..Core.HID_BUFFER import HID_BUFFER
 
 
@@ -48,7 +49,6 @@ class PopupOptions(dict, Dict[str, Union[float, int, str, bool]]):
         'delete',
         'sign',
         'transparency',
-        'take_focus',
         'font',
         ]
 
@@ -57,7 +57,6 @@ class PopupOptions(dict, Dict[str, Union[float, int, str, bool]]):
                  key_size: int = -1,
                  key_color: str = 'white',
                  transparency: float = 0.85,
-                 take_focus: bool = False,
                  font: str = '-family {Segoe UI Black} -size 13',
                  _space: str = '[ space ]',
                  _shift: str = 'Aa',
@@ -75,7 +74,6 @@ class PopupOptions(dict, Dict[str, Union[float, int, str, bool]]):
                  key_size: int = -1,
                  key_color: str = 'white',
                  transparency: float = 0.85,
-                 take_focus: bool = False,
                  font: str = '-family {Segoe UI Black} -size 13',
                  _space: str = '[ space ]',
                  _shift: str = 'Aa',
@@ -93,7 +91,6 @@ class PopupOptions(dict, Dict[str, Union[float, int, str, bool]]):
                  key_size: int = -1,
                  key_color: str = 'white',
                  transparency: float = 0.85,
-                 take_focus: bool = False,
                  font: str = '-family {Segoe UI Black} -size 13',
                  _space: str = '[ space ]',
                  _shift: str = 'Aa',
@@ -110,7 +107,6 @@ class PopupOptions(dict, Dict[str, Union[float, int, str, bool]]):
                  key_size: int = -1,
                  key_color: str = 'white',
                  transparency: float = 0.85,
-                 take_focus: bool = False,
                  font: str = '-family {Segoe UI Black} -size 13',
                  _space: str = '[ space ]',
                  _shift: str = 'Aa',
@@ -126,7 +122,6 @@ class PopupOptions(dict, Dict[str, Union[float, int, str, bool]]):
     def __init__(self, key_size: int = -1,
                  key_color: str = 'white',
                  transparency: float = 0.85,
-                 take_focus: bool = False,
                  font: str = '-family {Segoe UI Black} -size 13',
                  _space: str = '[ space ]',
                  _shift: str = 'Aa',
@@ -142,7 +137,6 @@ class PopupOptions(dict, Dict[str, Union[float, int, str, bool]]):
         self.key_size: Final[int] = int(kwargs.pop('key_size', -1))
         self.key_color: Final[str] = str(kwargs.pop('key_color', 'white'))
         self.transparency: Final[float] = float(kwargs.pop('transparency', 0.85))
-        self.take_focus: Final[bool] = bool(kwargs.pop('take_focus', False))
         self.font: Final[str] = str(kwargs.pop('font', '-family {Segoe UI Black} -size 13'))
         self.space: Final[str] = str(kwargs.pop('_space', '[ space ]'))
         self.shift: Final[str] = str(kwargs.pop('_shift', 'Aa'))
@@ -162,7 +156,7 @@ class PopupKeyboard(tkTopLevel):
     https://www.alt-codes.net/arrow_alt_codes.php
     """
     __slots__ = ['_attach',
-                 '_root_frame',
+                 '_frame',
                  '_key_color',
                  '__root',
                  '_space',
@@ -181,23 +175,57 @@ class PopupKeyboard(tkTopLevel):
                  ]
 
     _key_size: int
-    _root_frame: Frame
+    _frame: Frame
     _attach: Union['KeyboardMixin', BaseTextTkinterWidget]
     def __init__(self, root: tkRoot, attach: 'KeyboardMixin', options: PopupOptions = None):
         assert (isinstance(root, tkRoot))
         self.__root = root
-        tkTopLevel.__init__(self, master=root, fullscreen=False, takefocus=options.take_focus, width=1, height=1)
+        tkTopLevel.__init__(self, master=root, fullscreen=False, takefocus=False)
 
         self.overrideredirect(True)
         self.SetTransparency(options.transparency)
 
+        if 'relx' in options:
+            x = options['relx'] * root.Width
+            y = options['rely'] * root.Height
+            frame_width = options['relwidth'] * root.Width
+            frame_height = options['relheight'] * root.Height
+
+        elif 'x' in options:
+            x = options['x']
+            y = options['y']
+            frame_width = options['width']
+            frame_height = options['height']
+
+        else:
+            if 'relwidth' in options:
+                frame_width = options['relwidth'] * root.Width
+            elif 'width' in options:
+                frame_width = options['width']
+            else:
+                frame_width = attach.winfo_width()
+
+            if 'relheight' in options:
+                frame_height = options['relheight'] * root.Height
+            elif 'height' in options:
+                frame_height = options['height']
+            else:
+                frame_height = attach.winfo_height()
+
+            x = abs(attach.winfo_width() - attach.winfo_x()) / 2 - (frame_width / 2)
+            y = attach.winfo_y() + attach.winfo_height()
+            if y >= root.Height:
+                y = attach.winfo_y() - frame_height
+
+        self.SetDimensions(int(frame_width), int(frame_height), int(x), int(y))
+
         assert (isinstance(attach, KeyboardMixin) and isinstance(attach, BaseTextTkinterWidget))
+        self._hid = HID_BUFFER(attach.txt)
         self._attach = attach
-        self._key_color = options.key_color
         self._Frames: Dict[int, Frame] = { }
         self._letters: Dict[int, Dict[int, Button]] = { }
         self._numbers: Dict[int, Dict[int, Button]] = { }
-        self._hid = HID_BUFFER()
+        self._key_color: Final[str] = options.key_color
         self._space: Final[str] = options.space
         self._shift: Final[str] = options.shift
         self._next: Final[str] = options.next
@@ -208,10 +236,8 @@ class PopupKeyboard(tkTopLevel):
         self._sign: Final[str] = options.sign
 
         # self.Grid_ColumnConfigure(0, weight=1).Grid_RowConfigure(0, weight=1)
-        # self._root_frame = Frame(self).Grid(row=0, column=0)
-        self._root_frame = Frame(self).PlaceFull()
-
-        # if self._attach.IsAutoSize: self._SetDimensions()
+        # self._frame = Frame(self).Grid(row=0, column=0)
+        self._frame = Frame(self, takefocus=False).PlaceFull()
 
         Row0: List[str] = [self._backspace] + [str(i) for i in range(10)] + [self._delete]
         Row1: List[str] = ['|', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '/']
@@ -223,17 +249,17 @@ class PopupKeyboard(tkTopLevel):
         for r, row in enumerate([Row0, Row1, Row2, Row3, Row4]):
             if r not in self._letters: self._letters[r] = { }
 
-            self._root_frame.Grid_RowConfigure(r, weight=1)
+            self._frame.Grid_RowConfigure(r, weight=1)
             for c, text in enumerate(row):
-                self._root_frame.Grid_ColumnConfigure(c, weight=1)
+                self._frame.Grid_ColumnConfigure(c, weight=1)
 
                 if text == '': continue
-                w = Button(master=self._root_frame, text=text, bg=self._key_color, takefocus=options.take_focus).SetCommand(CurrentValue(self._handle_key_press))
+                w = Button(master=self._frame, text=text, bg=self._key_color, takefocus=False).SetCommand(CurrentValue(self._handle_key_press))
 
                 if self._shift == text:
                     w.Grid(row=r, column=c, rowspan=2)
 
-                elif 'space' in text:
+                elif 'space' in text.lower():
                     w.Grid(row=r, column=c, columnspan=3)
                     offset = 2
 
@@ -249,6 +275,14 @@ class PopupKeyboard(tkTopLevel):
         if options.font: self.SetFont(options.font)
 
         self.Bind(Bindings.Key, lambda e: self._attach.destroy_popup())  # destroy _PopupKeyboard on keyboard interrupt
+        self._updateFocus(self)
+        self._update()
+
+    def _updateFocus(self, w: tk.Misc):
+        for child in w.winfo_children():
+            # noinspection PyArgumentList
+            child.configure(takefocus=False)
+            self._updateFocus(child)
 
 
     def SwitchCase(self):
@@ -286,54 +320,14 @@ class PopupKeyboard(tkTopLevel):
 
 
     def _update(self):
-        """ resize to fit keys """
         self.update_idletasks()
         self.update()
         return self
 
 
 
-    @classmethod
-    def Create(cls, master: tkRoot, attach: 'KeyboardMixin', options: PopupOptions = None) -> 'PopupKeyboard':
-        if 'relx' in options:
-            x = options['relx'] * master.Width
-            y = options['rely'] * master.Height
-            frame_width = options['relwidth'] * master.Width
-            frame_height = options['relheight'] * master.Height
-
-        elif 'x' in options:
-            x = options['x']
-            y = options['y']
-            frame_width = options['width']
-            frame_height = options['height']
-
-        else:
-            if 'relwidth' in options:
-                frame_width = options['relwidth'] * master.Width
-            elif 'width' in options:
-                frame_width = options['width']
-            else:
-                frame_width = attach.winfo_width()
-
-            if 'relheight' in options:
-                frame_height = options['relheight'] * master.Height
-            elif 'height' in options:
-                frame_height = options['height']
-            else:
-                frame_height = attach.winfo_height()
-
-            x = abs(attach.winfo_width() - attach.winfo_x()) / 2 - (frame_width / 2)
-            y = attach.winfo_y() + attach.winfo_height()
-            if y >= master.Height:
-                y = attach.winfo_y() - frame_height
-
-        self = cls(master, attach, options)
-        self.SetDimensions(int(frame_width), int(frame_height), int(x), int(y))
-        return self._update()
-
-
-
     def _handle_key_press(self, _event: Optional[tkEvent], value: str, *_args, **_kwargs):
+        print(_event)
         if value == self._shift:
             self.SwitchCase()
 
@@ -404,7 +398,7 @@ class PopupKeyboard(tkTopLevel):
         return True
 
 class KeyboardMixin:
-    """
+    __doc__ = """
     Popup Keyboard is a module to be used with Python's Tkinter library.
     It subclasses the Entry widget as KeyboardEntry to make a pop-up keyboard appear when the widget gains focus.
     Still early in development.
@@ -452,12 +446,14 @@ class KeyboardMixin:
                                        key_color=key_color)
 
     """
+
     Width: int
     Height: int
     winfo_width: Callable[[], int]
     winfo_height: Callable[[], int]
     winfo_x: Callable[[], int]
     winfo_y: Callable[[], int]
+    focus_get: Callable[[], Optional[tk.Misc]]
     tk_focusNext: Callable
     tk_focusPrev: Callable
     Append: Callable
@@ -491,7 +487,9 @@ class KeyboardMixin:
 
         elif self.state == KeyBoardState.Virtual:
             self.state = KeyBoardState.Typing
-            self.destroy_popup()
+            if _event.widget is not self:
+                self.destroy_popup()
+                self.state = KeyBoardState.Idle
     def _handle_KeyPress(self, _event: tkEvent):
         if self.state == KeyBoardState.Virtual:
             self.destroy_popup()
@@ -502,20 +500,43 @@ class KeyboardMixin:
             self.state = KeyBoardState.Virtual
 
 
-    def _debug_event_(self, tag: EventType, event: tkEvent):
-        print('__KeyboardMixin__state__', self.state)
-        print(f'__KeyboardMixin__Event__{tag.name}__', str(TkinterEvent(event)))
-        print()
+    def _debug_event_(self, _event: tkEvent):
+        _event = TkinterEvent(_event)
+
+        PrettyPrint(event=_event.ToDict(),
+                    state=self.state,
+                    focus_get=self.focus_get())
 
 
 
     def _call_popup(self):
-        self.destroy_popup()
-        self.kb = PopupKeyboard.Create(self.__root, attach=self, options=self.__options)
+        if self.kb:
+            self.kb.destroy()
+            self.kb = None
+
+        print()
+        focus_get = self.focus_get()
+        print(f'BEFORE.{focus_get=}')
+
+        self.kb = PopupKeyboard(self.__root, attach=self, options=self.__options)
+
+        print()
+        focus_get = self.focus_get()
+        print(f'BEFORE.{focus_get=}')
 
 
 
     def destroy_popup(self):
+        focus_get = self.focus_get()
+        print()
+        print()
+        print(f'{focus_get=}')
+        print()
+        print()
+        traceback.print_stack()
+        print()
+        print()
+
         if self.kb:
             self.kb.destroy()
             self.kb = None

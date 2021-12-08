@@ -4,15 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7a6e45bf-6aac-404f-8876-27fa1a8fc2c2" name="Default Changelist" comment="2.1.1 - Bugfixes">
+    <list default="true" id="7a6e45bf-6aac-404f-8876-27fa1a8fc2c2" name="Default Changelist" comment="2.2.0 - Bugfixes">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/Core/HID_BUFFER.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/Core/HID_BUFFER.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PythonExtensions/__version__.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/__version__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PythonExtensions/tk/Base.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/tk/Base.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/tk/Events.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/tk/Events.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PythonExtensions/tk/KeyBoard.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/tk/KeyBoard.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/tk/Themed.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/tk/Themed.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev.py" beforeDir="false" afterPath="$PROJECT_DIR$/dev.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -293,14 +289,7 @@
       <workItem from="1638807083774" duration="22168000" />
       <workItem from="1638890309717" duration="22960000" />
       <workItem from="1638976586802" duration="1933000" />
-      <workItem from="1638978553996" duration="4028000" />
-    </task>
-    <task id="LOCAL-00067" summary="bug fixes / updates">
-      <created>1611301914148</created>
-      <option name="number" value="00067" />
-      <option name="presentableId" value="LOCAL-00067" />
-      <option name="project" value="LOCAL" />
-      <updated>1611301914148</updated>
+      <workItem from="1638978553996" duration="9730000" />
     </task>
     <task id="LOCAL-00068" summary="bug fixes / updates">
       <created>1611311491863</created>
@@ -638,7 +627,14 @@
       <option name="project" value="LOCAL" />
       <updated>1638978372345</updated>
     </task>
-    <option name="localTasksCounter" value="116" />
+    <task id="LOCAL-00116" summary="2.2.0 - Bugfixes">
+      <created>1638983248944</created>
+      <option name="number" value="00116" />
+      <option name="presentableId" value="LOCAL-00116" />
+      <option name="project" value="LOCAL" />
+      <updated>1638983248945</updated>
+    </task>
+    <option name="localTasksCounter" value="117" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -657,7 +653,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="pycharm fixes" />
     <MESSAGE value="project name change" />
     <MESSAGE value="add setup classifiers" />
     <MESSAGE value="bug fixes / updates" />
@@ -682,7 +677,8 @@
     <MESSAGE value="2.1.0 - bugfixes" />
     <MESSAGE value="2.1.1 - progress on bugfixes" />
     <MESSAGE value="2.1.1 - Bugfixes" />
-    <option name="LAST_COMMIT_MESSAGE" value="2.1.1 - Bugfixes" />
+    <MESSAGE value="2.2.0 - Bugfixes" />
+    <option name="LAST_COMMIT_MESSAGE" value="2.2.0 - Bugfixes" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/PythonExtensions$__init__.coverage" NAME="__init__ Coverage Results" MODIFIED="1610939731215" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PythonExtensions/Files" />
@@ -694,7 +690,7 @@
     <SUITE FILE_PATH="coverage/PythonExtensions$TestTkApp.coverage" NAME="TestTkApp Coverage Results" MODIFIED="1611950953829" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Tests" />
     <SUITE FILE_PATH="coverage/PythonExtensions$Constants.coverage" NAME="Constants Coverage Results" MODIFIED="1610937223831" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PythonExtensions" />
     <SUITE FILE_PATH="coverage/PythonExtensions$File.coverage" NAME="File Coverage Results" MODIFIED="1611006293121" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PythonExtensions/Files" />
-    <SUITE FILE_PATH="coverage/PythonExtensions$dev.coverage" NAME="dev Coverage Results" MODIFIED="1638981206642" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/PythonExtensions$dev.coverage" NAME="dev Coverage Results" MODIFIED="1638990569664" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/PythonExtensions$run.coverage" NAME="run Coverage Results" MODIFIED="1613082591231" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/PythonExtensions$test_tk_async.coverage" NAME="test_tk_async Coverage Results" MODIFIED="1625517948390" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="/home/pi/WorkSpace/PythonExtensions" />
     <SUITE FILE_PATH="coverage/PythonExtensions$build.coverage" NAME="build_classifiers Coverage Results" MODIFIED="1610748410999" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PythonExtensions/Setup" />

@@ -915,8 +915,8 @@ class BaseTextTkinterWidget(BaseTkinterWidget):
 # ------------------------------------------------------------------------------------------
 
 
-SyncCallable = Callable[[Optional[tkEvent], Tuple, Dict[str, Any]], Any]
-SimpleSyncCallable = Callable[[Optional[tkEvent]], Any]
+SyncCallable = Callable[[Optional[TkinterEvent], Tuple, Dict[str, Any]], Any]
+SimpleSyncCallable = Callable[[Optional[TkinterEvent]], Any]
 # class CallWrapper(object):
 #     """ Internal class. Stores function to call when some user defined Tcl function is called e.g. after an event occurred. """
 #     __slots__ = ['_func',
@@ -960,8 +960,8 @@ SimpleSyncCallable = Callable[[Optional[tkEvent]], Any]
 #         return self
 
 
-AsyncCallable = Callable[[Optional[tkEvent], Tuple, Dict[str, Any]], Coroutine]
-SimpleAsyncCallable = Callable[[Optional[tkEvent]], Coroutine]
+AsyncCallable = Callable[[Optional[TkinterEvent], Tuple, Dict[str, Any]], Coroutine]
+SimpleAsyncCallable = Callable[[Optional[TkinterEvent]], Coroutine]
 class CallWrapper(object):
     """ Internal class. Stores function to call when some user defined Tcl function is called e.g. after an event occurred. """
     __slots__ = ['_func',
@@ -990,6 +990,10 @@ class CallWrapper(object):
 
 
     def __call__(self, _event: Optional[tkEvent] = None):
+        if _event is not None:
+            _event = TkinterEvent(_event)
+
+
         try:
             try:
                 result = self._func(_event, self._args, self._kwargs)
