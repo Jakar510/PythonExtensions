@@ -53,6 +53,24 @@ class PopupOptions(dict, Dict[str, Union[float, int, str, bool]]):
         ]
 
     @overload
+    def __init__(self, relwidth: float, relheight: float,
+                 key_size: int = -1,
+                 key_color: str = 'white',
+                 transparency: float = 0.85,
+                 take_focus: bool = False,
+                 font: str = '-family {Segoe UI Black} -size 13',
+                 _space: str = '[ space ]',
+                 _shift: str = 'Aa',
+                 _next: str = '→',  # &#x2192
+                 _previous: str = '←',  # &#x2190
+                 _enter: str = '↲',  # &#x21B2
+                 _backspace: str = '<-',
+                 _delete: str = 'Clr',
+                 _sign: str = '±'
+                 ):
+        ...
+
+    @overload
     def __init__(self, relx: float, rely: float, relwidth: float, relheight: float,
                  key_size: int = -1,
                  key_color: str = 'white',
@@ -69,9 +87,43 @@ class PopupOptions(dict, Dict[str, Union[float, int, str, bool]]):
                  _sign: str = '±'
                  ):
         ...
+
+    @overload
+    def __init__(self, width: float, height: float,
+                 key_size: int = -1,
+                 key_color: str = 'white',
+                 transparency: float = 0.85,
+                 take_focus: bool = False,
+                 font: str = '-family {Segoe UI Black} -size 13',
+                 _space: str = '[ space ]',
+                 _shift: str = 'Aa',
+                 _next: str = '→',  # &#x2192
+                 _previous: str = '←',  # &#x2190
+                 _enter: str = '↲',  # &#x21B2
+                 _backspace: str = '<-',
+                 _delete: str = 'Clr',
+                 _sign: str = '±'
+                 ): ...
+
     @overload
     def __init__(self, x: float, y: float, width: float, height: float,
                  key_size: int = -1,
+                 key_color: str = 'white',
+                 transparency: float = 0.85,
+                 take_focus: bool = False,
+                 font: str = '-family {Segoe UI Black} -size 13',
+                 _space: str = '[ space ]',
+                 _shift: str = 'Aa',
+                 _next: str = '→',  # &#x2192
+                 _previous: str = '←',  # &#x2190
+                 _enter: str = '↲',  # &#x21B2
+                 _backspace: str = '<-',
+                 _delete: str = 'Clr',
+                 _sign: str = '±'
+                 ): ...
+
+    @overload
+    def __init__(self, key_size: int = -1,
                  key_color: str = 'white',
                  transparency: float = 0.85,
                  take_focus: bool = False,
@@ -131,7 +183,7 @@ class PopupKeyboard(tkTopLevel):
     _key_size: int
     _root_frame: Frame
     _attach: Union['KeyboardMixin', BaseTextTkinterWidget]
-    def __init__(self, root: tkRoot, attach: 'KeyboardMixin', options: PopupOptions):
+    def __init__(self, root: tkRoot, attach: 'KeyboardMixin', options: PopupOptions = None):
         assert (isinstance(root, tkRoot))
         self.__root = root
         tkTopLevel.__init__(self, master=root, fullscreen=False, takefocus=options.take_focus, width=1, height=1)
@@ -155,7 +207,8 @@ class PopupKeyboard(tkTopLevel):
         self._delete: Final[str] = options.delete
         self._sign: Final[str] = options.sign
 
-        # self._root_frame = Frame(self).Grid(row=0, column=0).Grid_ColumnConfigure(0, weight=1).Grid_RowConfigure(0, weight=1)
+        # self.Grid_ColumnConfigure(0, weight=1).Grid_RowConfigure(0, weight=1)
+        # self._root_frame = Frame(self).Grid(row=0, column=0)
         self._root_frame = Frame(self).PlaceFull()
 
         # if self._attach.IsAutoSize: self._SetDimensions()
@@ -241,18 +294,38 @@ class PopupKeyboard(tkTopLevel):
 
 
     @classmethod
-    def Create(cls, master: tkRoot, attach: 'KeyboardMixin', options: PopupOptions) -> 'PopupKeyboard':
-        if 'relwidth' in options:
+    def Create(cls, master: tkRoot, attach: 'KeyboardMixin', options: PopupOptions = None) -> 'PopupKeyboard':
+        if 'relx' in options:
             x = options['relx'] * master.Width
             y = options['rely'] * master.Height
             frame_width = options['relwidth'] * master.Width
             frame_height = options['relheight'] * master.Height
 
-        else:
+        elif 'x' in options:
             x = options['x']
             y = options['y']
             frame_width = options['width']
             frame_height = options['height']
+
+        else:
+            if 'relwidth' in options:
+                frame_width = options['relwidth'] * master.Width
+            elif 'width' in options:
+                frame_width = options['width']
+            else:
+                frame_width = attach.winfo_width()
+
+            if 'relheight' in options:
+                frame_height = options['relheight'] * master.Height
+            elif 'height' in options:
+                frame_height = options['height']
+            else:
+                frame_height = attach.winfo_height()
+
+            x = abs(attach.winfo_width() - attach.winfo_x()) / 2 - (frame_width / 2)
+            y = attach.winfo_y() + attach.winfo_height()
+            if y >= master.Height:
+                y = attach.winfo_y() - frame_height
 
         self = cls(master, attach, options)
         self.SetDimensions(int(frame_width), int(frame_height), int(x), int(y))
@@ -327,11 +400,8 @@ class PopupKeyboard(tkTopLevel):
             self._attach.tk_focusPrev().focus_set()
             return self._handle_enter()
     def _handle_enter(self) -> True:
-        if isinstance(self._attach, KeyboardMixin):
-            self._attach.destroy_popup()
-            return True
-
-        raise AttributeError('self.attach.destroy_popup() not found')
+        self._attach.destroy_popup()
+        return True
 
 class KeyboardMixin:
     """
@@ -396,12 +466,12 @@ class KeyboardMixin:
     __options: Final[PopupOptions]
     kb: Optional[PopupKeyboard]
     state: KeyBoardState
-    def __init__(self, master, root: tkRoot, options: PopupOptions):
+    def __init__(self, master, root: tkRoot, options: PopupOptions = None):
         assert (isinstance(self, BaseTextTkinterWidget) and isinstance(self, KeyboardMixin))
         assert (isinstance(root, tkRoot))
         self.__root = root
         self.master = master
-        self.__options = options
+        self.__options = options or PopupOptions()
         self.kb: Optional[PopupKeyboard] = None
         self.state = KeyBoardState.Idle
 
@@ -430,6 +500,8 @@ class KeyboardMixin:
         if self.state != KeyBoardState.Virtual or self.kb is None:
             self._call_popup()
             self.state = KeyBoardState.Virtual
+
+
     def _debug_event_(self, tag: EventType, event: tkEvent):
         print('__KeyboardMixin__state__', self.state)
         print(f'__KeyboardMixin__Event__{tag.name}__', str(TkinterEvent(event)))
@@ -449,6 +521,9 @@ class KeyboardMixin:
             self.kb = None
 
 
+# ------------------------------------------------------------------------------------------
+
+
 class KeyboardComboBoxThemed(ComboBoxThemed, KeyboardMixin):
     __slots__ = ['kb',
                  'state',
@@ -457,7 +532,7 @@ class KeyboardComboBoxThemed(ComboBoxThemed, KeyboardMixin):
                  '__root',
                  'key_size',
                  'key_color']
-    def __init__(self, master, root: tkRoot, options: PopupOptions, *, text: str = '', Override_var: tk.StringVar = None, Color: Dict = None, **kwargs):
+    def __init__(self, master, root: tkRoot, options: PopupOptions = None, *, text: str = '', Override_var: tk.StringVar = None, Color: Dict = None, **kwargs):
         ComboBoxThemed.__init__(self, master, text=text, Override_var=Override_var, Color=Color, postcommand=self._OnDropDown, **kwargs)
         KeyboardMixin.__init__(self, master, root=root, options=options)
         BaseTkinterWidget.Bind(self, Bindings.ComboboxSelected, self._OnSelect)
@@ -480,7 +555,7 @@ class KeyboardEntry(Entry, KeyboardMixin):
                  'key_size',
                  'key_color']
     # noinspection SpellCheckingInspection
-    def __init__(self, master, root: tkRoot, options: PopupOptions, *,
+    def __init__(self, master, root: tkRoot, options: PopupOptions = None, *,
                  insertbackground: str = 'red', insertborderwidth: int = 3, insertofftime: int = 500, insertontime: int = 500, insertwidth: int = 3,
                  text: str = '', Override_var: tk.StringVar = None, Color: Dict = None, **kwargs):
         Entry.__init__(self, master,
@@ -562,7 +637,7 @@ class TitledKeyboardComboBoxThemed(Frame, entry_mixin):
                  '__root',
                  'key_size',
                  'key_color']
-    def __init__(self, master, root: tkRoot, options: PopupOptions, *, RowPadding: int = 1, factor: int = 3, **frame):
+    def __init__(self, master, root: tkRoot, options: PopupOptions = None, *, RowPadding: int = 1, factor: int = 3, **frame):
         Frame.__init__(self, master, **frame)
         self.Grid_RowConfigure(0, weight=1).Grid_RowConfigure(1, weight=factor).Grid_ColumnConfigure(0, weight=1)
 
@@ -606,7 +681,7 @@ class FramedKeyboardComboBoxThemed(LabelFrame, entry_mixin):
                  '__root',
                  'key_size',
                  'key_color']
-    def __init__(self, master, root: tkRoot, options: PopupOptions, **frame):
+    def __init__(self, master, root: tkRoot, options: PopupOptions = None, **frame):
         LabelFrame.__init__(self, master, **frame)
 
         self.Value = KeyboardComboBoxThemed(self, root, options).PlaceFull()
@@ -655,7 +730,7 @@ class TitledKeyboardEntry(Frame, entry_mixin):
                  '__root',
                  'key_size',
                  'key_color']
-    def __init__(self, master, root: tkRoot, options: PopupOptions, *, RowPadding: int = 1, factor: int = 3, **frame):
+    def __init__(self, master, root: tkRoot, options: PopupOptions = None, *, RowPadding: int = 1, factor: int = 3, **frame):
         Frame.__init__(self, master, **frame)
         self.Grid_RowConfigure(0, weight=1).Grid_RowConfigure(1, weight=factor).Grid_ColumnConfigure(0, weight=1)
 
@@ -699,7 +774,7 @@ class FramedKeyboardEntry(LabelFrame, entry_mixin):
                  '__root',
                  'key_size',
                  'key_color']
-    def __init__(self, master, root: tkRoot, options: PopupOptions, **frame):
+    def __init__(self, master, root: tkRoot, options: PopupOptions = None, **frame):
         LabelFrame.__init__(self, master, **frame)
 
         self.Value = KeyboardEntry(self, root, options).PlaceFull()

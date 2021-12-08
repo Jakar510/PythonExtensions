@@ -30,7 +30,7 @@ class TimeKeeperMixin:
 
 
 
-class HID_BUFFER(object, TimeKeeperMixin):
+class HID_BUFFER(TimeKeeperMixin):
     __slots__ = ['_text', '_lastTime']
     _text: str
     def __init__(self, text: str = ''):

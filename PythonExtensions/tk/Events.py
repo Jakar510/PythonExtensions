@@ -128,8 +128,8 @@ class TkinterEvent(tkEvent):
     keycode: Optional[Union[str, int]]
     state: int
     time: int
-    x: Union[str, float]
-    y: Union[str, float]
+    x: Optional[int]
+    y: Optional[int]
     x_root: Union[str, float]
     y_root: Union[str, float]
     char: Optional[str]
@@ -137,6 +137,7 @@ class TkinterEvent(tkEvent):
     type: EventType
     widget: Widget
     delta: Optional[float]
+
 
     def __init__(self, source: Optional[tkEvent]):
         super().__init__()

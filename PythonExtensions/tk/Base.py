@@ -997,7 +997,7 @@ class CallWrapper(object):
                 result = self._func(_event)
 
             if iscoroutine(result) or iscoroutinefunction(result):
-                if self._loop is None: raise ValueError('_loop is None')
+                if self._loop is None: raise RuntimeError(f'_loop is None for method "{nameof(self._func)}"')
                 return run_coroutine_threadsafe(result, self._loop)
 
             return result

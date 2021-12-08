@@ -12,6 +12,7 @@ from typing import *
 from .Base import *
 from .Enumerations import *
 from .Events import *
+from ..Core.Json import BaseDictModel, BaseListModel
 
 
 
@@ -39,6 +40,8 @@ SizeGrip
 Scrollbar
 --ThemedTreeView
 """
+
+
 
 class ComboBoxThemed(ttk.Combobox, BaseTextTkinterWidget, CommandMixin):
     """Construct a Ttk Combobox _widget with the master master.
@@ -68,18 +71,19 @@ class ComboBoxThemed(ttk.Combobox, BaseTextTkinterWidget, CommandMixin):
 
 
     @property
-    def value(self) -> bool: return self._txt.get()
+    def value(self) -> str: return self._txt.get()
     @value.setter
     def value(self, v: str): self._txt.set(v)
+
 
     def _setCommand(self, add: bool):
         self.command_cb = self.Bind(Bindings.ComboboxSelected, self._cmd, add=add)
         return self
 
-    def SetValues(self, values: list or tuple):
+    def SetValues(self, values: Union[List[str], Tuple[str, ...]]):
         self.configure(values=values)
 
-    def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, convert_kwargs(kwargs))
+    def _options(self, cnf, kwargs=None): return self.merge_options(cnf, kwargs)
 
 # ------------------------------------------------------------------------------------------
 
@@ -88,12 +92,12 @@ class ScrollbarThemed(ttk.Scrollbar, BaseTkinterWidget):
     def __init__(self, master, orientation: Orient, **kwargs):
         ttk.Scrollbar.__init__(self, master, orient=orientation.value, **kwargs)
 
-    def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, convert_kwargs(kwargs))
+    def _options(self, cnf, kwargs=None): return self.merge_options(cnf, kwargs)
 
 # ------------------------------------------------------------------------------------------
 
-class ListItem(dict):
-    __slots__ = ['_state_', '__bindings__', '_pi', '_manager_', '_wrap', '_cb', '_updater', '_txt']
+class ListItem(BaseDictModel[str, Union['ListItem', str]]):
+    __slots__ = []
     @property
     def ID(self) -> str:
         return self.get("ID", None)
@@ -120,7 +124,7 @@ class ListItem(dict):
         raise TypeError(f"""Expecting {dict} got type {type(d)}""")
 
     @staticmethod
-    def Create(ID: str, Name: str, Children: List = None):
+    def Create(ID: str, Name: str, Children: List['ListItem'] = None):
         """
         :param ID: Unique Identifier
         :type ID: str
@@ -132,19 +136,13 @@ class ListItem(dict):
         :rtype: ListItem
         """
         return ListItem.Parse(dict(ID=ID, Name=Name, Children=Children))
-class ItemCollection(list):
-    __slots__ = ['_state_', '__bindings__', '_pi', '_manager_', '_wrap', '_cb', '_updater', '_txt']
+class ItemCollection(BaseListModel[ListItem]):
+    __slots__ = []
     def __init__(self, d: Union[List[ListItem], Iterable[ListItem]]):
         list.__init__(self, d)
 
-    def __setitem__(self, key: int, value: ListItem): return super().__setitem__(key, value)
-    def __getitem__(self, key: int) -> ListItem: return super().__getitem__(key)
-    def Slice(self, key: slice): return ItemCollection(super().__getitem__(key))
-
-    def __iter__(self) -> Iterable[ListItem]: return super().__iter__()
     def enumerate(self) -> Iterable[Tuple[int, ListItem]]: return enumerate(self)
     def Iter(self) -> Iterable[int]: return range(len(self))
-
     def Names(self) -> Iterable[str]: return map(lambda o: getattr(o, 'Name'), self)
     def IDs(self) -> Iterable[str]: return map(lambda o: getattr(o, 'ID'), self)
 
@@ -254,9 +252,9 @@ class TreeViewThemed(ttk.Treeview, BaseTkinterWidget, CommandMixin):
 
 
     def column(self, column, option=None, **kw):
-        return super(TreeViewThemed, self).column(column, option, **self.convert_kwargs(kw))
+        return super(TreeViewThemed, self).column(column, option, **convert_kwargs(kw))
     def heading(self, column, option=None, **kw):
-        return super(TreeViewThemed, self).heading(column, option, **self.convert_kwargs(kw))
+        return super(TreeViewThemed, self).heading(column, option, **convert_kwargs(kw))
 
     def selection(self) -> Tuple[str]:
         return super(TreeViewThemed, self).selection()
@@ -281,10 +279,11 @@ class TreeViewThemed(ttk.Treeview, BaseTkinterWidget, CommandMixin):
             else:
                 self.item(_id, tags=['sel', fg, bg])
 
-        self.SelectedItems = self.tag_has('sel')
+        self.SelectedItems = list(self.tag_has('sel'))
 
-    def _options(self, cnf, kwargs=None) -> dict:
-        return super()._options(cnf, convert_kwargs(kwargs))
+
+    def _options(self, cnf, kwargs=None):
+        return self.merge_options(cnf, kwargs)
 class TreeViewHolderThemed(Frame):
     """Construct a Ttk Treeview with master scale.
 
@@ -331,8 +330,9 @@ class TreeViewHolderThemed(Frame):
             self.vsb.show()
             self.hsb.show()
 
-    def _options(self, cnf, kwargs=None) -> dict:
-        return super()._options(cnf, convert_kwargs(kwargs))
+
+    def _options(self, cnf, kwargs=None):
+        return self.merge_options(cnf, kwargs)
 
 # ------------------------------------------------------------------------------------------
 
@@ -368,7 +368,7 @@ class ButtonThemed(ttk.Button, BaseTextTkinterWidget, ImageMixin, CommandMixin):
         if cmd: self.SetCommand(cmd)
 
 
-    def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, convert_kwargs(kwargs))
+    def _options(self, cnf, kwargs=None): return self.merge_options(cnf, kwargs)
 
 # ------------------------------------------------------------------------------------------
 
@@ -396,7 +396,7 @@ class LabelThemed(ttk.Label, BaseTextTkinterWidget, ImageMixin):
         BaseTextTkinterWidget.__init__(self, text, Override_var, Color, loop)
         ImageMixin.__init__(self)
 
-    def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, convert_kwargs(kwargs))
+    def _options(self, cnf, kwargs=None): return self.merge_options(cnf, kwargs)
 
 # ------------------------------------------------------------------------------------------
 
@@ -433,7 +433,7 @@ class EntryThemed(ttk.Entry, BaseTextTkinterWidget, CommandMixin):
     def Append(self, value: str):
         self.insert(Tags.End.value, value)
 
-    def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, convert_kwargs(kwargs))
+    def _options(self, cnf, kwargs=None): return self.merge_options(cnf, kwargs)
 
 # ------------------------------------------------------------------------------------------
 
@@ -559,8 +559,9 @@ class NotebookThemed(BaseTextTkinterWidget, ttk.Notebook):
         assert (isinstance(value, int))
         self.tab(self.ActiveTab, wraplength=self._wrap)
 
-    def _options(self, cnf, kwargs=None) -> dict:
-        return super()._options(cnf, convert_kwargs(kwargs))
+
+    def _options(self, cnf, kwargs=None):
+        return self.merge_options(cnf, kwargs)
 
 # ------------------------------------------------------------------------------------------
 
@@ -569,7 +570,7 @@ class SeparatorThemed(ttk.Separator, BaseTkinterWidget):
     def __init__(self, master, orientation: Orient = Orient.Horizonal):
         ttk.Separator.__init__(self, master, orient=orientation.value)
 
-    def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, convert_kwargs(kwargs))
+    def _options(self, cnf, kwargs=None): return self.merge_options(cnf, kwargs)
 
 # ------------------------------------------------------------------------------------------
 
@@ -610,4 +611,4 @@ class CheckButtonThemed(ttk.Checkbutton, BaseTextTkinterWidget, ImageMixin, Comm
 
         self.invoke()
 
-    def _options(self, cnf, kwargs=None) -> dict: return super()._options(cnf, convert_kwargs(kwargs))
+    def _options(self, cnf, kwargs=None): return self.merge_options(cnf, kwargs)
