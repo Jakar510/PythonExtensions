@@ -5,7 +5,6 @@
 # ------------------------------------------------------------------------------
 
 import string
-import traceback
 from enum import IntEnum
 from typing import *
 
@@ -274,7 +273,7 @@ class PopupKeyboard(tkTopLevel):
         if options.key_size > 0: self.SetSize(options.key_size)
         if options.font: self.SetFont(options.font)
 
-        self.Bind(Bindings.Key, lambda e: self._attach.destroy_popup())  # destroy _PopupKeyboard on keyboard interrupt
+        self.Bind(Bindings.Key, lambda e: destroy_popup())  # destroy _PopupKeyboard on keyboard interrupt
         self._updateFocus(self)
         self._update()
 
@@ -327,7 +326,6 @@ class PopupKeyboard(tkTopLevel):
 
 
     def _handle_key_press(self, _event: Optional[tkEvent], value: str, *_args, **_kwargs):
-        print(_event)
         if value == self._shift:
             self.SwitchCase()
 
@@ -393,9 +391,30 @@ class PopupKeyboard(tkTopLevel):
         elif value == self._previous:
             self._attach.tk_focusPrev().focus_set()
             return self._handle_enter()
-    def _handle_enter(self) -> True:
-        self._attach.destroy_popup()
+    @staticmethod
+    def _handle_enter() -> True:
+        destroy_popup()
         return True
+
+
+_kb: Optional[PopupKeyboard] = None
+
+
+def create_popup(root: tkRoot, attach: 'KeyboardMixin', options: PopupOptions):
+    assert (isinstance(attach, BaseTextTkinterWidget) and isinstance(attach, KeyboardMixin))
+    global _kb
+    if _kb:
+        _kb.destroy()
+        _kb = None
+
+    _kb = PopupKeyboard(root, attach, options)
+
+
+def destroy_popup():
+    global _kb
+    if _kb:
+        _kb.destroy()
+        _kb = None
 
 class KeyboardMixin:
     __doc__ = """
@@ -488,11 +507,11 @@ class KeyboardMixin:
         elif self.state == KeyBoardState.Virtual:
             self.state = KeyBoardState.Typing
             if _event.widget is not self:
-                self.destroy_popup()
+                destroy_popup()
                 self.state = KeyBoardState.Idle
     def _handle_KeyPress(self, _event: tkEvent):
         if self.state == KeyBoardState.Virtual:
-            self.destroy_popup()
+            destroy_popup()
             self.state = KeyBoardState.Typing
     def _handle_ButtonPress(self, _event: tkEvent):
         if self.state != KeyBoardState.Virtual or self.kb is None:
@@ -508,38 +527,11 @@ class KeyboardMixin:
                     focus_get=self.focus_get())
 
 
-
     def _call_popup(self):
-        if self.kb:
-            self.kb.destroy()
-            self.kb = None
-
-        print()
-        focus_get = self.focus_get()
-        print(f'BEFORE.{focus_get=}')
-
-        self.kb = PopupKeyboard(self.__root, attach=self, options=self.__options)
-
-        print()
-        focus_get = self.focus_get()
-        print(f'BEFORE.{focus_get=}')
+        create_popup(self.__root, attach=self, options=self.__options)
 
 
 
-    def destroy_popup(self):
-        focus_get = self.focus_get()
-        print()
-        print()
-        print(f'{focus_get=}')
-        print()
-        print()
-        traceback.print_stack()
-        print()
-        print()
-
-        if self.kb:
-            self.kb.destroy()
-            self.kb = None
 
 
 # ------------------------------------------------------------------------------------------
@@ -558,14 +550,15 @@ class KeyboardComboBoxThemed(ComboBoxThemed, KeyboardMixin):
         KeyboardMixin.__init__(self, master, root=root, options=options)
         BaseTkinterWidget.Bind(self, Bindings.ComboboxSelected, self._OnSelect)
 
+    # noinspection PyMethodMayBeStatic
     def _OnDropDown(self):
         """ By default, destroys the popup when the dropdown list is expanded. Override to add functionality """
-        self.destroy_popup()
+        destroy_popup()
 
-    # noinspection PyUnusedLocal
-    def _OnSelect(self, event: tkEvent = None):
+    # noinspection PyMethodMayBeStatic
+    def _OnSelect(self, _event: tkEvent = None):
         """ By default, destroys the popup when an item is selected. Override to add functionality """
-        self.destroy_popup()
+        destroy_popup()
 
 class KeyboardEntry(Entry, KeyboardMixin):
     __slots__ = ['kb',
