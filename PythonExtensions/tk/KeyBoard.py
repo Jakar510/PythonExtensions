@@ -24,6 +24,7 @@ __all__ = [
     'PopupOptions', 'PopupKeyboard',
     'KeyboardComboBoxThemed', 'TitledKeyboardComboBoxThemed', 'TitledComboBoxThemed', 'FramedKeyboardComboBoxThemed', 'FramedComboBoxThemed',
     'TitledEntry', 'TitledKeyboardEntry', 'FramedKeyboardEntry', 'FramedEntry', 'KeyboardEntry',
+    'destroy_popup', 'create_popup',
     ]
 
 class KeyBoardState(IntEnum):

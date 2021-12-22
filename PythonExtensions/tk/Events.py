@@ -438,6 +438,39 @@ class Bindings(Enum):
     Eight = '8'
     Nine = '9'
 
+    # class Symbols(Enum):
+    Colon = 'color'
+    SingleQoute = 'apostrophe'
+    DoubleQuote = 'quotedbl'
+    Tick = 'grave'  # `
+    Tilde = '~'
+    Exclamation = 'exclam'  # !
+    At = 'at'  # @
+    Pound = 'numbersign'  # #
+    Dollar = 'dollar'  # $
+    Percent = 'percent'  # %
+    Carrot = 'asciicircum'  # ^
+    Ampersand = 'ampersand'  # &
+    Asterisk = 'asterisk'  # *
+    LeftParenthese = 'parenleft'
+    RightParenthese = 'parenright'
+    Underscore = 'underscore'
+    Question = 'question'
+    Slash = 'slash'
+    BackSlash = 'backslash'
+    Pipe = 'bar'
+    AsciiTilde = 'asciitilde'
+    Period = 'period'
+    Plus = 'plus'
+    Semicolon = 'semicolon'
+    BackSpace = 'BackSpace'
+    BracerLeft = 'braceright'
+    BracerRight = 'braceright'
+    SquareBracketLeft = 'bracketleft'
+    SquareBracketRight = 'bracketright'
+    Minus = 'minus'
+    Equal = 'equal'
+
     # class Custom(Enum):
     ShiftTab = 'Shift_Tab',
     ShiftTabEvent = '<Shift-KeyPress-Tab>'
@@ -470,11 +503,6 @@ class Bindings(Enum):
     Alt = 'Alt'
     Alt_L = 'Alt_L'
     Alt_R = 'Alt_R'
-    AsciiTilde = 'asciitilde'
-    BackSlash = 'backslash'
-    BackSpace = 'BackSpace'
-    BracketLeft = 'bracketleft'
-    BracketRight = 'bracketright'
     Cancel = 'Cancel'
     Caps_Lock = 'Caps_Lock'
     Comma = 'comma'
@@ -486,7 +514,6 @@ class Bindings(Enum):
     End = 'End'
     EnterKey = 'Enter'
     ControlEnter = '<Control-KeyPress-Return>'
-    Equal = 'equal'
     Escape = 'Escape'
     Home = 'Home'
     Insert = 'Insert'
@@ -495,18 +522,14 @@ class Bindings(Enum):
     KP_Subtract = 'KP_Subtract'
     Key = '<Key>'
     Left = 'Left'
-    Minus = 'minus'
     Num_Lock = 'Num_Lock'
     Pause = 'Pause'
-    Period = 'period'
-    Plus = 'plus'
     Print = 'Print'
     QuoteLeft = 'quoteleft'
     QuoteRight = 'quoteright'
     Return = 'Return'
     Right = 'Right'
     Scroll_Lock = 'Scroll_Lock'
-    Semicolon = 'semicolon'
     Shift = 'Shift'
     Shift_R = 'Shift_R'
     Shift_L = 'Shift_L'
@@ -514,10 +537,11 @@ class Bindings(Enum):
     Shift_Left = '<Shift-Left>'
     Shift_Right = '<Shift-Right>'
     Shift_Up = '<Shift-Up>'
-    Slash = 'slash'
     Space = 'space'
     Tab = 'Tab'
     Up = 'Up'
+    WindowsKeyLeft = 'Win_L'
+    WindowsKeyRight = 'Win_R'
 
     # class ListBox(Enum):
     ListboxSelect = '<<ListboxSelect>>'
