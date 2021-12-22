@@ -137,13 +137,16 @@ class TkinterEvent(tkEvent):
     type: EventType
     widget: Widget
     delta: Optional[float]
-
+    send_event: bool
 
     def __init__(self, source: Optional[tkEvent]):
         super().__init__()
         if source is not None:
             assert (isinstance(source, tkEvent))
             for name, value in source.__dict__.items(): setattr(self, name, value)
+
+        if not hasattr(self, 'send_event'):
+            self.send_event = False
 
 
     def __str__(self) -> str:
