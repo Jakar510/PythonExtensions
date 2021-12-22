@@ -186,8 +186,8 @@ class PopupKeyboard(tkTopLevel):
         self.SetTransparency(options.transparency)
 
         if 'relx' in options:
-            x = options['relx'] * root.Width
-            y = options['rely'] * root.Height
+            x = options['relx'] * root.Width + root.winfo_x()
+            y = options['rely'] * root.Height + root.winfo_y()
             frame_width = options['relwidth'] * root.Width
             frame_height = options['relheight'] * root.Height
 
