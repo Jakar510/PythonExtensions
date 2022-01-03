@@ -174,12 +174,12 @@ class Entry(tk.Entry, BaseTextTkinterWidget, CommandMixin):
         self.command_cb = self.Bind(Bindings.ButtonPress.value, self._cmd, add=add)
         return self
 
-    @property
-    def txt(self) -> str: return self.get()
-    @txt.setter
-    def txt(self, value: str):
-        self.Clear()
-        self.insert(Tags.End.value, value)
+    # @property
+    # def txt(self) -> str: return self.get()
+    # @txt.setter
+    # def txt(self, value: str):
+    #     self.Clear()
+    #     self.insert(0, value)
 
     def Append(self, value: str):
         self.insert(Tags.End.value, value)

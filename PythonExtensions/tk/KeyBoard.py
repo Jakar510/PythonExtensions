@@ -627,6 +627,8 @@ class TitledComboBoxThemed(Frame, entry_mixin):
                  '__root',
                  'key_size',
                  'key_color']
+    Title: Label
+    Value: ComboBoxThemed
     def __init__(self, master, *, RowPadding: int = 1, factor: int = 3, **frame):
         Frame.__init__(self, master, **frame)
         self.Grid_RowConfigure(0, weight=1).Grid_RowConfigure(1, weight=factor).Grid_ColumnConfigure(0, weight=1)
@@ -652,6 +654,8 @@ class TitledKeyboardComboBoxThemed(Frame, entry_mixin):
                  '__root',
                  'key_size',
                  'key_color']
+    Title: Label
+    Value: KeyboardComboBoxThemed
     def __init__(self, master, root: tkRoot, options: PopupOptions = None, *, RowPadding: int = 1, factor: int = 3, **frame):
         Frame.__init__(self, master, **frame)
         self.Grid_RowConfigure(0, weight=1).Grid_RowConfigure(1, weight=factor).Grid_ColumnConfigure(0, weight=1)
@@ -677,6 +681,7 @@ class FramedComboBoxThemed(LabelFrame, entry_mixin):
                  '__root',
                  'key_size',
                  'key_color']
+    Value: ComboBoxThemed
     def __init__(self, master, **frame):
         LabelFrame.__init__(self, master, **frame)
         self.Value = ComboBoxThemed(self).PlaceFull()
@@ -696,6 +701,7 @@ class FramedKeyboardComboBoxThemed(LabelFrame, entry_mixin):
                  '__root',
                  'key_size',
                  'key_color']
+    Value: KeyboardComboBoxThemed
     def __init__(self, master, root: tkRoot, options: PopupOptions = None, **frame):
         LabelFrame.__init__(self, master, **frame)
 
@@ -720,6 +726,8 @@ class TitledEntry(Frame, entry_mixin):
                  '__root',
                  'key_size',
                  'key_color']
+    Title: Label
+    Value: Entry
     def __init__(self, master, *, RowPadding: int = 1, factor: int = 3, **frame):
         Frame.__init__(self, master, **frame)
         self.Grid_RowConfigure(0, weight=1).Grid_RowConfigure(1, weight=factor).Grid_ColumnConfigure(0, weight=1)
@@ -745,6 +753,8 @@ class TitledKeyboardEntry(Frame, entry_mixin):
                  '__root',
                  'key_size',
                  'key_color']
+    Title: Label
+    Value: KeyboardEntry
     def __init__(self, master, root: tkRoot, options: PopupOptions = None, *, RowPadding: int = 1, factor: int = 3, **frame):
         Frame.__init__(self, master, **frame)
         self.Grid_RowConfigure(0, weight=1).Grid_RowConfigure(1, weight=factor).Grid_ColumnConfigure(0, weight=1)
@@ -770,6 +780,7 @@ class FramedEntry(LabelFrame, entry_mixin):
                  '__root',
                  'key_size',
                  'key_color']
+    Value: Entry
     def __init__(self, master, **frame):
         LabelFrame.__init__(self, master, **frame)
         self.Value = Entry(self).PlaceFull()
@@ -789,6 +800,7 @@ class FramedKeyboardEntry(LabelFrame, entry_mixin):
                  '__root',
                  'key_size',
                  'key_color']
+    Value: KeyboardEntry
     def __init__(self, master, root: tkRoot, options: PopupOptions = None, **frame):
         LabelFrame.__init__(self, master, **frame)
 

@@ -80,7 +80,7 @@ class ComboBoxThemed(ttk.Combobox, BaseTextTkinterWidget, CommandMixin):
         self.command_cb = self.Bind(Bindings.ComboboxSelected, self._cmd, add=add)
         return self
 
-    def SetValues(self, values: Union[List[str], Tuple[str, ...]]):
+    def SetValues(self, values: Union[List[str], Iterable[str]]):
         self.configure(values=values)
 
     def _options(self, cnf, kwargs=None): return self.merge_options(cnf, kwargs)
