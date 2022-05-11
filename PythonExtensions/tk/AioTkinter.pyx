@@ -1,46 +1,50 @@
-# ------------------------------------------------------------------------------
-#  Created by Tyler Stegmaier.
+from enum import IntEnum, Enum
 
-# ------------------------------------------------------------------------------
-#
-# ------------------------------------------------------------------------------
+import cython
+from cython.view cimport array as cvarray
+from cython.operator cimport dereference as deref
 
-from enum import Enum, IntEnum
-from tkinter import EventType
+try:
+    from itertools import izip_longest
+except ImportError:
+    from itertools import zip_longest as izip_longest
+
+from libc.stdlib cimport malloc
+from libc.stdint cimport uintptr_t
+from libc.string cimport strdup
+from libc.string cimport strncpy
+from libc.float  cimport FLT_MAX
+from libcpp cimport bool
+
+cimport cimgui
+cimport enums
+cimport ansifeed
+
+from cpython.version cimport PY_MAJOR_VERSION
+
 from tkinter.constants import *
 
 
 
-
-__all__ = [
-    'ActiveStyle', 'AnchorAndSticky', 'Fill', 'Side', 'Relief', 'Orient', 'Wrap', 'BorderMode',
-    'Tags', 'ViewState', 'MenuItemTypes', 'SelectionMode', 'CanvasStyles', 'Layout',
-    'ViewArguments', 'ShowScrollBars', 'Bools', 'RotationAngle', 'Orientation', 'EventType'
-    ]
-
-class ShowScrollBars(IntEnum):
+#region Enums
+cpdef class ShowScrollBars(IntEnum):
     Never = 0
     Always = 1
     Auto = 2
 
-class Layout(IntEnum):
+cpdef class Layout(IntEnum):
     place = 1
     grid = 2
     pack = 3
 
-class ViewState(Enum):  # v _widget and button states
+cpdef class ViewState(Enum):
+    # v _widget and button states
     Normal = NORMAL
     Disabled = DISABLED
     Active = ACTIVE
     Hidden = HIDDEN  # Canvas state
 
-class Bools(IntEnum):
-    # NO = NO
-    # YES = YES
-
-    NO = FALSE = OFF = 0
-    YES = TRUE = ON = 1
-class AnchorAndSticky(Enum):
+cpdef class AnchorAndSticky(Enum):
     North = N
     South = S
     West = W
@@ -54,19 +58,19 @@ class AnchorAndSticky(Enum):
     All = NSEW
     Center = CENTER
 
-class Fill(Enum):
+cpdef class Fill(Enum):
     none = NONE
     x = X
     y = Y
     both = BOTH
 
-class Side(Enum):
+cpdef class Side(Enum):
     left = LEFT
     top = TOP
     right = RIGHT
     bottom = BOTTOM
 
-class Relief(Enum):
+cpdef class Relief(Enum):
     Raised = RAISED
     Sunken = SUNKEN
     Flat = FLAT
@@ -74,19 +78,19 @@ class Relief(Enum):
     Groove = GROOVE
     Solid = SOLID
 
-class Orient(Enum):
-    Horizonal = HORIZONTAL
+cpdef class Orient(Enum):
+    Horizontal = HORIZONTAL
     Vertical = VERTICAL
 
-class Wrap(Enum):
+cpdef class Wrap(Enum):
     Char = CHAR
     Word = WORD
 
-class BorderMode(Enum):
+cpdef class BorderMode(Enum):
     Inside = INSIDE
     Outside = OUTSIDE
 
-class Tags(Enum):  # Special tags, marks and insert positions
+cpdef class Tags(Enum):  # Special tags marks and insert positions
     Select = SEL
     SelectFirst = SEL_FIRST
     SelectLast = SEL_LAST
@@ -97,26 +101,26 @@ class Tags(Enum):  # Special tags, marks and insert positions
     First = FIRST
     All = ALL  # e.g. Canvas.delete(ALL)
 
-class MenuItemTypes(Enum):  # Menu item types
+cpdef class MenuItemTypes(Enum):  # Menu item types
     Cascade = CASCADE
     CheckButton = CHECKBUTTON
     Command = COMMAND
     RadioButton = RADIOBUTTON
     Separator = SEPARATOR
 
-class SelectionMode(Enum):  # Selection modes for list boxes
+cpdef class SelectionMode(Enum):  # Selection modes for list boxes
     Single = SINGLE
     Browse = BROWSE
     Multiple = MULTIPLE
     Extended = EXTENDED
 
-class ActiveStyle(Enum):  # Activestyle for list boxes
+cpdef class ActiveStyle(Enum):  # Activestyle for list boxes
     DotBox = DOTBOX
-    Underlind = UNDERLINE
+    Underlined = UNDERLINE
     none = NONE
 
 # Various canvas styles
-class CanvasStyles(Enum):
+cpdef class CanvasStyles(Enum):
     PieSlice = PIESLICE
     Chord = CHORD
     Arc = ARC
@@ -128,20 +132,21 @@ class CanvasStyles(Enum):
     Bevel = BEVEL
     Miter = MITER
 
-class ViewArguments(Enum):  # Arguments to xview/yview
+cpdef class ViewArguments(Enum):  # Arguments to xview/yview
     MoveTo = MOVETO
     Scroll = SCROLL
     Units = UNITS
     Pages = PAGES
 
-class RotationAngle(IntEnum):
+cpdef class RotationAngle(IntEnum):
     none = 0
     right = 90
     upside_down = 180
     left = 270
 
-    def Rotate(self, angle: int = -90): return RotationAngle((self.value + angle) % 360)
-
-class Orientation(IntEnum):
+cpdef class Orientation(IntEnum):
     Landscape = 0
     Portrait = 1
+
+cpdef RotationAngle Rotate(RotationAngle self, int angle = -90): return RotationAngle((&self + angle) % 360)
+#endregion

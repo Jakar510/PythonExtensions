@@ -10,3 +10,4 @@ aiofiles
 prettyprinter
 aiohttp
 yarl
+cython

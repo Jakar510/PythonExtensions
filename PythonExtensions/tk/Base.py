@@ -1,7 +1,6 @@
 # ------------------------------------------------------------------------------
 #  Created by Tyler Stegmaier.
-#  Property of TrueLogic Company.
-#  Copyright (c) 2020.
+
 # ------------------------------------------------------------------------------
 import base64
 import tkinter as tk
