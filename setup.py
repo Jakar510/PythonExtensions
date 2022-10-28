@@ -12,12 +12,13 @@ from PythonExtensions.__metadata__ import *
 
 
 
+__name__ = "PythonExtensions"
+
 long_description = ReadFromFile(abspath("./PyPiReadme.md"))
 
 install_requires = GetRequirements(abspath('./requirements.txt'))
 
-_packages, _package_data = Get_Packages_Data(abspath('PythonExtensions'), __name__, includes=MatchFileTypes('py', 'png', 'txt', 'json'))
-
+_packages, _package_data = Get_Packages_Data(abspath('PythonExtensions'), root=__name__, includes=MatchFileTypes('py', 'png', 'txt', 'json'))
 
 setup(name=__name__,
       version=__version__,
@@ -37,4 +38,3 @@ setup(name=__name__,
       package_dir={ __name__: __name__ },
       package_data=_package_data,
       )
-

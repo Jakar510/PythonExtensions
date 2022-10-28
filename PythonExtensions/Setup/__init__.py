@@ -61,7 +61,7 @@ def GetRootFiles(root: str):
     return files
 
 
-def Get_Packages_Data(path: str, root: str, *, includes: List[str], ignorables: List[str] = [pycache]):
+def Get_Packages_Data(path: str, root: str, *, includes: List[str], ignorables: List[str] = [pycache]) -> Tuple[List[str], Dict[str, List[str]]]:
     _packages: List[str] = []
     _package_data: Dict[str, List[str]] = { root: includes }
 
