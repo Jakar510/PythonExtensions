@@ -18,6 +18,10 @@ install_requires = GetRequirements(abspath('./requirements.txt'))
 
 _packages, _package_data = Get_Packages_Data(abspath('PythonExtensions'), __name__, includes=MatchFileTypes('py', 'png'))
 
+# https://packaging.python.org/en/latest/tutorials/packaging-projects/
+print(_packages)
+print(_package_data)
+
 setup(name=__name__,
       version=__version__,
       packages=_packages,

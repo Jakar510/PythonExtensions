@@ -25,7 +25,7 @@ from .Names import *
 # noinspection PyUnresolvedReferences
 from .Threads import *
 # noinspection PyUnresolvedReferences
-from .Debug import *
+from .debug import *
 # noinspection PyUnresolvedReferences
 from .Misc import *
 # noinspection PyUnresolvedReferences

@@ -11,6 +11,4 @@
 
 
 # major.minor[.maintenance]
-VERSION = (2, 0, 0)
-
-version = '.'.join(map(str, VERSION))
+VERSION = "2.3.0"
