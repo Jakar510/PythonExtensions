@@ -4,11 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7a6e45bf-6aac-404f-8876-27fa1a8fc2c2" name="Default Changelist" comment="investigating issues">
-      <change afterPath="$PROJECT_DIR$/PythonExtensions/tk/AioTkinter.pyx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/PythonExtensions.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/PythonExtensions.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="7a6e45bf-6aac-404f-8876-27fa1a8fc2c2" name="Default Changelist" comment="investigating implementing cython tkinter extensions">
+      <change afterPath="$PROJECT_DIR$/AioTkinter/Events.pyx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AioTkinter/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AioTkinter/constants.pyx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/deployment.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/deployment.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PythonExtensions/tk/AioTkinter.py" beforeDir="false" afterPath="$PROJECT_DIR$/AioTkinter/AioTkinter.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PythonExtensions/tk/AioTkinter.pyx" beforeDir="false" afterPath="$PROJECT_DIR$/AioTkinter/Enums.pyx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -89,11 +92,11 @@
       <recent name="D:\WorkSpace\Public\PythonExtensions\Tests" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="W:\WorkSpace\PythonExtensions\AioTkinter" />
       <recent name="D:\WorkSpace\Public\PythonExtensions\PythonExtensions\Core" />
       <recent name="D:\WorkSpace\Public\PythonExtensions\PythonExtensions\tk" />
       <recent name="D:\WorkSpace\Public\PythonExtensions\PythonExtensions" />
       <recent name="D:\WorkSpace\Public\PythonExtensions\PythonExtensions\Models" />
-      <recent name="D:\WorkSpace\PythonExtensions\Tests" />
     </key>
   </component>
   <component name="RunManager" selected="Python.kiosk">
@@ -331,14 +334,8 @@
       <workItem from="1666907581456" duration="413000" />
       <workItem from="1666975528838" duration="91000" />
       <workItem from="1667247250349" duration="5000" />
-      <workItem from="1667489602653" duration="518000" />
-    </task>
-    <task id="LOCAL-00076" summary="bug fixes / updates">
-      <created>1612280753694</created>
-      <option name="number" value="00076" />
-      <option name="presentableId" value="LOCAL-00076" />
-      <option name="project" value="LOCAL" />
-      <updated>1612280753694</updated>
+      <workItem from="1667489602653" duration="704000" />
+      <workItem from="1667490806558" duration="1816000" />
     </task>
     <task id="LOCAL-00077" summary="bug fixes / updates">
       <created>1612304434327</created>
@@ -676,7 +673,14 @@
       <option name="project" value="LOCAL" />
       <updated>1666975553790</updated>
     </task>
-    <option name="localTasksCounter" value="125" />
+    <task id="LOCAL-00125" summary="investigating implementing cython tkinter extensions">
+      <created>1667490306076</created>
+      <option name="number" value="00125" />
+      <option name="presentableId" value="LOCAL-00125" />
+      <option name="project" value="LOCAL" />
+      <updated>1667490306076</updated>
+    </task>
+    <option name="localTasksCounter" value="126" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -695,7 +699,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="1.6.0&#10;bug fixes" />
     <MESSAGE value="1.6.1&#10;bug fixes" />
     <MESSAGE value="2.0.0-beta&#10;bug fixes" />
     <MESSAGE value="restructure" />
@@ -720,7 +723,8 @@
     <MESSAGE value="2.2.5 - bug fix in KeyBoard.py." />
     <MESSAGE value="2.2.6 - bug fix in KeyBoard.py, Themed.py and Widgets.py." />
     <MESSAGE value="investigating issues" />
-    <option name="LAST_COMMIT_MESSAGE" value="investigating issues" />
+    <MESSAGE value="investigating implementing cython tkinter extensions" />
+    <option name="LAST_COMMIT_MESSAGE" value="investigating implementing cython tkinter extensions" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/PythonExtensions$Constants.coverage" NAME="Constants Coverage Results" MODIFIED="1610937223831" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PythonExtensions" />
