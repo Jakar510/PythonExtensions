@@ -1,5 +1,4 @@
 from enum import IntEnum, StrEnum
-from .constants import *
 
 
 
@@ -38,104 +37,104 @@ cpdef class Layout(IntEnum):
 
 cpdef class ViewState(StrEnum):
     # v _widget and button states
-    Normal = NORMAL
-    Disabled = DISABLED
-    Active = ACTIVE
-    Hidden = HIDDEN  # Canvas state
+    Normal = 'NORMAL'
+    Disabled = 'DISABLED'
+    Active = 'ACTIVE'
+    Hidden = 'HIDDEN'  # Canvas state
 
 cpdef class AnchorAndSticky(StrEnum):
-    North = N
-    South = S
-    West = W
-    East = E
-    NorthEast = NE
-    SouthEast = SE
-    NorthWest = NW
-    SouthWest = SW
-    NorthSouth = NS
-    EastWest = EW
-    All = NSEW
-    Center = CENTER
+    North = 'N'
+    South = 'S'
+    West = 'W'
+    East = 'E'
+    NorthEast = 'NE'
+    SouthEast = 'SE'
+    NorthWest = 'NW'
+    SouthWest = 'SW'
+    NorthSouth = 'NS'
+    EastWest = 'EW'
+    All = 'NSEW'
+    Center = 'CENTER'
 
 cpdef class Fill(StrEnum):
-    none = NONE
-    x = X
-    y = Y
-    both = BOTH
+    none = 'NONE'
+    x = 'X'
+    y = 'Y'
+    both = 'BOTH'
 
 cpdef class Side(StrEnum):
-    left = LEFT
-    top = TOP
-    right = RIGHT
-    bottom = BOTTOM
+    left = 'LEFT'
+    top = 'TOP'
+    right = 'RIGHT'
+    bottom = 'BOTTOM'
 
 cpdef class Relief(StrEnum):
-    Raised = RAISED
-    Sunken = SUNKEN
-    Flat = FLAT
-    Ridge = RIDGE
-    Groove = GROOVE
-    Solid = SOLID
+    Raised = 'RAISED'
+    Sunken = 'SUNKEN'
+    Flat = 'FLAT'
+    Ridge = 'RIDGE'
+    Groove = 'GROOVE'
+    Solid = 'SOLID'
 
 cpdef class Orient(StrEnum):
-    Horizontal = HORIZONTAL
-    Vertical = VERTICAL
+    Horizontal = 'HORIZONTAL'
+    Vertical = 'VERTICAL'
 
 cpdef class Wrap(StrEnum):
-    Char = CHAR
-    Word = WORD
+    Char = 'CHAR'
+    Word = 'WORD'
 
 cpdef class BorderMode(StrEnum):
-    Inside = INSIDE
-    Outside = OUTSIDE
+    Inside = 'INSIDE'
+    Outside = 'OUTSIDE'
 
 cpdef class Tags(StrEnum):  # Special tags marks and insert positions
-    Select = SEL
-    SelectFirst = SEL_FIRST
-    SelectLast = SEL_LAST
-    End = END
-    Insert = INSERT
-    Current = CURRENT
-    Anchor = ANCHOR
-    First = FIRST
-    All = ALL  # e.g. Canvas.delete(ALL)
+    Select = 'SEL'
+    SelectFirst = 'SEL_FIRST'
+    SelectLast = 'SEL_LAST'
+    End = 'END'
+    Insert = 'INSERT'
+    Current = 'CURRENT'
+    Anchor = 'ANCHOR'
+    First = 'FIRST'
+    All = 'all'  # e.g. Canvas.delete(ALL)
 
 cpdef class MenuItemTypes(StrEnum):  # Menu item types
-    Cascade = CASCADE
-    CheckButton = CHECKBUTTON
-    Command = COMMAND
-    RadioButton = RADIOBUTTON
-    Separator = SEPARATOR
+    Cascade = 'cascade'
+    CheckButton = 'checkbutton'
+    Command = 'command'
+    RadioButton = 'radiobutton'
+    Separator = 'separator'
 
 cpdef class SelectionMode(StrEnum):  # Selection modes for list boxes
-    Single = SINGLE
-    Browse = BROWSE
-    Multiple = MULTIPLE
-    Extended = EXTENDED
+    Single = 'single'
+    Browse = 'browse'
+    Multiple = 'multiple'
+    Extended = 'extended'
 
 cpdef class ActiveStyle(StrEnum):  # Activestyle for list boxes
-    DotBox = DOTBOX
-    Underlined = UNDERLINE
-    none = NONE
+    DotBox = 'dotbox'
+    Underlined = 'underlined'
+    none = 'none'
 
 # Various canvas styles
 cpdef class CanvasStyles(StrEnum):
-    PieSlice = PIESLICE
-    Chord = CHORD
-    Arc = ARC
-    First = FIRST
-    Last = LAST
-    Butt = BUTT
-    Projecting = PROJECTING
-    Round = ROUND
-    Bevel = BEVEL
-    Miter = MITER
+    PieSlice = 'pieslice'
+    Chord = 'chord'
+    Arc = 'arc'
+    First = 'first'
+    Last = 'last'
+    Butt = 'butt'
+    Projecting = 'projecting'
+    Round = 'round'
+    Bevel = 'bevel'
+    Miter = 'miter'
 
 cpdef class ViewArguments(StrEnum):  # Arguments to xview/yview
-    MoveTo = MOVETO
-    Scroll = SCROLL
-    Units = UNITS
-    Pages = PAGES
+    MoveTo = 'moveto'
+    Scroll = 'scroll'
+    Units = 'units'
+    Pages = 'pages'
 
 cpdef class Orientation(IntEnum):
     Landscape = 0

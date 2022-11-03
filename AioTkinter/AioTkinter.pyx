@@ -36,7 +36,7 @@ THE SOFTWARE.
 
 
 
-class _TkinterSelector(SelectSelector):
+cpdef class _TkinterSelector(SelectSelector):
     """
     Based off of _TkinterSelector from https://github.com/montag451/aiotkinter/blob/master/aiotkinter.py
     See also: https://gist.github.com/damonjw/35aac361ca5d313ee9bf79e00261f4ea
@@ -142,7 +142,7 @@ class _TkinterSelector(SelectSelector):
 
 
 
-class AsyncTkinterEventLoopPolicy(asyncio.DefaultEventLoopPolicy):
+cpdef class AsyncTkinterEventLoopPolicy(asyncio.DefaultEventLoopPolicy):
     """
     Based off of TkinterEventLoopPolicy from https://github.com/montag451/aiotkinter/blob/master/aiotkinter.py
     See also: https://gist.github.com/damonjw/35aac361ca5d313ee9bf79e00261f4ea
