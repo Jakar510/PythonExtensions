@@ -174,7 +174,7 @@ class tkRoot(tk.Tk, _rootMixin):
         self.style = Style(master=self)
 
     def _options(self, cnf, kwargs=None) -> Dict:
-        # noinspection PyUnresolvedReferences,PyProtectedMember
+        
         return super()._options(cnf, convert_kwargs(kwargs))
 
 
@@ -284,7 +284,7 @@ class tkTopLevel(tk.Toplevel, _rootMixin):
         self.style = master.style
 
     def _options(self, cnf, kwargs=None) -> Dict:
-        # noinspection PyUnresolvedReferences,PyProtectedMember
+        
         return super()._options(cnf, convert_kwargs(kwargs))
 
 

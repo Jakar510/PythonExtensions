@@ -6,11 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="7a6e45bf-6aac-404f-8876-27fa1a8fc2c2" name="Default Changelist" comment="investigating implementing cython tkinter extensions">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AioTkinter/AioTkinter.py" beforeDir="false" afterPath="$PROJECT_DIR$/AioTkinter/AioTkinter.pyx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AioTkinter/Enums.pyx" beforeDir="false" afterPath="$PROJECT_DIR$/AioTkinter/Enums.pyx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AioTkinter/Events.pyx" beforeDir="false" afterPath="$PROJECT_DIR$/AioTkinter/tk.pyx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AioTkinter/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/AioTkinter/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AioTkinter/constants.pyx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AioTkinter/tk.pyx" beforeDir="false" afterPath="$PROJECT_DIR$/AioTkinter/tk.pyx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PythonExtensions/tk/Base.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/tk/Base.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,7 +41,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="master" />
+        <entry key="$PROJECT_DIR$" value="dev" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -58,6 +55,7 @@
     </file-type-list>
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://C:/Program Files/Python310/Lib/tkinter/__init__.py" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/PythonExtensions/__version__.py" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/PythonExtensions/tk/Base.py" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/PythonExtensions/tk/KeyBoard.py" root0="FORCE_HIGHLIGHTING" />
@@ -76,15 +74,16 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;W:/WorkSpace/PythonExtensions&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "true",
+    "last_opened_file_path": "W:/WorkSpace/PythonExtensions",
+    "settings.editor.selected.configurable": "preferences.sourceCode.Python",
+    "settings.editor.splitter.proportion": "0.15353937"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\WorkSpace\Public\PythonExtensions" />
@@ -728,7 +727,7 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/PythonExtensions$Constants.coverage" NAME="Constants Coverage Results" MODIFIED="1610937223831" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PythonExtensions" />
-    <SUITE FILE_PATH="coverage/PythonExtensions$setup.coverage" NAME="setup Coverage Results" MODIFIED="1610984553102" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/PythonExtensions$setup.coverage" NAME="setup Coverage Results" MODIFIED="1666978410471" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/PythonExtensions$TestTkApp.coverage" NAME="TestTkApp Coverage Results" MODIFIED="1611950953829" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Tests" />
     <SUITE FILE_PATH="coverage/PythonExtensions$test_tk_async.coverage" NAME="test_tk_async Coverage Results" MODIFIED="1625517948390" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="/home/pi/WorkSpace/PythonExtensions" />
     <SUITE FILE_PATH="coverage/PythonExtensions$json_tests.coverage" NAME="json_tests Coverage Results" MODIFIED="1620848633923" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Tests" />
@@ -739,9 +738,9 @@
     <SUITE FILE_PATH="coverage/PythonExtensions$build.coverage" NAME="build_classifiers Coverage Results" MODIFIED="1610748410999" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PythonExtensions/Setup" />
     <SUITE FILE_PATH="coverage/PythonExtensions$__init__.coverage" NAME="__init__ Coverage Results" MODIFIED="1610939731215" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PythonExtensions/Files" />
     <SUITE FILE_PATH="coverage/PythonExtensions$TestLogging.coverage" NAME="TestLogging Coverage Results" MODIFIED="1611781819047" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Tests" />
-    <SUITE FILE_PATH="coverage/PythonExtensions$run_tests.coverage" NAME="run tests Coverage Results" MODIFIED="1634741039064" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/PythonExtensions$dev.coverage" NAME="dev Coverage Results" MODIFIED="1638992088931" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/PythonExtensions$run.coverage" NAME="run Coverage Results" MODIFIED="1613082591231" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/PythonExtensions$run_tests.coverage" NAME="run tests Coverage Results" MODIFIED="1634741039064" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/PythonExtensions$dev.coverage" NAME="dev Coverage Results" MODIFIED="1635451302317" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/PythonExtensions$kiosk.coverage" NAME="kiosk Coverage Results" MODIFIED="1641246768552" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
