@@ -4,10 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7a6e45bf-6aac-404f-8876-27fa1a8fc2c2" name="Default Changelist" comment="investigating implementing cython tkinter extensions">
+    <list default="true" id="7a6e45bf-6aac-404f-8876-27fa1a8fc2c2" name="Default Changelist" comment="experimenting with cythonized tkinter">
+      <change afterPath="$PROJECT_DIR$/AioTkinter/ttk.pyx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/AioTkinter/tk.pyx" beforeDir="false" afterPath="$PROJECT_DIR$/AioTkinter/tk.pyx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonExtensions/tk/Base.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonExtensions/tk/Base.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -74,16 +74,16 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "true",
-    "last_opened_file_path": "W:/WorkSpace/PythonExtensions",
-    "settings.editor.selected.configurable": "preferences.sourceCode.Python",
-    "settings.editor.splitter.proportion": "0.15353937"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;W:/WorkSpace/PythonExtensions&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.sourceCode.Python&quot;,
+    &quot;settings.editor.splitter.proportion&quot;: &quot;0.15353937&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\WorkSpace\Public\PythonExtensions" />
@@ -335,20 +335,7 @@
       <workItem from="1667489602653" duration="704000" />
       <workItem from="1667490806558" duration="2168000" />
       <workItem from="1667498047027" duration="6541000" />
-    </task>
-    <task id="LOCAL-00078" summary="bug fixes / updates">
-      <created>1612369504946</created>
-      <option name="number" value="00078" />
-      <option name="presentableId" value="LOCAL-00078" />
-      <option name="project" value="LOCAL" />
-      <updated>1612369504946</updated>
-    </task>
-    <task id="LOCAL-00079" summary="bug fixes / updates">
-      <created>1612370255884</created>
-      <option name="number" value="00079" />
-      <option name="presentableId" value="LOCAL-00079" />
-      <option name="project" value="LOCAL" />
-      <updated>1612370255884</updated>
+      <workItem from="1667657037126" duration="3373000" />
     </task>
     <task id="LOCAL-00080" summary="bug fixes / updates">
       <created>1612370360106</created>
@@ -679,7 +666,21 @@
       <option name="project" value="LOCAL" />
       <updated>1667492656036</updated>
     </task>
-    <option name="localTasksCounter" value="127" />
+    <task id="LOCAL-00127" summary="experimenting with cythonized tkinter">
+      <created>1667598291042</created>
+      <option name="number" value="00127" />
+      <option name="presentableId" value="LOCAL-00127" />
+      <option name="project" value="LOCAL" />
+      <updated>1667598291043</updated>
+    </task>
+    <task id="LOCAL-00128" summary="experimenting with cythonized tkinter">
+      <created>1667598313545</created>
+      <option name="number" value="00128" />
+      <option name="presentableId" value="LOCAL-00128" />
+      <option name="project" value="LOCAL" />
+      <updated>1667598313545</updated>
+    </task>
+    <option name="localTasksCounter" value="129" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -698,7 +699,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="1.6.1&#10;bug fixes" />
     <MESSAGE value="2.0.0-beta&#10;bug fixes" />
     <MESSAGE value="restructure" />
     <MESSAGE value="more bug fixes" />
@@ -723,7 +723,8 @@
     <MESSAGE value="2.2.6 - bug fix in KeyBoard.py, Themed.py and Widgets.py." />
     <MESSAGE value="investigating issues" />
     <MESSAGE value="investigating implementing cython tkinter extensions" />
-    <option name="LAST_COMMIT_MESSAGE" value="investigating implementing cython tkinter extensions" />
+    <MESSAGE value="experimenting with cythonized tkinter" />
+    <option name="LAST_COMMIT_MESSAGE" value="experimenting with cythonized tkinter" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/PythonExtensions$Constants.coverage" NAME="Constants Coverage Results" MODIFIED="1610937223831" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PythonExtensions" />

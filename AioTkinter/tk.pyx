@@ -835,7 +835,7 @@ def NoDefaultRoot():
     _default_root = None
     del _default_root
 
-def _get_default_root(what=None):
+def _get_default_root(what: str = None):
     if not _support_default_root:
         raise RuntimeError("No master specified and tkinter is "
                            "configured to not support default root")
@@ -873,7 +873,7 @@ def _tkerror(err):
     """Internal function."""
     pass
 
-def _exit(code=0):
+def _exit(code: int = 0):
     """Internal function. Calling it will raise the exception SystemExit."""
     try:
         code = int(code)
@@ -1261,21 +1261,23 @@ class Misc:
         self.tk.call('tkwait', 'variable', name)
     waitvar = wait_variable  # XXX b/w compat
 
-    def wait_window(self, window=None):
+    def wait_window(self, window: BaseWidget = None):
         """Wait until a WIDGET is destroyed.
 
         If no parameter is given self is used."""
         if window is None:
             window = self
+
         self.tk.call('tkwait', 'window', window._w)
 
-    def wait_visibility(self, window=None):
+    def wait_visibility(self, window: BaseWidget = None):
         """Wait until the visibility of a WIDGET changes
         (e.g. it appears).
 
         If no parameter is given self is used."""
         if window is None:
             window = self
+
         self.tk.call('tkwait', 'visibility', window._w)
 
     def setvar(self, name='PY_VAR', value='1'):
@@ -1371,7 +1373,7 @@ class Misc:
         if not name: return None
         return self._nametowidget(name)
 
-    def after(self, ms, func=None, *args):
+    def after(self, ms: int | str, func: Callable = None, *args)-> str | None:
         """Call function once after given time.
 
         MS specifies the time in milliseconds. FUNC gives the
@@ -1391,15 +1393,17 @@ class Misc:
                         self.deletecommand(name)
                     except TclError:
                         pass
+
             try:
                 callit.__name__ = func.__name__
             except AttributeError:
                 # Required for callable classes (bpo-44404)
                 callit.__name__ = type(func).__name__
+
             name = self._register(callit)
             return self.tk.call('after', ms, name)
 
-    def after_idle(self, func, *args):
+    def after_idle(self, func: Callable, *args):
         """Call FUNC once if the Tcl main loop has no event to
         process.
 
@@ -1407,15 +1411,14 @@ class Misc:
         after_cancel."""
         return self.after('idle', func, *args)
 
-    def after_cancel(self, id):
+    def after_cancel(self, id: str):
         """Cancel scheduling of function identified with ID.
 
         Identifier returned by after or after_idle must be
         given as first parameter.
         """
         if not id:
-            raise ValueError('id must be a valid identifier returned from '
-                             'after or after_idle')
+            raise ValueError('id must be a valid identifier returned from after or after_idle')
         try:
             data = self.tk.call('after', 'info', id)
             script = self.tk.splitlist(data)[0]
@@ -1444,12 +1447,13 @@ class Misc:
 
         selection_get(CLIPBOARD)
         """
-        if 'type' not in kw and self._windowingsystem == 'x11':
+        if 'type' not in kw and self._windowing_system == 'x11':
             try:
                 kw['type'] = 'UTF8_STRING'
                 return self.tk.call(('clipboard', 'get') + self._options(kw))
             except TclError:
                 del kw['type']
+
         return self.tk.call(('clipboard', 'get') + self._options(kw))
 
     def clipboard_clear(self, **kw):
@@ -1503,12 +1507,11 @@ class Misc:
         if status == 'none': status = None
         return status
 
-    def option_add(self, pattern, value, priority = None):
+    def option_add(self, pattern: str, value, priority: int = None):
         """Set a VALUE (second parameter) for an option
         PATTERN (first parameter).
 
-        An optional third parameter gives the numeric priority
-        (defaults to 80)."""
+        An optional third parameter gives the numeric priority (defaults to 80)."""
         self.tk.call('option', 'add', pattern, value, priority)
 
     def option_clear(self):
@@ -1517,7 +1520,7 @@ class Misc:
         It will be reloaded if option_add is called."""
         self.tk.call('option', 'clear')
 
-    def option_get(self, name, className):
+    def option_get(self, name: str, className: str):
         """Return the value for an option NAME for this widget
         with CLASSNAME.
 
@@ -1546,7 +1549,7 @@ class Misc:
         fetched, defaulting to STRING except on X11, where UTF8_STRING is tried
         before STRING."""
         if 'displayof' not in kw: kw['displayof'] = self._w
-        if 'type' not in kw and self._windowingsystem == 'x11':
+        if 'type' not in kw and self._windowing_system == 'x11':
             try:
                 kw['type'] = 'UTF8_STRING'
                 return self.tk.call(('selection', 'get') + self._options(kw))
@@ -1592,11 +1595,11 @@ class Misc:
         """Send Tcl command CMD to different interpreter INTERP to be executed."""
         return self.tk.call(('send', interp, cmd) + args)
 
-    def lower(self, belowThis=None):
+    def lower(self, belowThis: BaseWidget = None):
         """Lower this widget in the stacking order."""
         self.tk.call('lower', self._w, belowThis)
 
-    def tkraise(self, aboveThis=None):
+    def tkraise(self, aboveThis: BaseWidget = None):
         """Raise this widget in the stacking order."""
         self.tk.call('raise', self._w, aboveThis)
 
@@ -1604,15 +1607,15 @@ class Misc:
 
     def info_patchlevel(self):
         """Returns the exact version of the Tcl library."""
-        patchlevel = self.tk.call('info', 'patchlevel')
-        return _parse_version(patchlevel)
+        level = self.tk.call('info', 'patchlevel')
+        return _parse_version(level)
 
     def winfo_atom(self, name, displayof=0):
         """Return integer which represents atom NAME."""
         args = ('winfo', 'atom') + self._displayof(displayof) + (name,)
         return self.tk.getint(self.tk.call(args))
 
-    def winfo_atomname(self, id, displayof=0):
+    def winfo_atomname(self, id: str, displayof=0):
         """Return name of atom with identifier ID."""
         args = ('winfo', 'atomname') + self._displayof(displayof) + (id,)
         return self.tk.call(args)
@@ -1693,12 +1696,12 @@ class Misc:
         """Return the name of the parent of this widget."""
         return self.tk.call('winfo', 'parent', self._w)
 
-    def winfo_pathname(self, id, displayof=0):
+    def winfo_pathname(self, id: str, displayof: int = 0):
         """Return the pathname of the widget given by ID."""
         args = ('winfo', 'pathname') + self._displayof(displayof) + (id,)
         return self.tk.call(args)
 
-    def winfo_pixels(self, number):
+    def winfo_pixels(self, number: int):
         """Rounded integer value of winfo_fpixels."""
         return self.tk.getint(self.tk.call('winfo', 'pixels', self._w, number))
 
@@ -1722,7 +1725,7 @@ class Misc:
         """Return requested width of this widget."""
         return self.tk.getint(self.tk.call('winfo', 'reqwidth', self._w))
 
-    def winfo_rgb(self, color):
+    def winfo_rgb(self, color: str):
         """Return a tuple of integer RGB values in range(65536) for color in this widget."""
         return _get_ints(self.tk.call('winfo', 'rgb', self._w, color))
 
@@ -1779,7 +1782,7 @@ class Misc:
         the form "XmajorRminor vendor vendorVersion"."""
         return self.tk.call('winfo', 'server', self._w)
 
-    def winfo_toplevel(self):
+    def winfo_top_level(self):
         """Return the toplevel widget of this widget."""
         return self._nametowidget(self.tk.call('winfo', 'toplevel', self._w))
 
@@ -1793,46 +1796,46 @@ class Misc:
         colormodel of this widget."""
         return self.tk.call('winfo', 'visual', self._w)
 
-    def winfo_visualid(self):
+    def winfo_visual_id(self):
         """Return the X identifier for the visual for this widget."""
         return self.tk.call('winfo', 'visualid', self._w)
 
-    def winfo_visualsavailable(self, includeids=False):
+    def winfo_visuals_available(self, include_ids=False):
         """Return a list of all visuals available for the screen
         of this widget.
 
         Each item in the list consists of a visual name (see winfo_visual), a
         depth and if includeids is true is given also the X identifier."""
-        data = self.tk.call('winfo', 'visualsavailable', self._w, 'includeids' if includeids else None)
+        data = self.tk.call('winfo', 'visualsavailable', self._w, 'includeids' if include_ids else None)
         data = [self.tk.splitlist(x) for x in self.tk.splitlist(data)]
         return [self.__winfo_parseitem(x) for x in data]
 
-    def __winfo_parseitem(self, t):
+    def __winfo_parseitem(self, t)-> List[int]:
         """Internal function."""
-        return t[:1] + tuple(map(self.__winfo_getint, t[1:]))
+        return t[:1] + tuple(map(self.__winfo_get_int, t[1:]))
 
-    def __winfo_getint(self, x):
+    def __winfo_get_int(self, x: str)-> int:
         """Internal function."""
         return int(x, 0)
 
-    def winfo_vrootheight(self):
+    def winfo_v_root_height(self):
         """Return the height of the virtual root window associated with this
         widget in pixels. If there is no virtual root window return the
         height of the screen."""
         return self.tk.getint(self.tk.call('winfo', 'vrootheight', self._w))
 
-    def winfo_vrootwidth(self):
+    def winfo_v_root_width(self):
         """Return the width of the virtual root window associated with this
         widget in pixel. If there is no virtual root window return the
         width of the screen."""
         return self.tk.getint(self.tk.call('winfo', 'vrootwidth', self._w))
 
-    def winfo_vrootx(self):
+    def winfo_v_root_x(self):
         """Return the x offset of the virtual root relative to the root
         window of the screen of this widget."""
         return self.tk.getint(self.tk.call('winfo', 'vrootx', self._w))
 
-    def winfo_vrooty(self):
+    def winfo_v_root_y(self):
         """Return the y offset of the virtual root relative to the root
         window of the screen of this widget."""
         return self.tk.getint(self.tk.call('winfo', 'vrooty', self._w))
@@ -1861,7 +1864,7 @@ class Misc:
         the user."""
         self.tk.call('update', 'idletasks')
 
-    def bindtags(self, tagList=None):
+    def bindtags(self, tagList: Iterable[str] = None):
         """Set or get the list of bindtags for this widget.
 
         With no argument return the list of all bindtags associated with
@@ -1873,16 +1876,16 @@ class Misc:
         else:
             self.tk.call('bindtags', self._w, tagList)
 
-    def _bind(self, what, sequence, func, add, needcleanup=1):
+    def _bind(self, what: Tuple[str, ...], sequence: str, func: Callable | str, add: bool, need_cleanup: bool = 1):
         """Internal function."""
         if isinstance(func, str):
             self.tk.call(what + (sequence, func))
 
         elif func:
-            funcid = self._register(func, self._substitute, needcleanup)
-            cmd = ('%sif {"[%s %s]" == "break"} break\n' % (add and '+' or '', funcid, self._subst_format_str))
+            func_id = self._register(func, self._substitute, need_cleanup)
+            cmd = ('%sif {"[%s %s]" == "break"} break\n' % (add and '+' or '', func_id, self._subst_format_str))
             self.tk.call(what + (sequence, cmd))
-            return funcid
+            return func_id
 
         elif sequence:
             return self.tk.call(what + (sequence,))
@@ -1890,7 +1893,7 @@ class Misc:
         else:
             return self.tk.splitlist(self.tk.call(what))
 
-    def bind(self, sequence=None, func=None, add=None):
+    def bind(self, sequence: Bindings, func: Callable = None, add: bool = None):
         """Bind to this widget at event SEQUENCE a call to function FUNC.
 
         SEQUENCE is a string of concatenated event
@@ -1929,27 +1932,27 @@ class Misc:
         If FUNC or SEQUENCE is omitted the bound function or list
         of bound events are returned."""
 
-        return self._bind(('bind', self._w), sequence, func, add)
+        return self._bind(('bind', self._w), sequence.value(), func, add)
 
-    def unbind(self, sequence, funcid=None):
+    def unbind(self, sequence: Bindings, func_id: str = None):
         """Unbind for this widget for event SEQUENCE  the
         function identified with FUNCID."""
-        self.tk.call('bind', self._w, sequence, '')
-        if funcid:
-            self.deletecommand(funcid)
+        self.tk.call('bind', self._w, sequence.value(), '')
+        if func_id:
+            self.deletecommand(func_id)
 
-    def bind_all(self, sequence=None, func=None, add=None):
+    def bind_all(self, sequence: Bindings, func: Callable = None, add: bool = None):
         """Bind to all widgets at an event SEQUENCE a call to function FUNC.
         An additional boolean parameter ADD specifies whether FUNC will
         be called additionally to the other bound function or whether
         it will replace the previous function. See bind for the return value."""
-        return self._bind(('bind', 'all'), sequence, func, add, 0)
+        return self._bind(('bind', 'all'), sequence.value(), func, add, 0)
 
     def unbind_all(self, sequence):
         """Unbind for all widgets for event SEQUENCE all functions."""
         self.tk.call('bind', 'all', sequence, '')
 
-    def bind_class(self, className, sequence=None, func=None, add=None):
+    def bind_class(self, className: str, sequence: Bindings, func: Callable = None, add: bool = None):
         """Bind to widgets with bindtag CLASSNAME at event
         SEQUENCE a call of function FUNC. An additional
         boolean parameter ADD specifies whether FUNC will be
@@ -1957,7 +1960,7 @@ class Misc:
         whether it will replace the previous function. See bind for
         the return value."""
 
-        return self._bind(('bind', className), sequence, func, add, 0)
+        return self._bind(('bind', className), sequence.value(), func, add, 0)
 
     def unbind_class(self, className, sequence):
         """Unbind for all widgets with bindtag CLASSNAME for event SEQUENCE
@@ -1972,16 +1975,16 @@ class Misc:
         """Quit the Tcl interpreter. All widgets will be destroyed."""
         self.tk.quit()
 
-    def _displayof(self, displayof):
+    def _displayof(self, display_of: str = None) -> Tuple[str, str] | Tuple:
         """Internal function."""
-        if displayof:
-            return ('-displayof', displayof)
-        if displayof is None:
-            return ('-displayof', self._w)
+        if display_of:
+            return '-displayof', display_of
+        if display_of is None:
+            return '-displayof', self._w
         return ()
 
     @property
-    def _windowingsystem(self):
+    def _windowing_system(self):
         """Internal function."""
         try:
             return self._root()._windowingsystem_cached
@@ -2058,7 +2061,7 @@ class Misc:
 
     register = _register
 
-    def _root(self):
+    def _root(self) -> Tk:
         """Internal function."""
         w = self
         while w.master is not None: w = w.master
@@ -4165,7 +4168,7 @@ class Scale(Widget):
 
         return _get_ints(self.tk.call(self._w, 'coords', value))
 
-    def identify(self, x, y):
+    def identify(self, x: int, y: int):
         """Return where the point X,Y lies. Valid return values are "slider",
         "though1" and "though2"."""
         return self.tk.call(self._w, 'identify', x, y)
@@ -4720,8 +4723,6 @@ class Image:
     def width(self):
         """Return the width of the image."""
         return self.tk.getint(self.tk.call('image', 'width', self.name))
-
-
 class PhotoImage(Image):
     """Widget which can display images in PGM, PPM, GIF, PNG format."""
 
@@ -4803,8 +4804,6 @@ class PhotoImage(Image):
     def transparency_set(self, x, y, boolean):
         """Set the transparency of the pixel at x,y."""
         self.tk.call(self.name, 'transparency', 'set', x, y, boolean)
-
-
 class BitmapImage(Image):
     """Widget which can display images in XBM format."""
 
