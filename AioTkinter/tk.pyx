@@ -51,6 +51,7 @@ import re
 
 
 
+
 wantobjects = 1
 
 TkVersion = float(_tkinter.TK_VERSION)
@@ -2753,12 +2754,12 @@ class Tk(Misc, Wm):
         readprofile).
         It is constructed from sys.argv[0] without extensions if None is given. CLASSNAME
         is the name of the widget class."""
-        self.master = None
-        self.children = { }
-        self._tkloaded = False
+        self.master: Tk = None
+        self.children: Dict = { }
+        self._tk_loaded: bool = False
         # to avoid recursions in the getattr code in case of failure, we
         # ensure that self.tk is always _something_.
-        self.tk = None
+        self.tk: _tkinter.TkappType = None
         if baseName is None:
             import os
 
@@ -2776,12 +2777,12 @@ class Tk(Misc, Wm):
             self.readprofile(baseName, className)
 
     def loadtk(self):
-        if not self._tkloaded:
+        if not self._tk_loaded:
             self.tk.loadtk()
             self._loadtk()
 
     def _loadtk(self):
-        self._tkloaded = True
+        self._tk_loaded = True
         global _default_root
         # Version sanity checks
         tk_version = self.tk.getvar('tk_version')
